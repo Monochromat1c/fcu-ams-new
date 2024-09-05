@@ -1,0 +1,36 @@
+@font-face {
+    font-family: "Archivo";
+    font-style: black;
+    font-weight: 900;
+    src: local("Archivo"), local("Archivo"),
+        url("/fonts/Archivo.ttf") format("truetype");
+}
+
+@font-face {
+    font-family: "Urbanist";
+    font-style: black;
+    font-weight: 900;
+    src: local("Urbanist"), local("Urbanist"),
+        url("/fonts/Urbanist.ttf") format("truetype");
+}
+
+h1 {
+    font-family: "Archivo", sans-serif;
+}
+
+* {
+    font-family: 'Urbanist', sans-serif;
+    /* outline: 1px dotted red; */
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+.sidebar {
+    max-height: 100dvh;
+}
+
+.min-width {
+    min-width: 100px;
+}

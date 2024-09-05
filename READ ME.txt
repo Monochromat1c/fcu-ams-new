@@ -1,0 +1,13 @@
+Ubraha anay ni bag-o mo e serve ang laravel project nga gin clone mo HAHAHAHA
+
+1. E run ni sa terminal: composer install
+2. E run ni sa terminal: npm install
+3. E run ni sa terminal: cp .env.example .env
+4. E run ni sa terminal: php artisan key:generate
+5. E run ni sa terminal: php artisan migrate (type lang yes kung mangkuton ka nga ma ubra sang database)
+6. E run ni sa terminal: php artisan db:seed
+7. E run ni sa terminal: php artisan storage:link
+8. E run ni sa terminal: npm run build
+
+Go to C:\xampp\php\php.ini
+Search for ;extension=gd and ;extension=zip, and remove the ;

@@ -1,0 +1,13 @@
+.fcu-icon {
+    width: 150px;
+    height: 150px;
+}
+
+.content {
+    max-height: 100dvh;
+    overflow-y: scroll;
+}
+
+.dropdown-content a {
+    transition: max-height 0.3s ease-out;
+}

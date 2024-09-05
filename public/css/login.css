@@ -1,0 +1,55 @@
+form {
+    display: block !important;
+}
+
+.body {
+    background-image: url(/img/login/bg-2.jpg);
+}
+
+.login-container {
+    min-height: 94dvh;
+    min-width: 97dvw;
+    background-image: url(/img/login/transparent.png);
+    /* backdrop-filter: blur(1px); */
+}
+
+.form-container {
+    margin: auto;
+}
+
+.login-title {
+    padding-bottom: 15dvh;
+}
+
+.login-form {
+    background-color: #ffffff;
+    width: 444px;
+}
+
+.fcu-icon {
+    margin: 0 auto;
+    height: 222px;
+    width: 222px;
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.input-container input {
+    width: 100%;
+    padding: 10px 10px 10px 40px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.input-container .icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #aaa;
+}
