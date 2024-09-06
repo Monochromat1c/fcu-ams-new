@@ -12,4 +12,9 @@ class Location extends Model
     protected $fillable = [
         'location',
     ];
+
+    public function assets()
+    {
+        return $this->hasMany(Asset::class);
+    }
 }

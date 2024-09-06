@@ -12,4 +12,9 @@ class Department extends Model
     protected $fillable = [
         'department',
     ];
+
+    public function assets()
+    {
+        return $this->hasMany(Asset::class);
+    }
 }

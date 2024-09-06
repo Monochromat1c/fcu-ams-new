@@ -147,6 +147,17 @@
                 </div>
             </div>
         </div>
+        @if(session()->has('error'))
+            <div class="alert alert-danger">
+                {{ session()->get('error') }}
+            </div>
+        @endif
+
+        @if(session()->has('success'))
+            <div class="alert alert-success">
+                {{ session()->get('success') }}
+            </div>
+        @endif
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex justify-between mb-3">
                 <h2 class="text-2xl font-bold my-auto">Asset List</h2>

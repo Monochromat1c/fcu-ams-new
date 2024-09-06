@@ -12,4 +12,9 @@ class Site extends Model
     protected $fillable = [
         'site',
     ];
+
+    public function assets()
+    {
+        return $this->hasMany(Asset::class);
+    }
 }

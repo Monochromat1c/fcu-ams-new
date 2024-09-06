@@ -29,6 +29,7 @@ return new class extends Migration
             $table->date('purchase_date');
             $table->string('condition')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

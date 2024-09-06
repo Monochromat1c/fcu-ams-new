@@ -21,34 +21,49 @@ class DashboardController extends Controller
         $totalInventoryValue = Inventory::sum(DB::raw('unit_price * stocks'));
 
         $mostAcquiredCategory = Asset::select('category_id', DB::raw('COUNT(*) as count'))
-        ->groupBy('category_id')
-        ->orderBy('count', 'desc')
-        ->first()->category_id;
+            ->groupBy('category_id')
+            ->orderBy('count', 'desc')
+            ->first();
 
-        $mostAcquiredCategoryName = Category::find($mostAcquiredCategory)->category;
+        if ($mostAcquiredCategory) {
+            $mostAcquiredCategoryName = Category::find($mostAcquiredCategory->category_id)->category ?? 'No Data Available';
+        } else {
+            $mostAcquiredCategoryName = 'No Data Available';
+        }
 
         $mostValuedCategory = Asset::select('category_id', DB::raw('SUM(cost) as cost_sum'))
-        ->groupBy('category_id')
-        ->orderBy('cost_sum', 'desc')
-        ->first()->category_id;
+            ->groupBy('category_id')
+            ->orderBy('cost_sum', 'desc')
+            ->first();
 
-        $mostValuedCategoryName = Category::find($mostValuedCategory)->category;
+        if ($mostValuedCategory) {
+            $mostValuedCategoryName = Category::find($mostValuedCategory->category_id)->category ?? 'No Data Available';
+        } else {
+            $mostValuedCategoryName = 'No Data Available';
+        }
 
         $mostAcquiredSupplier = Asset::select('supplier_id', DB::raw('COUNT(*) as count'))
-        ->groupBy('supplier_id')
-        ->orderBy('count', 'desc')
-        ->first()->supplier_id;
+            ->groupBy('supplier_id')
+            ->orderBy('count', 'desc')
+            ->first();
 
-        $mostAcquiredSupplierName = Supplier::find($mostAcquiredSupplier)->supplier;
+        if ($mostAcquiredSupplier) {
+            $mostAcquiredSupplierName = Supplier::find($mostAcquiredSupplier->supplier_id)->supplier ?? 'No Data Available';
+        } else {
+            $mostAcquiredSupplierName = 'No Data Available';
+        }
 
         $mostValuedSupplier = Asset::select('supplier_id', DB::raw('SUM(cost) as cost_sum'))
-        ->groupBy('supplier_id')
-        ->orderBy('cost_sum', 'desc')
-        ->first()->supplier_id;
+            ->groupBy('supplier_id')
+            ->orderBy('cost_sum', 'desc')
+            ->first();
 
-        $mostValuedSupplierName = Supplier::find($mostValuedSupplier)->supplier;
+        if ($mostValuedSupplier) {
+            $mostValuedSupplierName = Supplier::find($mostValuedSupplier->supplier_id)->supplier ?? 'No Data Available';
+        } else {
+            $mostValuedSupplierName = 'No Data Available';
+        }
 
-        // Get asset distribution data
         $assetDistribution = Category::withCount('assets')->get()->map(function ($category) {
             return [
                 'label' => $category->category,
@@ -56,7 +71,6 @@ class DashboardController extends Controller
             ];
         });
 
-        // Get monthly asset acquisition data
         $assetAcquisition = Asset::select(DB::raw('MONTH(purchase_date) as month'), DB::raw('COUNT(*) as count'))
             ->groupBy('month')
             ->orderBy('month')
@@ -68,46 +82,45 @@ class DashboardController extends Controller
                 ];
             });
 
-        // Get recent actions
         $recentActions = $this->getRecentActions();
 
         $analyticsData = [
-        [
-            'label' => 'Total Assets',
-            'value' => $totalAssets,
-        ],
-        [
-            'label' => 'Total Asset Value',
-            'value' => $totalAssetValue,
-        ],
-        [
-            'label' => 'Total Inventory Stocks',
-            'value' => $totalInventoryStocks,
-        ],
-        [
-            'label' => 'Total Inventory Value',
-            'value' => $totalInventoryValue,
-        ],
-    ];
+            [
+                'label' => 'Total Assets',
+                'value' => $totalAssets,
+            ],
+            [
+                'label' => 'Total Asset Value',
+                'value' => $totalAssetValue,
+            ],
+            [
+                'label' => 'Total Inventory Stocks',
+                'value' => $totalInventoryStocks,
+            ],
+            [
+                'label' => 'Total Inventory Value',
+                'value' => $totalInventoryValue,
+            ],
+        ];
 
-    $distributionData = [
-        [
-            'label' => 'Most Acquired Asset Category',
-            'value' => $mostAcquiredCategoryName,
-        ],
-        [
-            'label' => 'Most Valued Asset Category',
-            'value' => $mostValuedCategoryName,
-        ],
-        [
-            'label' => 'Most Acquired Asset Supplier',
-            'value' => $mostAcquiredSupplierName,
-        ],
-        [
-            'label' => 'Most Valued Asset Supplier',
-            'value' => $mostValuedSupplierName,
-        ],
-    ];
+        $distributionData = [
+            [
+                'label' => 'Most Acquired Asset Category',
+                'value' => $mostAcquiredCategoryName,
+            ],
+            [
+                'label' => 'Most Valued Asset Category',
+                'value' => $mostValuedCategoryName,
+            ],
+            [
+                'label' => 'Most Acquired Asset Supplier',
+                'value' => $mostAcquiredSupplierName,
+            ],
+            [
+                'label' => 'Most Valued Asset Supplier',
+                'value' => $mostValuedSupplierName,
+            ],
+        ];
 
         return view('fcu-ams/dashboard', compact(
             'totalAssets',

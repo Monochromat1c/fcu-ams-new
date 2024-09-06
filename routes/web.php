@@ -11,8 +11,6 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\LeaseController;
-use App\Models\Asset;
-use App\Models\Inventory;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login');

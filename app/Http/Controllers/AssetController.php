@@ -13,8 +13,10 @@ use App\Models\Department;
 use App\Models\AssetEditHistory;
 use Illuminate\Validation\Rule;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx as WriterXlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx as ReaderXlsx;
+use PhpOffice\PhpSpreadsheet\Reader\Csv;
 
 class AssetController extends Controller
 {
@@ -211,6 +213,131 @@ class AssetController extends Controller
         $editHistory->save();
     }
 
+    public function import(Request $request)
+    {
+        $file = $request->file('file');
+        $extension = $file->getClientOriginalExtension();
+
+        if (!in_array($extension, ['xlsx', 'xls', 'csv'])) {
+            return redirect()->back()->with('error', 'Invalid file type. Only xlsx, xls, and csv are allowed.');
+        }
+
+        try {
+            if ($extension == 'xlsx' || $extension == 'xls') {
+                $reader = new ReaderXlsx();
+            } elseif ($extension == 'csv') {
+                $reader = new Csv();
+            }
+
+            $spreadsheet = $reader->load($file);
+            $sheet = $spreadsheet->getActiveSheet();
+            $data = $sheet->toArray();
+
+            // Skip header row
+            array_shift($data);
+
+            foreach ($data as $row) {
+                if (empty($row)) continue; // Skip empty rows
+
+                // Check if row has at least 12 required columns (excluding Created At and Updated At)
+                if (count($row) < 12) { 
+                    return redirect()->back()->with('error', 'Invalid data structure in the file.');
+                }
+
+                // Extract relevant data from row without trimming
+                list(
+                    $id,
+                    $assetName,
+                    $brand,
+                    $model,
+                    $serialNumber,
+                    $cost,
+                    $supplierName,
+                    $siteName,
+                    $locationName,
+                    $categoryName,
+                    $departmentName,
+                    $purchaseDate,
+                    // Ignore Condition for now; adjust as needed
+                    // Add more fields here if necessary
+                ) = array_slice($row, 0, 12);
+
+                // Find IDs for related tables without trimming
+                $supplierId = Supplier::where('supplier', $supplierName)->value('id');
+                if (!$supplierId) {
+                    Log::error('Supplier not found: ' . $supplierName);
+                    return redirect()->back()->with('error', 'Supplier not found: ' . $supplierName);
+                }
+
+                $siteId = Site::where('site', $siteName)->value('id');
+                if (!$siteId) {
+                    Log::error('Site not found: ' . $siteName);
+                    return redirect()->back()->with('error', 'Site not found: ' . $siteName);
+                }
+
+                $locationId = Location::where('location', $locationName)->value('id');
+                if (!$locationId) {
+                    Log::error('Location not found: ' . $locationName);
+                    return redirect()->back()->with('error', 'Location not found: ' . $locationName);
+                }
+
+                $categoryId = Category::where('category', $categoryName)->value('id');
+                if (!$categoryId) {
+                    Log::error('Category not found: ' . $categoryName);
+                    return redirect()->back()->with('error', 'Category not found: ' . $categoryName);
+                }
+
+                $departmentId = Department::where('department', $departmentName)->value('id');
+                if (!$departmentId) {
+                    Log::error('Department not found: ' . $departmentName);
+                    return redirect()->back()->with('error', 'Department not found: ' . $departmentName);
+                }
+
+                // Prepare asset data without trimming
+                $assetData = [
+                    'asset_name' => $assetName,
+                    'brand' => $brand,
+                    'model' => $model,
+                    'serial_number' => $serialNumber,
+                    'cost' => floatval($cost),
+                    'supplier_id' => $supplierId,
+                    'site_id' => $siteId,
+                    'location_id' => $locationId,
+                    'category_id' => $categoryId,
+                    'department_id' => $departmentId,
+                    'purchase_date' => date('Y-m-d', strtotime($purchaseDate)),
+                    // Add more fields here if necessary
+                    // Condition is ignored for now; adjust as needed
+                ];
+
+                // Check if asset exists by serial number or name
+                $existingAsset = Asset::where('serial_number', $assetData['serial_number'])->orWhere('asset_name', $assetData['asset_name'])->first();
+
+                if ($existingAsset) {
+                    try {
+                        $existingAsset->update($assetData);
+                    } catch (\Exception $e) {
+                        Log::error('Error updating asset: ' . $e->getMessage());
+                        return redirect()->back()->with('error', 'Error updating asset: ' . $e->getMessage());
+                    }
+                } else {
+                    // Create new asset
+                    try {
+                        Asset::create($assetData);
+                    } catch (\Exception $e) {
+                        Log::error('Error creating asset: ' . $e->getMessage());
+                        return redirect()->back()->with('error', 'Error creating asset: ' . $e->getMessage());
+                    }
+                }
+            }
+
+            return redirect()->route('asset.list')->with('success', 'Assets imported successfully.');
+        } catch (\Exception $e) {
+            Log::error('Error importing file: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Error importing file: ' . $e->getMessage());
+        }
+    }
+
     public function export() { 
         $assets = Asset::with(['supplier', 'site', 'location', 'category', 'department'])->get();
         $spreadsheet = new Spreadsheet(); 
@@ -247,7 +374,7 @@ class AssetController extends Controller
             $sheet->setCellValue('N' . $row, $asset->created_at); 
             $sheet->setCellValue('O' . $row, $asset->updated_at); $row++; 
         } 
-        $writer = new Xlsx($spreadsheet); $filename = 'assets_' . date('Y-m-d') . '.xlsx';
+        $writer = new WriterXlsx($spreadsheet); $filename = 'assets_' . date('Y-m-d') . '.xlsx';
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="'. urlencode($filename).'"'); 
         $writer->save('php://output'); 

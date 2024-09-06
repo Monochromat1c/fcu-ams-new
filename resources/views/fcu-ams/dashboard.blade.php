@@ -86,23 +86,39 @@
                 <canvas id="distributionChart"></canvas>
                 <p class="text-sm mb-4">
                     Most Acquired Asset Category:
-                    <span
-                        class="p-1 border-red-300 border bg-red-100 w">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    @if($mostAcquiredCategoryName)
+                        <span class="p-1 border-red-300 border bg-red-100 w">{{ $mostAcquiredCategoryName }}</span>
+                    @else
+                        <span class="p-1 border-red-300 border bg-red-100 w">No Data Available</span>
+                    @endif
                 </p>
+
                 <p class="text-sm mb-4">
                     Most Valued Asset Category:
-                    <span
-                        class="p-1 border-blue-300 border bg-blue-100 w">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    @if($mostValuedCategoryName)
+                        <span class="p-1 border-blue-300 border bg-blue-100 w">{{ $mostValuedCategoryName }}</span>
+                    @else
+                        <span class="p-1 border-blue-300 border bg-blue-100 w">No Data Available</span>
+                    @endif
                 </p>
+
                 <p class="text-sm mb-4">
                     Most Acquired Asset Supplier:
-                    <span
-                        class="p-1 border-yellow-300 border bg-yellow-100 w">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    @if($mostAcquiredSupplierName)
+                        <span
+                            class="p-1 border-yellow-300 border bg-yellow-100 w">{{ $mostAcquiredSupplierName }}</span>
+                    @else
+                        <span class="p-1 border-yellow-300 border bg-yellow-100 w">No Data Available</span>
+                    @endif
                 </p>
+
                 <p class="text-sm mb-4">
                     Most Valued Asset Supplier:
-                    <span
-                        class="p-1 border-green-500 border bg-green-100 w">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    @if($mostValuedSupplierName)
+                        <span class="p-1 border-green-500 border bg-green-100 w">{{ $mostValuedSupplierName }}</span>
+                    @else
+                        <span class="p-1 border-green-500 border bg-green-100 w">No Data Available</span>
+                    @endif
                 </p>
             </div>
         </div>
