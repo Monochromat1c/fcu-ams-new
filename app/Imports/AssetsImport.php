@@ -10,8 +10,9 @@ use App\Models\Category;
 use App\Models\Department;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\Importable;
+use Maatwebsite\Excel\Concerns\WithValidation;
 
-class AssetsImport implements ToModel, Importable
+class AssetsImport implements ToModel, Importable, WithValidation
 {
     /**
     * @param array $row
@@ -42,5 +43,27 @@ class AssetsImport implements ToModel, Importable
             'purchase_date' => $row['Purchase Date'],
             'condition' => $row['Condition'],
         ]);
+    }
+
+    public function rules(): array
+    {
+        return [
+            '*.Asset Name' => [
+                'required',
+                'string',
+                Rule::unique('assets', 'asset_name')->whereNull('deleted_at'),
+            ],
+            '*.Brand' => 'required|string',
+            '*.Model' => 'required|string',
+            '*.Serial Number' => 'required|string',
+            '*.Cost' => 'required|numeric',
+            '*.Supplier' => 'required|exists:suppliers,supplier',
+            '*.Site' => 'required|exists:sites,site',
+            '*.Location' => 'required|exists:locations,location',
+            '*.Category' => 'required|exists:categories,category',
+            '*.Department' => 'required|exists:departments,department',
+            '*.Purchase Date' => 'required|date',
+            '*.Condition' => 'nullable|string', 
+        ];
     }
 }
