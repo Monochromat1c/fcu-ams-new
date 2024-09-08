@@ -14,6 +14,7 @@ use App\Models\AssetEditHistory;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AssetsExport;
 use App\Imports\AssetsImport;
+use Illuminate\Validation\Rule;
 
 class AssetController extends Controller
 {
@@ -212,7 +213,13 @@ class AssetController extends Controller
 
     public function import(Request $request)
     {
-        
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        Excel::import(new AssetsImport, $request->file('file'));
+
+        return redirect()->route('asset.list')->with('success', 'Assets imported successfully.');
     }
 
     public function export() { 

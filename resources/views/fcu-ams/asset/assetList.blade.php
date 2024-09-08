@@ -82,6 +82,12 @@
                             Import from Excel
                         </button>
                     </form>
+                    <form action="{{ route('asset.import') }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" name="file" required>
+                        <button type="submit">Import</button>
+                    </form>
                 </div>
             </div>
             <div class="pagination-here flex justify-between align-items-center">
