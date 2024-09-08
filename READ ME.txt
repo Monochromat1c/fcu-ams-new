@@ -1,13 +1,17 @@
-Ubraha anay ni bag-o mo e serve ang laravel project nga gin clone mo HAHAHAHA
+Ubraha anay ni bag-o mo e serve ang laravel project
 
-1. E run ni sa terminal: composer install
-2. E run ni sa terminal: npm install
-3. E run ni sa terminal: cp .env.example .env
-4. E run ni sa terminal: php artisan key:generate
-5. E run ni sa terminal: php artisan migrate (type lang yes kung mangkuton ka nga ma ubra sang database)
-6. E run ni sa terminal: php artisan db:seed
-7. E run ni sa terminal: php artisan storage:link
-8. E run ni sa terminal: npm run build
+- Kadto anay sa C:\xampp\php\php.ini or kung diin mo gin install imo xampp
+- E search ni ang duwa kag kwaa ang ;
+ ;extension=gd 
+ ;extension=zip
 
-Go to C:\xampp\php\php.ini
-Search for ;extension=gd and ;extension=zip, and remove the ;
+E RUN SA TERMINAL (pasunod)
+ - composer install
+ - npm install
+ - cp .env.example .env
+ - php artisan key:generate
+ - php artisan migrate (type lang yes kung mangkuton ka nga ma ubra sang database)
+ - php artisan db:seed
+ - php artisan storage:link
+ - php artisan serve
+ - npm run build
