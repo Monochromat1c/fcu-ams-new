@@ -11,19 +11,23 @@ class Asset extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'id',
         'asset_image',
         'asset_name',
         'brand',
         'model',
         'serial_number',
         'cost',
-        'supplier',
-        'site',
-        'location',
-        'category',
-        'department',
+        'supplier_id',
+        'site_id',
+        'location_id',
+        'category_id',
+        'department_id',
         'purchase_date',
         'condition',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     public function supplier()

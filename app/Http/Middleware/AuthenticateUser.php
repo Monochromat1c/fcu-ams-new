@@ -23,18 +23,10 @@ class AuthenticateUser
 
         $response = $next($request);
 
-        if ($response instanceof \Symfony\Component\HttpFoundation\BinaryFileResponse) {
-            header('Cache-Control: no-cache, no-store, must-revalidate');
-            header('Pragma: no-cache');
-            header('Expires: 0');
-        } else {
-            $response->withHeaders([
-                'Cache-Control' => 'no-cache, no-store, must-revalidate',
-                'Pragma' => 'no-cache',
-                'Expires' => '0',
-            ]);
-        }
-
-        return $response;
+        return $response->withHeaders([
+            'Cache-Control' => 'no-cache, no-store, must-revalidate',
+            'Pragma' => 'no-cache',
+            'Expires' => '0',
+        ]);
     }
 }
