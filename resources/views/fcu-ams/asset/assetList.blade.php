@@ -66,28 +66,22 @@
         </div>
         <div class="mb-1 flex justify-between m-3 rounded-md">
             <div class="space-x-2 flex">
-                <div class="export-list my-auto">
-                    <a href="{{ route('asset.export') }}"
-                        class="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-200 ease-in rounded-md p-2">
-                        Export to Excel
-                    </a>
-                </div>
                 <div class="import-list my-auto">
                     <form action="{{ route('asset.import') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
-                        <input type="file" name="file" accept=".xlsx, .xls, .csv" required>
+                        <input type="file" class="border rounded-md" name="file" accept=".xlsx, .xls, .csv" required>
                         <button type="submit"
                             class="border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white transition-all duration-200 ease-in rounded-md p-2">
                             Import from Excel
                         </button>
                     </form>
-                    <form action="{{ route('asset.import') }}" method="POST"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <input type="file" name="file" required>
-                        <button type="submit">Import</button>
-                    </form>
+                </div>
+                <div class="export-list my-auto">
+                    <button type="button" onclick="window.location.href='{{ route('asset.export') }}'"
+                        class="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-200 ease-in rounded-md p-2">
+                        Export to Excel
+                    </button>
                 </div>
             </div>
             <div class="pagination-here flex justify-between align-items-center">
