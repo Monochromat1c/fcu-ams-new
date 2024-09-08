@@ -195,8 +195,6 @@
                                     <span class="mx-2">ID</span>
                                 </div>
                             </th>
-                            <!-- <th class="px-4 py-2 bg-slate-100 border border-slate-400 text-center">Asset Image -->
-                            </th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
@@ -226,7 +224,7 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'supplier_name', 'direction' => ($direction == 'asc' && $sort == 'supplier_name') ? 'desc' : 'asc']) }}">
+                                        href="{{ route('asset.list', ['sort' => 'supplier', 'direction' => ($direction == 'asc' && $sort == 'supplier') ? 'desc' : 'asc']) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -239,7 +237,7 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'site_name', 'direction' => ($direction == 'asc' && $sort == 'site_name') ? 'desc' : 'asc']) }}">
+                                        href="{{ route('asset.list', ['sort' => 'site', 'direction' => ($direction == 'asc' && $sort == 'site') ? 'desc' : 'asc']) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -252,7 +250,20 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'category_name', 'direction' => ($direction == 'asc' && $sort == 'category_name') ? 'desc' : 'asc']) }}">
+                                        href="{{ route('asset.list', ['sort' => 'location', 'direction' => ($direction == 'asc' && $sort == 'location') ? 'desc' : 'asc']) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                                        </svg>
+                                    </a>
+                                    <span class="mx-2">Location</span>
+                                </div>
+                            </th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                <div class="flex">
+                                    <a class="my-auto"
+                                        href="{{ route('asset.list', ['sort' => 'category', 'direction' => ($direction == 'asc' && $sort == 'category') ? 'desc' : 'asc']) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -265,7 +276,20 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'department_name', 'direction' => ($direction == 'asc' && $sort == 'department_name') ? 'desc' : 'asc']) }}">
+                                        href="{{ route('asset.list', ['sort' => 'department', 'direction' => ($direction == 'asc' && $sort == 'department') ? 'desc' : 'asc']) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                                        </svg>
+                                    </a>
+                                    <span class="mx-2">Department</span>
+                                </div>
+                            </th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                <div class="flex">
+                                    <a class="my-auto"
+                                        href="{{ route('asset.list', ['sort' => 'condition', 'direction' => ($direction == 'asc' && $sort == 'condition') ? 'desc' : 'asc']) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -284,22 +308,14 @@
                         @foreach($assets as $asset)
                             <tr>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->id }}</td>
-                                <!-- <td class="border border-slate-300 px-4 py-2" style="min-width:100px;">
-@if($asset->asset_image)
-                                        <img src="{{ asset($asset->asset_image) }}" alt="Asset Image"
-                                            class="mx-auto rounded-full" style="width:2.7rem;height:2.7rem;">
-@else
-                                        <img src="{{ asset('profile/default.png') }}"
-                                            alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
-@endif
-                                </td> -->
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier_name }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->site_name }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->category_name }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->condition }}
-                                </td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->site }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->location }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->category }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->department }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->condition }}</td>
                                 <td class="border border-slate-300 px-4 py-2">
                                     <div class="mx-auto flex justify-center space-x-2">
                                         <a href="{{ route('asset.view', ['id' => $asset->id]) }}"
