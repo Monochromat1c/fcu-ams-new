@@ -163,6 +163,7 @@
                 <h2 class="text-2xl font-bold my-auto">Asset List</h2>
                 <div class="searchBox">
                     <form action="{{ route('asset.list') }}" method="GET" class=" flex gap-1">
+                        <input type="hidden" name="submitted" value="true">
                         <input type="text" name="search" placeholder="Search for assets..."
                             class="py-2 px-3 border rounded-md border-red-950 w-96 text-sm text-gray-700 my-auto">
                         <div class="flex align-items-center gap-1">
@@ -365,14 +366,20 @@
             document.getElementById('delete-form-' + id).submit();
         }
     }
-
 </script>
 <script>
     function clearSearch() {
         document.querySelector('input[name="search"]').value = '';
         document.querySelector('form').submit();
     }
-
+</script>
+<script>
+    window.onload = function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (window.performance.navigation.type === 1 && urlParams.has('search')) {
+            window.location.href = "{{ route('asset.list') }}";
+        }
+    };
 </script>
 
 @endsection

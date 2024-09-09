@@ -11,8 +11,9 @@ use App\Models\Department;
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\WithValidation;
+use Illuminate\Validation\Rule;
 
-class AssetsImport implements ToModel, Importable, WithValidation
+class AssetsImport implements ToModel, WithValidation
 {
     /**
     * @param array $row
