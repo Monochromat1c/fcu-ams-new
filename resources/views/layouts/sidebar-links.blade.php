@@ -30,6 +30,7 @@
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('asset/add') ? 'bg-gray-100' : '' }}">Add
             Asset</a>
+        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dispose</a>
         <a href="{{ route('lease.index') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('lease') ? 'bg-gray-100' : '' }}">Lease</a>
@@ -37,7 +38,6 @@
         <a href="{{ route('maintenance') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('maintenance') ? 'bg-gray-100' : '' }}">Maintenance</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dispose</a>
     </div>
 </div>
 <div class="relative" x-data="{ open: false }">
@@ -58,6 +58,7 @@
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('inventory/list') ? 'bg-gray-100' : '' }}">Inventory
             List</a>
+        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Purchase Order</a>
         <a href="{{ route('inventory.stock.in') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('inventory/stock/in') ? 'bg-gray-100' : '' }}">Stock
@@ -66,7 +67,6 @@
             class="block px-4 py-2 text-gray-700
             hover:bg-gray-100{{ Request::is('inventory/stock/out') ? 'bg-gray-100' : '' }}">Stock
             Out</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Purchase Order</a>
     </div>
 </div>
 <a href="#" class="border-top flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
@@ -123,11 +123,12 @@
         <a href="{{ route('categories.list') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('categories/list') ? 'bg-gray-100' : '' }}">Category</a>
+        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Conditions</a>
         <a href="{{ route('departments.list') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('departments/list') ? 'bg-gray-100' : '' }}">Departments</a>
+            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Locations</a>
         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Sites</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Locations</a>
         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Suppliers</a>
     </div>
 </div>

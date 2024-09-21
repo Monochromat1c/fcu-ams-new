@@ -1,6 +1,7 @@
 @extends('layouts.layout')
-
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/addAsset.css') }}">
+
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-100 col-span-5">
@@ -25,7 +26,7 @@
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                     Asset Name
                                 </th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                     Cost
                                 </th>
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
@@ -39,7 +40,7 @@
                                 </th>
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                     Condition
-                                </th>
+                                </th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -50,11 +51,11 @@
                                     </td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $asset->id }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>
+                                    <!-- <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier_name }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $asset->site_name }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $asset->category_name }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->condition }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->condition_name }}</td> -->
                                 </tr>
                             @endforeach
                         </tbody>
