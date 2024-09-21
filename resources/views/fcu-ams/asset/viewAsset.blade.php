@@ -69,7 +69,7 @@
                             <td class="border border-slate-300 px-4 py-2">{{ $asset->category->category }}</td>
                             <td class="border border-slate-300 px-4 py-2">{{ $asset->department->department }}</td>
                             <td class="border border-slate-300 px-4 py-2">{{ $asset->purchase_date }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->condition }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $asset->condition->condition }}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -11,10 +11,11 @@
                 <img class="fcu-icon mb-3" src="/img/login/fcu-icon.png" alt="" srcset="">
                 <h1 class=" text-blue-900 text-center text-5xl">FCU</h1>
                 <h2 class=" text-blue-900 text-center text-2xl mb-5">Asset Management System</h2>
-                @if ($errors->any())
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                @if($errors->any())
+                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+                        role="alert">
                         <ul>
-                            @foreach ($errors->all() as $error)
+                            @foreach($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
                         </ul>
@@ -41,7 +42,10 @@
                     </label>
                     <input type="password" name="password" placeholder="PASSWORD">
                 </div>
-                <div class="flex justify-end mb-5">
+                <div class="flex justify-between mb-3">
+                    <div>
+                        <!-- <a href="#">Sign Up</span></a> -->
+                    </div>
                     <div>
                         <a href="#" class="text-red-700">Forgot Password</a>
                     </div>
@@ -49,6 +53,18 @@
                 <button type="submit" class="flex justify-center w-full bg-blue-900 p-3 rounded-lg">
                     <label for="" class="text-white">Sign In</label>
                 </button>
+                <div class="my-4 flex justify-center items-center">
+                    <div class="w-1/2 relative">
+                        <div class="absolute left-0 top-1/2 transform -translate-y-1/2 h-px bg-black w-full"></div>
+                    </div>
+                    <span class="mx-2">or</span>
+                    <div class="w-1/2 relative">
+                        <div class="absolute left-0 top-1/2 transform -translate-y-1/2 h-px bg-black w-full"></div>
+                    </div>
+                </div>
+                <a href="#" class="w-full flex justify-center bg-green-700 p-3 rounded-lg">
+                    <label for="" class="text-white">Create New Account</label>
+                </a>
             </form>
         </div>
     </div>

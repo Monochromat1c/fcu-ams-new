@@ -13,7 +13,7 @@ class AssetsExport implements FromCollection, WithHeadings
     */
     public function collection()
     {
-        return Asset::with(['supplier', 'site', 'location', 'category', 'department'])
+        return Asset::with(['supplier', 'site', 'location', 'category', 'department', 'condition'])
             ->get()
             ->map(function ($asset) {
                 return [
@@ -28,7 +28,7 @@ class AssetsExport implements FromCollection, WithHeadings
                     'Category' => $asset->category->category,
                     'Department' => $asset->department->department,
                     'Purchase Date' => $asset->purchase_date,
-                    'Condition' => $asset->condition,
+                    'Condition' => $asset->condition->condition,
                 ];
             });
     }

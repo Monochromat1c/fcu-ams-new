@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
+            $table->string('unique_tag');
             $table->string('stock_image')->nullable();
             $table->integer('stocks');
             $table->string('unit');

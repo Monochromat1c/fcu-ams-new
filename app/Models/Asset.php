@@ -51,8 +51,14 @@ class Asset extends Model
         return $this->belongsTo(Department::class);
     }
 
+    public function condition()
+    {
+        return $this->belongsTo(Condition::class);
+    }
+
     public function editHistory()
     {
         return $this->hasMany(AssetEditHistory::class);
     }
+
 }

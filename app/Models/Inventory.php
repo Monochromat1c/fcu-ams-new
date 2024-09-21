@@ -11,6 +11,7 @@ class Inventory extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
+        'unique_tag',
         'stock_image',
         'stocks',
         'unit',
@@ -22,5 +23,23 @@ class Inventory extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function generateUniqueTag()
+    {
+        $firstLetter = substr($this->name, 0, 1);
+        $existingTags = self::where('unique_tag', 'like', 'S-' . $firstLetter . '%')->get();
+        $nextNumber = count($existingTags) + 1;
+
+        return 'S-' . $firstLetter . $nextNumber;
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($supply) {
+            $supply->unique_tag = $supply->generateUniqueTag();
+        });
     }
 }

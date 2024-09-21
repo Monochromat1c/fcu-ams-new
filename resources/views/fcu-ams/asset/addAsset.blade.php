@@ -97,13 +97,18 @@
                             </select>
                         </div>
                         <div class="mb-2">
+                            <label for="condition_id" class="block text-gray-700 font-bold mb-2">Condition:</label>
+                            <select id="condition_id" name="condition_id" class="w-full p-2 border rounded-md"
+                                required>
+                                @foreach($conditions as $condition)
+                                    <option value="{{ $condition->id }}">{{ $condition->condition }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="mb-2">
                             <label for="purchase_date" class="block text-gray-700 font-bold mb-2">Purchase Date:</label>
                             <input type="date" id="purchase_date" name="purchase_date"
                                 class="w-full p-2 border rounded-md" required>
-                        </div>
-                        <div class="mb-2">
-                            <label for="condition" class="block text-gray-700 font-bold mb-2">Condition:</label>
-                            <input type="text" id="condition" name="condition" class="w-full p-2 border rounded-md">
                         </div>
                     </div>
                     <div class="space-x-2 flex">

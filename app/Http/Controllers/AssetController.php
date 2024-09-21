@@ -9,6 +9,7 @@ use App\Models\Supplier;
 use App\Models\Site;
 use App\Models\Location;
 use App\Models\Category;
+use App\Models\Condition;
 use App\Models\Department;
 use App\Models\AssetEditHistory;
 use Maatwebsite\Excel\Facades\Excel;
@@ -34,7 +35,8 @@ class AssetController extends Controller
             ->leftJoin('locations', 'assets.location_id', '=', 'locations.id')
             ->leftJoin('categories', 'assets.category_id', '=', 'categories.id')
             ->leftJoin('departments', 'assets.department_id', '=', 'departments.id')
-            ->select('assets.*', 'suppliers.supplier as supplier_name', 'sites.site as site_name', 'locations.location as location_name', 'categories.category as category_name', 'departments.department as department_name');
+            ->leftJoin('conditions', 'assets.condition_id', '=', 'conditions.id')
+            ->select('assets.*', 'suppliers.supplier as supplier_name', 'sites.site as site_name', 'conditions.condition as condition_name','locations.location as location_name', 'categories.category as category_name', 'departments.department as department_name');
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -68,12 +70,13 @@ class AssetController extends Controller
         $locations = DB::table('locations')->get();
         $categories = DB::table('categories')->get();
         $departments = DB::table('departments')->get();
-        return view('fcu-ams/asset/addAsset', compact('suppliers', 'sites', 'locations', 'categories', 'departments'));
+        $conditions = DB::table('conditions')->get();
+        return view('fcu-ams/asset/addAsset', compact('suppliers', 'sites', 'locations', 'categories', 'departments', 'conditions'));
     }
 
     public function show($id)
     {
-        $asset = Asset::with(['supplier', 'site', 'location', 'category', 'department', 'editHistory'])->findOrFail($id);
+        $asset = Asset::with(['supplier', 'site', 'location', 'category', 'department', 'editHistory', 'condition'])->findOrFail($id);
         return view('fcu-ams/asset/viewAsset', compact('asset'));
     }
 
@@ -94,8 +97,8 @@ class AssetController extends Controller
             'location_id' => 'required|integer|exists:locations,id',
             'category_id' => 'required|integer|exists:categories,id',
             'department_id' => 'required|integer|exists:departments,id',
+            'condition_id' => 'required|integer|exists:conditions,id',
             'purchase_date' => 'required|date',
-            'condition' => 'nullable|string',
             'asset_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -110,8 +113,8 @@ class AssetController extends Controller
         $asset->location_id = $validatedData['location_id'];
         $asset->category_id = $validatedData['category_id'];
         $asset->department_id = $validatedData['department_id'];
+        $asset->condition_id = $validatedData['condition_id'];
         $asset->purchase_date = $validatedData['purchase_date'];
-        $asset->condition = $validatedData['condition'];
 
         if ($request->hasFile('asset_image')) {
             $imageName = time().'.'.$request->asset_image->extension();
@@ -132,8 +135,9 @@ class AssetController extends Controller
         $locations = DB::table('locations')->get();
         $categories = DB::table('categories')->get();
         $departments = DB::table('departments')->get();
+        $conditions = DB::table('conditions')->get();
 
-        return view('fcu-ams/asset/updateAsset', compact('asset', 'suppliers', 'sites', 'locations', 'categories', 'departments'));
+        return view('fcu-ams/asset/updateAsset', compact('asset', 'suppliers', 'sites', 'locations', 'categories', 'departments', 'conditions'));
     }
 
     public function update(Request $request, $id)
@@ -153,8 +157,8 @@ class AssetController extends Controller
             'location_id' => 'required|integer|exists:locations,id',
             'category_id' => 'required|integer|exists:categories,id',
             'department_id' => 'required|integer|exists:departments,id',
+            'condition_id' => 'required|integer|exists:conditions,id',
             'purchase_date' => 'required|date',
-            'condition' => 'nullable|string',
             'asset_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
@@ -169,8 +173,8 @@ class AssetController extends Controller
         $asset->location_id = $validatedData['location_id'];
         $asset->category_id = $validatedData['category_id'];
         $asset->department_id = $validatedData['department_id'];
+        $asset->condition_id = $validatedData['condition_id'];
         $asset->purchase_date = $validatedData['purchase_date'];
-        $asset->condition = $validatedData['condition'];
 
         if ($request->hasFile('asset_image')) {
             $imageName = time().'.'.$request->asset_image->extension();
@@ -198,7 +202,7 @@ class AssetController extends Controller
 
     public function maintenance()
     {
-        $assets = Asset::where('condition', 'Maintenance')->orWhere('condition', 'maintenance')->get();
+        $assets = Asset::where('condition_id', 2)->get();
         return view('fcu-ams/asset/maintenance', compact('assets'));
     }
 

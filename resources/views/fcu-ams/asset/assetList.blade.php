@@ -66,7 +66,7 @@
         </div>
         <div class="mb-1 flex justify-between m-3 rounded-md">
             <div class="space-x-2 flex">
-                <div class="import-list my-auto">
+                <!-- <div class="import-list my-auto">
                     <form action="{{ route('asset.import') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
@@ -76,7 +76,7 @@
                             Import from Excel
                         </button>
                     </form>
-                </div>
+                </div> -->
                 <div class="export-list my-auto">
                     <button type="button" onclick="window.location.href='{{ route('asset.export') }}'"
                         class="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-200 ease-in rounded-md p-2">
@@ -299,7 +299,7 @@
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier_name }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->site_name }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->category_name }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->condition }}
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->condition_name }}
                                 </td>
                                 <td class="border border-slate-300 px-4 py-2">
                                     <div class="mx-auto flex justify-center space-x-2">

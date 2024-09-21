@@ -8,6 +8,12 @@ return new class extends Migration
 {
     public function up()
     {
+        Schema::create('conditions', function (Blueprint $table) {
+            $table->id();
+            $table->string('condition');
+            $table->timestamps();
+        });
+
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
             $table->string('asset_image')->nullable();
@@ -27,7 +33,8 @@ return new class extends Migration
             $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('id')->on('departments');
             $table->date('purchase_date');
-            $table->string('condition')->nullable();
+            $table->unsignedBigInteger('condition_id')->nullable();
+            $table->foreign('condition_id')->references('id')->on('conditions');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -36,5 +43,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('assets');
+        Schema::dropIfExists('conditions');
     }
 };

@@ -29,7 +29,7 @@
                     <thead>
                         <tr>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">ID</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Asset Image</th>
+                            <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400">Asset Image</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Asset Name</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Brand</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Model</th>
@@ -41,7 +41,7 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Category</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Department</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Condition</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 text-center">Action</th>
+                            <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 text-center">Action</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -68,8 +68,8 @@
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->category->category }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->department->department }}
                                 </td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->condition }}</td>
-                                <td class="border border-slate-300 px-4 py-2">
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->condition->condition }}</td>
+                                <!-- <td class="border border-slate-300 px-4 py-2">
                                     <div class="mx-auto flex justify-center space-x-2">
                                         <a href="{{ route('asset.edit', ['id' => $asset->id]) }}" class="text-blue-600 hover:text-blue-900">Edit</a>
                                         <form action="{{ route('asset.delete', ['id' => $asset->id]) }}" method="POST" id="delete-form-{{ $asset->id }}">
@@ -78,7 +78,7 @@
                                         </form>
                                         <button type="button" class="text-red-600 hover:text-red-900" onclick="confirmDelete({{ $asset->id }})">Delete</button>
                                     </div>
-                                </td>
+                                </td> -->
                             </tr>
                         @endforeach
                     </tbody>
