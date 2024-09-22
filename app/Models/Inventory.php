@@ -27,7 +27,7 @@ class Inventory extends Model
 
     public function generateUniqueTag()
     {
-        $firstLetter = substr($this->name, 0, 1);
+        $firstLetter = substr($this->items_specs, 0, 1);
         $existingTags = self::where('unique_tag', 'like', 'S-' . $firstLetter . '%')->get();
         $nextNumber = count($existingTags) + 1;
 

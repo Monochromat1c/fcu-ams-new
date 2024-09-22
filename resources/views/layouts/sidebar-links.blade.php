@@ -77,7 +77,9 @@
     </svg>
     Alerts
 </a>
-<a href="#" class="border-top flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+<a href="{{ route('reports.index') }}"
+    class="border-top flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100
+    {{ Request::is('reports') ? 'bg-gray-100' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd"
             d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z"
@@ -150,7 +152,8 @@
         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">View Users</a>
     </div>
 </div>
-<a href="#" class="border-top border-bottom flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+<a href="{{ route('profile.index') }}"
+    class="border-top border-bottom flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 {{ Request::is('user/profile') ? 'bg-gray-100' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
     </svg>

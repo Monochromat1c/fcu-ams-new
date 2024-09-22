@@ -98,7 +98,7 @@
                 </div>
                 <a href="{{ route('login') }}"
                     class="w-full flex justify-center bg-blue-900 p-3 rounded-lg">
-                    <label for="" class="text-white">Sign In</label>
+                    <label for="" class="text-white">Sign In With Your Account</label>
                 </a>
             </form>
         </div>

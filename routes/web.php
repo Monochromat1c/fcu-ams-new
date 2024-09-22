@@ -11,6 +11,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\LeaseController;
+use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ProfileController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login');
@@ -80,5 +82,14 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/lease/create/form', 'createForm')->name('lease.create.form');
         Route::post('/lease/create/form', 'createForm')->name('lease.create.form.add');
         Route::post('/lease', 'store')->name('lease.store');
+    });
+    
+    Route::controller(ReportController::class)->group(function () {
+        Route::get('/reports', 'index')->name('reports.index');
+    });
+
+    Route::controller(ProfileController::class)->group(function () {
+        Route::get('/user/profile', 'index')->name('profile.index');
+        Route::post('/user/profile/update', 'update')->name('profile.update');
     });
 });

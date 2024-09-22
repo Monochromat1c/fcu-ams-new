@@ -51,6 +51,7 @@ class InventoryController extends Controller
             $query->orderBy('items_specs', 'asc');
         }
 
+        $query->where('inventories.stocks', '>', 0);
         $inventories = $query->whereNull('inventories.deleted_at')->paginate(15);
 
         return view('fcu-ams/inventory/inventoryList', compact('totalItems', 'totalValue', 'lowStock', 'outOfStock', 'inventories', 'sort', 'direction', 'search'));
