@@ -11,7 +11,7 @@ form {
 
 .login-container {
     min-height: 94dvh;
-    min-width: 97dvw;
+    /* min-width: 97dvw; */
     background-image: url(/img/login/transparent.png);
     /* backdrop-filter: blur(1px); */
 }
@@ -26,7 +26,7 @@ form {
 
 .login-form {
     background-color: #ffffff;
-    width: 444px;
+    min-width: 30dvw;
 }
 
 .fcu-icon {
@@ -35,7 +35,7 @@ form {
     width: 222px;
 }
 
-.input-container {
+/* .input-container {
     position: relative;
     width: 100%;
 }
@@ -55,4 +55,4 @@ form {
     transform: translateY(-50%);
     font-size: 18px;
     color: #aaa;
-}
+} */

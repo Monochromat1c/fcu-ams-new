@@ -14,8 +14,13 @@ use App\Http\Controllers\LeaseController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login');
+    Route::get('/signup', 'signup')->name('signup');
     Route::post('/login', 'login')->name('login.submit');
     Route::post('/logout', 'logout')->name('logout');
+});
+
+Route::controller(UserController::class)->group(function () {
+    Route::post('/users', 'store')->name('users.store');
 });
 
 Route::middleware(['auth.user'])->group(function () {
@@ -65,9 +70,9 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/departments/add', 'store')->name('departments.add.store');
     });
 
-    Route::controller(UserController::class)->group(function () {
-        Route::post('/users', 'store')->name('users.store');
-    });
+    // Route::controller(UserController::class)->group(function () {
+    //     Route::post('/users', 'store')->name('users.store');
+    // });
 
     Route::controller(LeaseController::class)->group(function () {
         Route::get('/lease', 'index')->name('lease.index');

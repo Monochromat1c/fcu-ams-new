@@ -53,7 +53,7 @@
                 <button type="submit" class="flex justify-center w-full bg-blue-900 p-3 rounded-lg">
                     <label for="" class="text-white">Sign In</label>
                 </button>
-                <div class="my-4 flex justify-center items-center">
+                <div class="my-2 flex justify-center items-center">
                     <div class="w-1/2 relative">
                         <div class="absolute left-0 top-1/2 transform -translate-y-1/2 h-px bg-black w-full"></div>
                     </div>
@@ -62,7 +62,7 @@
                         <div class="absolute left-0 top-1/2 transform -translate-y-1/2 h-px bg-black w-full"></div>
                     </div>
                 </div>
-                <a href="#" class="w-full flex justify-center bg-green-700 p-3 rounded-lg">
+                <a href="{{ route('signup') }}" class="w-full flex justify-center bg-green-700 p-3 rounded-lg">
                     <label for="" class="text-white">Create New Account</label>
                 </a>
             </form>
