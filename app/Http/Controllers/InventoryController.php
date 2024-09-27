@@ -11,14 +11,14 @@ class InventoryController extends Controller
 {
     public function index(Request $request) {
         $totalItems = DB::table('inventories')->count();
-        $totalValue = DB::table('inventories')->sum(DB::raw('unit_price * stocks'));
+        $totalValue = DB::table('inventories')->sum(DB::raw('unit_price * quantity'));
         $lowStock = DB::table('inventories')
-            ->where('stocks', '>=', 1)
-            ->where('stocks', '<', 20)
+            ->where('quantity', '>=', 1)
+            ->where('quantity', '<', 20)
             ->whereNull('deleted_at')
             ->count();
         $outOfStock = DB::table('inventories')
-            ->where('stocks', '=', '0')
+            ->where('quantity', '=', '0')
             ->whereNull('deleted_at')
             ->count();
         $sort = $request->input('sort', 'items_specs');
@@ -43,7 +43,7 @@ class InventoryController extends Controller
 
         if ($sort && $direction) {
             if ($sort == 'total_item_price') {
-                $query->orderBy(DB::raw('unit_price * stocks'), $direction);
+                $query->orderBy(DB::raw('unit_price * quantity'), $direction);
             } else {
                 $query->orderBy($sort, $direction);
             }
@@ -51,7 +51,7 @@ class InventoryController extends Controller
             $query->orderBy('items_specs', 'asc');
         }
 
-        $query->where('inventories.stocks', '>', 0);
+        $query->where('inventories.quantity', '>', 0);
         $inventories = $query->whereNull('inventories.deleted_at')->paginate(15);
 
         return view('fcu-ams/inventory/inventoryList', compact('totalItems', 'totalValue', 'lowStock', 'outOfStock', 'inventories', 'sort', 'direction', 'search'));
@@ -77,7 +77,7 @@ class InventoryController extends Controller
                 Rule::unique('inventories', 'items_specs')->whereNull('deleted_at'),
             ],
             'unit' => 'required|string',
-            'stocks' => 'required|numeric',
+            'quantity' => 'required|numeric',
             'unit_price' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
             'stock_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -86,7 +86,7 @@ class InventoryController extends Controller
         $inventory = new Inventory();
         $inventory->items_specs = $validatedData['items_specs'];
         $inventory->unit = $validatedData['unit'];
-        $inventory->stocks = $validatedData['stocks'];
+        $inventory->quantity = $validatedData['quantity'];
         $inventory->unit_price = $validatedData['unit_price'];
         $inventory->supplier_id = $validatedData['supplier_id'];
 
@@ -118,7 +118,7 @@ class InventoryController extends Controller
                 Rule::unique('inventories', 'items_specs')->ignore($id)->whereNull('deleted_at'),
             ],
             'unit' => 'required|string',
-            'stocks' => 'required|numeric',
+            'quantity' => 'required|numeric',
             'unit_price' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
             'stock_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -127,7 +127,7 @@ class InventoryController extends Controller
         $inventory = Inventory::findOrFail($id);
         $inventory->items_specs = $validatedData['items_specs'];
         $inventory->unit = $validatedData['unit'];
-        $inventory->stocks = $validatedData['stocks'];
+        $inventory->quantity = $validatedData['quantity'];
         $inventory->unit_price = $validatedData['unit_price'];
         $inventory->supplier_id = $validatedData['supplier_id'];
 
@@ -165,11 +165,11 @@ class InventoryController extends Controller
 
         $inventory = Inventory::findOrFail($validatedData['item_id']);
 
-        if ($inventory->stocks < $validatedData['quantity']) {
-            return redirect()->back()->with('error', 'Insufficient stocks');
+        if ($inventory->quantity < $validatedData['quantity']) {
+            return redirect()->back()->with('error', 'Insufficient quantity');
         }
 
-        $inventory->stocks -= $validatedData['quantity'];
+        $inventory->quantity -= $validatedData['quantity'];
         $inventory->save();
 
         return redirect()->route('inventory.stock.out')->with('success', 'Item stocked out successfully');

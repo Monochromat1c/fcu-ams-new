@@ -43,8 +43,8 @@
                         <input type="text" id="unit" name="unit" class="w-full p-2 border rounded-md" required>
                     </div>
                     <div class="mb-4">
-                        <label for="stocks" class="block text-gray-700 font-bold mb-2">Stocks:</label>
-                        <input type="number" id="stocks" name="stocks" class="w-full p-2 border rounded-md" required>
+                        <label for="quantity" class="block text-gray-700 font-bold mb-2">Quantity:</label>
+                        <input type="number" id="quantity" name="quantity" class="w-full p-2 border rounded-md" required>
                     </div>
                     <div class="mb-4">
                         <label for="unit_price" class="block text-gray-700 font-bold mb-2">Unit Price:</label>

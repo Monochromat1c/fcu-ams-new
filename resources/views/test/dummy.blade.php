@@ -17,7 +17,7 @@
             <thead class="">
                 <tr class="bg-blue-600 text-white">
                     <td class="p-3 text-center">Item No.</td>
-                    <td class="p-3 text-center">Stocks</td>
+                    <td class="p-3 text-center">Quantity</td>
                     <td class="p-3 text-center">Unit</td>
                     <td class="p-3 text-center">Items & Specs</td>
                     <td class="p-3 text-center">Unit Price</td>

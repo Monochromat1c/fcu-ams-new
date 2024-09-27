@@ -92,7 +92,7 @@
                             <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">ID</th> -->
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unique Tag</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Items & Specs</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Stocks</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Quantity</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit Price</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Supplier</th>
@@ -104,7 +104,7 @@
                                 <!-- <td class="border border-slate-300 px-4 py-2">{{ $inventory->id }}</td> -->
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->unique_tag }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $inventory->stocks }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $inventory->quantity }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit_price }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->supplier->supplier }}
@@ -189,7 +189,7 @@
                         <tr>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unique Tag</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Items & Specs</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Stocks</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Quantity</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit Price</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Supplier</th>
@@ -200,7 +200,7 @@
                             <tr>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->unique_tag }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $inventory->stocks }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $inventory->quantity }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit_price }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->supplier->supplier }}
@@ -210,9 +210,9 @@
                     </tbody>
                 </table>
             </div>
-            <!-- <div class="bg-white rounded-lg shadow-md p-6 lowStock mb-3">
+            <div class="bg-white rounded-lg shadow-md p-6 lowStock mb-3">
                 <h2 class="text-2xl">Work in progress...</h2>
-            </div> -->
+            </div>
         </div>
     </div>
 </div>

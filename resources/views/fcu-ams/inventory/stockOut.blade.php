@@ -33,7 +33,7 @@
                         <select id="item_id" name="item_id" class="w-full p-2 border rounded-md" required>
                             @foreach($inventories as $inventory)
                                 <option value="{{ $inventory->id }}">{{ $inventory->items_specs }}
-                                    ({{ $inventory->stocks }} {{ $inventory->unit }})</option>
+                                    ({{ $inventory->quantity }} {{ $inventory->unit }})</option>
                             @endforeach
                         </select>
                     </div>

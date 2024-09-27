@@ -33,7 +33,7 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">ID</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Stock Image</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Items & Specs</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Stocks</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Quantity</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit Price</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Supplier</th>
@@ -53,12 +53,12 @@
                                 @endif
                             </td>
                             <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $inventory->stocks }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $inventory->quantity }}</td>
                             <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit }}</td>
                             <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit_price }}</td>
                             <td class="border border-slate-300 px-4 py-2">{{ $inventory->supplier->supplier }}</td>
                             <td class="border border-slate-300 px-4 py-2">
-                                {{ number_format($inventory->stocks * $inventory->unit_price, 2) }}</td>
+                                {{ number_format($inventory->quantity * $inventory->unit_price, 2) }}</td>
                         </tr>
                     </tbody>
                 </table>

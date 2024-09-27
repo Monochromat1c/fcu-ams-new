@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('unique_tag');
             $table->string('stock_image')->nullable();
-            $table->integer('stocks');
+            $table->integer('quantity');
             $table->string('unit');
             $table->string('items_specs');
             $table->decimal('unit_price', 10, 2);

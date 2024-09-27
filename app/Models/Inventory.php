@@ -13,7 +13,7 @@ class Inventory extends Model
     protected $fillable = [
         'unique_tag',
         'stock_image',
-        'stocks',
+        'quantity',
         'unit',
         'items_specs',
         'unit_price',

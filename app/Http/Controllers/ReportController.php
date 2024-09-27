@@ -23,13 +23,13 @@ class ReportController extends Controller
     public function index(Request $request) {
         $inventories = Inventory::with('supplier')
             ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
-            ->where('stocks', '>', 0)
+            ->where('quantity', '>', 0)
             ->orderBy('unique_tag', 'asc')
             ->paginate(5);
 
         $lowStockInventories = Inventory::with('supplier')
-            ->where('stocks', '>=', 1)
-            ->where('stocks', '<', 20)
+            ->where('quantity', '>=', 1)
+            ->where('quantity', '<', 20)
             ->whereNull('deleted_at')
             ->orderBy('unique_tag', 'asc')
             ->paginate(5);

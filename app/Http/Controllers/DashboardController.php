@@ -18,7 +18,7 @@ class DashboardController extends Controller
         $totalAssets = Asset::count();
         $totalAssetValue = Asset::sum('cost');
         $totalInventoryStocks = Inventory::count();
-        $totalInventoryValue = Inventory::sum(DB::raw('unit_price * stocks'));
+        $totalInventoryValue = Inventory::sum(DB::raw('unit_price * quantity'));
 
         $mostAcquiredCategory = Asset::select('category_id', DB::raw('COUNT(*) as count'))
             ->groupBy('category_id')
