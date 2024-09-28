@@ -119,7 +119,6 @@
         addSupplierBtn.addEventListener('click', function () {
             const newSupplier = document.getElementById('new_supplier').value;
             if (newSupplier.trim() !== '') {
-                // Submit the form to add a new supplier and refresh the page
                 const formData = new FormData();
                 formData.append('supplier', newSupplier);
                 fetch('{{ route('supplier.add') }}', {

@@ -30,16 +30,36 @@
                     <h3 class="text-lg font-semibold mb-3">Item Details</h3>
                     <div class="mb-4">
                         <label for="item_id" class="block text-gray-700 font-bold mb-2">Item:</label>
-                        <select id="item_id" name="item_id" class="w-full p-2 border rounded-md" required>
-                            @foreach($inventories as $inventory)
-                                <option value="{{ $inventory->id }}">{{ $inventory->items_specs }}
-                                    ({{ $inventory->quantity }} {{ $inventory->unit }})</option>
+                        {{ $inventories->links() }}
+                        @foreach($inventories as $inventory)
+                            <div class="flex items-center mb-2 mt-2">
+                                <input type="checkbox" id="item_id_{{ $inventory->id }}" name="item_id[]"
+                                    value="{{ $inventory->id }}">
+                                <label for="item_id_{{ $inventory->id }}" class="mx-2">{{ $inventory->brand }}
+                                    {{ $inventory->items_specs }} ({{ $inventory->quantity }} available,
+                                    {{ $inventory->unit_price }} {{ $inventory->unit->unit }})</label>
+                                <input type="number" id="quantity_{{ $inventory->id }}" name="quantity[]"
+                                    class="w-full p-2 border rounded-md" placeholder="Enter the quantity">
+                            </div>
+                        @endforeach
+                    </div>
+                    <div class="mb-4">
+                        <label for="department_id" class="block text-gray-700 font-bold mb-2">Department:</label>
+                        <select id="department_id" name="department_id" class="w-full p-2 border rounded-md" required>
+                            <option value="">Select a department</option>
+                            @foreach($departments as $department)
+                                <option value="{{ $department->id }}">{{ $department->department }}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="mb-4">
-                        <label for="quantity" class="block text-gray-700 font-bold mb-2">Quantity:</label>
-                        <input type="number" id="quantity" name="quantity" class="w-full p-2 border rounded-md"
+                        <label for="stock_out_date" class="block text-gray-700 font-bold mb-2">Stock Out Date:</label>
+                        <input type="date" id="stock_out_date" name="stock_out_date"
+                            class="w-full p-2 border rounded-md" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="receiver" class="block text-gray-700 font-bold mb-2">Received by:</label>
+                        <input type="input" id="receiver" name="receiver" class="w-full p-2 border rounded-md"
                             required>
                     </div>
                 </div>

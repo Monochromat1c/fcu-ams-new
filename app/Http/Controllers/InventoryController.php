@@ -5,6 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use App\Models\Inventory;
+use App\Models\Asset;
+use App\Models\Supplier;
+use App\Models\Site;
+use App\Models\Location;
+use App\Models\Category;
+use App\Models\Condition;
+use App\Models\Department;
+use App\Models\StockOut;
+use App\Models\AssetEditHistory;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\AssetsExport;
+use App\Imports\AssetsImport;
 use Illuminate\Validation\Rule;
 
 class InventoryController extends Controller
@@ -161,26 +173,56 @@ class InventoryController extends Controller
 
     public function createStockOut()
     {
-        $inventories = Inventory::whereNull('deleted_at')->get();
-        return view('fcu-ams/inventory/stockOut', compact('inventories'));
+        $inventories = Inventory::whereNull('deleted_at')
+            ->where('quantity', '>=', 1)
+            ->paginate(10);
+        $departments = Department::all();
+        return view('fcu-ams/inventory/stockOut', compact('inventories', 'departments'));
     }
 
     public function storeStockOut(Request $request)
     {
         $validatedData = $request->validate([
-            'item_id' => 'required|integer|exists:inventories,id',
-            'quantity' => 'required|numeric|min:1',
+            'item_id' => 'required|array',
+            'quantity' => 'required|array',
+            'department_id' => 'required|integer|exists:departments,id',
+            'stock_out_date' => 'required|date',
+            'receiver' => 'required|string',
         ]);
 
-        $inventory = Inventory::findOrFail($validatedData['item_id']);
+        foreach ($validatedData['item_id'] as $key => $itemId) {
+            $inventory = Inventory::findOrFail($itemId);
 
-        if ($inventory->quantity < $validatedData['quantity']) {
-            return redirect()->back()->with('error', 'Insufficient quantity');
+            if ($inventory->quantity < $validatedData['quantity'][$key]) {
+                return redirect()->back()->with('error', 'Insufficient quantity for item ' . $inventory->brand . ' ' . $inventory->items_specs);
+            }
+
+            $inventory->quantity -= $validatedData['quantity'][$key];
+            $inventory->department_id = $validatedData['department_id'];
+            $inventory->stock_out_date = $validatedData['stock_out_date'];
+            $inventory->save();
+
+            // Create a new stock out record
+            $stockOut = new StockOut();
+            $stockOut->inventory_id = $inventory->id;
+            $stockOut->quantity = $validatedData['quantity'][$key];
+            $stockOut->department_id = $validatedData['department_id'];
+            $stockOut->stock_out_date = $validatedData['stock_out_date'];
+            $stockOut->receiver = $validatedData['receiver'];
+            $stockOut->save();
         }
 
-        $inventory->quantity -= $validatedData['quantity'];
-        $inventory->save();
+        return redirect()->route('inventory.stock.out')->with('success', 'Items stocked out successfully');
+    }
 
-        return redirect()->route('inventory.stock.out')->with('success', 'Item stocked out successfully');
+    public function searchStockOut(Request $request)
+    {
+        $search = $request->input('search');
+        $inventories = Inventory::whereNull('deleted_at')
+            ->where('brand', 'like', '%' . $search . '%')
+            ->orWhere('items_specs', 'like', '%' . $search . '%')
+            ->paginate(10);
+        $departments = Department::all();
+        return view('fcu-ams/inventory/stockOut', compact('inventories', 'departments'));
     }
 }

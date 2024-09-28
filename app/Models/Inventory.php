@@ -18,6 +18,8 @@ class Inventory extends Model
         'items_specs',
         'unit_price',
         'deleted_at',
+        'department_id',
+        'stock_out_date',
     ];
 
     public function supplier()
@@ -28,6 +30,11 @@ class Inventory extends Model
     public function unit()
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 
     public function generateUniqueTag()
