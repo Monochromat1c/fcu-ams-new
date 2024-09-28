@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Inventory;
 use App\Models\Supplier;
+use App\Models\Unit;
 
 class InventorySeeder extends Seeder
 {
@@ -15,164 +16,185 @@ class InventorySeeder extends Seeder
     public function run()
     {
         $supplier = Supplier::where('supplier', 'Company X')->first();
+        $units = Unit::all();
 
         if ($supplier) {
             Inventory::create([
                 'quantity' => 15, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Faber-Castell Ballpen', 
+                'unit_id' => 2, 
+                'items_specs' => 'Ballpen', 
+                'brand' => 'Faber-Castell',
                 'unit_price' => 50.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 10, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Pilot G-Tec-C4 Gel Ink Pen', 
+                'unit_id' => 2, 
+                'items_specs' => 'G-Tec-C4 Gel Ink Pen',
+                'brand' => 'Pilot',
                 'unit_price' => 30.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 5, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Staedtler Noris Pencil', 
+                'unit_id' => 2, 
+                'items_specs' => 'Pencil', 
+                'brand' => 'Staedtler Noris',
                 'unit_price' => 20.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 10, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Faber-Castell 9000 Graphite Pencil', 
+                'unit_id' => 2, 
+                'items_specs' => '9000 Graphite Pencil', 
+                'brand' => 'Faber-Castell',
                 'unit_price' => 25.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 15, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Tombow Mono 100 Pencil', 
+                'unit_id' => 2, 
+                'items_specs' => 'Mono 100 Pencil', 
+                'brand' => 'Tombow',
                 'unit_price' => 30.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 5, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Pilot Acroball Pen', 
+                'unit_id' => 2, 
+                'items_specs' => 'Acroball Pen', 
+                'brand' => 'Pilot',
                 'unit_price' => 40.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 5, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Zebra Sarasa Gel Pen', 
+                'unit_id' => 2, 
+                'items_specs' => 'Sarasa Gel Pen', 
+                'brand' => 'Zebra',
                 'unit_price' => 35.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 0, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Faber-Castell Pitt Artist Pen', 
+                'unit_id' => 2, 
+                'items_specs' => 'Pitt Artist Pen', 
+                'brand' => 'Faber-Castell',
                 'unit_price' => 45.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 10, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Staedtler Lumocolor Permanent Marker', 
+                'unit_id' => 2, 
+                'items_specs' => 'Lumocolor Permanent Marker', 
+                'brand' => 'Staedtler',
                 'unit_price' => 50.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 100, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Tombow ABT Dual Tip Marker', 
+                'unit_id' => 2, 
+                'items_specs' => 'ABT Dual Tip Marker', 
+                'brand' => 'Tombow',
                 'unit_price' => 40.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 10, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Faber-Castell Polychromos Pencil', 
+                'unit_id' => 2, 
+                'items_specs' => 'Polychromos Pencil', 
+                'brand' => 'Faber-Castell',
                 'unit_price' => 55.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 100, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Pilot G2 Gel Ink Pen', 
+                'unit_id' => 2, 
+                'items_specs' => 'G2 Gel Ink Pen', 
+                'brand' => 'Pilot',
                 'unit_price' => 35.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 0, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Zebra F-701 Ballpoint Pen', 
+                'unit_id' => 2, 
+                'items_specs' => 'F-701 Ballpoint Pen', 
+                'brand' => 'Zebra',
                 'unit_price' => 30.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 5, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Staedtler Ergosoft Pencil', 
+                'unit_id' => 2, 
+                'items_specs' => 'Ergosoft Pencil', 
+                'brand' => 'Staedtler',
                 'unit_price' => 25.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 0, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Tombow Fudenosuke Brush Pen', 
+                'unit_id' => 2, 
+                'items_specs' => 'Fudenosuke Brush Pen', 
+                'brand' => 'Tombow',
                 'unit_price' => 40.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 100, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Faber-Castell Kneaded Eraser', 
+                'unit_id' => 2, 
+                'items_specs' => 'Kneaded Eraser', 
+                'brand' => 'Faber-Castell',
                 'unit_price' => 20.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 0, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Pilot FriXion Erasable Pen', 
+                'unit_id' => 2, 
+                'items_specs' => 'FriXion Erasable Pen', 
+                'brand' => 'Pilot',
                 'unit_price' => 35.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 100, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Zebra Midliner Highlighter', 
+                'unit_id' => 2, 
+                'items_specs' => 'Midliner Highlighter', 
+                'brand' => 'Zebra',
                 'unit_price' => 30.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 100, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Staedtler Textsurfer Highlighter', 
+                'unit_id' => 2, 
+                'items_specs' => 'Textsurfer Highlighter', 
+                'brand' => 'Staedtler',
                 'unit_price' => 25.00, 
                 'supplier_id' => $supplier->id,
             ]);
 
             Inventory::create([
                 'quantity' => 0, 
-                'unit' => 'Pcs.', 
-                'items_specs' => 'Tombow Dual Tip Highlighter', 
+                'unit_id' => 2, 
+                'items_specs' => 'Dual Tip Highlighter', 
+                'brand' => 'Tombow',
                 'unit_price' => 40.00, 
                 'supplier_id' => $supplier->id,
             ]);

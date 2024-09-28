@@ -27,7 +27,8 @@ class InventoryController extends Controller
 
         $query = DB::table('inventories')
             ->leftJoin('suppliers', 'inventories.supplier_id', '=', 'suppliers.id')
-            ->select('inventories.*', 'suppliers.supplier as supplier_name');
+            ->leftJoin('units', 'inventories.unit_id', '=', 'units.id')
+            ->select('inventories.*', 'suppliers.supplier as supplier_name', 'units.unit as unit_name');
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -59,24 +60,26 @@ class InventoryController extends Controller
 
     public function show($id)
     {
-        $inventory = Inventory::with('supplier')->findOrFail($id);
+        $inventory = Inventory::with('supplier', 'unit')->findOrFail($id);
         return view('fcu-ams/inventory/viewInventory', compact('inventory'));
     }
 
     public function create() {
         $suppliers = DB::table('suppliers')->get();
-        return view('fcu-ams/inventory/stockIn', compact('suppliers'));
+        $units = DB::table('units')->get();
+        return view('fcu-ams/inventory/stockIn', compact('suppliers', 'units'));
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
+            'brand' => 'required|string',
             'items_specs' => [
                 'required',
                 'string',
                 Rule::unique('inventories', 'items_specs')->whereNull('deleted_at'),
             ],
-            'unit' => 'required|string',
+            'unit_id' => 'required|integer|exists:units,id',
             'quantity' => 'required|numeric',
             'unit_price' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
@@ -84,8 +87,9 @@ class InventoryController extends Controller
         ]);
 
         $inventory = new Inventory();
+        $inventory->brand = $validatedData['brand'];
         $inventory->items_specs = $validatedData['items_specs'];
-        $inventory->unit = $validatedData['unit'];
+        $inventory->unit_id = $validatedData['unit_id'];
         $inventory->quantity = $validatedData['quantity'];
         $inventory->unit_price = $validatedData['unit_price'];
         $inventory->supplier_id = $validatedData['supplier_id'];
@@ -98,6 +102,8 @@ class InventoryController extends Controller
 
         $inventory->save();
 
+        $request->session()->put('input', $request->all());
+
         return redirect()->route('inventory.stock.in')->with('success', 'Item added to inventory.');
     }
 
@@ -105,19 +111,21 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::findOrFail($id);
         $suppliers = DB::table('suppliers')->get();
+        $units = DB::table('units')->get();
 
-        return view('fcu-ams/inventory/updateStock', compact('inventory', 'suppliers'));
+        return view('fcu-ams/inventory/updateStock', compact('inventory', 'suppliers', 'units'));
     }
 
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
+            'brand' => 'required|string',
             'items_specs' => [
                 'required',
                 'string',
                 Rule::unique('inventories', 'items_specs')->ignore($id)->whereNull('deleted_at'),
             ],
-            'unit' => 'required|string',
+            'unit_id' => 'required|integer|exists:units,id',
             'quantity' => 'required|numeric',
             'unit_price' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
@@ -125,8 +133,9 @@ class InventoryController extends Controller
         ]);
 
         $inventory = Inventory::findOrFail($id);
+        $inventory->brand = $validatedData['brand'];
         $inventory->items_specs = $validatedData['items_specs'];
-        $inventory->unit = $validatedData['unit'];
+        $inventory->unit_id = $validatedData['unit_id'];
         $inventory->quantity = $validatedData['quantity'];
         $inventory->unit_price = $validatedData['unit_price'];
         $inventory->supplier_id = $validatedData['supplier_id'];

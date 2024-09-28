@@ -25,6 +25,11 @@ class Inventory extends Model
         return $this->belongsTo(Supplier::class);
     }
 
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
+
     public function generateUniqueTag()
     {
         $firstLetter = substr($this->items_specs, 0, 1);

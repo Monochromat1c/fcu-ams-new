@@ -9,6 +9,7 @@ use App\Models\Site;
 use App\Models\Location;
 use App\Models\Category;
 use App\Models\Department;
+use App\Models\Unit;
 
 class ForeignRelatedTablesSeeder extends Seeder
 {
@@ -46,5 +47,23 @@ class ForeignRelatedTablesSeeder extends Seeder
             'department' => 'CCS Department',
         ]);
 
+        $units = [
+            ['unit' => 'per ream'],
+            ['unit' => 'per piece'],
+            ['unit' => 'per inch'],
+            ['unit' => 'per feet'],
+            ['unit' => 'per yard'],
+            ['unit' => 'per liter'],
+            ['unit' => 'per milliliter'],
+            ['unit' => 'per gallon'],
+            ['unit' => 'per ounce'],
+            ['unit' => 'per dozen'],
+            ['unit' => 'per pack'],
+            ['unit' => 'per box'],
+        ];
+
+        foreach ($units as $unit) {
+            Unit::create($unit);
+        }
     }
 }

@@ -33,14 +33,25 @@
                     <input type="file" id="stock_image" name="stock_image" class="w-full border rounded-md">
                 </div>
                 <div class="mb-4">
+                    <label for="brand" class="block text-gray-700 font-bold mb-2">Brand:</label>
+                    <input type="text" id="brand" name="brand" class="w-full p-2 border rounded-md"
+                        value="{{ $inventory->brand }}" required>
+                </div>
+                <div class="mb-4">
                     <label for="items_specs" class="block text-gray-700 font-bold mb-2">Item/Specs:</label>
                     <input type="text" id="items_specs" name="items_specs" class="w-full p-2 border rounded-md"
                         value="{{ $inventory->items_specs }}" required>
                 </div>
                 <div class="mb-4">
-                    <label for="unit" class="block text-gray-700 font-bold mb-2">Unit:</label>
-                    <input type="text" id="unit" name="unit" class="w-full p-2 border rounded-md"
-                        value="{{ $inventory->unit }}" required>
+                    <label for="unit_id" class="block text-gray-700 font-bold mb-2">Unit:</label>
+                    <select id="unit_id" name="unit_id" class="w-full p-2 border rounded-md" required>
+                        @foreach($units as $unit)
+                            <option value="{{ $unit->id }}"
+                                {{ $unit->id == $inventory->unit_id ? 'selected' : '' }}>
+                                {{ $unit->unit }}
+                            </option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="mb-4">
                     <label for="quantity" class="block text-gray-700 font-bold mb-2">Quantity:</label>

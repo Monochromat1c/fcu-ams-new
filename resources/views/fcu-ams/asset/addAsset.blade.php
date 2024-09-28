@@ -9,7 +9,7 @@
             <h1 class="text-center text-4xl">Add New Asset</h1>
         </nav>
         <div class="stockin-form bg-white m-3 shadow-md rounded-md p-5">
-            <form method="POST" enctype="multipart/form-data"  action="{{ route('asset.add.store') }}">
+            <form method="POST" enctype="multipart/form-data" action="{{ route('asset.add.store') }}">
                 @csrf
                 <div class="">
                     @if(session('success'))
@@ -58,6 +58,7 @@
                         <div class="mb-2">
                             <label for="supplier_id" class="block text-gray-700 font-bold mb-2">Supplier:</label>
                             <select id="supplier_id" name="supplier_id" class="w-full p-2 border rounded-md" required>
+                                <option value="">Select a supplier</option>
                                 @foreach($suppliers as $supplier)
                                     <option value="{{ $supplier->id }}">{{ $supplier->supplier }}</option>
                                 @endforeach
@@ -66,6 +67,7 @@
                         <div class="mb-2">
                             <label for="site_id" class="block text-gray-700 font-bold mb-2">Site:</label>
                             <select id="site_id" name="site_id" class="w-full p-2 border rounded-md" required>
+                            <option value="">Select a site</option>
                                 @foreach($sites as $site)
                                     <option value="{{ $site->id }}">{{ $site->site }}</option>
                                 @endforeach
@@ -74,6 +76,7 @@
                         <div class="mb-2">
                             <label for="location_id" class="block text-gray-700 font-bold mb-2">Location:</label>
                             <select id="location_id" name="location_id" class="w-full p-2 border rounded-md" required>
+                            <option value="">Select a location</option>
                                 @foreach($locations as $location)
                                     <option value="{{ $location->id }}">{{ $location->location }}</option>
                                 @endforeach
@@ -82,6 +85,7 @@
                         <div class="mb-2">
                             <label for="category_id" class="block text-gray-700 font-bold mb-2">Category:</label>
                             <select id="category_id" name="category_id" class="w-full p-2 border rounded-md" required>
+                            <option value="">Select a category</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->category }}</option>
                                 @endforeach
@@ -91,6 +95,7 @@
                             <label for="department_id" class="block text-gray-700 font-bold mb-2">Department:</label>
                             <select id="department_id" name="department_id" class="w-full p-2 border rounded-md"
                                 required>
+                            <option value="">Select a department</option>
                                 @foreach($departments as $department)
                                     <option value="{{ $department->id }}">{{ $department->department }}</option>
                                 @endforeach
@@ -98,8 +103,8 @@
                         </div>
                         <div class="mb-2">
                             <label for="condition_id" class="block text-gray-700 font-bold mb-2">Condition:</label>
-                            <select id="condition_id" name="condition_id" class="w-full p-2 border rounded-md"
-                                required>
+                            <select id="condition_id" name="condition_id" class="w-full p-2 border rounded-md" required>
+                            <option value="">Select a condition</option>
                                 @foreach($conditions as $condition)
                                     <option value="{{ $condition->id }}">{{ $condition->condition }}</option>
                                 @endforeach

@@ -13,6 +13,7 @@ use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SupplierController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login');
@@ -70,6 +71,10 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/departments/list', 'index')->name('departments.list');
         Route::get('/departments/add', 'create')->name('departments.add');
         Route::post('/departments/add', 'store')->name('departments.add.store');
+    });
+
+    Route::controller(SupplierController::class)->group(function (){
+        Route::post('/supplier/add', 'add')->name('supplier.add');
     });
 
     // Route::controller(UserController::class)->group(function () {

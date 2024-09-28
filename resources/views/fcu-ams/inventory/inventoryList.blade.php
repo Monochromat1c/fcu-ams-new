@@ -230,7 +230,7 @@
                                     <span class="mx-2">Unit Price</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'supplier_name', 'direction' => ($direction == 'asc' && $sort == 'supplier_name') ? 'desc' : 'asc']) }}">
@@ -242,7 +242,7 @@
                                     </a>
                                     <span class="mx-2">Supplier</span>
                                 </div>
-                            </th>
+                            </th> -->
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
@@ -275,9 +275,9 @@
                                 </td> -->
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->quantity }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit_name }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit_price }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $inventory->supplier_name }}</td>
+                                <!-- <td class="border border-slate-300 px-4 py-2">{{ $inventory->supplier_name }}</td> -->
                                 <td class="border border-slate-300 px-4 py-2">
                                     {{ number_format($inventory->quantity * $inventory->unit_price, 2) }}
                                 </td>

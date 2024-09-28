@@ -8,13 +8,22 @@ return new class extends Migration
 {
     public function up()
     {
+        Schema::create('units', function (Blueprint $table) {
+            $table->id();
+            $table->string('unit');
+            $table->timestamps();
+        });
+
         Schema::create('inventories', function (Blueprint $table) {
             $table->id();
             $table->string('unique_tag');
             $table->string('stock_image')->nullable();
             $table->integer('quantity');
-            $table->string('unit');
+            $table->unsignedBigInteger('unit_id');
+            $table->foreign('unit_id')->references('id')->on('units');
+            // $table->string('unit');
             $table->string('items_specs');
+            $table->string('brand')->nullable();
             $table->decimal('unit_price', 10, 2);
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers');
@@ -25,5 +34,6 @@ return new class extends Migration
     public function down()
     {
         Schema::dropIfExists('inventories');
+        Schema::dropIfExists('units');
     }
 };
