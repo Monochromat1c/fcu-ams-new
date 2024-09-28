@@ -18,6 +18,32 @@
             </a>
         </nav>
         <div class="content-area mx-3">
+            <div class="bg-white rounded-lg shadow-md p-6 lowStock mb-3">
+                <h2 class="text-2xl mb-2">Stock Out Records</h2>
+                <table class="table-auto w-full">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">ID</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Receiver</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Stock Out Date</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($stockOutRecords as $record)
+                            <tr>
+                                <td class="border border-slate-300 px-4 py-2">{{ $record->id }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $record->receiver }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $record->stock_out_date }}</td>
+                                <td class="border border-slate-300 px-4 py-2">
+                                    <a href="{{ route('stock.out.details', $record->id) }}" class="text-green-600">View
+                                        Details</a>
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
             <div class="bg-white rounded-lg shadow-md p-6 purchasedThisWeek mb-3">
                 <div class="flex justify-between align-items-center">
                     <h2 class="text-2xl mb-2">Supplies purchased this week</h2>

@@ -18,6 +18,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AssetsExport;
 use App\Imports\AssetsImport;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 
 class InventoryController extends Controller
 {
@@ -190,6 +191,8 @@ class InventoryController extends Controller
             'receiver' => 'required|string',
         ]);
 
+        $stockOutId = Str::uuid();
+
         foreach ($validatedData['item_id'] as $key => $itemId) {
             $inventory = Inventory::findOrFail($itemId);
 
@@ -204,6 +207,7 @@ class InventoryController extends Controller
 
             // Create a new stock out record
             $stockOut = new StockOut();
+            $stockOut->stock_out_id = $stockOutId;
             $stockOut->inventory_id = $inventory->id;
             $stockOut->quantity = $validatedData['quantity'][$key];
             $stockOut->department_id = $validatedData['department_id'];
@@ -213,16 +217,5 @@ class InventoryController extends Controller
         }
 
         return redirect()->route('inventory.stock.out')->with('success', 'Items stocked out successfully');
-    }
-
-    public function searchStockOut(Request $request)
-    {
-        $search = $request->input('search');
-        $inventories = Inventory::whereNull('deleted_at')
-            ->where('brand', 'like', '%' . $search . '%')
-            ->orWhere('items_specs', 'like', '%' . $search . '%')
-            ->paginate(10);
-        $departments = Department::all();
-        return view('fcu-ams/inventory/stockOut', compact('inventories', 'departments'));
     }
 }

@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\Condition;
 use App\Models\Inventory;
 use App\Models\Department;
+use App\Models\StockOut;
 use App\Models\AssetEditHistory;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AssetsExport;
@@ -34,6 +35,38 @@ class ReportController extends Controller
             ->orderBy('unique_tag', 'asc')
             ->paginate(5);
 
-        return view('fcu-ams/reports/reports', compact('inventories', 'lowStockInventories'));
+        $stockOutRecords = StockOut::with('inventory', 'department')
+            ->orderBy('stock_out_date', 'desc')
+            ->get()
+            ->groupBy('stock_out_id')
+            ->map(function ($records) {
+                return $records->first();
+            });
+
+        return view('fcu-ams/reports/reports', compact('inventories', 'lowStockInventories', 'stockOutRecords'));
+    }
+
+    public function stockOutDetails($id)
+    {
+        $record = StockOut::with('inventory', 'department')->findOrFail($id);
+        $stockOutDetails = [];
+        $totalPrice = 0;
+
+        $stockOutRecords = StockOut::where('department_id', $record->department_id)
+            ->where('stock_out_date', $record->stock_out_date)
+            ->where('receiver', $record->receiver)
+            ->get();
+
+        foreach ($stockOutRecords as $stockOutRecord) {
+            $inventory = Inventory::find($stockOutRecord->inventory_id);
+            $stockOutDetails[] = [
+                'item' => $inventory->brand . ' ' . $inventory->items_specs,
+                'quantity' => $stockOutRecord->quantity,
+                'price' => $inventory->unit_price,
+            ];
+            $totalPrice += $stockOutRecord->quantity * $inventory->unit_price;
+        }
+
+        return view('fcu-ams/reports/stock-out-details', compact('stockOutDetails', 'totalPrice'));
     }
 }

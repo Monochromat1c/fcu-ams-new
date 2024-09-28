@@ -40,8 +40,7 @@
                     <div class="flex mx-auto my-auto">
                         <!-- <div id="defaultModal" tabindex="-1" aria-hidden="true"
                             class="fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden"> -->
-                        <div id="defaultModal" tabindex="-1" aria-hidden="true"
-                            class="hidden">
+                        <div id="defaultModal" tabindex="-1" aria-hidden="true" class="hidden">
                             <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
                                 <!-- Modal content -->
                                 <div class="relative bg-white rounded-lg shadow-lg dark:bg-slate-100">
@@ -63,7 +62,8 @@
                                             @foreach($inventories as $inventory)
                                                 <div class="flex items-center mb-2 mt-2">
                                                     <input type="checkbox" id="item_id_{{ $inventory->id }}"
-                                                        name="item_id[]" value="{{ $inventory->id }}">
+                                                        name="item_id[]" value="{{ $inventory->id }}"
+                                                        onchange="document.getElementById('quantity_{{ $inventory->id }}').disabled = !this.checked">
                                                     <label for="item_id_{{ $inventory->id }}"
                                                         class="mx-2">{{ $inventory->brand }}
                                                         {{ $inventory->items_specs }} ({{ $inventory->quantity }}
@@ -71,7 +71,7 @@
                                                         {{ $inventory->unit->unit }})</label>
                                                     <input type="number" id="quantity_{{ $inventory->id }}"
                                                         name="quantity[]" class="w-full p-2 border rounded-md mr-2"
-                                                        placeholder="Enter the quantity">
+                                                        placeholder="Enter the quantity" disabled>
                                                 </div>
                                             @endforeach
                                         </div>

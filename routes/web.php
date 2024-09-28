@@ -91,6 +91,7 @@ Route::middleware(['auth.user'])->group(function () {
     
     Route::controller(ReportController::class)->group(function () {
         Route::get('/reports', 'index')->name('reports.index');
+        Route::get('/stock/out/{id}/details', 'stockOutDetails')->name('stock.out.details');
     });
 
     Route::controller(ProfileController::class)->group(function () {
