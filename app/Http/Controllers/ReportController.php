@@ -17,6 +17,7 @@ use App\Models\AssetEditHistory;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AssetsExport;
 use App\Imports\AssetsImport;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\Rule;
 
 class ReportController extends Controller
@@ -36,13 +37,21 @@ class ReportController extends Controller
             ->paginate(5);
 
         $stockOutRecords = StockOut::with('inventory', 'department')
-            ->orderBy('stock_out_date', 'desc') // Order by stock_out_date in descending order
+            ->orderBy('stock_out_date', 'desc')
             ->orderBy('created_at', 'desc')
             ->get()
             ->groupBy('stock_out_id')
             ->map(function ($records) {
                 return $records->first();
             });
+
+            $stockOutRecords = new LengthAwarePaginator(
+                $stockOutRecords->forPage($request->page, 5),
+                $stockOutRecords->count(),
+                5,
+                $request->page,
+                ['path' => $request->url(), 'query' => $request->query()]
+            );
 
         return view('fcu-ams/reports/reports', compact('inventories', 'lowStockInventories', 'stockOutRecords'));
     }
@@ -56,13 +65,13 @@ class ReportController extends Controller
         $stockOutRecords = StockOut::where('stock_out_id', $record->stock_out_id)->get();
 
         foreach ($stockOutRecords as $stockOutRecord) {
-        $inventory = $stockOutRecord->inventory;
-        $stockOutDetails[] = [
-        'item' => $inventory->brand . ' ' . $inventory->items_specs,
-        'quantity' => $stockOutRecord->quantity,
-        'price' => $inventory->unit_price,
-        ];
-        $totalPrice += $stockOutRecord->quantity * $inventory->unit_price;
+            $inventory = $stockOutRecord->inventory;
+            $stockOutDetails[] = [
+                'item' => $inventory->brand . ' ' . $inventory->items_specs,
+                'quantity' => $stockOutRecord->quantity,
+                'price' => $inventory->unit_price,
+            ];
+            $totalPrice += $stockOutRecord->quantity * $inventory->unit_price;
         }
 
         return view('fcu-ams/reports/stock-out-details', compact('stockOutDetails', 'totalPrice', 'record'));
