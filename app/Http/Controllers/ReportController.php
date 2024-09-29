@@ -36,7 +36,8 @@ class ReportController extends Controller
             ->paginate(5);
 
         $stockOutRecords = StockOut::with('inventory', 'department')
-            ->orderBy('stock_out_date', 'desc')
+            ->orderBy('stock_out_date', 'desc') // Order by stock_out_date in descending order
+            ->orderBy('created_at', 'desc')
             ->get()
             ->groupBy('stock_out_id')
             ->map(function ($records) {
@@ -52,21 +53,18 @@ class ReportController extends Controller
         $stockOutDetails = [];
         $totalPrice = 0;
 
-        $stockOutRecords = StockOut::where('department_id', $record->department_id)
-            ->where('stock_out_date', $record->stock_out_date)
-            ->where('receiver', $record->receiver)
-            ->get();
+        $stockOutRecords = StockOut::where('stock_out_id', $record->stock_out_id)->get();
 
         foreach ($stockOutRecords as $stockOutRecord) {
-            $inventory = Inventory::find($stockOutRecord->inventory_id);
-            $stockOutDetails[] = [
-                'item' => $inventory->brand . ' ' . $inventory->items_specs,
-                'quantity' => $stockOutRecord->quantity,
-                'price' => $inventory->unit_price,
-            ];
-            $totalPrice += $stockOutRecord->quantity * $inventory->unit_price;
+        $inventory = $stockOutRecord->inventory;
+        $stockOutDetails[] = [
+        'item' => $inventory->brand . ' ' . $inventory->items_specs,
+        'quantity' => $stockOutRecord->quantity,
+        'price' => $inventory->unit_price,
+        ];
+        $totalPrice += $stockOutRecord->quantity * $inventory->unit_price;
         }
 
-        return view('fcu-ams/reports/stock-out-details', compact('stockOutDetails', 'totalPrice'));
+        return view('fcu-ams/reports/stock-out-details', compact('stockOutDetails', 'totalPrice', 'record'));
     }
 }

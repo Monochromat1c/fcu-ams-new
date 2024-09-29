@@ -43,7 +43,7 @@
                         <div id="defaultModal" tabindex="-1" aria-hidden="true" class="hidden">
                             <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
                                 <!-- Modal content -->
-                                <div class="relative bg-white rounded-lg shadow-lg dark:bg-slate-100">
+                                <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
                                     <button type="button"
                                         class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
                                         onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
