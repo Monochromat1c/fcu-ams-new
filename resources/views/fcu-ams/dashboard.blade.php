@@ -8,12 +8,8 @@
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
             <div></div>
             <h1 class="my-auto text-3xl">Dashboard</h1>
-            <a href="" class="flex space-x-1" style="min-width:100px;">
-                <svg class="h-10 w-10 my-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                </svg>
+            <a href="{{ route('profile.index') }}" class="flex space-x-1" style="min-width:100px;">
+                <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset="">
                 <p class="my-auto">Lighttt</p>
             </a>
         </nav>
@@ -76,55 +72,35 @@
             </div>
         </div>
         <div class="m-3 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-semibold mb-4">Analytics</h3>
                 <canvas id="analyticsChart"></canvas>
-            </div>
+            </div> -->
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-lg font-semibold mb-4">Asset and Supplier Distribution</h3>
+                <h3 class="text-lg font-semibold mb-4">Inventory and Supplier Distribution</h3>
                 <div></div>
-                <canvas id="distributionChart"></canvas>
-                <p class="text-sm mb-4">
-                    Most Acquired Asset Category:
-                    @if($mostAcquiredCategoryName)
-                        <span class="p-1 border-red-300 border bg-red-100 w">{{ $mostAcquiredCategoryName }}</span>
-                    @else
-                        <span class="p-1 border-red-300 border bg-red-100 w">No Data Available</span>
-                    @endif
-                </p>
-
-                <p class="text-sm mb-4">
-                    Most Valued Asset Category:
-                    @if($mostValuedCategoryName)
-                        <span class="p-1 border-blue-300 border bg-blue-100 w">{{ $mostValuedCategoryName }}</span>
-                    @else
-                        <span class="p-1 border-blue-300 border bg-blue-100 w">No Data Available</span>
-                    @endif
-                </p>
-
-                <p class="text-sm mb-4">
-                    Most Acquired Asset Supplier:
-                    @if($mostAcquiredSupplierName)
+                <canvas id="distributionChart" class="mb-4"></canvas>
+                <p class="mb-1">
+                    Most Valued Inventory Supplier:
+                    @if($mostValuedInventorySupplierName)
                         <span
-                            class="p-1 border-yellow-300 border bg-yellow-100 w">{{ $mostAcquiredSupplierName }}</span>
+                            class="">{{ $mostValuedInventorySupplierName }}</span>
                     @else
-                        <span class="p-1 border-yellow-300 border bg-yellow-100 w">No Data Available</span>
+                        <span class="">No Data Available</span>
                     @endif
                 </p>
-
-                <p class="text-sm mb-4">
-                    Most Valued Asset Supplier:
-                    @if($mostValuedSupplierName)
-                        <span class="p-1 border-green-500 border bg-green-100 w">{{ $mostValuedSupplierName }}</span>
+                <p class="mb-1">
+                    Most Acquired Inventory Supplier:
+                    @if($mostAcquiredInventorySupplierName)
+                        <span
+                            class="">{{ $mostAcquiredInventorySupplierName }}</span>
                     @else
-                        <span class="p-1 border-green-500 border bg-green-100 w">No Data Available</span>
+                        <span class="">No Data Available</span>
                     @endif
                 </p>
             </div>
-        </div>
-        <div class="m-3">
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-lg font-semibold mb-4">Recent Item Actions</h3>
+                <h3 class="text-lg font-semibold mb-4">Recent Actions</h3>
                 <ul class="divide-y divide-gray-200">
                     @foreach($recentActions as $action)
                         <li class="py-3 flex justify-between items-center">
@@ -138,6 +114,9 @@
                     @endforeach
                 </ul>
             </div>
+        </div>
+        <div class="m-3">
+            
         </div>
     </div>
 </div>
@@ -269,44 +248,41 @@
             }
         }
     });
-
+</script>
+<script>
     // Distribution Chart
-const distributionChart = document.getElementById('distributionChart').getContext('2d');
-const distributionData = {!! json_encode($distributionData) !!};
-const distributionLabels = distributionData.map(data => data.value);
-const distributionValues = [1, 1, 1, 1];
+    const distributionChart = document.getElementById('distributionChart').getContext('2d');
+    const distributionData = {!! json_encode($distributionData) !!};
+    const distributionLabels = distributionData.map(data => data.value);
+    const distributionValues = [1, 1];
 
-new Chart(distributionChart, {
-    type: 'doughnut',
-    data: {
-        labels: distributionLabels,
-        datasets: [{
-            label: 'Asset and Supplier Distribution',
-            data: distributionValues,
-            backgroundColor: [
-                'rgba(255, 99, 132, 0.2)',
-                'rgba(54, 162, 235, 0.2)',
-                'rgba(255, 206, 86, 0.2)',
-                'rgba(75, 192, 192, 0.2)',
-            ],
-            borderColor: [
-                'rgba(255, 99, 132, 1)',
-                'rgba(54, 162, 235, 1)',
-                'rgba(255, 206, 86, 1)',
-                'rgba(75, 192, 192, 1)',
-            ],
-            borderWidth: 1
-        }]
-    },
-    options: {
-        title: {
-            display: true,
-            text: 'Asset and Supplier Distribution'
+    new Chart(distributionChart, {
+        type: 'doughnut',
+        data: {
+            labels: distributionLabels,
+            datasets: [{
+                label: 'Inventory and Supplier Distribution',
+                data: distributionValues,
+                backgroundColor: [
+                    'rgba(0, 48, 73, 0.2)',
+                    'rgba(184, 97, 37, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(0, 48, 73, 1)',
+                    'rgba(184, 97, 37, 1)'
+                ],
+                borderWidth: 1
+            }]
         },
-        responsive: true,
-        aspectRatio: 1.5
-    }
-});
+        options: {
+            title: {
+                display: true,
+                text: 'Inventory and Supplier Distribution'
+            },
+            responsive: true,
+            aspectRatio: 1.5
+        }
+    });
 </script>
 
 @endsection

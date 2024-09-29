@@ -82,6 +82,30 @@ class DashboardController extends Controller
                 ];
             });
 
+            // Most Acquired Inventory Supplier
+            $mostAcquiredInventorySupplier = Inventory::select('supplier_id', DB::raw('COUNT(*) as count'))
+                ->groupBy('supplier_id')
+                ->orderBy('count', 'desc')
+                ->first();
+
+            if ($mostAcquiredInventorySupplier) {
+                $mostAcquiredInventorySupplierName = Supplier::find($mostAcquiredInventorySupplier->supplier_id)->supplier ?? 'No Data Available';
+            } else {
+                $mostAcquiredInventorySupplierName = 'No Data Available';
+            }
+
+            // Most Valued Inventory Supplier
+            $mostValuedInventorySupplier = Inventory::select('supplier_id', DB::raw('SUM(unit_price * quantity) as value_sum'))
+                ->groupBy('supplier_id')
+                ->orderBy('value_sum', 'desc')
+                ->first();
+
+            if ($mostValuedInventorySupplier) {
+                $mostValuedInventorySupplierName = Supplier::find($mostValuedInventorySupplier->supplier_id)->supplier ?? 'No Data Available';
+            } else {
+                $mostValuedInventorySupplierName = 'No Data Available';
+            }
+
         $recentActions = $this->getRecentActions();
 
         $analyticsData = [
@@ -105,20 +129,12 @@ class DashboardController extends Controller
 
         $distributionData = [
             [
-                'label' => 'Most Acquired Asset Category',
-                'value' => $mostAcquiredCategoryName,
+                'label' => 'Most Acquired Inventory Supplier',
+                'value' => $mostAcquiredInventorySupplierName,
             ],
             [
-                'label' => 'Most Valued Asset Category',
-                'value' => $mostValuedCategoryName,
-            ],
-            [
-                'label' => 'Most Acquired Asset Supplier',
-                'value' => $mostAcquiredSupplierName,
-            ],
-            [
-                'label' => 'Most Valued Asset Supplier',
-                'value' => $mostValuedSupplierName,
+                'label' => 'Most Valued Inventory Supplier',
+                'value' => $mostValuedInventorySupplierName,
             ],
         ];
 
@@ -134,12 +150,14 @@ class DashboardController extends Controller
             'mostValuedCategoryName',
             'mostAcquiredSupplierName',
             'mostValuedSupplierName',
+            'mostAcquiredInventorySupplierName',
+            'mostValuedInventorySupplierName',
             'analyticsData',
             'distributionData',
         ));
     }
 
-    private function getRecentActions($limit = 5)
+    private function getRecentActions($limit = 10)
     {
         $assets = Asset::select('id', 'asset_name as name', 'created_at', DB::raw("'Asset' as type"), DB::raw("'added' as action"))
             ->unionAll(

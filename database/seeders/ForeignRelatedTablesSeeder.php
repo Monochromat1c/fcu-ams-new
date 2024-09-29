@@ -19,9 +19,16 @@ class ForeignRelatedTablesSeeder extends Seeder
     public function run()
     {
         // Seed Supplier
-        Supplier::create([
-            'supplier' => 'Company X',
-        ]);
+        $suppliers = [
+            ['supplier' => 'Quality Source Suppliers'],
+            ['supplier' => 'Apex Manufacturing Solutions'],
+            ['supplier' => 'Precision Supply Co.'],
+            ['supplier' => 'Company X'],
+        ];
+
+        foreach ($suppliers as $supplier) {
+            Supplier::create($supplier);
+        }
 
         // Seed Site
         Site::create([
