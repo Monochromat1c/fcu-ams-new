@@ -109,9 +109,11 @@
                                         <h2 class="mb-4 text-lg font-bold text-black">Add New Supplier</h2>
                                         <input type="text" id="new_supplier" name="new_supplier"
                                             class="w-full p-2 border rounded-md mb-2">
-                                        <button type="button" id="add-supplier-btn"
-                                            class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                                            Supplier</button>
+                                        <div class="flex flex-end">
+                                            <button type="button" id="add-supplier-btn"
+                                                class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
+                                                Supplier</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
