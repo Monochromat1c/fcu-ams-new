@@ -1,7 +1,12 @@
 @extends('layouts.layout')
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/stockin.css') }}">
-
+<style>
+    /* .modal-container{
+        min-width: 100dvw;
+        min-height: 100dvh;
+    } */
+</style>
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-100 col-span-5">
@@ -78,6 +83,40 @@
                             </option>
                         </select>
                     </div>
+                    <div class="modal-container ">
+                        <!-- Modal for adding new supplier -->
+                        <!-- <div id="defaultModal" tabindex="-1" aria-hidden="true"
+                            class="fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden"> -->
+                        <div id="add-supplier-modal" tabindex="-1" aria-hidden="true"
+                            class="flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal
+                            md:h-full hidden">
+                            <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
+                                <!-- Modal content -->
+                                <div
+                                    class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
+                                    <button type="button"
+                                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                        onclick="document.getElementById('add-supplier-modal').classList.toggle('hidden')">
+                                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                    <div class="p-6 text-center">
+                                        <h2 class="mb-4 text-lg font-bold text-black">Add New Supplier</h2>
+                                        <input type="text" id="new_supplier" name="new_supplier"
+                                            class="w-full p-2 border rounded-md mb-2">
+                                        <button type="button" id="add-supplier-btn"
+                                            class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
+                                            Supplier</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="hidden" id="add-supplier-form">
                         <label for="new_supplier" class="block text-gray-700 font-bold mb-2">New Supplier:</label>
                         <input type="text" id="new_supplier" name="new_supplier" class="w-full p-2 border rounded-md mb-2">
@@ -105,14 +144,14 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const supplierSelect = document.getElementById('supplier_id');
-        const addSupplierForm = document.getElementById('add-supplier-form');
+        const addSupplierModal = document.getElementById('add-supplier-modal');
         const addSupplierBtn = document.getElementById('add-supplier-btn');
 
         supplierSelect.addEventListener('change', function () {
             if (supplierSelect.value === 'add_new') {
-                addSupplierForm.classList.remove('hidden');
+                addSupplierModal.classList.remove('hidden');
             } else {
-                addSupplierForm.classList.add('hidden');
+                addSupplierModal.classList.add('hidden');
             }
         });
 
@@ -122,19 +161,19 @@
                 const formData = new FormData();
                 formData.append('supplier', newSupplier);
                 fetch('{{ route('supplier.add') }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.reload) {
-                        window.location.reload();
-                    }
-                })
-                .catch(error => console.error(error));
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.reload) {
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => console.error(error));
             }
         });
     });
