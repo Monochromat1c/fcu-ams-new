@@ -76,7 +76,10 @@ class AssetController extends Controller
 
     public function show($id)
     {
-        $asset = Asset::with(['supplier', 'site', 'location', 'category', 'department', 'editHistory', 'condition'])->findOrFail($id);
+        $asset = Asset::with(['supplier', 'site', 'location', 'category', 'department', 'editHistory' => function ($query) {
+            $query->orderBy('created_at', 'desc');
+        }, 'condition'])->findOrFail($id);
+        
         return view('fcu-ams/asset/viewAsset', compact('asset'));
     }
 
@@ -182,10 +185,8 @@ class AssetController extends Controller
             $asset->asset_image = 'profile/'.$imageName;
         }
 
-        $changes = 'Updated asset name to ' . $request->input('asset_name') . ', updated brand to ' .
-        $request->input('brand') . ', etc.';
-
-        $this->storeEditHistory($asset, auth()->user(), $changes);
+        $oldAsset = Asset::findOrFail($id);
+        $this->storeEditHistory($asset, auth()->user(), $oldAsset);
 
         $asset->save();
 
@@ -206,13 +207,46 @@ class AssetController extends Controller
         return view('fcu-ams/asset/maintenance', compact('assets'));
     }
 
-    public function storeEditHistory($asset, $user, $changes)
+    public function storeEditHistory($asset, $user, $oldAsset)
     {
-        $editHistory = new AssetEditHistory();
-        $editHistory->asset_id = $asset->id;
-        $editHistory->user_id = $user->id;
-        $editHistory->changes = $changes;
-        $editHistory->save();
+        $changes = [];
+        $fields = [
+            'asset_name' => 'Asset Name',
+            'brand' => 'Brand',
+            'model' => 'Model',
+            'serial_number' => 'Serial Number',
+            'cost' => 'Cost',
+            'supplier_id' => 'Supplier',
+            'site_id' => 'Site',
+            'location_id' => 'Location',
+            'category_id' => 'Category',
+            'department_id' => 'Department',
+            'purchase_date' => 'Purchase Date',
+            'condition_id' => 'Condition',
+        ];
+
+        foreach ($fields as $field => $header) {
+            if ($asset->$field != $oldAsset->$field) {
+                $oldValue = $oldAsset->$field;
+                $newValue = $asset->$field;
+
+                if (in_array($field, ['supplier_id', 'site_id', 'location_id', 'category_id', 'department_id', 'condition_id'])) {
+                    $relationship = str_replace('_id', '', $field);
+                    $oldValue = $oldAsset->$relationship->name ?? $oldAsset->$relationship->supplier ?? $oldAsset->$relationship->site ?? $oldAsset->$relationship->location ?? $oldAsset->$relationship->category ?? $oldAsset->$relationship->department ?? $oldAsset->$relationship->condition;
+                    $newValue = $asset->$relationship->name ?? $asset->$relationship->supplier ?? $asset->$relationship->site ?? $asset->$relationship->location ?? $asset->$relationship->category ?? $asset->$relationship->department ?? $asset->$relationship->condition;
+                }
+
+                $changes[] = "Updated $header from '$oldValue' to '$newValue'.";
+            }
+        }
+
+        if (count($changes) > 0) {
+            $editHistory = new AssetEditHistory();
+            $editHistory->asset_id = $asset->id;
+            $editHistory->user_id = $user->id;
+            $editHistory->changes = implode(', ', $changes);
+            $editHistory->save();
+        }
     }
 
     public function import(Request $request)

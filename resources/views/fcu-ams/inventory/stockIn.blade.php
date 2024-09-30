@@ -79,7 +79,7 @@
                                     {{ $supplier->supplier }}</option>
                             @endforeach
                             <option value="add_new">
-                                Add new supplier
+                                ADD NEW SUPPLIER
                             </option>
                         </select>
                     </div>
