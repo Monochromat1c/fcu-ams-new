@@ -22,6 +22,8 @@ class Asset extends Model
         'location_id',
         'category_id',
         'department_id',
+        'maintenance_start_date',
+        'maintenance_end_date',
         'purchase_date',
         'condition',
     ];

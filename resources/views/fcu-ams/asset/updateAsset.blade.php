@@ -130,6 +130,48 @@
                         </select>
                     </div>
                 </div>
+                <!-- Add this inside your edit asset form, after the condition field -->
+                <div class="modal-container">
+                    <div id="maintenance-modal" tabindex="-1" aria-hidden="true"
+                        class="flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
+                        <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
+                            <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
+                                <button type="button"
+                                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                    onclick="document.getElementById('maintenance-modal').classList.toggle('hidden')">
+                                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="sr-only">Close modal</span>
+                                </button>
+                                <div class="p-6 text-center">
+                                    <h2 class="mb-4 text-lg font-bold text-black">Maintenance Date</h2>
+                                    <div class="mb-4">
+                                        <label for="maintenance_start_date"
+                                            class="block text-left text-gray-700 font-bold mb-2">Start Date:</label>
+                                        <input type="date" id="maintenance_start_date" name="maintenance_start_date"
+                                            class="w-full p-2 border rounded-md"
+                                            value="{{ old('maintenance_start_date') ?? $asset->maintenance_start_date }}">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="maintenance_end_date" class="block text-left text-gray-700 font-bold mb-2">End
+                                            Date:</label>
+                                        <input type="date" id="maintenance_end_date" name="maintenance_end_date"
+                                            class="w-full p-2 border rounded-md"
+                                            value="{{ old('maintenance_end_date') ?? $asset->maintenance_end_date }}">
+                                    </div>
+                                    <div class="flex flex-end">
+                                        <button type="button" id="save-maintenance-btn"
+                                            class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="flex justify-end space-x-2">
                     <button type="button" class="ml-auto rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500
                         transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white"
@@ -178,5 +220,26 @@
     });
 
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const conditionSelect = document.getElementById('condition_id');
+        const maintenanceModal = document.getElementById('maintenance-modal');
+        const saveMaintenanceBtn = document.getElementById('save-maintenance-btn');
 
+        conditionSelect.addEventListener('change', function () {
+            const selectedCondition = conditionSelect.options[conditionSelect.selectedIndex].text;
+            if (selectedCondition === 'Maintenance') {
+                maintenanceModal.classList.remove('hidden');
+            } else {
+                maintenanceModal.classList.add('hidden');
+                document.getElementById('maintenance_start_date').value = '';
+                document.getElementById('maintenance_end_date').value = '';
+            }
+        });
+
+        saveMaintenanceBtn.addEventListener('click', function () {
+            maintenanceModal.classList.add('hidden');
+        });
+    });
+</script>
 @endsection

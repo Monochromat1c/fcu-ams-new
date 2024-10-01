@@ -177,6 +177,8 @@ class AssetController extends Controller
         $asset->category_id = $validatedData['category_id'];
         $asset->department_id = $validatedData['department_id'];
         $asset->condition_id = $validatedData['condition_id'];
+        $asset->maintenance_start_date = $request->input('maintenance_start_date') !== '' ? $request->input('maintenance_start_date') : null;
+        $asset->maintenance_end_date = $request->input('maintenance_end_date') !== '' ? $request->input('maintenance_end_date') : null;
         $asset->purchase_date = $validatedData['purchase_date'];
 
         if ($request->hasFile('asset_image')) {

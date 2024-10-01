@@ -202,7 +202,7 @@ class AssetSeeder extends Seeder
             'category_id' => $category->id,
             'department_id' => $department->id,
             'purchase_date' => now(),
-            'condition_id' => 2,
+            'condition_id' => 1,
         ]);
 
         Asset::create([
@@ -217,7 +217,7 @@ class AssetSeeder extends Seeder
             'category_id' => $category->id,
             'department_id' => $department->id,
             'purchase_date' => '2024-07-18',
-            'condition_id' => 2,
+            'condition_id' => 1,
         ]);
 
         Asset::create([
@@ -232,7 +232,7 @@ class AssetSeeder extends Seeder
             'category_id' => $category->id,
             'department_id' => $department->id,
             'purchase_date' => '2024-06-18',
-            'condition_id' => 2,
+            'condition_id' => 1,
         ]);
 
         Asset::create([
@@ -247,7 +247,7 @@ class AssetSeeder extends Seeder
             'category_id' => $category->id,
             'department_id' => $department->id,
             'purchase_date' => now(),
-            'condition_id' => 2,
+            'condition_id' => 1,
         ]);
 
         Asset::create([
@@ -262,7 +262,7 @@ class AssetSeeder extends Seeder
             'category_id' => $category->id,
             'department_id' => $department->id,
             'purchase_date' => now(),
-            'condition_id' => 2,
+            'condition_id' => 1,
         ]);
 
         Asset::create([
@@ -277,7 +277,7 @@ class AssetSeeder extends Seeder
             'category_id' => $category->id,
             'department_id' => $department->id,
             'purchase_date' => now(),
-            'condition_id' => 2,
+            'condition_id' => 1,
         ]);
 
         Asset::create([

@@ -14,6 +14,7 @@ use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
+use App\Http\Controllers\AlertController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login');
@@ -97,5 +98,9 @@ Route::middleware(['auth.user'])->group(function () {
     Route::controller(ProfileController::class)->group(function () {
         Route::get('/user/profile', 'index')->name('profile.index');
         Route::post('/user/profile/update', 'update')->name('profile.update');
+    });
+
+    Route::controller(AlertController::class)->group(function () {
+        Route::get('/alerts', 'index')->name('alerts.index');
     });
 });
