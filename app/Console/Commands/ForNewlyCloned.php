@@ -21,7 +21,7 @@ class ForNewlyCloned extends Command
         $this->call('key:generate');
 
         $this->info('Running migrations...');
-        $this->call('migrate');
+        $this->call('php artisan migrate');
 
         $this->info('Seeding the database...');
         $this->call('db:seed');
