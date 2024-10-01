@@ -16,7 +16,9 @@
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex justify-between mb-3">
                 <h2 class="text-2xl font-bold my-auto">View Asset</h2>
-                <div class="flex align-items-center gap-1">
+                <div class="flex align-items-center gap-3">
+                    <a href="{{ route('asset.qrCode', $asset->id) }}"
+                        class="btn btn-primary">Generate QR Code</a>
                     <a href="{{ route('asset.list') }}"
                         class="rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Back
                         to Asset List</a>

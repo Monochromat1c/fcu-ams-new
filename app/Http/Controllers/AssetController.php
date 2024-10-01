@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AssetsExport;
 use App\Imports\AssetsImport;
 use Illuminate\Validation\Rule;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class AssetController extends Controller
 {
@@ -264,5 +265,27 @@ class AssetController extends Controller
 
     public function export() { 
         return Excel::download(new AssetsExport, 'assets.xlsx');
+    }
+
+    public function generateQrCode($id)
+    {
+        $asset = Asset::findOrFail($id);
+        $assetDetails = [
+            'asset_name' => $asset->asset_name,
+            'brand' => $asset->brand,
+            'model' => $asset->model,
+            'serial_number' => $asset->serial_number,
+            'cost' => $asset->cost,
+            'supplier' => $asset->supplier->supplier,
+            'site' => $asset->site->site,
+            'location' => $asset->location->location,
+            'category' => $asset->category->category,
+            'department' => $asset->department->department,
+            'purchase_date' => $asset->purchase_date,
+            'condition' => $asset->condition->condition,
+        ];
+
+        $qrCode = QrCode::generate(json_encode($assetDetails));
+        return view('fcu-ams/asset/qrCode', compact('qrCode'));
     }
 }

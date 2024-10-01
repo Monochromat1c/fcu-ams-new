@@ -15,6 +15,7 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AlertController;
+use App\Http\Controllers\AlertController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login');
@@ -45,6 +46,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/asset/{id}/edit', 'edit')->name('asset.edit');
         Route::get('/maintenance', 'maintenance')->name('maintenance');
         Route::get('/asset/export', 'export')->name('asset.export');
+        Route::get('/asset/{id}/qrCode', 'generateQrCode')->name('asset.qrCode');
         Route::post('/asset/add', 'store')->name('asset.add.store');
         Route::post('/asset/{id}', 'update')->name('asset.update');
         Route::post('/asset/import', 'import')->name('asset.import');
