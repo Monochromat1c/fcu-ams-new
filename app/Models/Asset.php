@@ -25,7 +25,7 @@ class Asset extends Model
         'maintenance_start_date',
         'maintenance_end_date',
         'purchase_date',
-        'condition',
+        'condition_id',
     ];
 
     public function supplier()

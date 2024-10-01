@@ -14,7 +14,37 @@
             </a>
         </nav>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
-        
+            <h2 class="text-2xl mb-4">Assets Past Maintenance Due Date</h2>
+            <table class="table-auto w-full">
+                <thead>
+                    <tr>
+                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Asset Name</th>
+                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Brand</th>
+                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Model</th>
+                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Serial Number</th>
+                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Site</th>
+                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Location</th>
+                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Category</th>
+                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Department</th>
+                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Maintenance End Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($pastDueAssets as $asset)
+                        <tr>
+                            <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $asset->brand }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $asset->model }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $asset->serial_number }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $asset->site->site }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $asset->location->location }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $asset->category->category }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $asset->department->department }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $asset->maintenance_end_date }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
