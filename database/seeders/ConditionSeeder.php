@@ -14,7 +14,7 @@ class ConditionSeeder extends Seeder
      */
     public function run()
     {
-        $conditions = ['New', 'Maintenance', 'To Be Disposed'];
+        $conditions = ['New', 'Maintenance', 'Repaired', 'To Be Disposed'];
 
         foreach ($conditions as $condition) {
             DB::table('conditions')->insert([
