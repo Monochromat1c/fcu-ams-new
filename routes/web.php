@@ -25,6 +25,7 @@ Route::controller(LoginController::class)->group(function () {
 
 Route::controller(UserController::class)->group(function () {
     Route::post('/users', 'store')->name('users.store');
+    Route::post('/users', 'signup')->name('users.signup');
 });
 
 Route::middleware(['auth.user'])->group(function () {

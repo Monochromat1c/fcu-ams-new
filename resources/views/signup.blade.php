@@ -6,7 +6,7 @@
     <div class="login-container flex align-items-center justify-center bg bg-transparent rounded-lg p-5">
         <div class="form-container">
             <form class="login-form rounded-lg shadow-md shadow-black p-5 flex"
-                action="{{ route('users.store') }}" method="POST" enctype="multipart/form-data">
+                action="{{ route('users.signup') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <!-- <img class="fcu-icon mb-3" src="/img/login/fcu-icon.png" alt="" srcset=""> -->
                 <h1 class=" text-blue-900 text-center text-5xl">FCU</h1>
@@ -48,22 +48,22 @@
                             required>
                     </div>
                     <div class="mb-2">
-                        <label for="address" class="block text-gray-700 font-bold mb-2">Address:</label>
-                        <input type="text" id="address" name="address" class="w-full p-2 border rounded-md" required>
-                    </div>
-                    <div class="mb-2">
                         <label for="contact_number" class="block text-gray-700 font-bold mb-2">Contact Number:</label>
                         <input type="text" id="contact_number" name="contact_number"
                             class="w-full p-2 border rounded-md" required>
                     </div>
-                    <div class="mb-2">
+                    <div class="mb-2 col-span-2">
+                        <label for="address" class="block text-gray-700 font-bold mb-2">Address:</label>
+                        <input type="text" id="address" name="address" class="w-full p-2 border rounded-md" required>
+                    </div>
+                    <!-- <div class="mb-2">
                         <label for="role_id" class="block text-gray-700 font-bold mb-2">Role:</label>
                         <select id="role_id" name="role_id" class="w-full p-2 border rounded-md" required>
                             @foreach($roles as $role)
                                 <option value="{{ $role->id }}">{{ $role->role }}</option>
                             @endforeach
                         </select>
-                    </div>
+                    </div> -->
                     <div class="mb-2">
                         <label for="email" class="block text-gray-700 font-bold mb-2">Email:</label>
                         <input type="email" id="email" name="email" class="w-full p-2 border rounded-md" required>
