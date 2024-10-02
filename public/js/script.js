@@ -1,9 +1,17 @@
-document.addEventListener("DOMContentLoaded", function () {
-    var successMessage = document.querySelector(".successMessage");
+document.addEventListener("DOMContentLoaded", () => {
+    const successMessage = document.querySelector(".successMessage");
 
     if (successMessage) {
-        setTimeout(function () {
+        setTimeout(() => {
             successMessage.style.display = "none";
-        }, 3000);
+        }, 2000);
+    }
+
+    const errorMessage = document.querySelector(".errorMessage");
+
+    if (successMessage) {
+        setTimeout(() => {
+            errorMessage.style.display = "none";
+        }, 2000);
     }
 });

@@ -18,10 +18,28 @@
                 <h2 class="text-2xl font-bold my-auto">View Asset</h2>
                 <div class="flex align-items-center gap-3">
                     <a href="{{ route('asset.qrCode', $asset->id) }}"
-                        class="btn btn-primary">Generate QR Code</a>
+                        class="rounded-md shadow-md px-5 py-2 bg-blue-600 hover:shadow-md hover:bg-blue-500 transition-all
+                        duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+                        </svg>
+                        Generate Asset Tag
+                    </a>
                     <a href="{{ route('asset.list') }}"
-                        class="rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Back
-                        to Asset List</a>
+                        class="rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500 transition-all duration-200 hover:scale-105 
+                        ease-in hover:shadow-inner text-white flex gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                        </svg>
+
+                        Back to Asset List
+                    </a>
                 </div>
             </div>
             <div class="overflow-x-auto overflow-y-auto">
@@ -73,33 +91,36 @@
                 </table>
             </div>
         </div>
-        <div class="bg-white p-5 shadow-md m-3 rounded-md">
-            <div class="flex justify-between mb-3">
-                <h2 class="text-2xl font-bold my-auto">Edit History</h2>
-                <div class="flex align-items-center gap-1"></div>
-            </div>
-            <div class="overflow-x-auto overflow-y-auto">
-                <table class="table-auto w-full">
-                    <thead>
-                        <tr>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Date</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">User</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Changes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($asset->editHistory as $editHistory)
+        @if($asset->editHistory->isNotEmpty())
+            <div class="bg-white p-5 shadow-md m-3 rounded-md">
+                <div class="flex justify-between mb-3">
+                    <h2 class="text-2xl font-bold my-auto">Edit History</h2>
+                    <div class="flex align-items-center gap-1"></div>
+                </div>
+                <div class="overflow-x-auto overflow-y-auto">
+                    <table class="table-auto w-full">
+                        <thead>
                             <tr>
-                                <td class="border border-slate-300 px-4 py-2">{{ $editHistory->created_at }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $editHistory->user->first_name }}
-                                    {{ $editHistory->user->last_name }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $editHistory->changes }}</td>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Date</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">User</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Changes</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach($asset->editHistory as $editHistory)
+                                <tr>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $editHistory->created_at }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $editHistory->user->first_name }}
+                                        {{ $editHistory->user->last_name }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{!! nl2br($editHistory->changes) !!}
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 </div>
 

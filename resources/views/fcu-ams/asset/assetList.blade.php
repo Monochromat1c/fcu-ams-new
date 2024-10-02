@@ -143,17 +143,22 @@
                 </div>
             </div>
         </div>
-        @if(session()->has('error'))
-            <div class="alert alert-danger">
-                {{ session()->get('error') }}
-            </div>
-        @endif
-
-        @if(session()->has('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div>
-        @endif
+        <div class="m-3">
+            @if(session('success'))
+                <div class="successMessage bg-green-100 border border-green-400 text-black px-4 py-3 rounded relative mt-2 mb-2">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if($errors->any())
+                <div class="errorMessage bg-red-100 border border-red-400 text-black px-4 py-3 rounded relative mt-2 mb-2">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex justify-between mb-3">
                 <h2 class="text-2xl font-bold my-auto">Asset List</h2>

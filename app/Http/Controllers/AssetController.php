@@ -101,7 +101,6 @@ class AssetController extends Controller
             'location_id' => 'required|integer|exists:locations,id',
             'category_id' => 'required|integer|exists:categories,id',
             'department_id' => 'required|integer|exists:departments,id',
-            'condition_id' => 'required|integer|exists:conditions,id',
             'purchase_date' => 'required|date',
             'asset_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
@@ -117,7 +116,7 @@ class AssetController extends Controller
         $asset->location_id = $validatedData['location_id'];
         $asset->category_id = $validatedData['category_id'];
         $asset->department_id = $validatedData['department_id'];
-        $asset->condition_id = $validatedData['condition_id'];
+        $asset->condition_id = Condition::where('condition', 'New')->first()->id;
         $asset->purchase_date = $validatedData['purchase_date'];
 
         if ($request->hasFile('asset_image')) {
@@ -247,7 +246,7 @@ class AssetController extends Controller
             $editHistory = new AssetEditHistory();
             $editHistory->asset_id = $asset->id;
             $editHistory->user_id = $user->id;
-            $editHistory->changes = implode(', ', $changes);
+            $editHistory->changes = nl2br(implode("<br>", $changes));
             $editHistory->save();
         }
     }
@@ -286,6 +285,6 @@ class AssetController extends Controller
         ];
 
         $qrCode = QrCode::generate(implode("\n", $assetDetails));
-        return view('fcu-ams/asset/qrCode', compact('qrCode'));
+        return view('fcu-ams/asset/qrCode', compact('qrCode', 'id'));
     }
 }

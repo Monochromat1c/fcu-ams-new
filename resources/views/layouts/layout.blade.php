@@ -14,7 +14,7 @@
 <body>
     @yield('content')
 
-    <script src="/assets/js/script.js"></script>
+    <script src="{{ asset('js/script.js') }}"></script>
     <script src="{{ asset('js/alpine.min.js') }}" defer></script>
 </body>
 

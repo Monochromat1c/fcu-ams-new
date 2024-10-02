@@ -16,16 +16,22 @@
         body {
             background-color: white;
         }
+
         .no-print {
             display: none;
         }
+
         @page {
             size: auto;
             margin: 0mm;
         }
+
+        .shadow-lg {
+            box-shadow: none;
+        }
     }
 </style>
-<div class="bg-white rounded-lg p-8 mb-3 max-w-2xl my-9 mx-auto">
+<div class="bg-white rounded-lg p-8 mb-8 max-w-2xl my-9 mx-auto shadow-lg">
     <div class="text-center mb-5">
         <img class="fcu-icon mb-3 w-28 mx-auto" src="/img/login/fcu-icon.png" alt="" srcset="">
         <h2 class="text-2xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>

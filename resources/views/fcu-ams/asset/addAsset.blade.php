@@ -14,12 +14,12 @@
                 <div class="">
                     @if(session('success'))
                         <div
-                            class="bg-green-100 border border-green-400 text-black px-4 py-3 rounded relative mt-2 mb-2">
+                            class="successMessage bg-green-100 border border-green-400 text-black px-4 py-3 rounded relative mt-2 mb-2">
                             {{ session('success') }}
                         </div>
                     @endif
                     @if($errors->any())
-                        <div class="bg-red-100 border border-red-400 text-black px-4 py-3 rounded relative mt-2 mb-2">
+                        <div class="errorMessage bg-red-100 border border-red-400 text-black px-4 py-3 rounded relative mt-2 mb-2">
                             <ul>
                                 @foreach($errors->all() as $error)
                                     <li>{{ $error }}</li>
@@ -29,7 +29,7 @@
                     @endif
                     <h3 class="text-lg font-semibold mb-3">Asset Details</h3>
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="mb-2 col-span-2">
+                        <div class="mb-2">
                             <label for="asset_image" class="block text-gray-700 font-bold mb-2">Asset Image:</label>
                             <input type="file" id="asset_image" name="asset_image" class="w-full border rounded-md">
                         </div>
@@ -101,7 +101,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="mb-2">
+                        <!-- <div class="mb-2">
                             <label for="condition_id" class="block text-gray-700 font-bold mb-2">Condition:</label>
                             <select id="condition_id" name="condition_id" class="w-full p-2 border rounded-md" required>
                             <option value="">Select a condition</option>
@@ -109,7 +109,7 @@
                                     <option value="{{ $condition->id }}">{{ $condition->condition }}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> -->
                         <div class="mb-2">
                             <label for="purchase_date" class="block text-gray-700 font-bold mb-2">Purchase Date:</label>
                             <input type="date" id="purchase_date" name="purchase_date"
