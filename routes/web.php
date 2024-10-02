@@ -15,7 +15,6 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AlertController;
-use App\Http\Controllers\AlertController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login');
