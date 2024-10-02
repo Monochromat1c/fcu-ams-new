@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('asset_name');
             $table->string('brand');
             $table->string('model');
+            $table->string('specs')->nullable();
             $table->string('serial_number');
             $table->decimal('cost', 10, 2);
             $table->unsignedBigInteger('supplier_id');

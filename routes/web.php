@@ -15,6 +15,9 @@ use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AlertController;
+use App\Http\Controllers\UnitController;
+use App\Http\Controllers\SiteController;
+use App\Http\Controllers\LocationController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login');
@@ -64,18 +67,6 @@ Route::middleware(['auth.user'])->group(function () {
         Route::delete('/inventory/{id}', 'destroy')->name('inventory.delete');
     });
 
-    Route::controller(CategoryController::class)->group(function (){
-        Route::get('/categories/list', 'index')->name('categories.list');
-        Route::get('/categories/add', 'create')->name('categories.add');
-        Route::post('/categories/add', 'store')->name('categories.add.store');
-    });
-
-    Route::controller(DepartmentController::class)->group(function (){
-        Route::get('/departments/list', 'index')->name('departments.list');
-        Route::get('/departments/add', 'create')->name('departments.add');
-        Route::post('/departments/add', 'store')->name('departments.add.store');
-    });
-
     Route::controller(SupplierController::class)->group(function (){
         Route::post('/supplier/add', 'add')->name('supplier.add');
     });
@@ -104,5 +95,25 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(AlertController::class)->group(function () {
         Route::get('/alerts', 'index')->name('alerts.index');
+    });
+
+    Route::controller(UnitController::class)->group(function () {
+        Route::post('/unit/add', 'add')->name('unit.add');
+    });
+
+    Route::controller(SiteController::class)->group(function () {
+        Route::post('/site/add', 'add')->name('site.add');
+    });
+
+    Route::controller(LocationController::class)->group(function () {
+        Route::post('/location/add', 'add')->name('location.add');
+    });
+
+     Route::controller(CategoryController::class)->group(function (){
+        Route::post('/category/add', 'add')->name('category.add');
+    });
+
+    Route::controller(DepartmentController::class)->group(function (){
+        Route::post('/department/add', 'add')->name('department.add');
     });
 });

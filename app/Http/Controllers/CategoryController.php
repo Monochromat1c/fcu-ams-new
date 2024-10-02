@@ -7,43 +7,18 @@ use Illuminate\Http\Request;
 
 class CategoryController extends Controller
 {
-    public function index(Request $request) {
-        $sort = $request->input('sort', 'category');
-        $direction = $request->input('direction', 'asc');
-        $search = $request->input('search');
-
-        $query = Category::query();
-
-        if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('category', 'like', '%' . $search . '%');
-            });
-        }
-
-        if ($sort && $direction) {
-            $query->orderBy($sort, $direction);
-        } else {
-            $query->orderBy('category', 'asc');
-        }
-
-        $categories = $query->paginate(15);
-
-        return view('fcu-ams/categories/categoriesList', compact('categories', 'sort', 'direction', 'search'));
-    }
-
-    public function create()
-    {
-        return view('fcu-ams/categories/addCategory');
-    }
-
-    public function store(Request $request)
+    public function add(Request $request)
     {
         $validatedData = $request->validate([
-            'category' => 'required|string|unique:categories,category',
+            'category' => 'required|string',
         ]);
 
-        Category::create($validatedData);
+        $category = new Category();
+        $category->category = $validatedData['category'];
+        $category->save();
 
-        return redirect()->route('categories.add')->with('success', 'Category added successfully.');
+        $request->session()->put('input', $request->all());
+
+        return response()->json(['reload' => true]);
     }
 }

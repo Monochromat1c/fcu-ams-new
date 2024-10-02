@@ -29,7 +29,7 @@
                 @endif
                 <h3 class="text-lg font-semibold mb-3">Asset Details</h3>
                 <div class="grid grid-cols-2 gap-3">
-                    <div class="mb-4 col-span-2">
+                    <div class="mb-4">
                         <label for="asset_image" class="block text-gray-700 font-bold mb-2">Asset Image:</label>
                         <input type="file" id="asset_image" name="asset_image" class="w-full border rounded-md">
                     </div>
@@ -47,6 +47,11 @@
                         <label for="model" class="block text-gray-700 font-bold mb-2">Model:</label>
                         <input type="text" id="model" name="model" class="w-full p-2 border rounded-md"
                             value="{{ $asset->model }}" required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="spec" class="block text-gray-700 font-bold mb-2">Specification:</label>
+                        <input type="text" id="specs" name="specs" class="w-full p-2 border rounded-md"
+                            value="{{ $asset->specs }}">
                     </div>
                     <div class="mb-4">
                         <label for="serial_number" class="block text-gray-700 font-bold mb-2">Serial Number:</label>

@@ -11,7 +11,7 @@
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-100 col-span-5">
         <nav class="m-3 mt-6">
-            <h1 class="text-center text-4xl">Add New Item in the Inventory</h1>
+            <h1 class="text-center text-4xl">Stock In</h1>
         </nav>
         <div class="stockin-form bg-white m-3 shadow-md rounded-md p-5">
             <form method="POST" enctype="multipart/form-data"
@@ -57,7 +57,41 @@
                                     {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
                                     {{ $unit->unit }}</option>
                             @endforeach
+                            <option value="add_new_unit">
+                                ADD NEW UNIT
+                            </option>
                         </select>
+                    </div>
+
+                    <!-- Modal for adding new unit -->
+                    <div id="add-unit-modal" tabindex="-1" aria-hidden="true" class="flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal
+    md:h-full hidden">
+                        <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
+                            <!-- Modal content -->
+                            <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
+                                <button type="button"
+                                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                    onclick="document.getElementById('add-unit-modal').classList.toggle('hidden')">
+                                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path fill-rule="evenodd"
+                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                            clip-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="sr-only">Close modal</span>
+                                </button>
+                                <div class="p-6 text-center">
+                                    <h2 class="mb-4 text-lg font-bold text-black">Add New Unit</h2>
+                                    <input type="text" id="new_unit" name="new_unit"
+                                        class="w-full p-2 border rounded-md mb-2">
+                                    <div class="flex flex-end">
+                                        <button type="button" id="add-unit-btn"
+                                            class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
+                                            Unit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="mb-4">
                         <label for="quantity" class="block text-gray-700 font-bold mb-2">Quantity:</label>
@@ -128,10 +162,6 @@
                     </div>
                 </div>
                 <div class="space-x-2 flex">
-                    <button type="button"
-                        class="ml-auto rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white"
-                        onclick="history.back()">Back</button>
                     <button type="submit"
                         class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
                         transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
@@ -213,6 +243,43 @@
         });
     });
 
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const unitSelect = document.getElementById('unit_id');
+        const addUnitModal = document.getElementById('add-unit-modal');
+        const addUnitBtn = document.getElementById('add-unit-btn');
+
+        unitSelect.addEventListener('change', function () {
+            if (unitSelect.value === 'add_new_unit') {
+                addUnitModal.classList.remove('hidden');
+            } else {
+                addUnitModal.classList.add('hidden');
+            }
+        });
+
+        addUnitBtn.addEventListener('click', function () {
+            const newUnit = document.getElementById('new_unit').value;
+            if (newUnit.trim() !== '') {
+                const formData = new FormData();
+                formData.append('unit', newUnit);
+                fetch('{{ route('unit.add') }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.reload) {
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => console.error(error));
+            }
+        });
+    });
 </script>
 
 @endsection

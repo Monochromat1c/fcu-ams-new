@@ -15,6 +15,7 @@ class Asset extends Model
         'asset_name',
         'brand',
         'model',
+        'specs',
         'serial_number',
         'cost',
         'supplier_id',

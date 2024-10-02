@@ -94,6 +94,7 @@ class AssetController extends Controller
             ],
             'brand' => 'required|string',
             'model' => 'required|string',
+            'specs' => 'nullable|string',
             'serial_number' => 'required|string',
             'cost' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
@@ -109,6 +110,7 @@ class AssetController extends Controller
         $asset->asset_name = $validatedData['asset_name'];
         $asset->brand = $validatedData['brand'];
         $asset->model = $validatedData['model'];
+        $asset->specs = $validatedData['specs'] ?? '';
         $asset->serial_number = $validatedData['serial_number'];
         $asset->cost = $validatedData['cost'];
         $asset->supplier_id = $validatedData['supplier_id'];
@@ -153,6 +155,7 @@ class AssetController extends Controller
             ],
             'brand' => 'required|string',
             'model' => 'required|string',
+            'specs' => 'nullable|string',
             'serial_number' => 'required|string',
             'cost' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
@@ -169,6 +172,7 @@ class AssetController extends Controller
         $asset->asset_name = $validatedData['asset_name'];
         $asset->brand = $validatedData['brand'];
         $asset->model = $validatedData['model'];
+        $asset->specs = $validatedData['specs'] ?? '';
         $asset->serial_number = $validatedData['serial_number'];
         $asset->cost = $validatedData['cost'];
         $asset->supplier_id = $validatedData['supplier_id'];
@@ -216,6 +220,7 @@ class AssetController extends Controller
             'asset_name' => 'Asset Name',
             'brand' => 'Brand',
             'model' => 'Model',
+            'specs' => 'Specification',
             'serial_number' => 'Serial Number',
             'cost' => 'Cost',
             'supplier_id' => 'Supplier',

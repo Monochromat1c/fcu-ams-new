@@ -62,7 +62,7 @@
         </div>
         <div class="mb-1 flex justify-between m-3 rounded-md">
             <div class="flex">
-                <a href="{{ route('inventory.stock.in') }}"
+                <!-- <a href="{{ route('inventory.stock.in') }}"
                     class="mr-3 rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Stock
                     In</a>
                 <a href="#"
@@ -70,7 +70,7 @@
                     Out</a>
                 <a href="#"
                     class="mr-3 rounded-md shadow-md px-5 py-2 bg-blue-600 hover:shadow-md hover:bg-blue-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Create
-                    Purchase Order</a>
+                    Purchase Order</a> -->
             </div>
             <div class="pagination-here flex justify-between align-items-center">
                 <div class="flex align-items-center">
