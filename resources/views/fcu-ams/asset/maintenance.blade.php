@@ -20,66 +20,75 @@
                     <!-- <a href="{{ route('asset.list') }}" class="rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Back to Asset List</a> -->
                 </div>
             </div>
-            <div class="overflow-x-auto overflow-y-auto">
-                <table class="table-auto w-full">
-                    <thead>
-                        <tr>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">ID</th>
-                            <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400">Asset Image</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Asset Name</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Brand</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Model</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Serial Number</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Cost</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Supplier</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Site</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Location</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Category</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Department</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Condition</th>
-                            <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 text-center">Action</th> -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($assets as $asset)
+            @if($assets->where('condition.condition', 'Maintenance')->isEmpty())
+                <p class="text-center text-xl text-gray-500">No assets under maintenance.</p>
+            @else
+                <div class="overflow-x-auto overflow-y-auto">
+                    <table class="table-auto w-full">
+                        <thead>
                             <tr>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->id }}</td>
-                                <td class="border border-slate-300 px-4 py-2 min-width">
-                                    @if($asset->asset_image)
-                                        <img src="{{ asset($asset->asset_image) }}" alt="Asset Image"
-                                            class="mx-auto rounded-full" style="width:2.7rem;height:2.7rem;">
-                                    @else
-                                        <img src="{{ asset('profile/default.png') }}"
-                                            alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
-                                    @endif
-                                </td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->brand }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->model }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->serial_number }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier->supplier }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->site->site }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->location->location }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->category->category }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->department->department }}
-                                </td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->condition->condition }}</td>
-                                <!-- <td class="border border-slate-300 px-4 py-2">
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">ID</th>
+                                <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400">Asset Image</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Asset Name</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Brand</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Model</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Serial Number</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Cost</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Supplier</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Site</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Location</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Category</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Department</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Condition</th>
+                                <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 text-center">Action</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($assets as $asset)
+                                <tr>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->id }}</td>
+                                    <td class="border border-slate-300 px-4 py-2 min-width">
+                                        @if($asset->asset_image)
+                                            <img src="{{ asset($asset->asset_image) }}" alt="Asset Image"
+                                                class="mx-auto rounded-full" style="width:2.7rem;height:2.7rem;">
+                                        @else
+                                            <img src="{{ asset('profile/default.png') }}"
+                                                alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
+                                        @endif
+                                    </td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->brand }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->model }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->serial_number }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier->supplier }}
+                                    </td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->site->site }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->location->location }}
+                                    </td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->category->category }}
+                                    </td>
+                                    <td class="border border-slate-300 px-4 py-2">
+                                        {{ $asset->department->department }}
+                                    </td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->condition->condition }}
+                                    </td>
+                                    <!-- <td class="border border-slate-300 px-4 py-2">
                                     <div class="mx-auto flex justify-center space-x-2">
                                         <a href="{{ route('asset.edit', ['id' => $asset->id]) }}" class="text-blue-600 hover:text-blue-900">Edit</a>
                                         <form action="{{ route('asset.delete', ['id' => $asset->id]) }}" method="POST" id="delete-form-{{ $asset->id }}">
-                                            @csrf
-                                            @method('DELETE')
+@csrf
+@method('DELETE')
                                         </form>
                                         <button type="button" class="text-red-600 hover:text-red-900" onclick="confirmDelete({{ $asset->id }})">Delete</button>
                                     </div>
                                 </td> -->
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            @endif
         </div>
     </div>
 </div>

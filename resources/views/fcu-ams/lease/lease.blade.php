@@ -114,19 +114,6 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
-                                        href="{{ route('lease.index', ['sort' => 'id', 'direction' => ($direction == 'asc' && $sort == 'id') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
-                                    </a>
-                                    <span class="mx-2">ID</span>
-                                </div>
-                            </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
-                                <div class="flex">
-                                    <a class="my-auto"
                                         href="{{ route('lease.index', ['sort' => 'asset_name', 'direction' => ($direction == 'asc' && $sort == 'asset_name') ? 'desc' : 'asc']) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -185,15 +172,14 @@
 @foreach($leases as $lease)
     @foreach($lease->assets as $asset)
         <tr>
-            <td class="border border-slate-300 px-4 py-2">{{ $lease->id }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $lease->lease_date }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $lease->lease_expiration }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $lease->customer }}</td>
             <td class="border border-slate-300 px-4 py-2">
                 <div class="mx-auto flex justify-center space-x-2">
-                    <a href="" class="text-green-600 hover:text-green-900">View</a>
-                    <a href="" class="text-blue-600 hover:text-blue-900">Edit</a>
+                    <a href="" class="text-red-600 hover:text-red-900">End Lease</a>
+                    <!-- <a href="" class="text-blue-600 hover:text-blue-900">Edit</a>
                     <button type="button" class="text-red-600 hover:text-red-900"
                         onclick="confirmDelete({{ $lease->id }})">
                         Delete
@@ -201,7 +187,7 @@
                     <form action="" method="POST" id="delete-form-{{ $lease->id }}">
                         @csrf
                         @method('DELETE')
-                    </form>
+                    </form> -->
                 </div>
             </td>
         </tr>
