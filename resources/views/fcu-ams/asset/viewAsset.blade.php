@@ -57,27 +57,25 @@
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">ID</th>
-                            <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400">Asset Image</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Asset Name</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Brand</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Model</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Serial Number</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Cost</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Supplier</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Site</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Location</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Category</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Department</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Purchase Date</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Start of Maintenance</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">End of Maintenance</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Condition</th>
+                            <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400 whitespace-nowrap">Asset Image</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Asset Name</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Brand</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Model</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Serial Number</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Cost</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Supplier</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Site</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Location</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Category</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Department</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Purchase Date</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Start of Maintenance</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">End of Maintenance</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Condition</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->id }}</td>
                             <td class="border border-slate-300 px-4 py-2 min-width">
                                 @if($asset->asset_image)
                                     <img src="{{ asset($asset->asset_image) }}" alt="Asset Image"
@@ -87,33 +85,34 @@
                                         alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
                                 @endif
                             </td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->brand }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->model }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->serial_number }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier->supplier }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->site->site }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->location->location }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->category->category }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->department->department }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->purchase_date }}</td>
-                            <td class="border border-slate-300 px-4 py-2">
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $asset->asset_name }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $asset->brand }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $asset->model }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $asset->serial_number }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $asset->cost }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $asset->supplier->supplier }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $asset->site->site }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $asset->location->location }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $asset->category->category }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $asset->department->department }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
+                                {{ $asset->purchase_date }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
                                 {{ $asset->maintenance_start_date ?? 'N/A' }}</td>
-                            <td class="border border-slate-300 px-4 py-2">
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
                                 {{ $asset->maintenance_end_date ?? 'N/A' }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->condition->condition }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $asset->condition->condition }}</td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        @if($asset->editHistory->isNotEmpty())
-            <div class="bg-white p-5 shadow-md m-3 rounded-md">
-                <div class="flex justify-between mb-3">
-                    <h2 class="text-2xl font-bold my-auto">Edit History</h2>
-                    <div class="flex align-items-center gap-1"></div>
-                </div>
+        <div class="bg-white p-5 shadow-md m-3 rounded-md">
+            <div class="flex justify-between mb-3">
+                <h2 class="text-2xl font-bold my-auto">Edit History</h2>
+                <div class="flex align-items-center gap-1"></div>
+            </div>
+            @if($asset->editHistory->isNotEmpty())
                 <div class="overflow-x-auto overflow-y-auto">
                     <table class="table-auto w-full">
                         <thead>
@@ -127,7 +126,8 @@
                             @foreach($asset->editHistory as $editHistory)
                                 <tr>
                                     <td class="border border-slate-300 px-4 py-2">{{ $editHistory->created_at }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $editHistory->user->first_name }}
+                                    <td class="border border-slate-300 px-4 py-2">
+                                        {{ $editHistory->user->first_name }}
                                         {{ $editHistory->user->last_name }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{!! nl2br($editHistory->changes) !!}
                                     </td>
@@ -136,8 +136,10 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        @endif
+            @else
+                <p class="text-center text-xl text-gray-500">No records of edit history.</p>
+            @endif
+        </div>
     </div>
 </div>
 
