@@ -29,6 +29,7 @@ class AssetsImport implements ToModel, WithValidation
         $location = Location::where('location', $row['Location'])->first();
         $category = Category::where('category', $row['Category'])->first();
         $department = Department::where('department', $row['Department'])->first();
+        $condition = Condition::where('condition', $row['Condition'])->first();
 
         return new Asset([
             'asset_name' => $row['Asset Name'],
@@ -42,7 +43,7 @@ class AssetsImport implements ToModel, WithValidation
             'category_id' => $category->id,
             'department_id' => $department->id,
             'purchase_date' => $row['Purchase Date'],
-            'condition' => $row['Condition'],
+            'condition_id' => $row['Condition'],
         ]);
     }
 
@@ -64,7 +65,7 @@ class AssetsImport implements ToModel, WithValidation
             '*.Category' => 'required|exists:categories,category',
             '*.Department' => 'required|exists:departments,department',
             '*.Purchase Date' => 'required|date',
-            '*.Condition' => 'nullable|string', 
+            '*.Condition' => 'required|exists:conditions,condition',
         ];
     }
 }

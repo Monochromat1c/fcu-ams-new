@@ -31,37 +31,37 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div class="mb-2 col-span-2">
                             <label for="asset_image" class="block text-gray-700 font-bold mb-2">Asset Image:</label>
-                            <input type="file" id="asset_image" name="asset_image" class="w-full border rounded-md">
+                            <input type="file" id="asset_image" name="asset_image" class="w-full border rounded-md bg-gray-100">
                         </div>
                         <div class="mb-2">
                             <label for="asset_name" class="block text-gray-700 font-bold mb-2">Asset Name:</label>
-                            <input type="text" id="asset_name" name="asset_name" class="w-full p-2 border rounded-md"
-                                required>
+                            <input type="text" id="asset_name" name="asset_name" class="w-full p-2 border rounded-md bg-gray-100"
+                            >
                         </div>
                         <div class="mb-2">
                             <label for="brand" class="block text-gray-700 font-bold mb-2">Brand:</label>
-                            <input type="text" id="brand" name="brand" class="w-full p-2 border rounded-md" required>
+                            <input type="text" id="brand" name="brand" class="w-full p-2 border rounded-md bg-gray-100">
                         </div>
                         <div class="mb-2">
                             <label for="model" class="block text-gray-700 font-bold mb-2">Model:</label>
-                            <input type="text" id="model" name="model" class="w-full p-2 border rounded-md" required>
+                            <input type="text" id="model" name="model" class="w-full p-2 border rounded-md bg-gray-100">
                         </div>
                         <div class="mb-2">
                             <label for="spec" class="block text-gray-700 font-bold mb-2">Specification:</label>
-                            <input type="text" id="specs" name="specs" class="w-full p-2 border rounded-md">
+                            <input type="text" id="specs" name="specs" class="w-full p-2 border rounded-md bg-gray-100">
                         </div>
                         <div class="mb-2">
                             <label for="serial_number" class="block text-gray-700 font-bold mb-2">Serial Number:</label>
                             <input type="text" id="serial_number" name="serial_number"
-                                class="w-full p-2 border rounded-md" required>
+                                class="w-full p-2 border rounded-md bg-gray-100">
                         </div>
                         <div class="mb-2">
                             <label for="cost" class="block text-gray-700 font-bold mb-2">Cost:</label>
-                            <input type="number" id="cost" name="cost" class="w-full p-2 border rounded-md" required>
+                            <input type="number" id="cost" name="cost" class="w-full p-2 border rounded-md bg-gray-100" min="0">
                         </div>
                         <div class="mb-2">
                             <label for="supplier_id" class="block text-gray-700 font-bold mb-2">Supplier:</label>
-                            <select id="supplier_id" name="supplier_id" class="w-full p-2 border rounded-md" required>
+                            <select id="supplier_id" name="supplier_id" class="w-full p-2 border rounded-md bg-gray-100">
                                 <option value="">Select a supplier</option>
                                 @foreach($suppliers as $supplier)
                                     <option value="{{ $supplier->id }}"
@@ -96,7 +96,7 @@
                                             <div class="p-6 text-center">
                                                 <h2 class="mb-4 text-lg font-bold text-black">Add New Supplier</h2>
                                                 <input type="text" id="new_supplier" name="new_supplier"
-                                                    class="w-full p-2 border rounded-md mb-2">
+                                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                                                 <div class="flex flex-end">
                                                     <button type="button" id="add-supplier-btn"
                                                         class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
@@ -119,7 +119,7 @@
                         </div>
                         <div class="mb-2">
                             <label for="site_id" class="block text-gray-700 font-bold mb-2">Site:</label>
-                            <select id="site_id" name="site_id" class="w-full p-2 border rounded-md" required>
+                            <select id="site_id" name="site_id" class="w-full p-2 border rounded-md  bg-gray-100">
                                 <option value="">Select a site</option>
                                 @foreach($sites as $site)
                                     <option value="{{ $site->id }}">{{ $site->site }}</option>
@@ -148,7 +148,7 @@
                                             <div class="p-6 text-center">
                                                 <h2 class="mb-4 text-lg font-bold text-black">Add New Site</h2>
                                                 <input type="text" id="new_site" name="new_site"
-                                                    class="w-full p-2 border rounded-md mb-2">
+                                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                                                 <div class="flex flex-end">
                                                     <button type="button" id="add-site-btn"
                                                         class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
@@ -162,7 +162,7 @@
                             <div class="hidden" id="add-site-form">
                                 <label for="new_site" class="block text-gray-700 font-bold mb-2">New Site:</label>
                                 <input type="text" id="new_site" name="new_site"
-                                    class="w-full p-2 border rounded-md mb-2">
+                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                                 <button type="button" id="add-site-btn"
                                     class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
                                     Site</button>
@@ -170,7 +170,8 @@
                         </div>
                         <div class="mb-2">
                             <label for="location_id" class="block text-gray-700 font-bold mb-2">Location:</label>
-                            <select id="location_id" name="location_id" class="w-full p-2 border rounded-md" required>
+                            <select id="location_id" name="location_id"
+                                class="w-full p-2 border rounded-md bg-gray-100">
                             <option value="">Select a location</option>
                                 @foreach($locations as $location)
                                     <option value="{{ $location->id }}">{{ $location->location }}</option>
@@ -199,7 +200,7 @@
                                             <div class="p-6 text-center">
                                                 <h2 class="mb-4 text-lg font-bold text-black">Add New Location</h2>
                                                 <input type="text" id="new_location" name="new_location"
-                                                    class="w-full p-2 border rounded-md mb-2">
+                                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                                                 <div class="flex flex-end">
                                                     <button type="button" id="add-location-btn"
                                                         class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
@@ -213,7 +214,7 @@
                             <div class="hidden" id="add-location-form">
                                 <label for="new_location" class="block text-gray-700 font-bold mb-2">New Location:</label>
                                 <input type="text" id="new_location" name="new_location"
-                                    class="w-full p-2 border rounded-md mb-2">
+                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                                 <button type="button" id="add-location-btn"
                                     class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
                                     Location</button>
@@ -221,7 +222,8 @@
                         </div>
                         <div class="mb-2">
                             <label for="category_id" class="block text-gray-700 font-bold mb-2">Category:</label>
-                            <select id="category_id" name="category_id" class="w-full p-2 border rounded-md" required>
+                            <select id="category_id" name="category_id"
+                                class="w-full p-2 border rounded-md bg-gray-100">
                             <option value="">Select a category</option>
                                 @foreach($categories as $category)
                                     <option value="{{ $category->id }}">{{ $category->category }}</option>
@@ -250,7 +252,7 @@
                                             <div class="p-6 text-center">
                                                 <h2 class="mb-4 text-lg font-bold text-black">Add New Category</h2>
                                                 <input type="text" id="new_category" name="new_category"
-                                                    class="w-full p-2 border rounded-md mb-2">
+                                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                                                 <div class="flex flex-end">
                                                     <button type="button" id="add-category-btn"
                                                         class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
@@ -265,7 +267,7 @@
                                 <label for="new_category" class="block text-gray-700 font-bold mb-2">New
                                     Category:</label>
                                 <input type="text" id="new_category" name="new_category"
-                                    class="w-full p-2 border rounded-md mb-2">
+                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                                 <button type="button" id="add-category-btn"
                                     class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
                                     Category</button>
@@ -273,8 +275,9 @@
                         </div>
                         <div class="mb-2">
                             <label for="department_id" class="block text-gray-700 font-bold mb-2">Department:</label>
-                            <select id="department_id" name="department_id" class="w-full p-2 border rounded-md"
-                                required>
+                            <select id="department_id" name="department_id"
+                                class="w-full p-2 border rounded-md bg-gray-100"
+                            >
                             <option value="">Select a department</option>
                                 @foreach($departments as $department)
                                     <option value="{{ $department->id }}">{{ $department->department }}</option>
@@ -303,7 +306,7 @@
                                             <div class="p-6 text-center">
                                                 <h2 class="mb-4 text-lg font-bold text-black">Add New Department</h2>
                                                 <input type="text" id="new_department" name="new_department"
-                                                    class="w-full p-2 border rounded-md mb-2">
+                                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                                                 <div class="flex flex-end">
                                                     <button type="button" id="add-department-btn"
                                                         class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
@@ -318,7 +321,7 @@
                                 <label for="new_department" class="block text-gray-700 font-bold mb-2">New
                                     Department:</label>
                                 <input type="text" id="new_department" name="new_department"
-                                    class="w-full p-2 border rounded-md mb-2">
+                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                                 <button type="button" id="add-department-btn"
                                     class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
                                     Department</button>
@@ -326,7 +329,7 @@
                         </div>
                         <!-- <div class="mb-2">
                             <label for="condition_id" class="block text-gray-700 font-bold mb-2">Condition:</label>
-                            <select id="condition_id" name="condition_id" class="w-full p-2 border rounded-md" required>
+                            <select id="condition_id" name="condition_id" class="w-full p-2 border rounded-md">
                             <option value="">Select a condition</option>
                                 @foreach($conditions as $condition)
                                     <option value="{{ $condition->id }}">{{ $condition->condition }}</option>
@@ -336,16 +339,22 @@
                         <div class="mb-2">
                             <label for="purchase_date" class="block text-gray-700 font-bold mb-2">Purchase Date:</label>
                             <input type="date" id="purchase_date" name="purchase_date"
-                                class="w-full p-2 border rounded-md" required>
+                                class="w-full p-2 border rounded-md bg-gray-100">
                         </div>
                     </div>
                     <div class="space-x-2 flex">
-                        <button type="button" class="ml-auto rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500
+                        <!-- <button type="button" class="ml-auto rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500
                         transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white"
-                            onclick="history.back()">Back</button>
+                            onclick="history.back()">Back</button> -->
                         <button type="submit" class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                            Item</button>
+                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                        </svg>
+                        Add Item
+                    </button>
                     </div>
             </form>
         </div>
@@ -359,7 +368,6 @@
             document.getElementById('logout-form').submit();
         }
     }
-
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {

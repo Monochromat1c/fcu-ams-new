@@ -36,21 +36,21 @@
                     <h3 class="text-lg font-semibold mb-3">Item Details</h3>
                     <div class="mb-4">
                         <label for="stock_image" class="block text-gray-700 font-bold mb-2">Item Image:</label>
-                        <input type="file" id="stock_image" name="stock_image" class="w-full border rounded-md">
+                        <input type="file" id="stock_image" name="stock_image" class="w-full border rounded-md bg-gray-100">
                     </div>
                     <div class="mb-4">
                         <label for="brand" class="block text-gray-700 font-bold mb-2">Brand:</label>
-                        <input type="text" id="brand" name="brand" class="w-full p-2 border rounded-md"
+                        <input type="text" id="brand" name="brand" class="w-full p-2 border rounded-md bg-gray-100"
                             value="{{ old('brand') ?? '' }}" required>
                     </div>
                     <div class="mb-4">
                         <label for="items_specs" class="block text-gray-700 font-bold mb-2">Item/Specs:</label>
-                        <input type="text" id="items_specs" name="items_specs" class="w-full p-2 border rounded-md"
+                        <input type="text" id="items_specs" name="items_specs" class="w-full p-2 border rounded-md bg-gray-100"
                             value="{{ old('items_specs') ?? '' }}" required>
                     </div>
                     <div class="mb-4">
                         <label for="unit_id" class="block text-gray-700 font-bold mb-2">Unit:</label>
-                        <select id="unit_id" name="unit_id" class="w-full p-2 border rounded-md" required>
+                        <select id="unit_id" name="unit_id" class="w-full p-2 border rounded-md bg-gray-100" required>
                             <option value="">Select a unit</option>
                             @foreach($units as $unit)
                                 <option value="{{ $unit->id }}"
@@ -83,7 +83,7 @@
                                 <div class="p-6 text-center">
                                     <h2 class="mb-4 text-lg font-bold text-black">Add New Unit</h2>
                                     <input type="text" id="new_unit" name="new_unit"
-                                        class="w-full p-2 border rounded-md mb-2">
+                                        class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                                     <div class="flex flex-end">
                                         <button type="button" id="add-unit-btn"
                                             class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
@@ -95,17 +95,19 @@
                     </div>
                     <div class="mb-4">
                         <label for="quantity" class="block text-gray-700 font-bold mb-2">Quantity:</label>
-                        <input type="number" id="quantity" name="quantity" class="w-full p-2 border rounded-md"
-                            value="{{ old('quantity') ?? '' }}" required>
+                        <input type="number" id="quantity" name="quantity" class="w-full p-2 border rounded-md bg-gray-100"
+                            value="{{ old('quantity') ?? '' }}"
+                            min="0" required>
                     </div>
                     <div class="mb-4">
                         <label for="unit_price" class="block text-gray-700 font-bold mb-2">Unit Price:</label>
-                        <input type="number" id="unit_price" name="unit_price" class="w-full p-2 border rounded-md"
-                            value="{{ old('unit_price') ?? '' }}" required>
+                        <input type="number" id="unit_price" name="unit_price" class="w-full p-2 border rounded-md bg-gray-100"
+                            value="{{ old('unit_price') ?? '' }}" min="0"
+                            required>
                     </div>
                     <div class="mb-2">
                         <label for="supplier_id" class="block text-gray-700 font-bold mb-2">Supplier:</label>
-                        <select id="supplier_id" name="supplier_id" class="w-full p-2 border rounded-md" required>
+                        <select id="supplier_id" name="supplier_id" class="w-full p-2 border rounded-md bg-gray-100" required>
                             <option value="">Select a supplier</option>
                             @foreach($suppliers as $supplier)
                                 <option value="{{ $supplier->id }}"
@@ -142,7 +144,7 @@
                                     <div class="p-6 text-center">
                                         <h2 class="mb-4 text-lg font-bold text-black">Add New Supplier</h2>
                                         <input type="text" id="new_supplier" name="new_supplier"
-                                            class="w-full p-2 border rounded-md mb-2">
+                                            class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                                         <div class="flex flex-end">
                                             <button type="button" id="add-supplier-btn"
                                                 class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
@@ -155,7 +157,8 @@
                     </div>
                     <div class="hidden" id="add-supplier-form">
                         <label for="new_supplier" class="block text-gray-700 font-bold mb-2">New Supplier:</label>
-                        <input type="text" id="new_supplier" name="new_supplier" class="w-full p-2 border rounded-md mb-2">
+                        <input type="text" id="new_supplier" name="new_supplier"
+                            class="w-full p-2 border rounded-md mb-2 bg-gray-100">
                         <button type="button" id="add-supplier-btn"
                             class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
                             Supplier</button>
@@ -164,8 +167,13 @@
                 <div class="space-x-2 flex">
                     <button type="submit"
                         class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                        Item
+                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                        </svg>
+                        Add Item
                     </button>
                 </div>
             </form>

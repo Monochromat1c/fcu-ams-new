@@ -8,9 +8,20 @@
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
             <div></div>
             <h1 class="my-auto text-3xl">Dashboard</h1>
-            <a href="{{ route('profile.index') }}" class="flex space-x-1" style="min-width:100px;">
-                <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset="">
-                <p class="my-auto">Lighttt</p>
+            <a href="{{ route('profile.index') }}" class="flex gap-3" style="min-width:100px;">
+                <!-- <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset=""> -->
+                <div>
+                    @if(auth()->user()->profile_picture)
+                        <img src="{{ asset('storage/app/public/profile_pictures/' . auth()->user()->profile_picture) }}"
+                            alt="Profile Picture" class="w-14 h-14 rounded-full mx-auto">
+                    @else
+                        <img src="{{ asset('profile/default.png') }}" alt="Default Image"
+                            class="w-14 h-14 rounded-full mx-auto">
+                    @endif
+                </div>
+                <p class="my-auto">
+                    {{ (auth()->user() ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'N/A') }}
+                </p>
             </a>
         </nav>
         <div class="m-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -76,7 +87,7 @@
                 <h3 class="text-lg font-semibold mb-4">Analytics</h3>
                 <canvas id="analyticsChart"></canvas>
             </div> -->
-            <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-semibold mb-4">Inventory and Supplier Distribution</h3>
                 <div></div>
                 <canvas id="distributionChart" class="mb-4"></canvas>
@@ -98,8 +109,8 @@
                         <span class="">No Data Available</span>
                     @endif
                 </p>
-            </div>
-            <div class="bg-white rounded-lg shadow-md p-6">
+            </div> -->
+            <div class="bg-white rounded-lg shadow-md p-6 col-span-2">
                 <h3 class="text-lg font-semibold mb-4">Recent Actions</h3>
                 <ul class="divide-y divide-gray-200">
                     @foreach($recentActions as $action)

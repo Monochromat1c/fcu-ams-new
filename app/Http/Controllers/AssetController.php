@@ -258,11 +258,13 @@ class AssetController extends Controller
 
     public function import(Request $request)
     {
+        $file = $request->file('file');
+
         $request->validate([
             'file' => 'required|mimes:xlsx,xls,csv',
         ]);
 
-        Excel::import(new AssetsImport, $request->file('file'));
+        Excel::import(new AssetsImport, $file);
 
         return redirect()->route('asset.list')->with('success', 'Assets imported successfully.');
     }

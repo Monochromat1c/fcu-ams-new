@@ -61,7 +61,7 @@
                     <div class="mb-4">
                         <label for="cost" class="block text-gray-700 font-bold mb-2">Cost:</label>
                         <input type="number" id="cost" name="cost" class="w-full p-2 border rounded-md"
-                            value="{{ $asset->cost }}" required>
+                            value="{{ $asset->cost }}" min="0" required>
                     </div>
                     <div class="mb-4">
                         <label for="supplier_id" class="block text-gray-700 font-bold mb-2">Supplier:</label>
@@ -179,11 +179,23 @@
                 </div>
                 <div class="flex justify-end space-x-2">
                     <button type="button" class="ml-auto rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white"
-                        onclick="history.back()">Back</button>
+                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2"
+                        onclick="history.back()">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                        </svg>
+                        Back
+                    </button>
                     <button type="submit" class="rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Update
-                        Asset
+                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                        </svg>
+                        Update Asset
                     </button>
                 </div>
             </form>

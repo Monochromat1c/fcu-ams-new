@@ -8,9 +8,20 @@
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
             <div></div>
             <h1 class="my-auto text-3xl">Reports</h1>
-            <a href="{{ route('profile.index') }}" class="flex space-x-1" style="min-width:100px;">
-                <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset="">
-                <p class="my-auto">Lighttt</p>
+            <a href="{{ route('profile.index') }}" class="flex gap-3" style="min-width:100px;">
+                <!-- <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset=""> -->
+                <div>
+                    @if(auth()->user()->profile_picture)
+                        <img src="{{ asset('storage/app/public/profile_pictures/' . auth()->user()->profile_picture) }}"
+                            alt="Profile Picture" class="w-14 h-14 rounded-full mx-auto">
+                    @else
+                        <img src="{{ asset('profile/default.png') }}" alt="Default Image"
+                            class="w-14 h-14 rounded-full mx-auto">
+                    @endif
+                </div>
+                <p class="my-auto">
+                    {{ (auth()->user() ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'N/A') }}
+                </p>
             </a>
         </nav>
         <div class="content-area mx-3">
@@ -213,7 +224,7 @@
                     </table>
                 </div>
             @endif
-            @if($lowStockInventories->isNotEmpty())
+            <!-- @if($lowStockInventories->isNotEmpty())
                 <div class="bg-white rounded-lg shadow-md p-6 lowStock mb-3">
                     <div class="flex justify-between align-items-center">
                         <h2 class="text-2xl mb-2">Low Stock Supplies</h2>
@@ -314,7 +325,7 @@
                         </tbody>
                     </table>
                 </div>
-            @endif
+            @endif -->
             <!-- <div class="bg-white rounded-lg shadow-md p-6 lowStock mb-3">
                 <h2 class="text-2xl">Work in progress...</h2>
             </div> -->
