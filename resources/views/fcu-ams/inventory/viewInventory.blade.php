@@ -15,7 +15,7 @@
                         <img src="{{ asset('storage/app/public/profile_pictures/' . auth()->user()->profile_picture) }}"
                             alt="Profile Picture" class="w-14 h-14 rounded-full mx-auto">
                     @else
-                        <img src="{{ asset('profile/default.png') }}" alt="Default Image"
+                        <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
                             class="w-14 h-14 rounded-full mx-auto">
                     @endif
                 </div>
@@ -61,7 +61,7 @@
                                     <img src="{{ asset($inventory->stock_image) }}" alt="Inventory Image"
                                         class="mx-auto rounded-full" style="width:2.7rem;height:2.7rem;">
                                 @else
-                                    <img src="{{ asset('profile/default.png') }}"
+                                    <img src="{{ asset('profile/defaultIcon.png') }}"
                                         alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
                                 @endif
                             </td>

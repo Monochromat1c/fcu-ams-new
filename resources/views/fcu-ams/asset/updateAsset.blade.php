@@ -245,7 +245,7 @@
 
         conditionSelect.addEventListener('change', function () {
             const selectedCondition = conditionSelect.options[conditionSelect.selectedIndex].text;
-            if (selectedCondition === 'Maintenance') {
+            if (selectedCondition === 'asdfaws') {
                 maintenanceModal.classList.remove('hidden');
             } else {
                 maintenanceModal.classList.add('hidden');

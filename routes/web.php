@@ -48,10 +48,12 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/asset/{id}/edit', 'edit')->name('asset.edit');
         Route::get('/maintenance', 'maintenance')->name('maintenance');
         Route::get('/asset/export', 'export')->name('asset.export');
+        Route::get('/asset/search', 'search')->name('asset.search');
         Route::get('/asset/{id}/qrCode', 'generateQrCode')->name('asset.qrCode');
         Route::post('/asset/add', 'store')->name('asset.add.store');
         Route::post('/asset/{id}', 'update')->name('asset.update');
         Route::post('/asset/import', 'import')->name('asset.import');
+        Route::post('/asset/{id}/finish-maintenance', 'finishMaintenance')->name('asset.finishMaintenance');
         Route::delete('/asset/{id}', 'destroy')->name('asset.delete');
     }); 
 

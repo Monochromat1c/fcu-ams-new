@@ -15,7 +15,7 @@
                         <img src="{{ asset('storage/app/public/profile_pictures/' . auth()->user()->profile_picture) }}"
                             alt="Profile Picture" class="w-14 h-14 rounded-full mx-auto">
                     @else
-                        <img src="{{ asset('profile/default.png') }}" alt="Default Image"
+                        <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
                             class="w-14 h-14 rounded-full mx-auto">
                     @endif
                 </div>
@@ -70,6 +70,8 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Category</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Department</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Purchase Date</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Start of Maintenance</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">End of Maintenance</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Condition</th>
                         </tr>
                     </thead>
@@ -81,7 +83,7 @@
                                     <img src="{{ asset($asset->asset_image) }}" alt="Asset Image"
                                         class="mx-auto rounded-full" style="width:2.7rem;height:2.7rem;">
                                 @else
-                                    <img src="{{ asset('profile/default.png') }}"
+                                    <img src="{{ asset('profile/defaultIcon.png') }}"
                                         alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
                                 @endif
                             </td>
@@ -96,6 +98,10 @@
                             <td class="border border-slate-300 px-4 py-2">{{ $asset->category->category }}</td>
                             <td class="border border-slate-300 px-4 py-2">{{ $asset->department->department }}</td>
                             <td class="border border-slate-300 px-4 py-2">{{ $asset->purchase_date }}</td>
+                            <td class="border border-slate-300 px-4 py-2">
+                                {{ $asset->maintenance_start_date ?? 'N/A' }}</td>
+                            <td class="border border-slate-300 px-4 py-2">
+                                {{ $asset->maintenance_end_date ?? 'N/A' }}</td>
                             <td class="border border-slate-300 px-4 py-2">{{ $asset->condition->condition }}</td>
                         </tr>
                     </tbody>
