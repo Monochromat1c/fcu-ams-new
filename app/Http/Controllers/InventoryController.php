@@ -47,7 +47,7 @@ class InventoryController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('inventories.items_specs', 'like', '%' . $search . '%')
                     ->orWhere('suppliers.supplier', 'like', '%' . $search . '%')
-                    ->orWhere('inventories.unit_id', 'like', '%' . $search . '%');
+                    ->orWhere('inventories.unit', 'like', '%' . $search . '%');
             });
         }
 

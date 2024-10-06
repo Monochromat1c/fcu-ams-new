@@ -15,7 +15,7 @@
                         <img src="{{ asset('storage/app/public/profile_pictures/' . auth()->user()->profile_picture) }}"
                             alt="Profile Picture" class="w-14 h-14 rounded-full mx-auto">
                     @else
-                        <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
+                        <img src="{{ asset('profile/default.png') }}" alt="Default Image"
                             class="w-14 h-14 rounded-full mx-auto">
                     @endif
                 </div>
@@ -42,34 +42,36 @@
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400 whitespace-nowrap">Supply Image</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Brand</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Items & Specs</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Quantity</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Unit</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Unit Price</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Supplier</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Total Item Price</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">ID</th>
+                            <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400">Supply Image</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Brand</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Items & Specs</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Quantity</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit Price</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Supplier</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Total Item Price</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
+                            <td class="border border-slate-300 px-4 py-2">{{ $inventory->id }}</td>
+                            <td class="border border-slate-300 px-4 py-2">
                                 @if($inventory->stock_image)
                                     <img src="{{ asset($inventory->stock_image) }}" alt="Inventory Image"
                                         class="mx-auto rounded-full" style="width:2.7rem;height:2.7rem;">
                                 @else
-                                    <img src="{{ asset('profile/defaultIcon.png') }}"
+                                    <img src="{{ asset('profile/default.png') }}"
                                         alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
                                 @endif
                             </td>
-                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->brand }}</td>
-                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->items_specs }}</td>
-                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->quantity }}</td>
-                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->unit->unit }}</td>
-                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->unit_price }}</td>
-                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->supplier->supplier }}</td>
-                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
+                            <td class="border border-slate-300 px-4 py-2">{{ $inventory->brand }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $inventory->quantity }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit->unit }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit_price }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $inventory->supplier->supplier }}</td>
+                            <td class="border border-slate-300 px-4 py-2">
                                 {{ number_format($inventory->quantity * $inventory->unit_price, 2) }}</td>
                         </tr>
                     </tbody>

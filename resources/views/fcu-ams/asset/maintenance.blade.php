@@ -15,7 +15,7 @@
                         <img src="{{ asset('storage/app/public/profile_pictures/' . auth()->user()->profile_picture) }}"
                             alt="Profile Picture" class="w-14 h-14 rounded-full mx-auto">
                     @else
-                        <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
+                        <img src="{{ asset('profile/default.png') }}" alt="Default Image"
                             class="w-14 h-14 rounded-full mx-auto">
                     @endif
                 </div>
@@ -24,24 +24,6 @@
                 </p>
             </a>
         </nav>
-        <div class="m-3">
-            @if(session('success'))
-                <div
-                    class="successMessage bg-green-100 border border-green-400 text-black px-4 py-3 rounded relative mt-2 mb-2">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if($errors->any())
-                <div
-                    class="errorMessage bg-red-100 border border-red-400 text-black px-4 py-3 rounded relative mt-2 mb-2">
-                    <ul>
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
-        </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex justify-between mb-3">
                 <h2 class="text-2xl font-bold my-auto">Maintenance List</h2>
@@ -69,8 +51,6 @@
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Category</th>
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Department</th>
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Condition</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Start of Maintenance</th>
-                                <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400">Action</th>
                                 <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 text-center">Action</th> -->
                             </tr>
                         </thead>
@@ -83,7 +63,7 @@
                                             <img src="{{ asset($asset->asset_image) }}" alt="Asset Image"
                                                 class="mx-auto rounded-full" style="width:2.7rem;height:2.7rem;">
                                         @else
-                                            <img src="{{ asset('profile/defaultIcon.png') }}"
+                                            <img src="{{ asset('profile/default.png') }}"
                                                 alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
                                         @endif
                                     </td>
@@ -104,28 +84,16 @@
                                     </td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $asset->condition->condition }}
                                     </td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->maintenance_start_date }}
-                                    </td>
-                                    <td class="border border-slate-300 px-4 py-2">
-                                        <div class="mx-auto flex">
-                                            <form
-                                                action="{{ route('asset.finishMaintenance', $asset->id) }}"
-                                                method="POST">
-                                                @csrf
-                                                <button type="submit"
-                                                    class="rounded-md shadow-md px-5 py-2 flex my-auto gap-1 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                                                        class="size-6">
-                                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                                    </svg>
-
-                                                    Done
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </td>
+                                    <!-- <td class="border border-slate-300 px-4 py-2">
+                                    <div class="mx-auto flex justify-center space-x-2">
+                                        <a href="{{ route('asset.edit', ['id' => $asset->id]) }}" class="text-blue-600 hover:text-blue-900">Edit</a>
+                                        <form action="{{ route('asset.delete', ['id' => $asset->id]) }}" method="POST" id="delete-form-{{ $asset->id }}">
+@csrf
+@method('DELETE')
+                                        </form>
+                                        <button type="button" class="text-red-600 hover:text-red-900" onclick="confirmDelete({{ $asset->id }})">Delete</button>
+                                    </div>
+                                </td> -->
                                 </tr>
                             @endforeach
                         </tbody>

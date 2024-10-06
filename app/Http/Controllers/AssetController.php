@@ -181,16 +181,9 @@ class AssetController extends Controller
         $asset->category_id = $validatedData['category_id'];
         $asset->department_id = $validatedData['department_id'];
         $asset->condition_id = $validatedData['condition_id'];
+        $asset->maintenance_start_date = $request->input('maintenance_start_date') !== '' ? $request->input('maintenance_start_date') : null;
+        $asset->maintenance_end_date = $request->input('maintenance_end_date') !== '' ? $request->input('maintenance_end_date') : null;
         $asset->purchase_date = $validatedData['purchase_date'];
-
-        $condition = Condition::find($validatedData['condition_id']);
-        if ($condition && $condition->condition === 'Maintenance') {
-            $asset->maintenance_start_date = now();
-            $asset->maintenance_end_date = $request->input('maintenance_end_date') ?? null;
-        } else {
-            $asset->maintenance_start_date = null;
-            $asset->maintenance_end_date = null;
-        }
 
         if ($request->hasFile('asset_image')) {
             $imageName = time().'.'.$request->asset_image->extension();
@@ -218,24 +211,6 @@ class AssetController extends Controller
     {
         $assets = Asset::where('condition_id', 2)->get();
         return view('fcu-ams/asset/maintenance', compact('assets'));
-    }
-
-    public function finishMaintenance(Request $request, $id)
-    {
-        $asset = Asset::findOrFail($id);
-
-        $repairedCondition = Condition::where('condition', 'Repaired')->first();
-
-        if ($repairedCondition) {
-            $oldAsset = $asset->replicate();
-            $asset->condition_id = $repairedCondition->id;
-            $asset->maintenance_end_date = now();
-            $asset->save();
-
-            $this->storeEditHistory($asset, auth()->user(), $oldAsset);
-        }
-
-        return redirect()->route('maintenance')->with('success', 'Maintenance completed successfully.');
     }
 
     public function storeEditHistory($asset, $user, $oldAsset)
