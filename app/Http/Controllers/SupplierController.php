@@ -33,4 +33,20 @@ class SupplierController extends Controller
 
         return response()->json(['reload' => true]);
     }
+    
+    public function delete(Request $request)
+    {
+        $id = $request->input('id');
+        $supplier = Supplier::find($id);
+        if ($supplier) {
+            try {
+                $supplier->delete();
+                return redirect()->back()->with('success', 'Supplier deleted successfully');
+            } catch (\Illuminate\Database\QueryException $e) {
+                return redirect()->back()->withErrors(['error' => 'Cannot delete supplier because it is associated with one or more assets.']);
+            }
+        } else {
+            return redirect()->back()->withErrors(['error' => 'Supplier not found']);
+        }
+    }
 }

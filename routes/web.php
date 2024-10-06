@@ -69,6 +69,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(SupplierController::class)->group(function (){
         Route::post('/supplier/add', 'add')->name('supplier.add');
+        Route::post('/supplier/delete', 'delete')->name('supplier.delete');
     });
 
     // Route::controller(UserController::class)->group(function () {

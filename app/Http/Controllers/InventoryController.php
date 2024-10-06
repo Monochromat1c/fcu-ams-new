@@ -87,11 +87,7 @@ class InventoryController extends Controller
     {
         $validatedData = $request->validate([
             'brand' => 'required|string',
-            'items_specs' => [
-                'required',
-                'string',
-                Rule::unique('inventories', 'items_specs')->whereNull('deleted_at'),
-            ],
+            'items_specs' => 'required|string',
             'unit_id' => 'required|integer|exists:units,id',
             'quantity' => 'required|numeric',
             'unit_price' => 'required|numeric',
@@ -99,21 +95,34 @@ class InventoryController extends Controller
             'stock_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-        $inventory = new Inventory();
-        $inventory->brand = $validatedData['brand'];
-        $inventory->items_specs = $validatedData['items_specs'];
-        $inventory->unit_id = $validatedData['unit_id'];
-        $inventory->quantity = $validatedData['quantity'];
-        $inventory->unit_price = $validatedData['unit_price'];
-        $inventory->supplier_id = $validatedData['supplier_id'];
+        $existingInventory = Inventory::where('items_specs', $validatedData['items_specs'])
+            ->where('brand', $validatedData['brand'])
+            ->where('unit_id', $validatedData['unit_id'])
+            ->where('unit_price', $validatedData['unit_price'])
+            ->where('supplier_id', $validatedData['supplier_id'])
+            ->whereNull('deleted_at')
+            ->first();
 
-        if ($request->hasFile('stock_image')) {
-            $imageName = time().'.'.$request->stock_image->extension();
-            $request->stock_image->move(public_path('profile'), $imageName);
-            $inventory->stock_image = 'profile/'.$imageName;
+        if ($existingInventory) {
+            $existingInventory->quantity += $validatedData['quantity'];
+            $existingInventory->save();
+        } else {
+            $inventory = new Inventory();
+            $inventory->brand = $validatedData['brand'];
+            $inventory->items_specs = $validatedData['items_specs'];
+            $inventory->unit_id = $validatedData['unit_id'];
+            $inventory->quantity = $validatedData['quantity'];
+            $inventory->unit_price = $validatedData['unit_price'];
+            $inventory->supplier_id = $validatedData['supplier_id'];
+
+            if ($request->hasFile('stock_image')) {
+                $imageName = time().'.'.$request->stock_image->extension();
+                $request->stock_image->move(public_path('profile'), $imageName);
+                $inventory->stock_image = 'profile/'.$imageName;
+            }
+
+            $inventory->save();
         }
-
-        $inventory->save();
 
         $request->session()->put('input', $request->all());
 

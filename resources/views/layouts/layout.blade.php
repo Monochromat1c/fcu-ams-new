@@ -14,7 +14,8 @@
 <body>
     @yield('content')
 
-    <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('js/successMessageTimer.js') }}"></script>
+    <script src="{{ asset('js/errorMessageTimer.js') }}"></script>
     <script src="{{ asset('js/alpine.min.js') }}" defer></script>
 </body>
 

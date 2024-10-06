@@ -53,7 +53,15 @@ class ReportController extends Controller
                 ['path' => $request->url(), 'query' => $request->query()]
             );
 
-        return view('fcu-ams/reports/reports', compact('inventories', 'lowStockInventories', 'stockOutRecords'));
+            $assets = Asset::with('supplier')
+                ->whereDate('purchase_date', '>=', now()->startOfWeek())
+                ->whereDate('purchase_date', '<=', now()->endOfWeek())
+                ->orderBy('asset_name', 'asc')
+                ->paginate(5);
+
+
+        return view('fcu-ams/reports/reports', compact('inventories', 'lowStockInventories', 'stockOutRecords',
+        'assets'));
     }
 
     public function stockOutDetails($id)
