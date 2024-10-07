@@ -46,6 +46,7 @@
                                 <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400">Stock Image</th>
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Item</th>
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Brand</th>
+                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Quantity</th>
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Supplier</th>
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit</th>
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit Price</th>
@@ -66,8 +67,9 @@
                                     </td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $inventory->brand }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->supplier }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->quantity }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->supplier->supplier }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit->unit }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit_price }}</td>
                                 </tr>
                             @endforeach

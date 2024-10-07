@@ -14,14 +14,12 @@
                 @csrf
                 <div class="">
                     @if(session('success'))
-                        <div
-                            class="successMessage bg-green-100 border border-green-400 text-black px-4 py-3 rounded
-                            relative mt-2 mb-2">
+                        <div class="successMessage bg-green-600 border border-green-600 text-white px-4 py-3 rounded relative mt-2 mb-2">
                             {{ session('success') }}
                         </div>
                     @endif
                     @if($errors->any())
-                        <div class="bg-red-100 border border-red-400 text-black px-4 py-3 rounded relative mt-2 mb-2">
+                        <div class="errorMessage bg-red-900 border border-red-900 text-white px-4 py-3 rounded relative mt-2 mb-2">
                             <ul>
                                 @foreach($errors->all() as $error)
                                     <li>{{ $error }}</li>

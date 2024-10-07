@@ -10,6 +10,7 @@ use App\Models\Site;
 use App\Models\Location;
 use App\Models\Category;
 use App\Models\Condition;
+use App\Models\Status;
 use App\Models\Department;
 use App\Models\AssetEditHistory;
 use Maatwebsite\Excel\Facades\Excel;
@@ -37,7 +38,8 @@ class AssetController extends Controller
             ->leftJoin('categories', 'assets.category_id', '=', 'categories.id')
             ->leftJoin('departments', 'assets.department_id', '=', 'departments.id')
             ->leftJoin('conditions', 'assets.condition_id', '=', 'conditions.id')
-            ->select('assets.*', 'suppliers.supplier as supplier_name', 'sites.site as site_name', 'conditions.condition as condition_name','locations.location as location_name', 'categories.category as category_name', 'departments.department as department_name');
+            ->leftJoin('statuses', 'assets.status_id', '=', 'statuses.id')
+            ->select('assets.*', 'suppliers.supplier as supplier_name', 'sites.site as site_name', 'statuses.status as status_name','conditions.condition as condition_name','locations.location as location_name', 'categories.category as category_name', 'departments.department as department_name');
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -72,7 +74,8 @@ class AssetController extends Controller
         $categories = DB::table('categories')->get();
         $departments = DB::table('departments')->get();
         $conditions = DB::table('conditions')->get();
-        return view('fcu-ams/asset/addAsset', compact('suppliers', 'sites', 'locations', 'categories', 'departments', 'conditions'));
+        $statuses = DB::table('statuses')->get();
+        return view('fcu-ams/asset/addAsset', compact('suppliers', 'sites', 'locations', 'categories', 'departments', 'conditions', 'statuses'));
     }
 
     public function show($id)
@@ -119,6 +122,7 @@ class AssetController extends Controller
         $asset->category_id = $validatedData['category_id'];
         $asset->department_id = $validatedData['department_id'];
         $asset->condition_id = Condition::where('condition', 'New')->first()->id;
+        $asset->status_id = Status::where('status', 'Available')->first()->id;
         $asset->purchase_date = $validatedData['purchase_date'];
 
         if ($request->hasFile('asset_image')) {
@@ -141,8 +145,10 @@ class AssetController extends Controller
         $categories = DB::table('categories')->get();
         $departments = DB::table('departments')->get();
         $conditions = DB::table('conditions')->get();
+        $statuses = DB::table('statuses')->get();
 
-        return view('fcu-ams/asset/updateAsset', compact('asset', 'suppliers', 'sites', 'locations', 'categories', 'departments', 'conditions'));
+        return view('fcu-ams/asset/updateAsset', compact('asset', 'suppliers', 'sites', 'locations', 'categories',
+        'departments', 'conditions', 'statuses'));
     }
 
     public function update(Request $request, $id)
@@ -163,6 +169,7 @@ class AssetController extends Controller
             'location_id' => 'required|integer|exists:locations,id',
             'category_id' => 'required|integer|exists:categories,id',
             'department_id' => 'required|integer|exists:departments,id',
+            'status_id' => 'required|integer|exists:statuses,id',
             'condition_id' => 'required|integer|exists:conditions,id',
             'purchase_date' => 'required|date',
             'asset_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -181,6 +188,7 @@ class AssetController extends Controller
         $asset->category_id = $validatedData['category_id'];
         $asset->department_id = $validatedData['department_id'];
         $asset->condition_id = $validatedData['condition_id'];
+        $asset->status_id = $validatedData['status_id'];
         $asset->maintenance_start_date = $request->input('maintenance_start_date') !== '' ? $request->input('maintenance_start_date') : null;
         $asset->maintenance_end_date = $request->input('maintenance_end_date') !== '' ? $request->input('maintenance_end_date') : null;
         $asset->purchase_date = $validatedData['purchase_date'];
@@ -230,6 +238,7 @@ class AssetController extends Controller
             'department_id' => 'Department',
             'purchase_date' => 'Purchase Date',
             'condition_id' => 'Condition',
+            'status_id' => 'Status',
         ];
 
         foreach ($fields as $field => $header) {
@@ -237,10 +246,16 @@ class AssetController extends Controller
                 $oldValue = $oldAsset->$field;
                 $newValue = $asset->$field;
 
-                if (in_array($field, ['supplier_id', 'site_id', 'location_id', 'category_id', 'department_id', 'condition_id'])) {
+                if (in_array($field, ['supplier_id', 'site_id', 'location_id', 'category_id', 'department_id', 'condition_id', 'status_id'])) {
                     $relationship = str_replace('_id', '', $field);
-                    $oldValue = $oldAsset->$relationship->name ?? $oldAsset->$relationship->supplier ?? $oldAsset->$relationship->site ?? $oldAsset->$relationship->location ?? $oldAsset->$relationship->category ?? $oldAsset->$relationship->department ?? $oldAsset->$relationship->condition;
-                    $newValue = $asset->$relationship->name ?? $asset->$relationship->supplier ?? $asset->$relationship->site ?? $asset->$relationship->location ?? $asset->$relationship->category ?? $asset->$relationship->department ?? $asset->$relationship->condition;
+                    $oldValue = $oldAsset->$relationship->name ?? $oldAsset->$relationship->supplier ??
+                        $oldAsset->$relationship->site ?? $oldAsset->$relationship->location ??
+                        $oldAsset->$relationship->category ?? $oldAsset->$relationship->department ??
+                        $oldAsset->$relationship->condition ?? $oldAsset->$relationship->status;
+                    $newValue = $asset->$relationship->name ?? $asset->$relationship->supplier ??
+                        $asset->$relationship->site ?? $asset->$relationship->location ?? $asset->$relationship->category ??
+                        $asset->$relationship->department ?? $asset->$relationship->condition ??
+                        $asset->$relationship->status;
                 }
 
                 $changes[] = "Updated $header from '$oldValue' to '$newValue'.";
@@ -288,6 +303,7 @@ class AssetController extends Controller
             'Category: ' . $asset->category->category,
             'Department: ' . $asset->department->department,
             'Purchase Date: ' . $asset->purchase_date,
+            'Status: ' . $asset->status->status,
             'Condition: ' . $asset->condition->condition,
         ];
 

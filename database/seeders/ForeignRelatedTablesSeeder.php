@@ -9,6 +9,7 @@ use App\Models\Site;
 use App\Models\Location;
 use App\Models\Category;
 use App\Models\Department;
+use App\Models\Status;
 use App\Models\Unit;
 
 class ForeignRelatedTablesSeeder extends Seeder
@@ -53,6 +54,16 @@ class ForeignRelatedTablesSeeder extends Seeder
         Department::create([
             'department' => 'CCS Department',
         ]);
+        
+        // Seed Status
+        $statuses = [
+            ['status' => 'Available'],
+            ['status' => 'Not Available'],
+        ];
+
+        foreach ($statuses as $status) {
+            Status::create($status);
+        };
 
         $units = [
             ['unit' => 'per ream'],

@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Condition extends Model
+class Status extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'condition',
+        'status',
     ];
 
     public function assets()

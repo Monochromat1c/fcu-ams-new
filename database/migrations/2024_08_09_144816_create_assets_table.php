@@ -14,6 +14,12 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('statuses', function (Blueprint $table) {
+            $table->id();
+            $table->string('status');
+            $table->timestamps();
+        });
+
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
             $table->string('asset_image')->nullable();
@@ -34,6 +40,8 @@ return new class extends Migration
             $table->unsignedBigInteger('department_id');
             $table->foreign('department_id')->references('id')->on('departments');
             $table->date('purchase_date');
+            $table->unsignedBigInteger('status_id')->nullable();
+            $table->foreign('status_id')->references('id')->on('statuses');
             $table->unsignedBigInteger('condition_id')->nullable();
             $table->foreign('condition_id')->references('id')->on('conditions');
             $table->date('maintenance_start_date')->nullable();

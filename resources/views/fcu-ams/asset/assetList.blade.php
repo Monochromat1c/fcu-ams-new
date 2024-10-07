@@ -156,12 +156,12 @@
         </div>
         <div class="m-3">
             @if(session('success'))
-                <div class="successMessage bg-green-100 border border-green-400 text-black px-4 py-3 rounded relative mt-2 mb-2">
+                <div class="successMessage bg-green-600 border border-green-600 text-white px-4 py-3 rounded relative mt-2 mb-2">
                     {{ session('success') }}
                 </div>
             @endif
             @if($errors->any())
-                <div class="errorMessage bg-red-100 border border-red-400 text-black px-4 py-3 rounded relative mt-2 mb-2">
+                <div class="errorMessage bg-red-900 border border-red-900 text-white px-4 py-3 rounded relative mt-2 mb-2">
                     <ul>
                         @foreach($errors->all() as $error)
                             <li>{{ $error }}</li>
@@ -195,19 +195,6 @@
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
-                                <div class="flex">
-                                    <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'id', 'direction' => ($direction == 'asc' && $sort == 'id') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
-                                    </a>
-                                    <span class="mx-2">ID</span>
-                                </div>
-                            </th>
                             <!-- <th class="px-4 py-2 bg-slate-100 border border-slate-400 text-center">Asset Image -->
                             </th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
@@ -278,6 +265,19 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
+                                        href="{{ route('asset.list', ['sort' => 'status_name', 'direction' => ($direction == 'asc' && $sort == 'status_name') ? 'desc' : 'asc']) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                                        </svg>
+                                    </a>
+                                    <span class="mx-2">Status</span>
+                                </div>
+                            </th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                <div class="flex">
+                                    <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'condition_name', 'direction' => ($direction == 'asc' && $sort == 'condition_name') ? 'desc' : 'asc']) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -296,7 +296,6 @@
                     <tbody>
                         @foreach($assets as $asset)
                             <tr>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->id }}</td>
                                 <!-- <td class="border border-slate-300 px-4 py-2" style="min-width:100px;">
 @if($asset->asset_image)
                                         <img src="{{ asset($asset->asset_image) }}" alt="Asset Image"
@@ -311,6 +310,7 @@
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier_name }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->site_name }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->category_name }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->status_name }}
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->condition_name }}
                                 </td>
                                 <td class="border border-slate-300 px-4 py-2">

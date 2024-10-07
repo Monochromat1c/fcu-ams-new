@@ -66,8 +66,8 @@
                                     </td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $inventory->brand }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->supplier }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->supplier->supplier }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit->unit }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit_price }}</td>
                                 </tr>
                             @endforeach

@@ -68,9 +68,10 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Category</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Department</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Purchase Date</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Status</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Condition</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Start of Maintenance</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">End of Maintenance</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Condition</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -95,11 +96,12 @@
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->category->category }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->department->department }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->purchase_date }}</td>
+                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->status->status }}</td>
+                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->condition->condition }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
                                 {{ $asset->maintenance_start_date ?? 'N/A' }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
                                 {{ $asset->maintenance_end_date ?? 'N/A' }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->condition->condition }}</td>
                         </tr>
                     </tbody>
                 </table>

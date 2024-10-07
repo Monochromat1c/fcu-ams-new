@@ -74,13 +74,11 @@ class InventoryController extends Controller
 
     public function lowStock(Request $request)
     {
-        $lowStock = DB::table('inventories')
-            ->join('units', 'inventories.unit_id', '=', 'units.id')
-            ->join('suppliers', 'inventories.supplier_id', '=', 'suppliers.id')
-            ->where('inventories.quantity', '>=', 1)
-            ->where('inventories.quantity', '<', 20)
-            ->whereNull('inventories.deleted_at')
-            ->select('inventories.*', 'units.unit', 'suppliers.supplier')
+        $lowStock = Inventory::with(['unit', 'supplier'])
+            ->where('quantity', '>=', 1)
+            ->where('quantity', '<', 20)
+            ->whereNull('deleted_at')
+            ->orderBy('unique_tag', 'asc')
             ->get();
 
         return view('fcu-ams/inventory/lowStock', compact('lowStock'));
@@ -88,12 +86,10 @@ class InventoryController extends Controller
 
     public function outOfStock(Request $request)
     {
-        $outOfStock = DB::table('inventories')
-            ->join('units', 'inventories.unit_id', '=', 'units.id')
-            ->join('suppliers', 'inventories.supplier_id', '=', 'suppliers.id')
+        $outOfStock = Inventory::with(['unit', 'supplier'])
             ->where('quantity', '=', 0)
             ->whereNull('deleted_at')
-            ->select('inventories.*', 'units.unit', 'suppliers.supplier')
+            ->orderBy('unique_tag', 'asc')
             ->get();
 
         return view('fcu-ams/inventory/outOfStock', compact('outOfStock'));

@@ -11,6 +11,7 @@ use App\Models\Location;
 use App\Models\Category;
 use App\Models\Department;
 use App\Models\Condition;
+use App\Models\Status;
 
 class AssetSeeder extends Seeder
 {
@@ -26,6 +27,7 @@ class AssetSeeder extends Seeder
         $category2 = Category::where('category', 'Vehicles')->first();
         $department = Department::where('department', 'CCS Department')->first();
         $conditions = Condition::all();
+        $status = Status::all();
 
         if ($supplier && $site && $location && $category && $department) {
             Asset::create([
@@ -41,6 +43,7 @@ class AssetSeeder extends Seeder
                 'department_id' => $department->id,
                 'purchase_date' => '2024-07-18',
                 'condition_id' => 1,
+                'status_id' => 1,
             ]);
         } else {
             echo "Some required records are missing.\n";
@@ -60,6 +63,7 @@ class AssetSeeder extends Seeder
                 'department_id' => $department->id,
                 'purchase_date' => '2024-07-18',
                 'condition_id' => 1,
+                'status_id' => 1,
             ]);
         } else {
             echo "Some required records are missing.\n";
@@ -79,6 +83,7 @@ class AssetSeeder extends Seeder
                 'department_id' => $department->id,
                 'purchase_date' => '2024-07-18',
                 'condition_id' => 1,
+                'status_id' => 1,
             ]);
         } else {
             echo "Some required records are missing.\n";
@@ -98,6 +103,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => '2024-07-18',
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -113,6 +119,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => '2024-07-18',
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -128,6 +135,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => '2024-07-18',
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -143,6 +151,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => '2024-07-18',
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -158,6 +167,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => '2024-07-18',
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -173,6 +183,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => '2024-07-18',
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -188,6 +199,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => '2024-07-18',
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -203,6 +215,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => now(),
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -218,6 +231,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => '2024-07-18',
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -233,6 +247,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => '2024-06-18',
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -248,6 +263,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => now(),
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -263,6 +279,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => now(),
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -278,6 +295,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => now(),
             'condition_id' => 1,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -293,6 +311,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => now(),
             'condition_id' => 3,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -308,6 +327,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => now(),
             'condition_id' => 3,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -323,6 +343,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => now(),
             'condition_id' => 3,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -338,6 +359,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => now(),
             'condition_id' => 3,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -353,6 +375,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => now(),
             'condition_id' => 3,
+            'status_id' => 1,
         ]);
 
         Asset::create([
@@ -368,6 +391,7 @@ class AssetSeeder extends Seeder
             'department_id' => $department->id,
             'purchase_date' => now(),
             'condition_id' => 3,
+            'status_id' => 1,
         ]);
     } else {
         echo "Some required records are missing.\n";
