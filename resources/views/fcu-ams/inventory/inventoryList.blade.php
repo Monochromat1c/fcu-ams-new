@@ -92,16 +92,24 @@
             </div>
         </div>
         <div class="mb-1 flex justify-between m-3 rounded-md">
-            <div class="flex">
-                <!-- <a href="{{ route('inventory.stock.in') }}"
-                    class="mr-3 rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Stock
-                    In</a>
-                <a href="#"
-                    class="mr-3 rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Stock
-                    Out</a>
-                <a href="#"
-                    class="mr-3 rounded-md shadow-md px-5 py-2 bg-blue-600 hover:shadow-md hover:bg-blue-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Create
-                    Purchase Order</a> -->
+            <div class="gap-2 flex">
+                <!-- <div class="import-list my-auto">
+                    <form action="{{ route('asset.import') }}" method="POST"
+                        enctype="multipart/form-data">
+                        @csrf
+                        <input type="file" class="border rounded-md" name="file" accept=".xlsx, .xls, .csv" required>
+                        <button type="submit"
+                            class="border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white transition-all duration-200 ease-in rounded-md p-2">
+                            Import from Excel
+                        </button>
+                    </form>
+                </div> -->
+                <div class="export-list my-auto">
+                    <button type="button" onclick="window.location.href='{{ route('inventories.export') }}'"
+                        class="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-200 ease-in rounded-md p-2">
+                        Export to Excel
+                    </button>
+                </div>
             </div>
             <div class="pagination-here flex justify-between align-items-center">
                 <div class="flex align-items-center">

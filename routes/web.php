@@ -67,6 +67,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/inventory/stock/in/{id}', 'update')->name('inventory.stock.in.update');
         Route::post('/inventory/stock/out', 'storeStockOut')->name('inventory.stock.out.store');
         Route::delete('/inventory/{id}', 'destroy')->name('inventory.delete');
+        Route::get('/inventories/export', 'export')->name('inventories.export');
     });
 
     Route::controller(SupplierController::class)->group(function (){

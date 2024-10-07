@@ -16,6 +16,7 @@ use App\Models\StockOut;
 use App\Models\AssetEditHistory;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AssetsExport;
+use App\Exports\InventoryExport;
 use App\Imports\AssetsImport;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
@@ -253,5 +254,9 @@ class InventoryController extends Controller
         }
 
         return redirect()->route('inventory.stock.out')->with('success', 'Items stocked out successfully');
+    }
+
+    public function export() { 
+        return Excel::download(new InventoryExport, 'inventories.xlsx');
     }
 }
