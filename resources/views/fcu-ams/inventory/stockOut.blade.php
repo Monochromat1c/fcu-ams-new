@@ -36,19 +36,25 @@
                             onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
                             Select Items
                         </button>
-                        <div class="overflow-y-auto h-96">
+                        <div class="overflow-y-auto max-h-64 hidden mt-3" id="selected-items-container">
                             <table class="table-auto w-full">
                                 <thead>
                                     <tr>
-                                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">ID</th>
                                         <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Item</th>
                                         <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Quantity
                                         </th>
+                                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Price</th>
+                                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Total</th>
                                     </tr>
                                 </thead>
                                 <tbody id="selected-items">
-                                    <!-- Selected items will be displayed here -->
                                 </tbody>
+                                <tfoot>
+                                    <tr class="font-bold">
+                                        <td class="px-4 py-2" colspan="3">Overall Price:</td>
+                                        <td class="px-4 py-2" id="overall-price">₱0.00</td>
+                                    </tr>
+                                </tfoot>
                             </table>
                         </div>
                     </div>
@@ -79,9 +85,6 @@
                                                     <tr>
                                                         <th
                                                             class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
-                                                            ID</th>
-                                                        <th
-                                                            class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                                             Item</th>
                                                         <th
                                                             class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
@@ -94,9 +97,7 @@
                                                 <tbody>
                                                     @foreach($inventories as $inventory)
                                                         <tr>
-                                                            <td class="border border-slate-300 px-4 py-2">
-                                                                {{ $inventory->id }}</td>
-                                                            <td class="border border-slate-300 px-4 py-2">
+                                                            <td class="border text-left border-slate-300 px-4 py-2">
                                                                 {{ $inventory->brand }}
                                                                 {{ $inventory->items_specs }}</td>
                                                             <td class="border border-slate-300 px-4 py-2">
@@ -120,14 +121,14 @@
                                             </table>
                                         </div>
                                         <button type="button" class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
-        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2"
-                                            onclick="addSelectedItems()">
+                                            transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-1"
+                                            onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                                    d="m4.5 12.75 6 6 9-13.5" />
                                             </svg>
-                                            Add
+                                            Done
                                         </button>
                                     </div>
                                 </div>
@@ -218,83 +219,93 @@
 </script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-    var checkboxes = document.querySelectorAll('input[type="checkbox"][name="item_id[]"]');
-    var quantities = document.querySelectorAll('input[type="number"][name="quantity[]"]');
     var selectedItemsTable = document.getElementById('selected-items');
     var modal = document.getElementById('defaultModal');
+    var overallPriceCell = document.getElementById('overall-price');
 
-    checkboxes.forEach(function (checkbox, index) {
-        checkbox.addEventListener('change', function () {
-            if (this.checked) {
+    modal.addEventListener('change', function (event) {
+        if (event.target.type === 'checkbox') {
+            var checkbox = event.target;
+            var quantityInput = checkbox.nextElementSibling;
+            var label = checkbox.closest('tr').cells[0].textContent;
+            var id = checkbox.value;
+            var price = checkbox.closest('tr').cells[1].textContent;
+            var quantity = quantityInput.value;
+
+            if (checkbox.checked) {
                 var row = document.createElement('tr');
-                var idCell = document.createElement('td');
                 var itemCell = document.createElement('td');
                 var quantityCell = document.createElement('td');
+                var priceCell = document.createElement('td');
+                var totalPriceCell = document.createElement('td');
 
-                idCell.textContent = this.value;
-                var label = modal.querySelector('label[for="item_id_' + this.value + '"]');
-                var tr = label.closest('tr');
-                itemCell.textContent = tr.cells[1].textContent;
-                quantityCell.textContent = quantities[index].value;
+                itemCell.textContent = label;
+                itemCell.className = 'border border-slate-300 px-4 py-2';
 
-                row.appendChild(idCell);
+                quantityCell.textContent = quantity;
+                quantityCell.className = 'border border-slate-300 px-4 py-2';
+
+                priceCell.textContent = price;
+                priceCell.className = 'border border-slate-300 px-4 py-2';
+
+                totalPriceCell.textContent = parseFloat(price) * parseInt(quantity);
+                totalPriceCell.className = 'border border-slate-300 px-4 py-2';
+
                 row.appendChild(itemCell);
                 row.appendChild(quantityCell);
+                row.appendChild(priceCell);
+                row.appendChild(totalPriceCell);
 
                 selectedItemsTable.appendChild(row);
+                document.getElementById('selected-items-container').classList.remove('hidden');
+
+                updateOverallPrice();
             } else {
                 var rows = selectedItemsTable.rows;
                 for (var i = 0; i < rows.length; i++) {
-                    if (rows[i].cells[0].textContent == this.value) {
+                    if (rows[i].cells[0].textContent == label) {
                         rows[i].remove();
                         break;
                     }
                 }
-            }
-        });
-    });
-
-    quantities.forEach(function (quantity, index) {
-        quantity.addEventListener('input', function () {
-            var rows = selectedItemsTable.rows;
-            for (var i = 0; i < rows.length; i++) {
-                if (rows[i].cells[0].textContent == checkboxes[index].value) {
-                    rows[i].cells[2].textContent = this.value;
-                    break;
+                if (selectedItemsTable.rows.length == 0) {
+                    document.getElementById('selected-items-container').classList.add('hidden');
                 }
+
+                updateOverallPrice();
             }
-        });
-    });
-});
-</script>
-<script>
-    function addSelectedItems() {
-    var checkboxes = document.querySelectorAll('input[type="checkbox"][name="item_id[]"]');
-    var selectedItemsTable = document.getElementById('selected-items');
-    var modal = document.getElementById('defaultModal'); // Define the modal variable here
-
-    checkboxes.forEach(function (checkbox, index) {
-        if (checkbox.checked) {
-            var row = document.createElement('tr');
-            var idCell = document.createElement('td');
-            var itemCell = document.createElement('td');
-            var quantityCell = document.createElement('td');
-
-            idCell.textContent = checkbox.value;
-            var label = modal.querySelector('label[for="item_id_' + checkbox.value + '"]');
-            var tr = label.closest('tr');
-            itemCell.textContent = tr.cells[1].textContent;
-            quantityCell.textContent = document.querySelector('input[type="number"][name="quantity[]"][id="quantity_' + checkbox.value + '"]').value;
-
-            row.appendChild(idCell);
-            row.appendChild(itemCell);
-            row.appendChild(quantityCell);
-
-            selectedItemsTable.appendChild(row);
         }
     });
 
-    document.getElementById('defaultModal').classList.toggle('hidden');
-}
+    modal.addEventListener('input', function (event) {
+        if (event.target.type === 'number') {
+            var quantityInput = event.target;
+            var checkbox = quantityInput.previousElementSibling;
+            var label = checkbox.closest('tr').cells[0].textContent;
+            var price = checkbox.closest('tr').cells[1].textContent;
+            var quantity = quantityInput.value;
+
+            var rows = selectedItemsTable.rows;
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].cells[0].textContent == label) {
+                    rows[i].cells[1].textContent = quantity;
+                    rows[i].cells[3].textContent = parseFloat(price) * parseInt(quantity);
+                    break;
+                }
+            }
+
+            updateOverallPrice();
+        }
+    });
+
+    function updateOverallPrice() {
+        var rows = selectedItemsTable.rows;
+        var overallPrice = 0;
+        for (var i = 0; i < rows.length; i++) {
+            overallPrice += parseFloat(rows[i].cells[3].textContent);
+        }
+        overallPriceCell.textContent = '₱' + overallPrice.toFixed(2);
+    }
+});
 </script>
 @endsection
