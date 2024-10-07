@@ -16,10 +16,10 @@
                         <label class="mr-3">Profile Picture:</label>
                         <div class="border border-slate-300 px-4 py-2">
                             @if(auth()->user()->profile_picture)
-                                <img src="{{ asset('storage/' . auth()->user()->profile_picture) }}"
-                                    alt="Profile Picture" class="mx-auto rounded-full" style="width:2.7rem;height:2.7rem;">
+                                <img src="{{ asset('storage/app/public/profile_pictures/' . auth()->user()->profile_picture) }}"
+                                    alt="Profile Picture" class="w-14 h-14 rounded-full mx-auto">
                             @else
-                                <img src="{{ asset('profile/default.png') }}" alt="Default Image"
+                                <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
                                     class="w-14 h-14 rounded-full mx-auto">
                             @endif
                         </div>
