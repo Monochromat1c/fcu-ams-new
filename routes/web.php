@@ -61,6 +61,8 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/inventory/stock/in', 'create')->name('inventory.stock.in');
         Route::get('/inventory/stock/in/{id}/edit', 'edit')->name('inventory.stock.in.edit');
         Route::get('/inventory/stock/out', 'createStockOut')->name('inventory.stock.out');
+        Route::get('/inventory/low-stock', 'lowStock')->name('inventory.low.stock');
+        Route::get('/inventory/out-of-stock', 'outOfStock')->name('inventory.out.of.stock');
         Route::post('/inventory/stock/in', 'store')->name('inventory.stock.in.store');
         Route::post('/inventory/stock/in/{id}', 'update')->name('inventory.stock.in.update');
         Route::post('/inventory/stock/out', 'storeStockOut')->name('inventory.stock.out.store');

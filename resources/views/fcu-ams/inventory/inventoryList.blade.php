@@ -56,7 +56,17 @@
                     </svg>
                     <h3 class="text-lg font-semibold my-auto">Low Stocks</h3>
                 </div>
-                <p class="text-3xl font-bold">{{ $lowStock }}</p>
+                <p class="text-3xl mb-2 font-bold">{{ $lowStock }}</p>
+                <a href="{{ route('inventory.low.stock') }}"
+                    class="text-orange-600 hover:text-orange-900 flex gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    View Low Stock Supplies
+                </a>
             </div>
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex align-items-center mb-2">
@@ -68,7 +78,17 @@
 
                     <h3 class="text-lg font-semibold my-auto">Out of Stocks</h3>
                 </div>
-                <p class="text-3xl font-bold">{{ $outOfStock }}</p>
+                <p class="mb-2 text-3xl font-bold">{{ $outOfStock }}</p>
+                <a href="{{ route('inventory.out.of.stock') }}"
+                    class="text-red-600 hover:text-red-900 flex gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    </svg>
+                    View Out of Stock Supplies
+                </a>
             </div>
         </div>
         <div class="mb-1 flex justify-between m-3 rounded-md">

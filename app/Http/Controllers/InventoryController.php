@@ -71,6 +71,33 @@ class InventoryController extends Controller
         return view('fcu-ams/inventory/inventoryList', compact('totalItems', 'totalValue', 'lowStock', 'outOfStock', 'inventories', 'sort', 'direction', 'search'));
     }
 
+    public function lowStock(Request $request)
+    {
+        $lowStock = DB::table('inventories')
+            ->join('units', 'inventories.unit_id', '=', 'units.id')
+            ->join('suppliers', 'inventories.supplier_id', '=', 'suppliers.id')
+            ->where('inventories.quantity', '>=', 1)
+            ->where('inventories.quantity', '<', 20)
+            ->whereNull('inventories.deleted_at')
+            ->select('inventories.*', 'units.unit', 'suppliers.supplier')
+            ->get();
+
+        return view('fcu-ams/inventory/lowStock', compact('lowStock'));
+    }
+
+    public function outOfStock(Request $request)
+    {
+        $outOfStock = DB::table('inventories')
+            ->join('units', 'inventories.unit_id', '=', 'units.id')
+            ->join('suppliers', 'inventories.supplier_id', '=', 'suppliers.id')
+            ->where('quantity', '=', 0)
+            ->whereNull('deleted_at')
+            ->select('inventories.*', 'units.unit', 'suppliers.supplier')
+            ->get();
+
+        return view('fcu-ams/inventory/outOfStock', compact('outOfStock'));
+    }
+
     public function show($id)
     {
         $inventory = Inventory::with('supplier', 'unit')->findOrFail($id);

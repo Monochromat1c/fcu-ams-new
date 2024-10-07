@@ -31,14 +31,14 @@ class DefaultUserSeeder extends Seeder
         ]);
 
         User::create([
-            'first_name' => 'Wealyn',
-            'last_name' => 'Yap',
+            'first_name' => 'Admin',
+            'last_name' => '01',
             'address' => 'Abx Xyz, 123',
             'contact_number' => '09123456389',
             'role_id' => $adminRole->id,
             'username' => 'admin',
             'password' => Hash::make('admin123'),
-            'email' => 'wyap@gmail.com',
+            'email' => 'admin@gmail.com',
         ]);
     }
 }
