@@ -36,6 +36,21 @@
                             onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
                             Select Items
                         </button>
+                        <div class="overflow-y-auto h-96">
+                            <table class="table-auto w-full">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">ID</th>
+                                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Item</th>
+                                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Quantity
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="selected-items">
+                                    <!-- Selected items will be displayed here -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="flex mx-auto my-auto">
                         <!-- <div id="defaultModal" tabindex="-1" aria-hidden="true"
@@ -43,7 +58,8 @@
                         <div id="defaultModal" tabindex="-1" aria-hidden="true" class="hidden">
                             <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
                                 <!-- Modal content -->
-                                <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
+                                <div
+                                    class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
                                     <button type="button"
                                         class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
                                         onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
@@ -56,25 +72,63 @@
                                         <span class="sr-only">Close modal</span>
                                     </button>
                                     <div class="p-6 text-center">
-                                        <h2 class="mb-4 text-lg font-bold text-black">Select Items to
-                                            Stock Out</h2>
-                                        <div class="overflow-y-auto h-96">
-                                            @foreach($inventories as $inventory)
-                                                <div class="flex items-center mb-2 mt-2">
-                                                    <input type="checkbox" id="item_id_{{ $inventory->id }}"
-                                                        name="item_id[]" value="{{ $inventory->id }}"
-                                                        onchange="document.getElementById('quantity_{{ $inventory->id }}').disabled = !this.checked">
-                                                    <label for="item_id_{{ $inventory->id }}"
-                                                        class="mx-2">{{ $inventory->brand }}
-                                                        {{ $inventory->items_specs }} ({{ $inventory->quantity }}
-                                                        available, {{ $inventory->unit_price }}
-                                                        {{ $inventory->unit->unit }})</label>
-                                                    <input type="number" id="quantity_{{ $inventory->id }}"
-                                                        name="quantity[]" class="w-full p-2 border rounded-md mr-2"
-                                                        placeholder="Enter the quantity" min="0" disabled>
-                                                </div>
-                                            @endforeach
+                                        <h2 class="mb-4 text-lg font-bold text-black">Select Items to Stock Out</h2>
+                                        <div class="overflow-y-auto h-96 mb-3">
+                                            <table class="table-auto w-full">
+                                                <thead>
+                                                    <tr>
+                                                        <th
+                                                            class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                                            ID</th>
+                                                        <th
+                                                            class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                                            Item</th>
+                                                        <th
+                                                            class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                                            Quantity</th>
+                                                        <th
+                                                            class="px-4 py-2 text-center bg-slate-100 border border-slate-400">
+                                                            Action</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($inventories as $inventory)
+                                                        <tr>
+                                                            <td class="border border-slate-300 px-4 py-2">
+                                                                {{ $inventory->id }}</td>
+                                                            <td class="border border-slate-300 px-4 py-2">
+                                                                {{ $inventory->brand }}
+                                                                {{ $inventory->items_specs }}</td>
+                                                            <td class="border border-slate-300 px-4 py-2">
+                                                                {{ $inventory->quantity }}</td>
+                                                            <td class="border border-slate-300 text-center px-4 py-2">
+                                                                <div class="flex my-auto gap-2">
+                                                                    <input type="checkbox"
+                                                                        id="item_id_{{ $inventory->id }}" name="item_id[]"
+                                                                        value="{{ $inventory->id }}"
+                                                                        onchange="document.getElementById('quantity_{{ $inventory->id }}').disabled = !this.checked">
+                                                                    <input type="number"
+                                                                        id="quantity_{{ $inventory->id }}"
+                                                                        name="quantity[]"
+                                                                    class="w-full p-2 border rounded-md"
+                                                                    placeholder="Quantity" min="0" disabled>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
+                                        <button type="button" class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
+        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2"
+                                            onclick="addSelectedItems()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+                                            </svg>
+                                            Add
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -162,5 +216,85 @@
         });
     });
 </script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"][name="item_id[]"]');
+    var quantities = document.querySelectorAll('input[type="number"][name="quantity[]"]');
+    var selectedItemsTable = document.getElementById('selected-items');
+    var modal = document.getElementById('defaultModal');
 
+    checkboxes.forEach(function (checkbox, index) {
+        checkbox.addEventListener('change', function () {
+            if (this.checked) {
+                var row = document.createElement('tr');
+                var idCell = document.createElement('td');
+                var itemCell = document.createElement('td');
+                var quantityCell = document.createElement('td');
+
+                idCell.textContent = this.value;
+                var label = modal.querySelector('label[for="item_id_' + this.value + '"]');
+                var tr = label.closest('tr');
+                itemCell.textContent = tr.cells[1].textContent;
+                quantityCell.textContent = quantities[index].value;
+
+                row.appendChild(idCell);
+                row.appendChild(itemCell);
+                row.appendChild(quantityCell);
+
+                selectedItemsTable.appendChild(row);
+            } else {
+                var rows = selectedItemsTable.rows;
+                for (var i = 0; i < rows.length; i++) {
+                    if (rows[i].cells[0].textContent == this.value) {
+                        rows[i].remove();
+                        break;
+                    }
+                }
+            }
+        });
+    });
+
+    quantities.forEach(function (quantity, index) {
+        quantity.addEventListener('input', function () {
+            var rows = selectedItemsTable.rows;
+            for (var i = 0; i < rows.length; i++) {
+                if (rows[i].cells[0].textContent == checkboxes[index].value) {
+                    rows[i].cells[2].textContent = this.value;
+                    break;
+                }
+            }
+        });
+    });
+});
+</script>
+<script>
+    function addSelectedItems() {
+    var checkboxes = document.querySelectorAll('input[type="checkbox"][name="item_id[]"]');
+    var selectedItemsTable = document.getElementById('selected-items');
+    var modal = document.getElementById('defaultModal'); // Define the modal variable here
+
+    checkboxes.forEach(function (checkbox, index) {
+        if (checkbox.checked) {
+            var row = document.createElement('tr');
+            var idCell = document.createElement('td');
+            var itemCell = document.createElement('td');
+            var quantityCell = document.createElement('td');
+
+            idCell.textContent = checkbox.value;
+            var label = modal.querySelector('label[for="item_id_' + checkbox.value + '"]');
+            var tr = label.closest('tr');
+            itemCell.textContent = tr.cells[1].textContent;
+            quantityCell.textContent = document.querySelector('input[type="number"][name="quantity[]"][id="quantity_' + checkbox.value + '"]').value;
+
+            row.appendChild(idCell);
+            row.appendChild(itemCell);
+            row.appendChild(quantityCell);
+
+            selectedItemsTable.appendChild(row);
+        }
+    });
+
+    document.getElementById('defaultModal').classList.toggle('hidden');
+}
+</script>
 @endsection
