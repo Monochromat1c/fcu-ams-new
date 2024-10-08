@@ -1,7 +1,6 @@
 @extends('layouts.layout')
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/addAsset.css') }}">
-
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-100 col-span-5">
@@ -26,9 +25,61 @@
         </nav>
         <div class="mb-1 flex justify-between m-3 rounded-md">
             <div class="flex">
-                <a href="{{ route('categories.add') }}"
-                    class="mr-3 rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                    Category</a>
+                <button id="add-category-button"
+                    class="flex gap-1 mr-3 rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="size-6">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                    </svg>
+                    Add Category
+                </button>
+                <!-- Modal for adding new category -->
+                <div id="add-category-modal" style="min-height:100vh;" tabindex="-1" aria-hidden="true"
+                    class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+                    <div class="relative my-auto mx-auto p-4 w-full max-w-2xl h-full md:h-auto">
+                        <!-- Modal content -->
+                        <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
+                            <button type="button"
+                                class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                onclick="document.getElementById('add-category-modal').classList.toggle('hidden')">
+                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                        clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="sr-only">Close modal</span>
+                            </button>
+                            <div class="p-6 text-center">
+                                <h2 class="mb-4 text-lg font-bold text-black">Add New Category</h2>
+                                <input type="text" id="new_category" name="new_category"
+                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
+                                <div class="flex flex-end">
+                                    <button type="button" id="add-category-btn"
+                                        class="flex gap-1 ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                                        </svg>
+
+                                        Save
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden" id="add-category-form">
+                    <label for="new_category" class="block text-gray-700 font-bold mb-2">New
+                        Category:</label>
+                    <input type="text" id="new_category" name="new_category"
+                        class="w-full p-2 border rounded-md mb-2 bg-gray-100">
+                    <button type="button" id="add-category-btn"
+                        class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
+                        Category</button>
+                </div>
             </div>
             <div class="pagination-here flex justify-between align-items-center">
                 <div class="flex align-items-center">
@@ -96,8 +147,8 @@
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex justify-between mb-3">
                 <h2 class="text-2xl font-bold my-auto">Categories List</h2>
-                <div class="searchBox">
-                    <form action="{{ route('categories.list') }}" method="GET" class=" flex gap-1">
+                <!-- <div class="searchBox">
+                    <form action="{{ route('category.index') }}" method="GET" class=" flex gap-1">
                         <input type="text" name="search" placeholder="Search for categories..."
                             class="py-2 px-3 border rounded-md border-red-950 w-96 text-sm text-gray-700 my-auto">
                         <div class="flex align-items-center gap-1">
@@ -111,59 +162,46 @@
                             </button>
                         </div>
                     </form>
-                </div>
+                </div> -->
             </div>
             <div class="overflow-x-auto overflow-y-auto">
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
-                                <div class="flex">
-                                    <a class="my-auto"
-                                        href="{{ route('categories.list', ['sort' => 'id', 'direction' => ($direction == 'asc' && $sort == 'id') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
-                                    </a>
-                                    <span class="mx-2">ID</span>
-                                </div>
+                                Category
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
-                                <div class="flex">
-                                    <a class="my-auto"
-                                        href="{{ route('categories.list', ['sort' => 'category', 'direction' => ($direction == 'asc' && $sort == 'category') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
-                                    </a>
-                                    <span class="mx-2">Category</span>
-                                </div>
-                            </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
-                                <div class="flex">
-                                    <a class="my-auto"
-                                        href="{{ route('categories.list', ['sort' => 'date_added', 'direction' => ($direction == 'asc' && $sort == 'date_added') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
-                                    </a>
-                                    <span class="mx-2">Date Added</span>
-                                </div>
+                            <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400">
+                                Action
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($categories as $category)
-                            <tr>
-                                <td class="border border-slate-300 px-4 py-2">{{ $category->id }}</td>
+                            <tr class="">
                                 <td class="border border-slate-300 px-4 py-2">{{ $category->category }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $category->created_at }}</td>
+                                <td class="border border-slate-300 px-4 py-2">
+                                    <div class="mx-auto flex justify-center space-x-2">
+                                        <a href="" class="text-blue-600 hover:text-blue-900">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                            </svg>
+                                        </a>
+                                        <button type="button" class="text-red-600 hover:text-red-900" onclick="">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                            </svg>
+                                        </button>
+                                        <form action="" method="POST" id="">
+                                            @csrf
+                                            @method('DELETE')
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -173,13 +211,6 @@
     </div>
 </div>
 
-<script>
-    function confirmDelete(id) {
-        if (confirm('Are you sure you want to delete this category?')) {
-            document.getElementById('delete-form-' + id).submit();
-        }
-    }
-</script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // Get the current URL
@@ -200,6 +231,7 @@
             });
         });
     });
+
 </script>
 <script>
     function confirmDelete(id) {
@@ -207,12 +239,58 @@
             document.getElementById('delete-form-' + id).submit();
         }
     }
+
 </script>
 <script>
-    function clearSearch() {
-        document.querySelector('input[name="search"]').value = '';
-        document.querySelector('form').submit();
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const addCategoryButton = document.querySelector('#add-category-button');
+        addCategoryButton.addEventListener('click', function () {
+            const addCategoryModal = document.getElementById('add-category-modal');
+            addCategoryModal.classList.add('show');
+            addCategoryModal.style.display = 'block';
+        });
+    });
+
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addCategoryButton = document.querySelector('#add-category-button');
+        const addCategoryModal = document.getElementById('add-category-modal');
+        const closeButton = document.querySelector('#add-category-modal button.absolute');
+        const addCategoryBtn = document.getElementById('add-category-btn');
+
+        addCategoryButton.addEventListener('click', function () {
+            addCategoryModal.style.display = 'flex';
+        });
+
+        closeButton.addEventListener('click', function () {
+            addCategoryModal.style.display = 'none';
+        });
+
+        addCategoryBtn.addEventListener('click', function () {
+            const newCategory = document.getElementById('new_category').value;
+            if (newCategory.trim() !== '') {
+                const formData = new FormData();
+                formData.append('category', newCategory);
+                fetch('{{ route('category.add') }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.reload) {
+                            window.location.reload();
+                        }
+                    })
+                    .catch(error => console.error(error));
+                addCategoryModal.style.display = 'none';
+            }
+        });
+    });
+
 </script>
 
 @endsection

@@ -56,11 +56,11 @@
                             </table>
                         </div>
                     </div>
-                    <div class="flex mx-auto my-auto">
                         <!-- <div id="defaultModal" tabindex="-1" aria-hidden="true"
                             class="fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden"> -->
-                        <div id="defaultModal" tabindex="-1" aria-hidden="true" class="hidden">
-                            <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+                        <div id="defaultModal" style="min-height:100vh;" tabindex="-1" aria-hidden="true"
+                            class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+                            <div class="relative my-auto mx-auto p-4 w-full max-w-2xl h-full md:h-auto">
                                 <!-- Modal content -->
                                 <div
                                     class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
@@ -131,7 +131,6 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
                     <div class="mb-4">
                         <label for="department_id" class="block text-gray-700 font-bold mb-2">Department:</label>

@@ -113,7 +113,8 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/location/add', 'add')->name('location.add');
     });
 
-     Route::controller(CategoryController::class)->group(function (){
+    Route::controller(CategoryController::class)->group(function (){
+        Route::get('/category/index', 'index')->name('category.index');
         Route::post('/category/add', 'add')->name('category.add');
     });
 

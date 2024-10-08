@@ -90,7 +90,7 @@
                                 <!-- Modal for adding new supplier -->
                                 <!-- <div id="defaultModal" tabindex="-1" aria-hidden="true"
                             class="fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden"> -->
-                                <div id="add-supplier-modal" tabindex="-1" aria-hidden="true" class="flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal
+                                <div id="add-supplier-modal" tabindex="-1" aria-hidden="true" class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal
                             md:h-full hidden">
                                     <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
                                         <!-- Modal content -->
@@ -143,7 +143,7 @@
                             <div class="modal-container ">
                                 <!-- Modal for adding new site -->
                                 <div id="add-site-modal" tabindex="-1" aria-hidden="true"
-                                    class="flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
+                                    class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
                                     <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
                                         <!-- Modal content -->
                                         <div
@@ -195,7 +195,7 @@
                             <div class="modal-container ">
                                 <!-- Modal for adding new location -->
                                 <div id="add-location-modal" tabindex="-1" aria-hidden="true"
-                                    class="flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
+                                    class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
                                     <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
                                         <!-- Modal content -->
                                         <div
@@ -247,7 +247,7 @@
                             <div class="modal-container ">
                                 <!-- Modal for adding new category -->
                                 <div id="add-category-modal" tabindex="-1" aria-hidden="true"
-                                    class="flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
+                                    class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
                                     <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
                                         <!-- Modal content -->
                                         <div
@@ -301,7 +301,7 @@
                             <div class="modal-container ">
                                 <!-- Modal for adding new department -->
                                 <div id="add-department-modal" tabindex="-1" aria-hidden="true"
-                                    class="flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
+                                    class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
                                     <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
                                         <!-- Modal content -->
                                         <div
@@ -375,7 +375,7 @@
         <!-- DELETE CONFIRMATION MODAL -->
         <!-- Delete supplier modal -->
         <div id="delete-supplier-modal" tabindex="-1" aria-hidden="true"
-            class="flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
+            class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
             <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">

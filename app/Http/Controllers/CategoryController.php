@@ -21,4 +21,10 @@ class CategoryController extends Controller
 
         return response()->json(['reload' => true]);
     }
+
+    public function index() {
+        $categories = Category::orderBy('category', 'asc')->paginate(10);
+
+        return view('fcu-ams/categories/categoriesList', compact('categories'));
+    }
 }
