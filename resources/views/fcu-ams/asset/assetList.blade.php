@@ -86,7 +86,16 @@
                 </div> -->
                 <div class="export-list my-auto">
                     <button type="button" onclick="window.location.href='{{ route('asset.export') }}'"
-                        class="border border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-200 ease-in rounded-md p-2">
+                        class="flex gap-2 items-center bg-green-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 my-auto" viewBox="0 0 384 512">
+                            <path fill="#FFFFFF" d="M48 448L48 64c0-8.8 7.2-16 16-16l160 0 0 80c0 17.7 14.3 32 32 32l80 0 0 288c0 8.8-7.2
+                                16-16 16L64 464c-8.8 0-16-7.2-16-16zM64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64
+                                64l256 0c35.3 0 64-28.7 64-64l0-293.5c0-17-6.7-33.3-18.7-45.3L274.7 18.7C262.7 6.7 246.5
+                                0 229.5 0L64 0zm90.9 233.3c-8.1-10.5-23.2-12.3-33.7-4.2s-12.3 23.2-4.2 33.7L161.6
+                                320l-44.5 57.3c-8.1 10.5-6.3 25.5 4.2 33.7s25.5 6.3 33.7-4.2L192 359.1l37.1 47.6c8.1
+                                10.5 23.2 12.3 33.7 4.2s12.3-23.2 4.2-33.7L222.4 320l44.5-57.3c8.1-10.5
+                                6.3-25.5-4.2-33.7s-25.5-6.3-33.7 4.2L192 280.9l-37.1-47.6z"/>
+                        </svg>
                         Export to Excel
                     </button>
                 </div>
@@ -197,7 +206,7 @@
                         <tr>
                             <!-- <th class="px-4 py-2 bg-slate-100 border border-slate-400 text-center">Asset Image -->
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'asset_tag_id', 'direction' => ($direction == 'asc' && $sort == 'asset_tag_id') ? 'desc' : 'asc']) }}">
@@ -210,7 +219,7 @@
                                     <span class="mx-2">Asset Tag ID</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'cost', 'direction' => ($direction == 'asc' && $sort == 'cost') ? 'desc' : 'asc']) }}">
@@ -223,7 +232,7 @@
                                     <span class="mx-2">Cost</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'supplier_name', 'direction' => ($direction == 'asc' && $sort == 'supplier_name') ? 'desc' : 'asc']) }}">
@@ -236,7 +245,7 @@
                                     <span class="mx-2">Supplier</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'site_name', 'direction' => ($direction == 'asc' && $sort == 'site_name') ? 'desc' : 'asc']) }}">
@@ -249,7 +258,7 @@
                                     <span class="mx-2">Site</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'category_name', 'direction' => ($direction == 'asc' && $sort == 'category_name') ? 'desc' : 'asc']) }}">
@@ -262,7 +271,7 @@
                                     <span class="mx-2">Category</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'status_name', 'direction' => ($direction == 'asc' && $sort == 'status_name') ? 'desc' : 'asc']) }}">
@@ -275,7 +284,7 @@
                                     <span class="mx-2">Status</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'condition_name', 'direction' => ($direction == 'asc' && $sort == 'condition_name') ? 'desc' : 'asc']) }}">
@@ -288,14 +297,14 @@
                                     <span class="mx-2">Condition</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 text-center">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 text-center">
                                 Action
                             </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($assets as $asset)
-                            <tr>
+                            <tr class="hover:bg-slate-100">
                                 <!-- <td class="border border-slate-300 px-4 py-2" style="min-width:100px;">
 @if($asset->asset_image)
                                         <img src="{{ asset($asset->asset_image) }}" alt="Asset Image"

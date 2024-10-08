@@ -21,7 +21,7 @@
                 clip-rule="evenodd" />
         </svg>
     </button>
-    <div x-show="open" class="pl-4">
+    <div x-show="open" class="pl-9">
         <a href="{{ route('asset.list') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('asset/list') ? 'bg-gray-100' : '' }}">Asset
@@ -53,7 +53,7 @@
                 clip-rule="evenodd" />
         </svg>
     </button>
-    <div x-show="open" class="pl-4">
+    <div x-show="open" class="pl-9">
         <a href="{{ route('inventory.list') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('inventory/list') ? 'bg-gray-100' : '' }}">Inventory
@@ -88,7 +88,7 @@
     </svg>
     Reports
 </a>
-<div class="relative" x-data="{ open: false }">
+<!-- <div class="relative" x-data="{ open: false }">
     <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="h-5 w-5 mr-2" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="size-6">
@@ -102,11 +102,11 @@
                 clip-rule="evenodd" />
         </svg>
     </button>
-    <div x-show="open" class="pl-4">
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Add Customer</a>
+    <div x-show="open" class="pl-9">
+        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100 pl-">Add Customer</a>
         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">View Customers</a>
     </div>
-</div>
+</div> -->
 <div class="relative" x-data="{ open: false }">
     <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -121,15 +121,16 @@
                 clip-rule="evenodd" />
         </svg>
     </button>
-    <div x-show="open" class="pl-4">
+    <div x-show="open" class="pl-9">
         <a href="{{ route('category.index') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
-            {{ Request::is('category/index') ? 'bg-gray-100' : '' }}">Category</a>
+            {{ Request::is('category/index') ? 'bg-gray-100' : '' }}">Categories</a>
         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Conditions</a>
         <a href="{"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Departments</a>
             <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Locations</a>
         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Sites</a>
+        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Statuses</a>
         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Suppliers</a>
     </div>
 </div>
@@ -146,7 +147,7 @@
                 clip-rule="evenodd" />
         </svg>
     </button>
-    <div x-show="open" class="pl-4">
+    <div x-show="open" class="pl-9">
         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Add User</a>
         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">View Users</a>
     </div>

@@ -218,7 +218,7 @@
                         <tr>
                             <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 text-center">Item
                                 Profile</th> -->
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'items_specs', 'direction' => ($direction == 'asc' && $sort == 'items_specs') ? 'desc' : 'asc']) }}">
@@ -231,7 +231,7 @@
                                     <span class="mx-2">Items & Specs</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'brand', 'direction' => ($direction == 'asc' && $sort == 'brand') ? 'desc' : 'asc']) }}">
@@ -244,7 +244,7 @@
                                     <span class="mx-2">Brand</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'quantity', 'direction' => ($direction == 'asc' && $sort == 'quantity') ? 'desc' : 'asc']) }}">
@@ -257,7 +257,7 @@
                                     <span class="mx-2">Quantity</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'unit', 'direction' => ($direction == 'asc' && $sort == 'unit') ? 'desc' : 'asc']) }}">
@@ -270,7 +270,7 @@
                                     <span class="mx-2">Unit</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'unit_price', 'direction' => ($direction == 'asc' && $sort == 'unit_price') ? 'desc' : 'asc']) }}">
@@ -283,7 +283,7 @@
                                     <span class="mx-2">Unit Price</span>
                                 </div>
                             </th>
-                            <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <!-- <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'supplier_name', 'direction' => ($direction == 'asc' && $sort == 'supplier_name') ? 'desc' : 'asc']) }}">
@@ -296,7 +296,7 @@
                                     <span class="mx-2">Supplier</span>
                                 </div>
                             </th> -->
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'total_item_price', 'direction' => ($direction == 'asc' && $sort == 'total_item_price') ? 'desc' : 'asc']) }}">
@@ -309,13 +309,13 @@
                                     <span class="mx-2">Total Item Price</span>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 text-center">
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 text-center">
                                 Action
                             </th>
                         </tr>
                     <tbody>
                         @foreach($inventories as $inventory)
-                            <tr>
+                            <tr class="hover:bg-slate-100">
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->brand }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->quantity }}</td>

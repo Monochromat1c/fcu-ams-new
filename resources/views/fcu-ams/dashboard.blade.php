@@ -25,18 +25,20 @@
             </a>
         </nav>
         <div class="m-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="flex align-items-center mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-2" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path fill-rule="evenodd"
-                            d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
-                            clip-rule="evenodd" />
-                    </svg>
-                    <h3 class="text-lg font-semibold my-auto">Total Assets</h3>
+            <a href="{{ route('asset.list') }}">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex align-items-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-2" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        <h3 class="text-lg font-semibold my-auto">Total Assets</h3>
+                    </div>
+                    <p class="text-3xl font-bold">{{ $totalAssets }}</p>
                 </div>
-                <p class="text-3xl font-bold">{{ $totalAssets }}</p>
-            </div>
+            </a>
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex align-items-center mb-2">
                     <svg class="h-10 w-10 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -49,17 +51,19 @@
                 </div>
                 <p class="text-3xl font-bold">₱{{ number_format($totalAssetValue, 2) }}</p>
             </div>
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <div class="flex align-items-center mb-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-2" viewBox="0 0 20 20"
-                        fill="currentColor">
-                        <path
-                            d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
-                    </svg>
-                    <h3 class="text-lg font-semibold my-auto">Total Inventory Supplies</h3>
+            <a href="{{ route('inventory.list') }}">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <div class="flex align-items-center mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-2" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path
+                                d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+                        </svg>
+                        <h3 class="text-lg font-semibold my-auto">Total Inventory Supplies</h3>
+                    </div>
+                    <p class="text-3xl font-bold">{{ $totalInventoryStocks }}</p>
                 </div>
-                <p class="text-3xl font-bold">{{ $totalInventoryStocks }}</p>
-            </div>
+            </a>
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex align-items-center mb-2">
                     <svg class="h-10 w-10 mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -139,6 +143,7 @@
     const assetAcquisitionData = {!! json_encode($assetAcquisition->items()) !!}; // get the items of the paginated collection
     const assetAcquisitionLabels = assetAcquisitionData.map(data => data.month);
     const assetAcquisitionValues = assetAcquisitionData.map(data => data.count);
+    const assetAcquisitionAssetTags = assetAcquisitionData.map(data => data.asset_tags);
 
     new Chart(assetAcquisitionChart, {
         type: 'bar',
@@ -148,12 +153,12 @@
                 label: 'Monthly Asset Acquisition',
                 data: assetAcquisitionValues,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(255, 206, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(153, 102, 255, 0.8)',
+                    'rgba(255, 159, 64, 0.8)',
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
@@ -170,6 +175,16 @@
             title: {
                 display: true,
                 text: 'Monthly Asset Acquisition'
+            },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        const index = tooltipItem.index;
+                        const count = assetAcquisitionValues[index];
+                        const assetTags = assetAcquisitionAssetTags[index];
+                        return `Assets: ${count} (${assetTags})`;
+                    }
+                }
             }
         }
     });
@@ -196,12 +211,12 @@
                 label: 'Asset Distribution',
                 data: assetDistributionValues,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(255, 206, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(153, 102, 255, 0.8)',
+                    'rgba(255, 159, 64, 0.8)',
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
@@ -239,10 +254,10 @@
                 label: 'Analytics',
                 data: analyticsValues,
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(255, 206, 86, 0.8)',
+                    'rgba(75, 192, 192, 0.8)',
                 ],
                 borderColor: [
                     'rgba(255, 99, 132, 1)',
@@ -276,8 +291,8 @@
                 label: 'Inventory and Supplier Distribution',
                 data: distributionValues,
                 backgroundColor: [
-                    'rgba(0, 48, 73, 0.2)',
-                    'rgba(184, 97, 37, 0.2)'
+                    'rgba(0, 48, 73, 0.8)',
+                    'rgba(184, 97, 37, 0.8)'
                 ],
                 borderColor: [
                     'rgba(0, 48, 73, 1)',

@@ -78,6 +78,7 @@ class DashboardController extends Controller
 
         $assetAcquisition->transform(function ($item) {
             $item->month = date('F', mktime(0, 0, 0, $item->month, 1));
+            $item->asset_tags = Asset::whereMonth('purchase_date', $item->month)->pluck('asset_tag_id')->implode(', ');
             return $item;
         });
 

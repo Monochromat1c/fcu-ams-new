@@ -42,14 +42,14 @@
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400 whitespace-nowrap">Supply Image</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Brand</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Items & Specs</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Quantity</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Unit</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Unit Price</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Supplier</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Total Item Price</th>
+                            <th class="px-4 py-2 text-center bg-slate-200 border border-slate-400 whitespace-nowrap">Supply Image</th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Brand</th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Items & Specs</th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Quantity</th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Unit</th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Unit Price</th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Supplier</th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Total Item Price</th>
                         </tr>
                     </thead>
                     <tbody>

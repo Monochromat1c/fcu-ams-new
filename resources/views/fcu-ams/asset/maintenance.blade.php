@@ -38,28 +38,28 @@
                     <table class="table-auto w-full">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400 whitespace-nowrap">Asset Image</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Asset Tag ID</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Brand</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Model</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Serial Number</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Cost</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Supplier</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Site</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Location</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Category</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Department</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">
+                                <th class="px-4 py-2 text-center bg-slate-200 border border-slate-400 whitespace-nowrap">Asset Image</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Asset Tag ID</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Brand</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Model</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Serial Number</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Cost</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Supplier</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Site</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Location</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Category</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Department</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
                                     Start of Maintenance</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
                                     End of Maintenance</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Condition</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 text-center">Action</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Condition</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($assets as $asset)
-                                <tr>
+                                <tr class="hover:bg-slate-100">
                                     <td class="border border-slate-300 px-4 py-2 min-width">
                                         @if($asset->asset_image)
                                             <img src="{{ asset($asset->asset_image) }}" alt="Asset Image"
