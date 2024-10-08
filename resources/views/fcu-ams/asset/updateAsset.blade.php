@@ -34,9 +34,9 @@
                         <input type="file" id="asset_image" name="asset_image" class="w-full border rounded-md">
                     </div>
                     <div class="mb-4">
-                        <label for="asset_name" class="block text-gray-700 font-bold mb-2">Asset Name:</label>
-                        <input type="text" id="asset_name" name="asset_name" class="w-full p-2 border rounded-md"
-                            value="{{ $asset->asset_name }}" required>
+                        <label for="asset_tag_id" class="block text-gray-700 font-bold mb-2">Asset Tag ID:</label>
+                        <input type="text" id="asset_tag_id" name="asset_tag_id" class="w-full p-2 border rounded-md"
+                            value="{{ $asset->asset_tag_id }}" required>
                     </div>
                     <div class="mb-4">
                         <label for="brand" class="block text-gray-700 font-bold mb-2">Brand:</label>

@@ -23,7 +23,7 @@ return new class extends Migration
         Schema::create('assets', function (Blueprint $table) {
             $table->id();
             $table->string('asset_image')->nullable();
-            $table->string('asset_name');
+            $table->string('asset_tag_id');
             $table->string('brand');
             $table->string('model');
             $table->string('specs')->nullable();

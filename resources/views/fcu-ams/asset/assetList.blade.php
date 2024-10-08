@@ -200,14 +200,14 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'asset_name', 'direction' => ($direction == 'asc' && $sort == 'asset_name') ? 'desc' : 'asc']) }}">
+                                        href="{{ route('asset.list', ['sort' => 'asset_tag_id', 'direction' => ($direction == 'asc' && $sort == 'asset_tag_id') ? 'desc' : 'asc']) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
                                         </svg>
                                     </a>
-                                    <span class="mx-2">Asset Name</span>
+                                    <span class="mx-2">Asset Tag ID</span>
                                 </div>
                             </th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
@@ -305,7 +305,7 @@
                                             alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
 @endif
                                 </td> -->
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier_name }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->site_name }}</td>

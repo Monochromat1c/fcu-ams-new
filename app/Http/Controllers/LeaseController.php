@@ -25,7 +25,7 @@ class LeaseController extends Controller
                     ->orWhere('leases.lease_expiration', 'like', '%' . $search . '%')
                     ->orWhere('leases.customer', 'like', '%' . $search . '%')
                     ->orWhereHas('assets', function ($q) use ($search) {
-                        $q->where('assets.asset_name', 'like', '%' . $search . '%');
+                        $q->where('assets.asset_tag_id', 'like', '%' . $search . '%');
                     });
             });
         }
@@ -41,8 +41,8 @@ class LeaseController extends Controller
                 $leases = $leases->orderBy('leases.lease_expiration', $direction);
             } elseif ($sort == 'customer') {
                 $leases = $leases->orderBy('leases.customer', $direction);
-            } elseif ($sort == 'asset_name') {
-                $leases = $leases->orderBy('assets.asset_name', $direction);
+            } elseif ($sort == 'asset_tag_id') {
+                $leases = $leases->orderBy('assets.asset_tag_id', $direction);
             } else {
                 $leases = $leases->orderBy($sort, $direction);
             }

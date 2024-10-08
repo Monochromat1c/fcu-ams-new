@@ -20,381 +20,510 @@ class AssetSeeder extends Seeder
      */
     public function run()
     {
-        $supplier = Supplier::where('supplier', 'Company X')->first();
+        $supplier = Supplier::all();
         $site = Site::where('site', 'Main Campus')->first();
         $location = Location::where('location', 'Roxas City')->first();
-        $category = Category::where('category', 'Equipment')->first();
-        $category2 = Category::where('category', 'Vehicles')->first();
+        $category = Category::all();
         $department = Department::where('department', 'CCS Department')->first();
         $conditions = Condition::all();
         $status = Status::all();
 
         if ($supplier && $site && $location && $category && $department) {
             Asset::create([
-                'asset_name' => 'Asus Zephyr 2020 Edition',
-                'brand' => 'Asus',
-                'model' => 'Zephyr',
-                'serial_number' => 'SN123456',
-                'cost' => 34499.00,
-                'supplier_id' => $supplier->id,
+                'asset_tag_id' => 'FCCPC001',
+                'specs' => 'Desktop',
+                'brand' => 'HP',
+                'model' => 'HP OMEN',
+                'serial_number' => '4CE8061CQG',
+                'cost' => 12350.00,
+                'supplier_id' => 4,
                 'site_id' => $site->id,
                 'location_id' => $location->id,
-                'category_id' => $category->id,
+                'category_id' => 1,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-07-18',
+                'purchase_date' => '2024-01-24',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
-        } else {
-            echo "Some required records are missing.\n";
-        }
         
-        if ($supplier && $site && $location && $category && $department) {
             Asset::create([
-                'asset_name' => 'Asus Zephyr',
-                'brand' => 'Asus',
-                'model' => 'Zephyr',
-                'serial_number' => 'SN395456',
-                'cost' => 24999.00,
-                'supplier_id' => $supplier->id,
+                'asset_tag_id' => 'FCCPC002',
+                'specs' => 'Desktop',
+                'brand' => 'HP',
+                'model' => 'HP OMEN',
+                'serial_number' => 'CZC7139K48',
+                'cost' => 11425.00,
+                'supplier_id' => 4,
                 'site_id' => $site->id,
                 'location_id' => $location->id,
-                'category_id' => $category->id,
+                'category_id' => 1,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-07-18',
+                'purchase_date' => '2024-01-24',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
-        } else {
-            echo "Some required records are missing.\n";
-        }
-
-        if ($supplier && $site && $location && $category2 && $department) {
+        
             Asset::create([
-                'asset_name' => 'NMAX 155',
-                'brand' => 'Yamaha',
-                'model' => 'NMAX',
-                'serial_number' => 'FD396456',
-                'cost' => 151900.00,
-                'supplier_id' => $supplier->id,
+                'asset_tag_id' => 'FCCPC003',
+                'specs' => 'Desktop',
+                'brand' => 'HP',
+                'model' => 'HP OMEN',
+                'serial_number' => 'CZC7139K4B',
+                'cost' => 11425.00,
+                'supplier_id' => 4,
                 'site_id' => $site->id,
                 'location_id' => $location->id,
-                'category_id' => $category2->id,
+                'category_id' => 1,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-07-18',
+                'purchase_date' => '2024-01-24',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
+        
+            Asset::create([
+                'asset_tag_id' => 'FCCPC004',
+                'specs' => 'Desktop',
+                'brand' => 'HP',
+                'model' => 'HP OMEN',
+                'serial_number' => '4CE80966NT',
+                'cost' => 10224.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 1,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-01-24',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+        
+            Asset::create([
+                'asset_tag_id' => 'FCCPC005',
+                'specs' => 'Desktop',
+                'brand' => 'HP',
+                'model' => 'HP OMEN',
+                'serial_number' => '4CE8061CP0',
+                'cost' => 10224.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 1,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-01-24',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+        
+            Asset::create([
+                'asset_tag_id' => 'FCCPC006',
+                'specs' => 'Desktop',
+                'brand' => 'HP',
+                'model' => 'HP OMEN',
+                'serial_number' => '4CE8061CPG',
+                'cost' => 10224.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 1,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-01-24',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+        
+            Asset::create([
+                'asset_tag_id' => 'FCCPC007',
+                'specs' => 'Desktop',
+                'brand' => 'HP',
+                'model' => 'HP OMEN',
+                'serial_number' => 'CZC7139K0W',
+                'cost' => 11425.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 1,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-01-24',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCMO001',
+                'specs' => 'Monitor',
+                'brand' => 'HP',
+                'model' => 'HP EliteDisplay',
+                'serial_number' => 'CNC634P8KD',
+                'cost' => 3859.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 2,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-02-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCMO002',
+                'specs' => 'Monitor',
+                'brand' => 'HP',
+                'model' => 'HP EliteDisplay',
+                'serial_number' => 'CNC801NT2X',
+                'cost' => 4680.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 2,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-02-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCMO003',
+                'specs' => 'Monitor',
+                'brand' => 'HP',
+                'model' => 'HP EliteDisplay',
+                'serial_number' => 'CNC72816TB',
+                'cost' => 4680.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 2,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-02-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCMO004',
+                'specs' => 'Monitor',
+                'brand' => 'HP',
+                'model' => 'HP EliteDisplay',
+                'serial_number' => 'CNC72816VF',
+                'cost' => 3859.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 2,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-02-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCMO005',
+                'specs' => 'Monitor',
+                'brand' => 'HP',
+                'model' => 'HP EliteDisplay',
+                'serial_number' => 'CNC801NT1L',
+                'cost' => 3859.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 2,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-02-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCMO006',
+                'specs' => 'Monitor',
+                'brand' => 'HP',
+                'model' => 'HP EliteDisplay',
+                'serial_number' => 'CNC634PDVV',
+                'cost' => 3859.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 2,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-02-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCMO007',
+                'specs' => 'Monitor',
+                'brand' => 'HP',
+                'model' => 'HP EliteDisplay',
+                'serial_number' => 'CNC540NZWL',
+                'cost' => 4680.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 2,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-02-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCLT001',
+                'specs' => 'Laptop',
+                'brand' => 'Dell',
+                'model' => 'Alienware ',
+                'serial_number' => '8C2W533',
+                'cost' => 125520.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 3,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-03-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCLT002',
+                'specs' => 'Laptop',
+                'brand' => 'Dell',
+                'model' => 'Alienware ',
+                'serial_number' => 'BVCX533',
+                'cost' => 125520.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 3,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-03-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCLT003',
+                'specs' => 'Laptop',
+                'brand' => 'Dell',
+                'model' => 'Alienware ',
+                'serial_number' => '9B2W533',
+                'cost' => 125520.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 3,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-03-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCLT004',
+                'specs' => 'Laptop',
+                'brand' => 'Dell',
+                'model' => 'Alienware ',
+                'serial_number' => '66M1633',
+                'cost' => 110872.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 3,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-03-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCLT005',
+                'specs' => 'Laptop',
+                'brand' => 'Dell',
+                'model' => 'Alienware ',
+                'serial_number' => '6A693415Q',
+                'cost' => 110872.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 3,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-03-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCLT006',
+                'specs' => 'Laptop',
+                'brand' => 'Dell',
+                'model' => 'Alienware ',
+                'serial_number' => 'B90X533',
+                'cost' => 110872.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 3,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-03-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCLT007',
+                'specs' => 'Laptop',
+                'brand' => 'Dell',
+                'model' => 'Alienware ',
+                'serial_number' => '92GW533',
+                'cost' => 110872.00,
+                'supplier_id' => 4,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 3,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-03-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCPR001',
+                'specs' => 'Printer',
+                'brand' => 'HP',
+                'model' => 'HP Color LaserJet ',
+                'serial_number' => 'NLBVM8H0LX',
+                'cost' => 63299.00,
+                'supplier_id' => 5,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 4,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-04-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCPR002',
+                'specs' => 'Printer',
+                'brand' => 'HP',
+                'model' => 'HP Color LaserJet ',
+                'serial_number' => 'NLBVM8H045',
+                'cost' => 63299.00,
+                'supplier_id' => 5,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 4,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-04-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCPR003',
+                'specs' => 'Printer',
+                'brand' => 'HP',
+                'model' => 'HP Color LaserJet ',
+                'serial_number' => 'NLBVM8H08F',
+                'cost' => 63299.00,
+                'supplier_id' => 5,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 4,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-04-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCPH001',
+                'specs' => 'IP Phone',
+                'brand' => 'Cisco',
+                'model' => 'Cisco IP Phone',
+                'serial_number' => '20EZIZCL30229E46',
+                'cost' => 14259.00,
+                'supplier_id' => 6,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 5,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-04-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCPH002',
+                'specs' => 'IP Phone',
+                'brand' => 'Cisco',
+                'model' => 'Cisco IP Phone',
+                'serial_number' => '20EZIZCL30229E49',
+                'cost' => 14259.00,
+                'supplier_id' => 6,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 5,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-04-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCPH003',
+                'specs' => 'IP Phone',
+                'brand' => 'Cisco',
+                'model' => 'Cisco IP Phone',
+                'serial_number' => '20EZIZCL30229E47',
+                'cost' => 14259.00,
+                'supplier_id' => 6,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 5,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-04-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCPH004',
+                'specs' => 'IP Phone',
+                'brand' => 'Cisco',
+                'model' => 'Cisco IP Phone',
+                'serial_number' => '20EZIZCL30229E51',
+                'cost' => 14259.00,
+                'supplier_id' => 6,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 5,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-04-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+
+            Asset::create([
+                'asset_tag_id' => 'FCCPH005',
+                'specs' => 'IP Phone',
+                'brand' => 'Cisco',
+                'model' => 'Cisco IP Phone',
+                'serial_number' => '20EZIZCL30229E3B',
+                'cost' => 14259.00,
+                'supplier_id' => 6,
+                'site_id' => $site->id,
+                'location_id' => $location->id,
+                'category_id' => 5,
+                'department_id' => $department->id,
+                'purchase_date' => '2024-04-17',
+                'condition_id' => 1,
+                'status_id' => 1,
+            ]);
+        
         } else {
             echo "Some required records are missing.\n";
         }
-
-        if ($supplier && $site && $location && $category && $category2 && $department) {
-        Asset::create([
-            'asset_name' => 'Laptop 1',
-            'brand' => 'Dell',
-            'model' => 'Inspiron 15',
-            'serial_number' => 'ABC123456',
-            'cost' => 35000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => '2024-07-18',
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Printer 1',
-            'brand' => 'HP',
-            'model' => 'LaserJet 1020',
-            'serial_number' => 'XYZ789012',
-            'cost' => 15000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => '2024-07-18',
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Projector 1',
-            'brand' => 'Epson',
-            'model' => 'PowerLite 2155',
-            'serial_number' => 'DEF456789',
-            'cost' => 40000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => '2024-07-18',
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Van 1',
-            'brand' => 'Toyota',
-            'model' => 'Hiace',
-            'serial_number' => 'GHI012345',
-            'cost' => 800000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category2->id,
-            'department_id' => $department->id,
-            'purchase_date' => '2024-07-18',
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Truck 1',
-            'brand' => 'Isuzu',
-            'model' => 'Elf',
-            'serial_number' => 'JKL678901',
-            'cost' => 1200000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category2->id,
-            'department_id' => $department->id,
-            'purchase_date' => '2024-07-18',
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Motorcycle 1',
-            'brand' => 'Honda',
-            'model' => 'XRM',
-            'serial_number' => 'MNO234567',
-            'cost' => 80000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category2->id,
-            'department_id' => $department->id,
-            'purchase_date' => '2024-07-18',
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Bicycle 1',
-            'brand' => 'Trek',
-            'model' => 'Mountain Bike',
-            'serial_number' => 'PQR345678',
-            'cost' => 30000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => '2024-07-18',
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Generator 1',
-            'brand' => 'Kipor',
-            'model' => 'KG 2000',
-            'serial_number' => 'STU901234',
-            'cost' => 50000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => now(),
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Air Conditioner 1',
-            'brand' => 'LG',
-            'model' => 'Inverter',
-            'serial_number' => 'VWX567890',
-            'cost' => 60000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => '2024-07-18',
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Refrigerator 1',
-            'brand' => 'Samsung',
-            'model' => 'French Door',
-            'serial_number' => 'YZA123456',
-            'cost' => 80000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => '2024-06-18',
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Washing Machine 1',
-            'brand' => 'Whirlpool',
-            'model' => 'Front Load',
-            'serial_number' => 'BCD789012',
-            'cost' => 40000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => now(),
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Dryer 1',
-            'brand' => 'LG',
-            'model' => 'Inverter',
-            'serial_number' => 'EFG456789',
-            'cost' => 50000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => now(),
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Microwave 1',
-            'brand' => 'Panasonic',
-            'model' => 'Inverter',
-            'serial_number' => 'HIJ012345',
-            'cost' => 30000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => now(),
-            'condition_id' => 1,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Toaster 1',
-            'brand' => 'Black+Decker',
-            'model' => '4-Slice',
-            'serial_number' => 'KLM678901',
-            'cost' => 20000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => now(),
-            'condition_id' => 3,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Blender 1',
-            'brand' => 'Philips',
-            'model' => 'Hand Blender',
-            'serial_number' => 'NOP234567',
-            'cost' => 25000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => now(),
-            'condition_id' => 3,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Stand Fan 1',
-            'brand' => 'KDK',
-            'model' => '16-Inch',
-            'serial_number' => 'QRS345678',
-            'cost' => 15000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => now(),
-            'condition_id' => 3,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Ceiling Fan 1',
-            'brand' => 'Hunter',
-            'model' => '52-Inch',
-            'serial_number' => 'TUV678901',
-            'cost' => 40000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => now(),
-            'condition_id' => 3,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Water Dispenser 1',
-            'brand' => 'Aquasana',
-            'model' => 'Hot and Cold',
-            'serial_number' => 'WXY012345',
-            'cost' => 60000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => now(),
-            'condition_id' => 3,
-            'status_id' => 1,
-        ]);
-
-        Asset::create([
-            'asset_name' => 'Water Purifier 1',
-            'brand' => 'Brita',
-            'model' => 'Longlast',
-            'serial_number' => 'ZAB234567',
-            'cost' => 80000.00,
-            'supplier_id' => $supplier->id,
-            'site_id' => $site->id,
-            'location_id' => $location->id,
-            'category_id' => $category->id,
-            'department_id' => $department->id,
-            'purchase_date' => now(),
-            'condition_id' => 3,
-            'status_id' => 1,
-        ]);
-    } else {
-        echo "Some required records are missing.\n";
-    }
     }
 }

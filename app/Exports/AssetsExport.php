@@ -17,7 +17,7 @@ class AssetsExport implements FromCollection, WithHeadings
             ->get()
             ->map(function ($asset) {
                 return [
-                    'Asset Name' => $asset->asset_name,
+                    'Asset Tag ID' => $asset->asset_tag_id,
                     'Brand' => $asset->brand,
                     'Model' => $asset->model,
                     'Specification' => $asset->specs,
@@ -38,7 +38,7 @@ class AssetsExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
-            'Asset Name',
+            'Asset Tag ID',
             'Brand',
             'Model',
             'Specification',

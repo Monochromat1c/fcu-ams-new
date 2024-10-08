@@ -32,7 +32,7 @@
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Asset Name</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Asset Tag ID</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Brand</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Model</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Serial Number</th>
@@ -46,7 +46,7 @@
                     <tbody>
                         @foreach($pastDueAssets as $asset)
                             <tr>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->brand }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->model }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->serial_number }}</td>

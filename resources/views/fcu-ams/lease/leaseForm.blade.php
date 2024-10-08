@@ -40,13 +40,13 @@
             <table class="table-auto w-full">
                 <thead>
                     <tr>
-                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Asset Name</th>
+                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Asset Tag ID</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach($assets as $asset)
                         <tr>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
+                            <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
                         </tr>
                     @endforeach
                 </tbody>

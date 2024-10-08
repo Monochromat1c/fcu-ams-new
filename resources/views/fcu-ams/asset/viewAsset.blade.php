@@ -57,7 +57,7 @@
                     <thead>
                         <tr>
                             <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400 whitespace-nowrap">Asset Image</th>
-                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Asset Name</th>
+                            <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Asset Tag ID</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Brand</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Model</th>
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400 whitespace-nowrap">Serial Number</th>
@@ -85,7 +85,7 @@
                                         alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
                                 @endif
                             </td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->asset_name }}</td>
+                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->asset_tag_id }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->brand }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->model }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->serial_number }}</td>

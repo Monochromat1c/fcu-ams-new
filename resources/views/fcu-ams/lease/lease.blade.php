@@ -125,7 +125,7 @@
                             <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
-                                        href="{{ route('lease.index', ['sort' => 'asset_name', 'direction' => ($direction == 'asc' && $sort == 'asset_name') ? 'desc' : 'asc']) }}">
+                                        href="{{ route('lease.index', ['sort' => 'asset_tag_id', 'direction' => ($direction == 'asc' && $sort == 'asset_tag_id') ? 'desc' : 'asc']) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -183,7 +183,7 @@
 @foreach($leases as $lease)
     @foreach($lease->assets as $asset)
         <tr>
-            <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
+            <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $lease->lease_date }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $lease->lease_expiration }}</td>
             <td class="border border-slate-300 px-4 py-2">{{ $lease->customer }}</td>

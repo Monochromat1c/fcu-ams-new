@@ -24,7 +24,9 @@ class ForeignRelatedTablesSeeder extends Seeder
             ['supplier' => 'Quality Source Suppliers'],
             ['supplier' => 'Apex Manufacturing Solutions'],
             ['supplier' => 'Precision Supply Co.'],
-            ['supplier' => 'Company X'],
+            ['supplier' => 'PC Express'],
+            ['supplier' => 'Asianic Distributors Inc.'],
+            ['supplier' => 'Iridium Technologies, Inc.'],
         ];
 
         foreach ($suppliers as $supplier) {
@@ -42,13 +44,17 @@ class ForeignRelatedTablesSeeder extends Seeder
         ]);
 
         // Seed Category
-        Category::create([
-            'category' => 'Equipment',
-        ]);
+        $categories = [
+            ['category' => 'Desktop'],
+            ['category' => 'Monitor'],
+            ['category' => 'Laptop'],
+            ['category' => 'Printer'],
+            ['category' => 'Phone'],
+        ];
 
-        Category::create([
-            'category' => 'Vehicles',
-        ]);
+        foreach ($categories as $category) {
+            Category::create($category);
+        };
 
         // Seed Department
         Department::create([

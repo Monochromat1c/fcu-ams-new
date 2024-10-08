@@ -32,7 +32,7 @@ class AssetsImport implements ToModel, WithValidation
         $condition = Condition::where('condition', $row['Condition'])->first();
 
         return new Asset([
-            'asset_name' => $row['Asset Name'],
+            'asset_tag_id' => $row['Asset Tag ID'],
             'brand' => $row['Brand'],
             'model' => $row['Model'],
             'serial_number' => $row['Serial Number'],
@@ -50,10 +50,10 @@ class AssetsImport implements ToModel, WithValidation
     public function rules(): array
     {
         return [
-            '*.Asset Name' => [
+            '*.Asset Tag ID' => [
                 'required',
                 'string',
-                Rule::unique('assets', 'asset_name')->whereNull('deleted_at'),
+                Rule::unique('assets', 'asset_tag_id')->whereNull('deleted_at'),
             ],
             '*.Brand' => 'required|string',
             '*.Model' => 'required|string',

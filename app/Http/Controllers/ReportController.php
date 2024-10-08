@@ -56,7 +56,7 @@ class ReportController extends Controller
             $assets = Asset::with('supplier')
                 ->whereDate('purchase_date', '>=', now()->startOfWeek())
                 ->whereDate('purchase_date', '<=', now()->endOfWeek())
-                ->orderBy('asset_name', 'asc')
+                ->orderBy('asset_tag_id', 'asc')
                 ->paginate(5);
 
 

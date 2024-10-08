@@ -27,7 +27,7 @@ class AssetController extends Controller
         $lowValueAssets = DB::table('assets')->where('cost', '<', 1000)->whereNull('deleted_at')->count();
         $highValueAssets = DB::table('assets')->where('cost', '>=', 1000)->whereNull('deleted_at')->count();
 
-        $sort = $request->input('sort', 'asset_name');
+        $sort = $request->input('sort', 'asset_tag_id');
         $direction = $request->input('direction', 'asc');
         $search = $request->input('search');
 
@@ -43,7 +43,7 @@ class AssetController extends Controller
 
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('assets.asset_name', 'like', '%' . $search . '%')
+                $q->where('assets.asset_tag_id', 'like', '%' . $search . '%')
                     ->orWhere('suppliers.supplier', 'like', '%' . $search . '%')
                     ->orWhere('sites.site', 'like', '%' . $search . '%')
                     ->orWhere('locations.location', 'like', '%' . $search . '%')
@@ -59,7 +59,7 @@ class AssetController extends Controller
         if ($sort && $direction) {
             $query->orderBy($sort, $direction);
         } else {
-            $query->orderBy('asset_name', 'asc');
+            $query->orderBy('asset_tag_id', 'asc');
         }
 
         $assets = $query->whereNull('assets.deleted_at')->paginate(15);
@@ -90,10 +90,10 @@ class AssetController extends Controller
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'asset_name' => [
+            'asset_tag_id' => [
                 'required',
                 'string',
-                Rule::unique('assets', 'asset_name')->whereNull('deleted_at'),
+                Rule::unique('assets', 'asset_tag_id')->whereNull('deleted_at'),
             ],
             'brand' => 'required|string',
             'model' => 'required|string',
@@ -110,7 +110,7 @@ class AssetController extends Controller
         ]);
 
         $asset = new Asset();
-        $asset->asset_name = $validatedData['asset_name'];
+        $asset->asset_tag_id = $validatedData['asset_tag_id'];
         $asset->brand = $validatedData['brand'];
         $asset->model = $validatedData['model'];
         $asset->specs = $validatedData['specs'] ?? '';
@@ -154,10 +154,10 @@ class AssetController extends Controller
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'asset_name' => [
+            'asset_tag_id' => [
                 'required',
                 'string',
-                Rule::unique('assets', 'asset_name')->ignore($id)->whereNull('deleted_at'),
+                Rule::unique('assets', 'asset_tag_id')->ignore($id)->whereNull('deleted_at'),
             ],
             'brand' => 'required|string',
             'model' => 'required|string',
@@ -176,7 +176,7 @@ class AssetController extends Controller
         ]);
 
         $asset = Asset::findOrFail($id);
-        $asset->asset_name = $validatedData['asset_name'];
+        $asset->asset_tag_id = $validatedData['asset_tag_id'];
         $asset->brand = $validatedData['brand'];
         $asset->model = $validatedData['model'];
         $asset->specs = $validatedData['specs'] ?? '';
@@ -225,7 +225,7 @@ class AssetController extends Controller
     {
         $changes = [];
         $fields = [
-            'asset_name' => 'Asset Name',
+            'asset_tag_id' => 'Asset Tag ID',
             'brand' => 'Brand',
             'model' => 'Model',
             'specs' => 'Specification',
@@ -292,7 +292,7 @@ class AssetController extends Controller
     {
         $asset = Asset::findOrFail($id);
         $assetDetails = [
-            'Asset Name: ' . $asset->asset_name,
+            'Asset Tag ID: ' . $asset->asset_tag_id,
             'Brand: ' . $asset->brand,
             'Model: ' . $asset->model,
             'Serial Number: ' . $asset->serial_number,

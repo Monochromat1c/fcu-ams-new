@@ -24,7 +24,7 @@
                                     ID
                                 </th> -->
                                 <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
-                                    Asset Name
+                                    Asset Tag ID
                                 </th>
                                 <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
                                     Cost
@@ -50,7 +50,7 @@
                                         <input type="checkbox" name="selected_assets[]" value="{{ $asset->id }}" />
                                     </td>
                                     <!-- <td class="border border-slate-300 px-4 py-2">{{ $asset->id }}</td> -->
-                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_name }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
                                     <!-- <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier_name }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $asset->site_name }}</td>
