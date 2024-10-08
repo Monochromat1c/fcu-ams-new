@@ -74,13 +74,12 @@ class DashboardController extends Controller
         $assetAcquisition = Asset::select(DB::raw('MONTH(purchase_date) as month'), DB::raw('COUNT(*) as count'))
             ->groupBy('month')
             ->orderBy('month')
-            ->get()
-            ->map(function ($asset) {
-                return [
-                    'label' => date('F', mktime(0, 0, 0, $asset->month, 1)),
-                    'value' => $asset->count,
-                ];
-            });
+            ->paginate(6);
+
+        $assetAcquisition->transform(function ($item) {
+            $item->month = date('F', mktime(0, 0, 0, $item->month, 1));
+            return $item;
+        });
 
             // Most Acquired Inventory Supplier
             $mostAcquiredInventorySupplier = Inventory::select('supplier_id', DB::raw('COUNT(*) as count'))

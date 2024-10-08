@@ -80,6 +80,7 @@
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-semibold mb-4">Monthly Asset Acquisition</h3>
                 <canvas id="assetAcquisitionChart"></canvas>
+                {{ $assetAcquisition->links() }}
             </div>
         </div>
         <div class="m-3 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -134,6 +135,46 @@
 
 <script src="{{ asset('js/chart.js') }}"></script>
 <script>
+    const assetAcquisitionChart = document.getElementById('assetAcquisitionChart').getContext('2d');
+    const assetAcquisitionData = {!! json_encode($assetAcquisition->items()) !!}; // get the items of the paginated collection
+    const assetAcquisitionLabels = assetAcquisitionData.map(data => data.month);
+    const assetAcquisitionValues = assetAcquisitionData.map(data => data.count);
+
+    new Chart(assetAcquisitionChart, {
+        type: 'bar',
+        data: {
+            labels: assetAcquisitionLabels,
+            datasets: [{
+                label: 'Monthly Asset Acquisition',
+                data: assetAcquisitionValues,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'Monthly Asset Acquisition'
+            }
+        }
+    });
+</script>
+<script>
     function confirmLogout() {
         if (confirm('Are you sure you want to logout?')) {
             document.getElementById('logout-form').submit();
@@ -180,46 +221,6 @@
             },
             responsive: true,
             aspectRatio: 1.5
-        }
-    });
-
-    // Monthly Asset Acquisition Chart
-    const assetAcquisitionChart = document.getElementById('assetAcquisitionChart').getContext('2d');
-    const assetAcquisitionData = {!! json_encode($assetAcquisition) !!};
-    const assetAcquisitionLabels = assetAcquisitionData.map(data => data.label);
-    const assetAcquisitionValues = assetAcquisitionData.map(data => data.value);
-
-    new Chart(assetAcquisitionChart, {
-        type: 'bar',
-        data: {
-            labels: assetAcquisitionLabels,
-            datasets: [{
-                label: 'Monthly Asset Acquisition',
-                data: assetAcquisitionValues,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Monthly Asset Acquisition'
-            }
         }
     });
 </script>

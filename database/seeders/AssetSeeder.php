@@ -109,7 +109,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 1,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-01-24',
+                'purchase_date' => '2024-02-24',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
