@@ -30,7 +30,7 @@
                     <h3 class="text-lg font-semibold mb-3">Item Details</h3>
                     <div class="mb-4">
                         <label for="item_id" class="block text-gray-700 font-bold mb-2">Item:</label>
-                        <button type="button" class="ml-auto rounded-md border text-left px-3 py-2  text-black w-full"
+                        <button type="button" class="ml-auto rounded-md border text-left px-3 py-2 bg-gray-100 text-black w-full"
                             onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
                             Select Items
                         </button>
@@ -49,7 +49,9 @@
                                 </tbody>
                                 <tfoot>
                                     <tr class="font-bold">
-                                        <td class="px-4 py-2" colspan="3">Overall Price:</td>
+                                        <td class="px-4 py-2 invisible" colspan="">Overall Price:</td>
+                                        <td class="px-4 py-2 invisible" colspan="">Overall Price:</td>
+                                        <td class="px-4 py-2 text-right" colspan="">Overall Price:</td>
                                         <td class="px-4 py-2" id="overall-price">₱0.00</td>
                                     </tr>
                                 </tfoot>
@@ -134,7 +136,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="department_id" class="block text-gray-700 font-bold mb-2">Department:</label>
-                        <select id="department_id" name="department_id" class="w-full p-2 border rounded-md" required>
+                        <select id="department_id" name="department_id" class="w-full p-2 border rounded-md bg-gray-100" required>
                             <option value="">Select a department</option>
                             @foreach($departments as $department)
                                 <option value="{{ $department->id }}">{{ $department->department }}</option>
@@ -144,11 +146,11 @@
                     <div class="mb-4">
                         <label for="stock_out_date" class="block text-gray-700 font-bold mb-2">Stock Out Date:</label>
                         <input type="date" id="stock_out_date" name="stock_out_date"
-                            class="w-full p-2 border rounded-md" required>
+                            class="w-full p-2 border rounded-md bg-gray-100" required>
                     </div>
                     <div class="mb-4">
                         <label for="receiver" class="block text-gray-700 font-bold mb-2">Received by:</label>
-                        <input type="input" id="receiver" name="receiver" class="w-full p-2 border rounded-md"
+                        <input type="input" id="receiver" name="receiver" class="w-full p-2 border rounded-md bg-gray-100"
                             required>
                     </div>
                 </div>

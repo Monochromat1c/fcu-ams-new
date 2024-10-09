@@ -150,6 +150,14 @@
 
                                 </tr>
                             </tbody>
+                            <tfoot>
+                                <tr class="font-bold">
+                                    <td class="px-4 py-2 invisible" colspan="">Overall Price:</td>
+                                    <td class="px-4 py-2 invisible" colspan="">Overall Price:</td>
+                                    <td class="px-4 py-2 text-right">Overall Price:</td>
+                                    <td class="px-4 py-2" id="overall-price">₱0.00</td>
+                                </tr>
+                            </tfoot>
                         </table>
                         <button class="add-row-button flex gap-2 ml-4 my-2 rounded-md shadow-md bg-green-600 hover:shadow-md hover:bg-green-500
                         transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white px-5 py-2"
@@ -232,6 +240,25 @@
                 const row = deleteRowButton.parentNode.parentNode;
                 row.remove();
             });
+        });
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var overallPriceCell = document.getElementById('overall-price');
+        var purchaseOrderTableBody = document.getElementById('purchase-order-table-body');
+
+        purchaseOrderTableBody.addEventListener('input', function (event) {
+            if (event.target.type === 'number') {
+                var rows = purchaseOrderTableBody.rows;
+                var overallPrice = 0;
+                for (var i = 0; i < rows.length; i++) {
+                    var quantity = rows[i].cells[1].children[0].value;
+                    var unitPrice = rows[i].cells[3].children[0].value;
+                    overallPrice += parseFloat(quantity) * parseFloat(unitPrice);
+                }
+                overallPriceCell.textContent = '₱' + overallPrice.toFixed(2);
+            }
         });
     });
 </script>

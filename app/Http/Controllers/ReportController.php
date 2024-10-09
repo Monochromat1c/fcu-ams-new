@@ -13,6 +13,7 @@ use App\Models\Condition;
 use App\Models\Inventory;
 use App\Models\Department;
 use App\Models\StockOut;
+use App\Models\PurchaseOrder;
 use App\Models\AssetEditHistory;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AssetsExport;
@@ -59,9 +60,26 @@ class ReportController extends Controller
                 ->orderBy('asset_tag_id', 'asc')
                 ->paginate(5);
 
+        $purchaseOrders = PurchaseOrder::with('supplier', 'department')
+            ->orderBy('po_date', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get()
+            ->groupBy('group_id_for_items_purchased_at_the_same_time')
+            ->map(function ($records) {
+                return $records->first();
+            });
+
+        $purchaseOrders = new LengthAwarePaginator(
+            $purchaseOrders->forPage($request->page, 5),
+            $purchaseOrders->count(),
+            5,
+            $request->page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
 
         return view('fcu-ams/reports/reports', compact('inventories', 'lowStockInventories', 'stockOutRecords',
-        'assets'));
+        'assets', 'purchaseOrders'));
     }
 
     public function stockOutDetails($id)
