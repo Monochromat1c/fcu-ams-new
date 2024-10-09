@@ -96,7 +96,16 @@
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->category->category }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->department->department }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->purchase_date }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->status->status }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
+                                <div class="flex items-center gap-1">
+                                    @if($asset->status->status == 'Available')
+                                        <span class="inline-block w-4 h-4 bg-green-500 rounded-full"></span>
+                                    @elseif($asset->status->status == 'Not Available')
+                                        <span class="inline-block w-4 h-4 bg-red-500 rounded-full"></span>
+                                    @endif
+                                    {{ $asset->status->status }}
+                                </div>
+                            </td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->condition->condition }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
                                 {{ $asset->maintenance_start_date ?? 'N/A' }}</td>
