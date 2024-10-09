@@ -58,15 +58,16 @@
                         <tr>
                             <th class="px-4 py-2 text-center bg-slate-200 border border-slate-400 whitespace-nowrap">Asset Image</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Asset Tag ID</th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Specification</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Brand</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Model</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Serial Number</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Cost</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Supplier</th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Category</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Site</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Location</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Category</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Department</th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Cost</th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Supplier</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Purchase Date</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Status</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Condition</th>
@@ -86,15 +87,16 @@
                                 @endif
                             </td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->asset_tag_id }}</td>
+                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->specs }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->brand }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->model }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->serial_number }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->cost }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->supplier->supplier }}</td>
+                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->category->category }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->site->site }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->location->location }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->category->category }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->department->department }}</td>
+                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->cost }}</td>
+                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->supplier->supplier }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->purchase_date }}</td>
                             <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
                                 <div class="flex items-center gap-1">
