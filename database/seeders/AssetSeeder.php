@@ -271,7 +271,7 @@ class AssetSeeder extends Seeder
                 'asset_tag_id' => 'FCCLT001',
                 'specs' => 'Laptop',
                 'brand' => 'Dell',
-                'model' => 'Alienware ',
+                'model' => 'Alienware',
                 'serial_number' => '8C2W533',
                 'cost' => 125520.00,
                 'supplier_id' => 4,
