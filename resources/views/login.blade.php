@@ -46,9 +46,9 @@
                     <div>
                         <!-- <a href="#">Sign Up</span></a> -->
                     </div>
-                    <div>
+                    <!-- <div>
                         <a href="#" class="text-red-700">Forgot Password</a>
-                    </div>
+                    </div> -->
                 </div>
                 <button type="submit" class="flex justify-center w-full bg-blue-900 p-3 rounded-lg">
                     <label for="" class="text-white">Sign In</label>

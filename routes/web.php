@@ -18,6 +18,7 @@ use App\Http\Controllers\AlertController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\PurchaseOrderController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login');
@@ -120,5 +121,10 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(DepartmentController::class)->group(function (){
         Route::post('/department/add', 'add')->name('department.add');
+    });
+
+    Route::controller(PurchaseOrderController::class)->group(function (){
+        Route::get('/purchase/order/index', 'index')->name('purchase.order.index');
+        Route::post('/purchase/order/store', 'store')->name('purchase.order.store');
     });
 });

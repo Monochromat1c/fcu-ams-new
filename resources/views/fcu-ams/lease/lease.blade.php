@@ -98,6 +98,12 @@
                 </div>
             </div>
         </div>
+        @if($leases->isEmpty())
+        <div class="bg-white p-5 shadow-md m-3 rounded-md">
+            <h2 class="text-2xl font-bold my-auto mb-2">Leased Items</h2>
+            <p class="text-center text-xl text-gray-500">No leased assets.</p>
+        </div>
+        @else
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex justify-between mb-3">
                 <h2 class="text-2xl font-bold my-auto">Leased Items</h2>
@@ -180,34 +186,35 @@
                         </tr>
                     </thead>
                     <tbody>
-@foreach($leases as $lease)
-    @foreach($lease->assets as $asset)
-        <tr>
-            <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
-            <td class="border border-slate-300 px-4 py-2">{{ $lease->lease_date }}</td>
-            <td class="border border-slate-300 px-4 py-2">{{ $lease->lease_expiration }}</td>
-            <td class="border border-slate-300 px-4 py-2">{{ $lease->customer }}</td>
-            <td class="border border-slate-300 px-4 py-2">
-                <div class="mx-auto flex justify-center space-x-2">
-                    <a href="" class="text-red-600 hover:text-red-900">End Lease</a>
-                    <!-- <a href="" class="text-blue-600 hover:text-blue-900">Edit</a>
-                    <button type="button" class="text-red-600 hover:text-red-900"
-                        onclick="confirmDelete({{ $lease->id }})">
-                        Delete
-                    </button>
-                    <form action="" method="POST" id="delete-form-{{ $lease->id }}">
-                        @csrf
-                        @method('DELETE')
-                    </form> -->
-                </div>
-            </td>
-        </tr>
-    @endforeach
-@endforeach
+                        @foreach($leases as $lease)
+                            @foreach($lease->assets as $asset)
+                                <tr>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $lease->lease_date }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $lease->lease_expiration }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $lease->customer }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">
+                                        <div class="mx-auto flex justify-center space-x-2">
+                                            <a href="" class="text-red-600 hover:text-red-900">End Lease</a>
+                                            <!-- <a href="" class="text-blue-600 hover:text-blue-900">Edit</a>
+                                            <button type="button" class="text-red-600 hover:text-red-900"
+                                                onclick="confirmDelete({{ $lease->id }})">
+                                                Delete
+                                            </button>
+                                            <form action="" method="POST" id="delete-form-{{ $lease->id }}">
+                                                @csrf
+                                                @method('DELETE')
+                                            </form> -->
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @endforeach
                     </tbody>
                 </table>
             </div>
         </div>
+        @endif
     </div>
 </div>
 <script>

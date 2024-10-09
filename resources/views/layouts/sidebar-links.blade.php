@@ -58,7 +58,7 @@
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('inventory/list') ? 'bg-gray-100' : '' }}">Inventory
             List</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Purchase Order</a>
+        <a href="{{ route('purchase.order.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Purchase Order</a>
         <a href="{{ route('inventory.stock.in') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('inventory/stock/in') ? 'bg-gray-100' : '' }}">Stock
