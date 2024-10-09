@@ -106,7 +106,7 @@
                 </div> -->
                 <div class="export-list my-auto">
                     <button type="button" onclick="window.location.href='{{ route('inventories.export') }}'"
-                        class="flex gap-2 items-center bg-green-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
+                        class="flex gap-2 items-center bg-indigo-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 my-auto" viewBox="0 0 384 512">
                             <path fill="#FFFFFF" d="M48 448L48 64c0-8.8 7.2-16 16-16l160 0 0 80c0 17.7 14.3 32 32 32l80 0 0 288c0 8.8-7.2
                                 16-16 16L64 464c-8.8 0-16-7.2-16-16zM64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64
