@@ -22,39 +22,45 @@ class PurchaseOrderController extends Controller
     }
 
     public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'department_id' => 'required|integer|exists:departments,id',
-            'supplier_id' => 'required|integer|exists:suppliers,id',
-            'unit_id' => 'required|integer|exists:units,id',
-            'location_id' => 'required|integer|exists:locations,id',
-            'po_date' => 'required|date',
-            'po_number' => 'required|integer',
-            'mr_number' => 'required|integer',
-            'quantity' => 'required|integer',
-            'items_specs' => 'required|string',
-            'unit_price' => 'required|numeric',
-            'note' => 'nullable|string',
-        ]);
+{
+    $validatedData = $request->validate([
+        'department_id' => 'required|integer|exists:departments,id',
+        'supplier_id' => 'required|integer|exists:suppliers,id',
+        'location_id' => 'required|integer|exists:locations,id',
+        'po_date' => 'required|date',
+        'po_number' => 'required|integer',
+        'mr_number' => 'required|integer',
+        'note' => 'nullable|string',
+        'items_specs' => 'required|array',
+        'items_specs.*' => 'required|string',
+        'quantity' => 'required|array',
+        'quantity.*' => 'required|integer',
+        'unit_id' => 'required|array',
+        'unit_id.*' => 'required|integer|exists:units,id',
+        'unit_price' => 'required|array',
+        'unit_price.*' => 'required|numeric',
+    ]);
 
-        $purchaseOrderId = Str::uuid();
+    $purchaseOrderGroupId = Str::uuid();
 
+    foreach ($validatedData['items_specs'] as $key => $itemSpec) {
         $purchaseOrder = new PurchaseOrder();
-        $purchaseOrder->purchase_order_id = $purchaseOrderId;
+        $purchaseOrder->group_id_for_items_purchased_at_the_same_time = $purchaseOrderGroupId;
         $purchaseOrder->department_id = $validatedData['department_id'];
         $purchaseOrder->supplier_id = $validatedData['supplier_id'];
-        $purchaseOrder->unit_id = $validatedData['unit_id'];
+        $purchaseOrder->unit_id = $validatedData['unit_id'][$key];
         $purchaseOrder->location_id = $validatedData['location_id'];
         $purchaseOrder->po_date = $validatedData['po_date'];
         $purchaseOrder->po_number = $validatedData['po_number'];
         $purchaseOrder->mr_number = $validatedData['mr_number'];
-        $purchaseOrder->quantity = $validatedData['quantity'];
-        $purchaseOrder->items_specs = $validatedData['items_specs'];
-        $purchaseOrder->unit_price = $validatedData['unit_price'];
+        $purchaseOrder->quantity = $validatedData['quantity'][$key];
+        $purchaseOrder->items_specs = $itemSpec;
+        $purchaseOrder->unit_price = $validatedData['unit_price'][$key];
         $purchaseOrder->note = $validatedData['note'];
 
         $purchaseOrder->save();
-
-        return redirect()->route('purchase.order.index')->with('success', 'Purchase order created successfully');
     }
+
+    return redirect()->route('purchase.order.index')->with('success', 'Purchase order created successfully');
+}
 }
