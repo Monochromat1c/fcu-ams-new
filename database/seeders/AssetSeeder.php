@@ -21,7 +21,7 @@ class AssetSeeder extends Seeder
     public function run()
     {
         $supplier = Supplier::all();
-        $site = Site::where('site', 'Main Campus')->first();
+        $site = Site::where('site', 'Annex Campus')->first();
         $location = Location::where('location', 'Roxas City')->first();
         $category = Category::all();
         $department = Department::where('department', 'CCS Department')->first();
