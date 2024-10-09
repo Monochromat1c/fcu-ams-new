@@ -39,7 +39,7 @@
             <div class="mx-auto my-2">
                 {{ $qrCode }}
             </div>
-            <h2 class="text-xl font-bold">Asset ID: {{ $id }}</h2>
+            <h2 class="text-xl font-bold">Asset Tag ID: {{ $asset->asset_tag_id }}</h2>
         </div>
         <div class="flex justify-between mt-5 no-print">
             <button onclick="window.history.back()"

@@ -35,7 +35,7 @@ class ForeignRelatedTablesSeeder extends Seeder
 
         // Seed Site
         Site::create([
-            'site' => 'Main Campus',
+            'site' => 'Annex Campus',
         ]);
 
         // Seed Location

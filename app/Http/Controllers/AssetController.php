@@ -293,21 +293,22 @@ class AssetController extends Controller
         $asset = Asset::findOrFail($id);
         $assetDetails = [
             'Asset Tag ID: ' . $asset->asset_tag_id,
+            'Specification: ' . $asset->specs,
             'Brand: ' . $asset->brand,
             'Model: ' . $asset->model,
             'Serial Number: ' . $asset->serial_number,
-            'Cost: ' . $asset->cost,
-            'Supplier: ' . $asset->supplier->supplier,
+            'Category: ' . $asset->category->category,
             'Site: ' . $asset->site->site,
             'Location: ' . $asset->location->location,
-            'Category: ' . $asset->category->category,
             'Department: ' . $asset->department->department,
+            'Cost: ' . $asset->cost,
+            'Supplier: ' . $asset->supplier->supplier,
             'Purchase Date: ' . $asset->purchase_date,
             'Status: ' . $asset->status->status,
             'Condition: ' . $asset->condition->condition,
         ];
 
         $qrCode = QrCode::generate(implode("\n", $assetDetails));
-        return view('fcu-ams/asset/qrCode', compact('qrCode', 'id'));
+        return view('fcu-ams/asset/qrCode', compact('qrCode', 'id', 'asset'));
     }
 }
