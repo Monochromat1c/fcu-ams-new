@@ -42,18 +42,18 @@
                     <table class="table-auto w-full">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unique Tag</th>
-                                <th class="px-4 py-2 text-center bg-slate-100 border border-slate-400">Stock Image</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Item</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Brand</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Supplier</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit</th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Unit Price</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unique Tag</th>
+                                <th class="px-4 py-2 text-center bg-slate-200 border border-slate-400">Stock Image</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Item</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Brand</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Supplier</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unit</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unit Price</th>
                             </tr>
                         </thead>
                         <tbody>
                         @foreach($outOfStock as $inventory)
-                                <tr>
+                                <tr class="hover:bg-slate-100">
                                     <td class="border border-slate-300 px-4 py-2">{{ $inventory->unique_tag }}</td>
                                     <td class="border border-slate-300 px-4 py-2">
                                         @if($inventory->stock_image)

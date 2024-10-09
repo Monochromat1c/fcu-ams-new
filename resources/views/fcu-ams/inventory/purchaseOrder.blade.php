@@ -137,7 +137,7 @@
                                             class="w-full p-2 border rounded-md bg-gray-100" min="0" required>
                                     </td>
                                     <td class="px-4 py-2 w-auto flex gap-2">
-                                        <button class="delete-row-buttonfd flex gap-2 my-auto rounded-md shadow-md bg-red-600 hover:shadow-md hover:bg-red-500
+                                        <button class="delete-row-buttonfd flex gap-2 mx-auto my-auto rounded-md shadow-md bg-red-600 hover:shadow-md hover:bg-red-500
                         transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white px-5 py-2"
                                             type="button">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"

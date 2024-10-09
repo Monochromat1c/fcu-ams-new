@@ -12,6 +12,10 @@ class LoginController extends Controller
         return view ('login');
     }
 
+    public  function asdf() {
+        return view ('asdf');
+    }
+
     public function signup() {
         $roles = DB::table('roles')->get();
         return view ('signup', compact('roles'));
