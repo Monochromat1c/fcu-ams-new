@@ -25,17 +25,23 @@ class ReportController extends Controller
 {
     public function index(Request $request) {
         $inventories = Inventory::with('supplier')
-            ->whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])
+            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->where('quantity', '>', 0)
             ->orderBy('unique_tag', 'asc')
-            ->paginate(5);
+            ->paginate(10);
+
+        $inventoriesForPrint = Inventory::with('supplier')
+            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+            ->where('quantity', '>', 0)
+            ->orderBy('unique_tag', 'asc')
+            ->get();
 
         $lowStockInventories = Inventory::with('supplier')
             ->where('quantity', '>=', 1)
             ->where('quantity', '<', 20)
             ->whereNull('deleted_at')
             ->orderBy('unique_tag', 'asc')
-            ->paginate(5);
+            ->paginate(10);
 
         $stockOutRecords = StockOut::with('inventory', 'department')
             ->orderBy('stock_out_date', 'desc')
@@ -47,18 +53,18 @@ class ReportController extends Controller
             });
 
             $stockOutRecords = new LengthAwarePaginator(
-                $stockOutRecords->forPage($request->page, 5),
+                $stockOutRecords->forPage($request->page, 10),
                 $stockOutRecords->count(),
-                5,
+                10,
                 $request->page,
                 ['path' => $request->url(), 'query' => $request->query()]
             );
 
             $assets = Asset::with('supplier')
-                ->whereDate('purchase_date', '>=', now()->startOfWeek())
-                ->whereDate('purchase_date', '<=', now()->endOfWeek())
+                ->whereDate('purchase_date', '>=', now()->startOfMonth())
+                ->whereDate('purchase_date', '<=', now()->endOfMonth())
                 ->orderBy('asset_tag_id', 'asc')
-                ->paginate(5);
+                ->paginate(10);
 
         $purchaseOrders = PurchaseOrder::with('supplier', 'department')
             ->orderBy('po_date', 'desc')
@@ -70,16 +76,15 @@ class ReportController extends Controller
             });
 
         $purchaseOrders = new LengthAwarePaginator(
-            $purchaseOrders->forPage($request->page, 5),
+            $purchaseOrders->forPage($request->page, 10),
             $purchaseOrders->count(),
             5,
             $request->page,
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
-
         return view('fcu-ams/reports/reports', compact('inventories', 'lowStockInventories', 'stockOutRecords',
-        'assets', 'purchaseOrders'));
+        'assets', 'purchaseOrders', 'inventoriesForPrint'));
     }
 
     public function stockOutDetails($id)

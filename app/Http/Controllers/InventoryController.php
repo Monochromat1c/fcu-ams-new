@@ -253,6 +253,6 @@ class InventoryController extends Controller
     }
 
     public function export() { 
-        return Excel::download(new InventoryExport, 'inventories.xlsx');
+        return Excel::download(new InventoryExport, 'inventories.csv');
     }
 }

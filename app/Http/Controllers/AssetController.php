@@ -285,7 +285,7 @@ class AssetController extends Controller
     }
 
     public function export() { 
-        return Excel::download(new AssetsExport, 'assets.xlsx');
+        return Excel::download(new AssetsExport, 'assets.csv');
     }
 
     public function generateQrCode($id)

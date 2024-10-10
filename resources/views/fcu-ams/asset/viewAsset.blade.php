@@ -136,7 +136,8 @@
                         <tbody>
                             @foreach($asset->editHistory as $editHistory)
                                 <tr>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $editHistory->created_at }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">
+                                        {{ $editHistory->created_at->format('Y-m-d H:i:s') }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $editHistory->user->first_name }}
                                         {{ $editHistory->user->last_name }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{!! nl2br($editHistory->changes) !!}

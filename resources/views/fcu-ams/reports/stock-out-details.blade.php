@@ -40,7 +40,6 @@
         <p class="text-gray-600 mb-3">Date: {{ $record->stock_out_date }}</p>
         <h2 class="text-xl font-bold">{{ $record->department->department ?? 'N/A' }}
         </h2>
-
     </div>
 
     <table class="w-full mb-8">

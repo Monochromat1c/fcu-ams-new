@@ -1,13 +1,41 @@
 @extends('layouts.layout')
 @section('content')
 <style>
-    /* Add any custom styles here */
+    body {
+        --tw-bg-opacity: 1;
+        background-color: rgb(241 245 249 / var(--tw-bg-opacity))
+            /* #f1f5f9 */
+        ;
+    }
+
+    .fcu-icon {
+        filter: grayscale(100%);
+    }
+
+    @media print {
+        body {
+            background-color: white;
+        }
+
+        .no-print {
+            display: none;
+        }
+
+        @page {
+            size: auto;
+            margin: 0mm;
+        }
+
+        .shadow-lg {
+            box-shadow: none;
+        }
+    }
 </style>
 <div class="bg-white rounded-lg p-8 mb-8 max-w-2xl my-9 mx-auto shadow-lg">
     <div class="text-center mb-5">
         <img class="fcu-icon mb-3 w-28 mx-auto" src="/img/login/fcu-icon.png" alt="" srcset="">
         <h2 class="text-2xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>
-        <h2 class="text-xl font-bold">Roxas Avenue, Roxas City</h2>
+        <h2 class="text-xl font-bold mb-3">Roxas Avenue, Roxas City</h2>
         <h2 class="text-xl font-bold">Purchase Order Receipt</h2>
         <p class="text-gray-600 mb-3">Date: {{ $record->po_date }}</p>
         <h2 class="text-xl font-bold">{{ $record->department->department ?? 'N/A' }}

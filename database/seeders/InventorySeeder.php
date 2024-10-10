@@ -217,6 +217,15 @@ class InventorySeeder extends Seeder
                 'supplier_id' => 2,
             ]);
 
+            Inventory::create([
+                'quantity' => 100, 
+                'unit_id' => 1, 
+                'items_specs' => 'Bond Paper Short', 
+                'brand' => 'Canon',
+                'unit_price' => 350.00,
+                'supplier_id' => 2,
+            ]);
+
         } else {
             echo "Supplier 'Company X' is required but not found.\n";
         }

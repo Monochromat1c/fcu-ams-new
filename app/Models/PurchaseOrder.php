@@ -19,6 +19,7 @@ class PurchaseOrder extends Model
         'mr_number',
         'quantity',
         'items_specs',
+        'approved_by',
         'unit_price',
         'note',
     ];
