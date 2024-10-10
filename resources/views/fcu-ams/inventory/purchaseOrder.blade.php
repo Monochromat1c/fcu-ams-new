@@ -89,7 +89,12 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="mb-4 col-span-2">
+                            <div class="mb-4">
+                                <label for="approved_by" class="block text-gray-700 font-bold mb-2">Approved By:</label>
+                                <input type="text" id="approved_by" name="approved_by"
+                                            class="w-full p-2 border rounded-md bg-gray-100" required>
+                            </div>
+                            <div class="mb-4">
                                 <label for="note" class="block text-gray-700 font-bold mb-2">Note:</label>
                                 <textarea id="note" name="note"
                                     class="w-full p-2 border rounded-md bg-gray-100"></textarea>

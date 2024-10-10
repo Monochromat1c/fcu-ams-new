@@ -102,4 +102,24 @@ class ReportController extends Controller
 
         return view('fcu-ams/reports/stock-out-details', compact('stockOutDetails', 'totalPrice', 'record'));
     }
+
+    public function purchaseOrderDetails($id)
+    {
+        $record = PurchaseOrder::with('department', 'supplier')->findOrFail($id);
+        $purchaseOrderDetails = [];
+        $totalPrice = 0;
+
+        $purchaseOrderRecords = PurchaseOrder::where('group_id_for_items_purchased_at_the_same_time', $record->group_id_for_items_purchased_at_the_same_time)->get();
+
+        foreach ($purchaseOrderRecords as $purchaseOrderRecord) {
+            $purchaseOrderDetails[] = [
+                'items_specs' => $purchaseOrderRecord->items_specs,
+                'quantity' => $purchaseOrderRecord->quantity,
+                'unit_price' => $purchaseOrderRecord->unit_price,
+            ];
+            $totalPrice += $purchaseOrderRecord->quantity * $purchaseOrderRecord->unit_price;
+        }
+
+        return view('fcu-ams/reports/purchase-order-details', compact('purchaseOrderDetails', 'totalPrice', 'record'));
+    }
 }

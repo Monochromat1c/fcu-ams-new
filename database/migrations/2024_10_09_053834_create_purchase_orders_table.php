@@ -27,6 +27,7 @@ return new class extends Migration
             $table->integer('mr_number');
             $table->integer('quantity');
             $table->string('items_specs');
+            $table->string('approved_by');
             $table->decimal('unit_price', 10, 2);
             $table->string('note')->nullable();
             $table->timestamps();

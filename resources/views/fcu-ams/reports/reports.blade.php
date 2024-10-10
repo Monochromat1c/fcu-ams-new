@@ -116,7 +116,7 @@
                                 <td class="border border-slate-300 px-4 py-2">{{ $record->department->department }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $record->po_date }}</td>
                                 <td class="border border-slate-300 text-center px-4 py-2">
-                                    <a href="{{ route('stock.out.details', $record->id) }}"
+                                    <a href="{{ route('purchase-order-details', $record->id) }}"
                                         class="text-green-600 mx-auto">View Details</a>
                                 </td>
                             </tr>

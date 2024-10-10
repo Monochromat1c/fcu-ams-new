@@ -30,6 +30,7 @@ class PurchaseOrderController extends Controller
         'po_date' => 'required|date',
         'po_number' => 'required|integer',
         'mr_number' => 'required|integer',
+        'approved_by' => 'required|string',
         'note' => 'nullable|string',
         'items_specs' => 'required|array',
         'items_specs.*' => 'required|string',
@@ -53,6 +54,7 @@ class PurchaseOrderController extends Controller
         $purchaseOrder->po_date = $validatedData['po_date'];
         $purchaseOrder->po_number = $validatedData['po_number'];
         $purchaseOrder->mr_number = $validatedData['mr_number'];
+        $purchaseOrder->approved_by = $validatedData['approved_by'];
         $purchaseOrder->quantity = $validatedData['quantity'][$key];
         $purchaseOrder->items_specs = $itemSpec;
         $purchaseOrder->unit_price = $validatedData['unit_price'][$key];
