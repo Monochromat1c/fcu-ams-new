@@ -14,7 +14,7 @@
                 @csrf
                 <input type="hidden" name="id" value="{{ $asset->id }}">
                 @if(session('success'))
-                    <div class="successMessage bg-green-600 border border-green-600 text-white px-4 py-3 rounded relative mt-2 mb-2">
+                    <div class="successMessage bg-lime-800 border border-lime-800 text-white px-4 py-3 rounded relative mt-2 mb-2">
                         {{ session('success') }}
                     </div>
                 @endif

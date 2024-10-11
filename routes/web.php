@@ -119,6 +119,8 @@ Route::middleware(['auth.user'])->group(function () {
     Route::controller(CategoryController::class)->group(function (){
         Route::get('/category/index', 'index')->name('category.index');
         Route::post('/category/add', 'add')->name('category.add');
+        Route::post('/category/{id}', 'update')->name('category.update');
+        Route::delete('/category/{id}', 'destroy')->name('category.destroy');
     });
 
     Route::controller(DepartmentController::class)->group(function (){

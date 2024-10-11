@@ -107,7 +107,7 @@
         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">View Customers</a>
     </div>
 </div> -->
-<!-- <div class="relative" x-data="{ open: false }">
+<div class="relative" x-data="{ open: false }">
     <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd"
@@ -134,7 +134,7 @@
         <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Suppliers</a>
     </div>
 </div>
-<div class="relative" x-data="{ open: false }">
+<!-- <div class="relative" x-data="{ open: false }">
     <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
             <path

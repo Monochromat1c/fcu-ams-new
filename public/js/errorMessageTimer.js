@@ -1,9 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const errorMessage = document.querySelector(".errorMessage");
+    const errorMessage = document.querySelector(".errorMessageWithTimer");
 
     if (errorMessage) {
         setTimeout(() => {
             errorMessage.style.display = "none";
-        }, 2000);
+        }, 6000);
     }
 });

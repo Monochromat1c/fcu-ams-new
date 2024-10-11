@@ -144,6 +144,9 @@
                 </div>
             </div>
         </div>
+        <div class="m-3">
+            @include('layouts.messageWithTimerForError')
+        </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex justify-between mb-3">
                 <h2 class="text-2xl font-bold my-auto">Categories List</h2>
@@ -182,21 +185,25 @@
                                 <td class="border border-slate-300 px-4 py-2">{{ $category->category }}</td>
                                 <td class="border border-slate-300 px-4 py-2">
                                     <div class="mx-auto flex justify-center space-x-2">
-                                        <a href="" class="text-blue-600 hover:text-blue-900">
+                                        <button type="button" class="text-blue-600 hover:text-blue-900"
+                                            onclick="document.getElementById('modal{{ $category->id }}').classList.toggle('hidden')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                             </svg>
-                                        </a>
-                                        <button type="button" class="text-red-600 hover:text-red-900" onclick="">
+                                        </button>
+                                        <button type="button" class="text-red-600 hover:text-red-900"
+                                            onclick="document.getElementById('delete-modal{{ $category->id }}').classList.toggle('hidden')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                             </svg>
                                         </button>
-                                        <form action="" method="POST" id="">
+                                        <form
+                                            action="{{ route('category.destroy', ['id' => $category->id]) }}"
+                                            method="POST" id="delete-form{{ $category->id }}">
                                             @csrf
                                             @method('DELETE')
                                         </form>
@@ -204,6 +211,99 @@
                                 </td>
                             </tr>
                         @endforeach
+                        <!-- MODAL TO EDIT CATEGORY -->
+                        @foreach($categories as $category)
+                        <div id="modal{{ $category->id }}" style="min-height:100vh;" tabindex="-1" aria-hidden="true"
+                            class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+                            <div class="relative my-auto mx-auto p-4 w-full max-w-2xl h-full md:h-auto">
+                                <!-- Modal content -->
+                                <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
+                                    <button type="button"
+                                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                        onclick="document.getElementById('modal{{ $category->id }}').classList.toggle('hidden')">
+                                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd"
+                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                clip-rule="evenodd"></path>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
+                                    <div class="p-6 text-center" id="modal">
+                                        <form method="POST"
+                                            action="{{ route('category.update', ['id' => $category->id]) }}">
+                                            @csrf
+                                            <h3 class="text-lg font-semibold mb-3">Category Details</h3>
+                                            <input type="hidden" name="id" value="{{ $category->id }}">
+                                            <div class="mb-4">
+                                                <input type="text" id="category" name="category"
+                                                    class="w-full p-2 border rounded-md"
+                                                    value="{{ $category->category }}" required>
+                                            </div>
+                                            <div class="flex justify-end space-x-2">
+                                                <button type="submit"
+                                                    class="rounded-md shadow-md px-5 py-2 bg-blue-600 hover:shadow-md hover:bg-blue-500
+                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                        viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+                                                        class="size-6">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                                                    </svg>
+                                                    Update Category
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                        <!-- END -->
+                        <!-- DELETE CONFIRMATION MODAL -->
+                        @foreach($categories as $category)
+                        <div id="delete-modal{{ $category->id }}" style="min-height:100vh;" tabindex="-1" aria-hidden="true"
+                            class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+                            <div class="relative my-auto mx-auto p-4 w-full max-w-2xl h-full md:h-auto">
+                                <!-- Delete confirmation modal content -->
+                                <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
+                                    <button type="button"
+                                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                        onclick="document.getElementById('delete-modal{{ $category->id }}').classList.toggle('hidden')">
+                                        <!-- Close button icon -->
+                                    </button>
+                                    <div class="p-6 text-center" id="modal">
+                                        <h3 class="text-lg font-semibold">Delete Confirmation</h3>
+                                        <p class="my-2">Are you sure you want to delete the category "<span class="text-red-800">{{ $category->category }}</span>"?</p>
+                                        <div class="flex justify-between">
+                                            <button type="button"
+                                                class="rounded-md shadow-md px-5 py-2 bg-gray-600 hover:shadow-md hover:bg-gray-500
+                                                transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-1"
+                                                onclick="document.getElementById('delete-modal{{ $category->id }}').classList.toggle('hidden')">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M6 18 18 6M6 6l12 12" />
+                                                </svg>
+                                                Cancel
+                                            </button>
+                                            <button type="submit" form="delete-form{{ $category->id }}"
+                                                class="rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500
+                                                transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="m4.5 12.75 6 6 9-13.5" />
+                                                </svg>
+                                                Confirm Delete
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @endforeach
+                        <!-- END -->
                     </tbody>
                 </table>
             </div>
