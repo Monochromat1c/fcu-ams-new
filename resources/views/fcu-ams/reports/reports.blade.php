@@ -343,7 +343,7 @@
                 <!-- FOR PRINT ONLY -->
                 <div id="printableTable" class="hidden my-5">
                     <div class="text-center mb-5">
-                        <img class="fcu-icon mb-3 w-28 mx-auto" src="/img/login/fcu-icon.png" alt="" srcset="">
+                        <!-- <img class="fcu-icon mb-3 w-28 mx-auto" src="/img/login/fcu-icon.png" alt="" srcset=""> -->
                         <h2 class="text-2xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>
                         <h2 class="text-xl font-bold mb-3">Roxas Avenue, Roxas City</h2>
                         <h2 class="text-xl font-bold">OFFICE SUPPLIES INVENTORY (Per Month)</h2>
@@ -352,22 +352,24 @@
                     <table class="table-auto w-full">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unique Tag</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Items & Specs</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Quantity</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unit Price</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Total Item Price
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400  whitespace-nowrap">Unique Tag</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400  whitespace-nowrap">Items & Specs</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400  whitespace-nowrap">Brand</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400  whitespace-nowrap">Quantity</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400  whitespace-nowrap">Unit Price</th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400  whitespace-nowrap">Total Item Price
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($inventoriesForPrint as $inventory)
                                 <tr class="hover:bg-slate-100">
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unique_tag }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->quantity }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit_price }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">
+                                    <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->unique_tag }}</td>
+                                    <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->items_specs }}</td>
+                                    <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->brand }}</td>
+                                    <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->quantity }}</td>
+                                    <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->unit_price }}</td>
+                                    <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
                                         {{ number_format($inventory->quantity * $inventory->unit_price, 2) }}
                                     </td>
                                 </tr>
@@ -402,7 +404,7 @@
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
-                            <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">ID</th> -->
+                            <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400  whitespace-nowrap">ID</th> -->
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unique Tag</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Items & Specs</th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Quantity</th>
@@ -676,15 +678,14 @@
             var dropdownLinks = button.nextElementSibling.querySelectorAll('a');
             // Loop through each dropdown link
             dropdownLinks.forEach(function (link) {
-                // Check if the current URL matches the link's href
-                if (currentUrl === link.href) {
+                // Check if the current URL matches or starts with the link's href
+                if (currentUrl === link.href || currentUrl.startsWith(link.href)) {
                     // Open the dropdown
                     button.click();
                 }
             });
         });
     });
-
 </script>
 <script>
     function confirmDelete(id) {

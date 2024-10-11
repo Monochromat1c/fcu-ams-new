@@ -237,15 +237,14 @@
             var dropdownLinks = button.nextElementSibling.querySelectorAll('a');
             // Loop through each dropdown link
             dropdownLinks.forEach(function (link) {
-                // Check if the current URL matches the link's href
-                if (currentUrl === link.href) {
+                // Check if the current URL matches or starts with the link's href
+                if (currentUrl === link.href || currentUrl.startsWith(link.href)) {
                     // Open the dropdown
                     button.click();
                 }
             });
         });
     });
-
 </script>
 <script>
     function confirmDelete(id) {

@@ -230,6 +230,19 @@
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
                                     <a class="my-auto"
+                                        href="{{ route('inventory.list', ['sort' => 'unique_tag', 'direction' => ($direction == 'asc' && $sort == 'unique_tag') ? 'desc' : 'asc']) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                                        </svg>
+                                    </a>
+                                    <span class="mx-2">Unique Tag</span>
+                                </div>
+                            </th>
+                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
+                                <div class="flex">
+                                    <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'items_specs', 'direction' => ($direction == 'asc' && $sort == 'items_specs') ? 'desc' : 'asc']) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -325,6 +338,7 @@
                     <tbody>
                         @foreach($inventories as $inventory)
                             <tr class="hover:bg-slate-100">
+                                <td class="border border-slate-300 px-4 py-2">{{ $inventory->unique_tag }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->brand }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $inventory->quantity }}</td>
@@ -402,15 +416,14 @@
             var dropdownLinks = button.nextElementSibling.querySelectorAll('a');
             // Loop through each dropdown link
             dropdownLinks.forEach(function (link) {
-                // Check if the current URL matches the link's href
-                if (currentUrl === link.href) {
+                // Check if the current URL matches or starts with the link's href
+                if (currentUrl === link.href || currentUrl.startsWith(link.href)) {
                     // Open the dropdown
                     button.click();
                 }
             });
         });
     });
-
 </script>
 <script>
     function confirmDelete(id) {
