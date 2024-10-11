@@ -21,7 +21,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PurchaseOrderController;
 
 Route::controller(LoginController::class)->group(function () {
-    Route::get('/', 'index')->name('login');
+    Route::get('/', 'index')->name('login')->middleware('auth.redirect');
     // Route::get('/', 'asdf')->name('login');
     Route::get('/signup', 'signup')->name('signup');
     Route::post('/login', 'login')->name('login.submit');

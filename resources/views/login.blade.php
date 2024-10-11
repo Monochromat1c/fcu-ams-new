@@ -1,5 +1,14 @@
 @extends('layouts.layout')
 @section('content')
+<script>
+    function preventBack() {
+        window.history.forward()
+    };
+    setTimeout("preventBack()", 0);
+    windows.onunload = function () {
+        null;
+    }
+</script>
 <link rel="stylesheet" href="{{ asset('css/login.css') }}">
 
 <div class="body min-h-screen p-5 flex align-items-center justify-center">

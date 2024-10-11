@@ -1,5 +1,14 @@
 @extends('layouts.layout')
 @section('content')
+<script>
+    function preventBack() {
+        window.history.forward()
+    };
+    setTimeout("preventBack()", 0);
+    windows.onunload = function () {
+        null;
+    }
+</script>
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
 <div class="grid grid-cols-6">
@@ -311,5 +320,4 @@
         }
     });
 </script>
-
 @endsection
