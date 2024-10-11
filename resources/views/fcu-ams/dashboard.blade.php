@@ -92,7 +92,7 @@
             </div>
             <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-semibold mb-4">Monthly Asset Acquisition</h3>
-                <canvas id="assetAcquisitionChart"></canvas>
+                <canvas id="assetAcquisitionChart" class="mb-2"></canvas>
                 {{ $assetAcquisition->links() }}
             </div>
         </div>

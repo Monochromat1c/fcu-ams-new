@@ -313,7 +313,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 3,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-03-17',
+                'purchase_date' => '2024-04-17',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -330,7 +330,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 3,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-03-17',
+                'purchase_date' => '2024-04-17',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -347,7 +347,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 3,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-03-17',
+                'purchase_date' => '2024-05-17',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -364,7 +364,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 3,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-03-17',
+                'purchase_date' => '2024-06-17',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -381,7 +381,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 3,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-03-17',
+                'purchase_date' => '2024-06-17',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -398,7 +398,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 4,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-04-17',
+                'purchase_date' => '2024-07-17',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -415,7 +415,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 4,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-04-17',
+                'purchase_date' => '2024-08-17',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -432,7 +432,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 4,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-04-17',
+                'purchase_date' => '2024-08-17',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -449,7 +449,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 5,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-04-17',
+                'purchase_date' => '2024-09-17',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -466,7 +466,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 5,
                 'department_id' => $department->id,
-                'purchase_date' => '2024-04-17',
+                'purchase_date' => '2024-09-17',
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
