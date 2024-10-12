@@ -185,13 +185,7 @@
     });
 </script>
 <script src="{{ asset('js/chart.js') }}"></script>
-<script>
-    function confirmLogout() {
-        if (confirm('Are you sure you want to logout?')) {
-            document.getElementById('logout-form').submit();
-        }
-    }
-</script>
+ 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
     var selectedItemsTable = document.getElementById('selected-items');

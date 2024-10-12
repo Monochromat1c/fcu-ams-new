@@ -25,7 +25,7 @@
         <form id="logout-form" method="POST" action="{{ route('logout') }}" class="hidden">
             @csrf
         </form>
-        <button onclick="confirmLogout()"
+        <button onclick="document.getElementById('logout-modal').classList.toggle('hidden')"
             class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd"

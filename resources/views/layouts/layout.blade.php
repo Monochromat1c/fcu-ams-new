@@ -14,6 +14,7 @@
 <body>
     @yield('content')
 
+    @include('layouts.modals.logout')
     <script src="{{ asset('js/successMessageTimer.js') }}"></script>
     <script src="{{ asset('js/errorMessageTimer.js') }}"></script>
     <script src="{{ asset('js/sidebarLinkDropdownScript.js') }}"></script>

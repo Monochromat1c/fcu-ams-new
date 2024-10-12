@@ -198,13 +198,7 @@
         }
     });
 </script>
-<script>
-    function confirmLogout() {
-        if (confirm('Are you sure you want to logout?')) {
-            document.getElementById('logout-form').submit();
-        }
-    }
-</script>
+ 
 <script>
     // Asset Distribution Chart
     const assetDistributionChart = document.getElementById('assetDistributionChart').getContext('2d');
