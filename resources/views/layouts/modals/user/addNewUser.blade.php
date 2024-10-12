@@ -74,16 +74,25 @@
                             <input type="password" id="password" name="password" class="w-full p-2 border rounded-md"
                                 required>
                         </div>
-                        <div class="mb-2">
+                        <div class="mb-4">
                             <label for="password_confirmation" class="block text-gray-700 font-bold mb-2">Confirm
                                 Password:</label>
                             <input type="password" id="password_confirmation" name="password_confirmation"
                                 class="w-full p-2 border rounded-md" required>
                         </div>
                     </div>
-                    <button type="submit" class="flex justify-center w-full bg-green-700 p-3 rounded-lg mt-3">
-                        <label for="" class="text-white">Sign Up</label>
-                    </button>
+                    <div class="flex justify-end space-x-2">
+                        <button type="submit"
+                            class="rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
+                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                            </svg>
+                            Add New User
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
