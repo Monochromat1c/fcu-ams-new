@@ -58,14 +58,17 @@
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('inventory/list') ? 'bg-gray-100' : '' }}">Inventory
             List</a>
-        <a href="{{ route('purchase.order.index') }}" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Purchase Order</a>
+        <a href="{{ route('purchase.order.index') }}"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100
+            {{ Request::is('purchase/order/index') ? 'bg-gray-100' : '' }}">Purchase
+            Order</a>
         <a href="{{ route('inventory.stock.in') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('inventory/stock/in') ? 'bg-gray-100' : '' }}">Stock
             In</a>
         <a href="{{ route('inventory.stock.out') }}"
-            class="block px-4 py-2 text-gray-700
-            hover:bg-gray-100{{ Request::is('inventory/stock/out') ? 'bg-gray-100' : '' }}">Stock
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100
+            {{ Request::is('inventory/stock/out') ? 'bg-gray-100' : '' }}">Stock
             Out</a>
     </div>
 </div>
@@ -145,12 +148,18 @@
             {{ Request::is('supplier/index') ? 'bg-gray-100' : '' }}">Suppliers</a>
     </div>
 </div>
+<a href="{{ route('user.index') }}"
+    class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100
+    {{ Request::is('user/index') ? 'bg-gray-100' : '' }}">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path
+            d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
+    </svg>
+    Users
+</a>
 <!-- <div class="relative" x-data="{ open: false }">
     <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700 hover:bg-gray-100">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-            <path
-                d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
-        </svg>
+        
         Users
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-auto" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd"

@@ -31,7 +31,6 @@ Route::controller(LoginController::class)->group(function () {
 });
 
 Route::controller(UserController::class)->group(function () {
-    Route::post('/users', 'store')->name('users.store');
     Route::post('/users', 'signup')->name('users.signup');
 });
 
@@ -166,6 +165,13 @@ Route::middleware(['auth.user'])->group(function () {
     //     Route::post('/supplier/add', 'add')->name('supplier.add');
     //     Route::post('/supplier/delete', 'delete')->name('supplier.delete');
     // });
+
+    Route::controller(UserController::class)->group(function () {
+        Route::get('/user/index', 'index')->name('user.index');
+        Route::post('/user/add', 'add')->name('user.add');
+        Route::post('/user/{id}', 'update')->name('user.update');
+        Route::delete('/user/{id}', 'destroy')->name('user.destroy');
+    });
 
     Route::controller(PurchaseOrderController::class)->group(function (){
         Route::get('/purchase/order/index', 'index')->name('purchase.order.index');

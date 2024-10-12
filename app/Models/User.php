@@ -30,13 +30,13 @@ class User extends Authenticatable
         return $this->belongsTo(Role::class);
     }
 
-    public function getProfilePictureAttribute($value)
-    {
-        if ($value) {
-            return Storage::disk('public')->url('profile_pictures/'.$value);
-        }
-        return null;
-    }
+    // public function getProfilePictureAttribute($value)
+    // {
+    //     if ($value) {
+    //         return Storage::disk('public')->url('profile_pictures/'.$value);
+    //     }
+    //     return null;
+    // }
 
     public function getAuthIdentifierName()
     {

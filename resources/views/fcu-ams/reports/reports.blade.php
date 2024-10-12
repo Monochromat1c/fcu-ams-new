@@ -34,9 +34,9 @@
             <a href="{{ route('profile.index') }}" class="flex gap-3" style="min-width:100px;">
                 <!-- <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset=""> -->
                 <div>
-                    @if(auth()->user()->profile_picture)
-                        <img src="{{ asset('storage/app/public/profile_pictures/' . auth()->user()->profile_picture) }}"
-                            alt="Profile Picture" class="w-14 h-14 rounded-full mx-auto">
+                     @if(auth()->user()->profile_picture)
+                        <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
+                            class="w-14 h-14 rounded-full mx-auto">
                     @else
                         <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
                             class="w-14 h-14 rounded-full mx-auto">
@@ -666,27 +666,7 @@
     }
 
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get the current URL
-        var currentUrl = window.location.href;
-        // Get all dropdown buttons
-        var dropdownButtons = document.querySelectorAll('.relative button');
-        // Loop through each dropdown button
-        dropdownButtons.forEach(function (button) {
-            // Get the dropdown links
-            var dropdownLinks = button.nextElementSibling.querySelectorAll('a');
-            // Loop through each dropdown link
-            dropdownLinks.forEach(function (link) {
-                // Check if the current URL matches or starts with the link's href
-                if (currentUrl === link.href || currentUrl.startsWith(link.href)) {
-                    // Open the dropdown
-                    button.click();
-                }
-            });
-        });
-    });
-</script>
+ 
 <script>
     function confirmDelete(id) {
         if (confirm('Are you sure you want to delete this asset?')) {

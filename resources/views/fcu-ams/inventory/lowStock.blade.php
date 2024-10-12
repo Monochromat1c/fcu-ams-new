@@ -9,9 +9,9 @@
             <a href="{{ route('profile.index') }}" class="flex gap-3" style="min-width:100px;">
                 <!-- <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset=""> -->
                 <div>
-                    @if(auth()->user()->profile_picture)
-                        <img src="{{ asset('storage/app/public/profile_pictures/' . auth()->user()->profile_picture) }}"
-                            alt="Profile Picture" class="w-14 h-14 rounded-full mx-auto">
+                     @if(auth()->user()->profile_picture)
+                        <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
+                            class="w-14 h-14 rounded-full mx-auto">
                     @else
                         <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
                             class="w-14 h-14 rounded-full mx-auto">

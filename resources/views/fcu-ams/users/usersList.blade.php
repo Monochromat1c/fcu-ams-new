@@ -6,7 +6,7 @@
     <div class="content min-h-screen bg-slate-100 col-span-5">
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
             <div></div>
-            <h1 class="my-auto text-3xl">Categories</h1>
+            <h1 class="my-auto text-3xl">Users</h1>
             <a href="{{ route('profile.index') }}" class="flex gap-3" style="min-width:100px;">
                 <div>
                      @if(auth()->user()->profile_picture)
@@ -24,22 +24,22 @@
         </nav>
         <div class="mb-1 flex justify-between m-3 rounded-md">
             <div class="flex">
-                <button onclick="document.getElementById('add-category-modal').classList.toggle('hidden')"
+                <button onclick="document.getElementById('add-user-modal').classList.toggle('hidden')"
                     class="flex gap-1 mr-3 rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    Add Category
+                    Add User
                 </button>
-                @include('layouts.modals.category.addNewCategory')
+                @include('layouts.modals.user.addNewUser')
             </div>
             <div class="pagination-here flex justify-between align-items-center">
                 <div class="flex align-items-center">
                     <ul class="pagination my-auto flex">
                         <li class="page-item p-1 my-auto">
-                            <a class="page-link my-auto" href="{{ $categories->url(1) }}">
+                            <a class="page-link my-auto" href="{{ $users->url(1) }}">
                                 <svg class="w-5 h-5 my-auto" viewBox="0 0 48 48" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g id="previous">
@@ -53,7 +53,7 @@
                             </a>
                         </li>
                         <li class="page-item p-1 my-auto">
-                            <a class="page-link my-auto" href="{{ $categories->previousPageUrl() }}">
+                            <a class="page-link my-auto" href="{{ $users->previousPageUrl() }}">
                                 <svg fill="#000000" class="w-5 h-5 my-auto" viewBox="0 0 24 24" id="previous"
                                     data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color">
                                     <path id="primary" d="M17,3V21L5,12Z"
@@ -65,13 +65,13 @@
                     </ul>
                 </div>
                 <div class="text-center my-auto pr-4 pl-4 font_bold">
-                    Showing {{ $categories->firstItem() }} to {{ $categories->lastItem() }} of
-                    {{ $categories->total() }} items
+                    Showing {{ $users->firstItem() }} to {{ $users->lastItem() }} of
+                    {{ $users->total() }} items
                 </div>
                 <div class="flex align-items-center">
                     <ul class="pagination my-auto flex">
                         <li class="page-item p-1">
-                            <a class="page-link" href="{{ $categories->nextPageUrl() }}">
+                            <a class="page-link" href="{{ $users->nextPageUrl() }}">
                                 <svg fill="#000000" class="w-5 h-5 my-auto" viewBox="0 0 24 24" id="next"
                                     data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color">
                                     <path id="primary" d="M17,12,5,21V3Z"
@@ -81,7 +81,7 @@
                             </a>
                         </li>
                         <li class="page-item p-1 my-auto">
-                            <a class="page-link" href="{{ $categories->url($categories->lastPage()) }}">
+                            <a class="page-link" href="{{ $users->url($users->lastPage()) }}">
                                 <svg class="w-5 h-5 my-auto" viewBox="0 0 48 48" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g id="next">
@@ -103,28 +103,46 @@
         </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md overflow-auto">
             <div class="flex justify-between mb-3">
-                <h2 class="text-2xl font-bold my-auto">Categories List</h2>
+                <h2 class="text-2xl font-bold my-auto">Users List</h2>
             </div>
             <div class="overflow-x-auto overflow-y-auto">
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
-                                Category
+                            <th class="px-4 py-2 text-left bg-slate-200 whitespace-nowrap border border-slate-400">
+                                Name
                             </th>
-                            <th class="px-4 py-2 text-center bg-slate-200 border border-slate-400">
+                            <th class="px-4 py-2 text-left bg-slate-200 whitespace-nowrap border border-slate-400">
+                                Username
+                            </th>
+                            <th class="px-4 py-2 text-left bg-slate-200 whitespace-nowrap border border-slate-400">
+                                Role
+                            </th>
+                            <th class="px-4 py-2 text-center bg-slate-200 whitespace-nowrap border border-slate-400">
                                 Action
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($categories as $category)
+                        @foreach($users as $user)
                             <tr class="hover:bg-slate-100">
-                                <td class="border border-slate-300 px-4 py-2">{{ $category->category }}</td>
-                                <td class="border border-slate-300 px-4 py-2">
+                                <td class="border border-slate-300 whitespace-nowrap px-4 py-2">{{ $user->first_name . ' ' . $user->last_name }}</td>
+                                <td class="border border-slate-300 whitespace-nowrap px-4 py-2">{{ $user->username }}</td>
+                                <td class="border border-slate-300 whitespace-nowrap px-4 py-2">{{ $user->role->role }}</td>
+                                <td class="border border-slate-300 whitespace-nowrap px-4 py-2">
                                     <div class="mx-auto flex justify-center space-x-2">
+                                        <button type="button" class="text-green-600 hover:text-green-900"
+                                            onclick="document.getElementById('view-user-modal{{ $user->id }}').classList.toggle('hidden')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                stroke-width="1.5" stroke="currentColor" class="size-6">
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round"
+                                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                            </svg>
+                                        </button>
                                         <button type="button" class="text-blue-600 hover:text-blue-900"
-                                            onclick="document.getElementById('modal{{ $category->id }}').classList.toggle('hidden')">
+                                            onclick="document.getElementById('edit-user-modal{{ $user->id }}').classList.toggle('hidden')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -132,7 +150,7 @@
                                             </svg>
                                         </button>
                                         <button type="button" class="text-red-600 hover:text-red-900"
-                                            onclick="document.getElementById('delete-modal{{ $category->id }}').classList.toggle('hidden')">
+                                            onclick="document.getElementById('delete-user-modal{{ $user->id }}').classList.toggle('hidden')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -140,8 +158,8 @@
                                             </svg>
                                         </button>
                                         <form
-                                            action="{{ route('category.destroy', ['id' => $category->id]) }}"
-                                            method="POST" id="delete-form{{ $category->id }}">
+                                            action="{{ route('user.destroy', ['id' => $user->id]) }}"
+                                            method="POST" id="delete-form{{ $user->id }}">
                                             @csrf
                                             @method('DELETE')
                                         </form>
@@ -149,9 +167,9 @@
                                 </td>
                             </tr>
                         @endforeach
-                        @include('layouts.modals.category.editCategory')
-                        @include('layouts.modals.category.deleteCategory')
                     </tbody>
+                    @include('layouts.modals.user.viewUser')
+                    @include('layouts.modals.user.editUser')
                 </table>
             </div>
         </div>

@@ -10,7 +10,14 @@ use App\Models\Role;
 
 class UserController extends Controller
 {
-    public function store(Request $request)
+    public function index() {
+        $users = User::with('role')->orderBy('first_name', 'asc')->paginate(10);
+        $roles = Role::all();
+
+        return view('fcu-ams/users/usersList', compact('users', 'roles'));
+    }
+
+    public function add(Request $request)
     {
         $request->validate([
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -38,15 +45,14 @@ class UserController extends Controller
         $user->password = Hash::make($request->input('password'));
 
         if ($request->hasFile('profile_picture')) {
-            $profilePicture = $request->file('profile_picture');
-            $profilePictureName = time().'.'.$profilePicture->getClientOriginalExtension();
-            $profilePicture->storeAs('public/profile_pictures', $profilePictureName);
-            $user->profile_picture = $profilePictureName;
+            $imageName = time().'.'.$request->profile_picture->extension();
+            $request->profile_picture->move(public_path('profile'), $imageName);
+            $user->profile_picture = 'profile/'.$imageName;
         }
 
         $user->save();
 
-        return redirect()->route('signup')->with('success', 'User created successfully!');
+        return redirect()->route('user.index')->with('success', 'User created successfully!');
     }
 
     public function signup(Request $request)
@@ -80,10 +86,9 @@ class UserController extends Controller
         }
 
         if ($request->hasFile('profile_picture')) {
-            $profilePicture = $request->file('profile_picture');
-            $profilePictureName = time().'.'.$profilePicture->getClientOriginalExtension();
-            $profilePicture->storeAs('public/profile_pictures', $profilePictureName);
-            $user->profile_picture = $profilePictureName;
+            $imageName = time().'.'.$request->profile_picture->extension();
+            $request->profile_picture->move(public_path('profile'), $imageName);
+            $user->profile_picture = 'profile/'.$imageName;
         }
 
         $user->save();
