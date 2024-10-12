@@ -125,13 +125,24 @@
         <a href="{{ route('category.index') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100
             {{ Request::is('category/index') ? 'bg-gray-100' : '' }}">Categories</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Conditions</a>
-        <a href="{"
-            class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Departments</a>
-            <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Locations</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Sites</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Statuses</a>
-        <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Suppliers</a>
+        <a href="{{ route('condition.index') }}"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100
+            {{ Request::is('condition/index') ? 'bg-gray-100' : '' }}">Conditions</a>
+        <a href="{{ route('department.index') }}"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100
+            {{ Request::is('department/index') ? 'bg-gray-100' : '' }}">Departments</a>
+        <a href="{{ route('location.index') }}"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100
+            {{ Request::is('location/index') ? 'bg-gray-100' : '' }}">Locations</a>
+        <a href="{{ route('site.index') }}"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100
+            {{ Request::is('site/index') ? 'bg-gray-100' : '' }}">Sites</a>
+        <a href="{{ route('status.index') }}"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100
+            {{ Request::is('status/index') ? 'bg-gray-100' : '' }}">Statuses</a>
+        <a href="{{ route('supplier.index') }}"
+            class="block px-4 py-2 text-gray-700 hover:bg-gray-100
+            {{ Request::is('supplier/index') ? 'bg-gray-100' : '' }}">Suppliers</a>
     </div>
 </div>
 <!-- <div class="relative" x-data="{ open: false }">

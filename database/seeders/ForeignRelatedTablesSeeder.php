@@ -34,9 +34,14 @@ class ForeignRelatedTablesSeeder extends Seeder
         }
 
         // Seed Site
-        Site::create([
-            'site' => 'Annex Campus',
-        ]);
+        $sites = [
+            ['site' => 'Annex Campus'],
+            ['site' => 'Main Campus'],
+        ];
+        
+        foreach ($sites as $site){
+            Site::create($site);
+        }
 
         // Seed Location
         Location::create([
@@ -64,7 +69,7 @@ class ForeignRelatedTablesSeeder extends Seeder
         // Seed Status
         $statuses = [
             ['status' => 'Available'],
-            ['status' => 'Not Available'],
+            ['status' => 'Unavailable'],
         ];
 
         foreach ($statuses as $status) {

@@ -9,6 +9,7 @@ use App\Http\Controllers\AssetController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ConditionController;
 use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\LeaseController;
 use App\Http\Controllers\ReportController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\AlertController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\StatusController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\PurchaseOrderController;
 
@@ -72,11 +74,6 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/inventories/export', 'export')->name('inventories.export');
     });
 
-    Route::controller(SupplierController::class)->group(function (){
-        Route::post('/supplier/add', 'add')->name('supplier.add');
-        Route::post('/supplier/delete', 'delete')->name('supplier.delete');
-    });
-
     // Route::controller(UserController::class)->group(function () {
     //     Route::post('/users', 'store')->name('users.store');
     // });
@@ -108,14 +105,6 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/unit/add', 'add')->name('unit.add');
     });
 
-    Route::controller(SiteController::class)->group(function () {
-        Route::post('/site/add', 'add')->name('site.add');
-    });
-
-    Route::controller(LocationController::class)->group(function () {
-        Route::post('/location/add', 'add')->name('location.add');
-    });
-
     Route::controller(CategoryController::class)->group(function (){
         Route::get('/category/index', 'index')->name('category.index');
         Route::post('/category/add', 'add')->name('category.add');
@@ -123,9 +112,60 @@ Route::middleware(['auth.user'])->group(function () {
         Route::delete('/category/{id}', 'destroy')->name('category.destroy');
     });
 
-    Route::controller(DepartmentController::class)->group(function (){
-        Route::post('/department/add', 'add')->name('department.add');
+    Route::controller(ConditionController::class)->group(function (){
+        Route::get('/condition/index', 'index')->name('condition.index');
+        Route::post('/condition/add', 'add')->name('condition.add');
+        Route::post('/condition/{id}', 'update')->name('condition.update');
+        Route::delete('/condition/{id}', 'destroy')->name('condition.destroy');
     });
+
+    Route::controller(DepartmentController::class)->group(function (){
+        Route::get('/department/index', 'index')->name('department.index');
+        Route::post('/department/add', 'add')->name('department.add');
+        Route::post('/department/{id}', 'update')->name('department.update');
+        Route::delete('/department/{id}', 'destroy')->name('department.destroy');
+    });
+    // Route::controller(DepartmentController::class)->group(function (){
+    //     Route::post('/department/add', 'add')->name('department.add');
+    // });
+
+    Route::controller(LocationController::class)->group(function (){
+        Route::get('/location/index', 'index')->name('location.index');
+        Route::post('/location/add', 'add')->name('location.add');
+        Route::post('/location/{id}', 'update')->name('location.update');
+        Route::delete('/location/{id}', 'destroy')->name('location.destroy');
+    });
+    // Route::controller(LocationController::class)->group(function () {
+    // Route::post('/location/add', 'add')->name('location.add');
+    // });
+
+    Route::controller(SiteController::class)->group(function (){
+        Route::get('/site/index', 'index')->name('site.index');
+        Route::post('/site/add', 'add')->name('site.add');
+        Route::post('/site/{id}', 'update')->name('site.update');
+        Route::delete('/site/{id}', 'destroy')->name('site.destroy');
+    });
+    // Route::controller(SiteController::class)->group(function () {
+    //     Route::post('/site/add', 'add')->name('site.add');
+    // });
+
+    Route::controller(StatusController::class)->group(function (){
+        Route::get('/status/index', 'index')->name('status.index');
+        Route::post('/status/add', 'add')->name('status.add');
+        Route::post('/status/{id}', 'update')->name('status.update');
+        Route::delete('/status/{id}', 'destroy')->name('status.destroy');
+    });
+
+    Route::controller(SupplierController::class)->group(function (){
+        Route::get('/supplier/index', 'index')->name('supplier.index');
+        Route::post('/supplier/add', 'add')->name('supplier.add');
+        Route::post('/supplier/{id}', 'update')->name('supplier.update');
+        Route::delete('/supplier/{id}', 'destroy')->name('supplier.destroy');
+    });
+    // Route::controller(SupplierController::class)->group(function (){
+    //     Route::post('/supplier/add', 'add')->name('supplier.add');
+    //     Route::post('/supplier/delete', 'delete')->name('supplier.delete');
+    // });
 
     Route::controller(PurchaseOrderController::class)->group(function (){
         Route::get('/purchase/order/index', 'index')->name('purchase.order.index');

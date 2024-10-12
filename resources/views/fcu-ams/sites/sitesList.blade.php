@@ -6,7 +6,7 @@
     <div class="content min-h-screen bg-slate-100 col-span-5">
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
             <div></div>
-            <h1 class="my-auto text-3xl">Departments</h1>
+            <h1 class="my-auto text-3xl">Sites</h1>
             <a href="{{ route('profile.index') }}" class="flex gap-3" style="min-width:100px;">
                 <div>
                     @if(auth()->user()->profile_picture)
@@ -24,22 +24,22 @@
         </nav>
         <div class="mb-1 flex justify-between m-3 rounded-md">
             <div class="flex">
-                <button onclick="document.getElementById('add-department-modal').classList.toggle('hidden')"
+                <button onclick="document.getElementById('add-site-modal').classList.toggle('hidden')"
                     class="flex gap-1 mr-3 rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    Add Department
+                    Add Site
                 </button>
-                @include('layouts.modals.department.addNewDepartment')
+                @include('layouts.modals.site.addNewSite')
             </div>
             <div class="pagination-here flex justify-between align-items-center">
                 <div class="flex align-items-center">
                     <ul class="pagination my-auto flex">
                         <li class="page-item p-1 my-auto">
-                            <a class="page-link my-auto" href="{{ $departments->url(1) }}">
+                            <a class="page-link my-auto" href="{{ $sites->url(1) }}">
                                 <svg class="w-5 h-5 my-auto" viewBox="0 0 48 48" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g id="previous">
@@ -53,7 +53,7 @@
                             </a>
                         </li>
                         <li class="page-item p-1 my-auto">
-                            <a class="page-link my-auto" href="{{ $departments->previousPageUrl() }}">
+                            <a class="page-link my-auto" href="{{ $sites->previousPageUrl() }}">
                                 <svg fill="#000000" class="w-5 h-5 my-auto" viewBox="0 0 24 24" id="previous"
                                     data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color">
                                     <path id="primary" d="M17,3V21L5,12Z"
@@ -65,13 +65,13 @@
                     </ul>
                 </div>
                 <div class="text-center my-auto pr-4 pl-4 font_bold">
-                    Showing {{ $departments->firstItem() }} to {{ $departments->lastItem() }} of
-                    {{ $departments->total() }} items
+                    Showing {{ $sites->firstItem() }} to {{ $sites->lastItem() }} of
+                    {{ $sites->total() }} items
                 </div>
                 <div class="flex align-items-center">
                     <ul class="pagination my-auto flex">
                         <li class="page-item p-1">
-                            <a class="page-link" href="{{ $departments->nextPageUrl() }}">
+                            <a class="page-link" href="{{ $sites->nextPageUrl() }}">
                                 <svg fill="#000000" class="w-5 h-5 my-auto" viewBox="0 0 24 24" id="next"
                                     data-name="Line Color" xmlns="http://www.w3.org/2000/svg" class="icon line-color">
                                     <path id="primary" d="M17,12,5,21V3Z"
@@ -81,7 +81,7 @@
                             </a>
                         </li>
                         <li class="page-item p-1 my-auto">
-                            <a class="page-link" href="{{ $departments->url($departments->lastPage()) }}">
+                            <a class="page-link" href="{{ $sites->url($sites->lastPage()) }}">
                                 <svg class="w-5 h-5 my-auto" viewBox="0 0 48 48" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <g id="next">
@@ -103,14 +103,14 @@
         </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md overflow-auto">
             <div class="flex justify-between mb-3">
-                <h2 class="text-2xl font-bold my-auto">Departments List</h2>
+                <h2 class="text-2xl font-bold my-auto">Sites List</h2>
             </div>
             <div class="overflow-x-auto overflow-y-auto">
                 <table class="table-auto w-full">
                     <thead>
                         <tr>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
-                                Department
+                                Site
                             </th>
                             <th class="px-4 py-2 text-center bg-slate-200 border border-slate-400">
                                 Action
@@ -118,13 +118,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach($departments as $department)
+                        @foreach($sites as $site)
                             <tr class="hover:bg-slate-100">
-                                <td class="border border-slate-300 px-4 py-2">{{ $department->department }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $site->site }}</td>
                                 <td class="border border-slate-300 px-4 py-2">
                                     <div class="mx-auto flex justify-center space-x-2">
                                         <button type="button" class="text-blue-600 hover:text-blue-900"
-                                            onclick="document.getElementById('modal{{ $department->id }}').classList.toggle('hidden')">
+                                            onclick="document.getElementById('modal{{ $site->id }}').classList.toggle('hidden')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -132,7 +132,7 @@
                                             </svg>
                                         </button>
                                         <button type="button" class="text-red-600 hover:text-red-900"
-                                            onclick="document.getElementById('delete-modal{{ $department->id }}').classList.toggle('hidden')">
+                                            onclick="document.getElementById('delete-modal{{ $site->id }}').classList.toggle('hidden')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -140,8 +140,8 @@
                                             </svg>
                                         </button>
                                         <form
-                                            action="{{ route('department.destroy', ['id' => $department->id]) }}"
-                                            method="POST" id="delete-form{{ $department->id }}">
+                                            action="{{ route('site.destroy', ['id' => $site->id]) }}"
+                                            method="POST" id="delete-form{{ $site->id }}">
                                             @csrf
                                             @method('DELETE')
                                         </form>
@@ -149,8 +149,8 @@
                                 </td>
                             </tr>
                         @endforeach
-                        @include('layouts.modals.department.editDepartment')
-                        @include('layouts.modals.department.deleteDepartment')
+                        @include('layouts.modals.site.editSite')
+                        @include('layouts.modals.site.deleteSite')
                     </tbody>
                 </table>
             </div>

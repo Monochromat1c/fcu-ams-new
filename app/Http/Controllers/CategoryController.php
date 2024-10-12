@@ -57,7 +57,5 @@ class CategoryController extends Controller
         } else {
             return redirect()->back()->withErrors(['error' => 'Category not found']);
         }
-
-        
     }
 }

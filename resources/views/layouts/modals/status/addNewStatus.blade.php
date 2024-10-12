@@ -1,11 +1,11 @@
-<div id="add-condition-modal" style="min-height:100vh;" tabindex="-1" aria-hidden="true"
+<div id="add-status-modal" style="min-height:100vh;" tabindex="-1" aria-hidden="true"
     class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
     <div class="relative my-auto mx-auto p-4 w-full max-w-2xl h-full md:h-auto">
         <!-- Modal content -->
         <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
             <button type="button"
                 class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                onclick="document.getElementById('add-condition-modal').classList.toggle('hidden')">
+                onclick="document.getElementById('add-status-modal').classList.toggle('hidden')">
                 <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                     xmlns="http://www.w3.org/2000/svg">
                     <path fill-rule="evenodd"
@@ -15,11 +15,11 @@
                 <span class="sr-only">Close modal</span>
             </button>
             <div class="p-6 text-center">
-                <h2 class="mb-4 text-lg font-bold text-black">Add New Condition</h2>
-                <form method="POST" action="{{ route('condition.add') }}">
+                <h2 class="mb-4 text-lg font-bold text-black">Add New Status</h2>
+                <form method="POST" action="{{ route('status.add') }}">
                     @csrf
                     <div class="mb-4">
-                        <input type="text" id="condition" name="condition" class="w-full p-2 border rounded-md" required>
+                        <input type="text" id="status" name="status" class="w-full p-2 border rounded-md" required>
                     </div>
                     <div class="flex justify-end space-x-2">
                         <button type="submit"
@@ -30,7 +30,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
                             </svg>
-                            Add Condition
+                            Add Status
                         </button>
                     </div>
                 </form>
