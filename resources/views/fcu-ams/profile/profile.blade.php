@@ -45,6 +45,10 @@
                         <label class="mr-3">Username:</label>
                         <p class="text-slate-600">{{ $user->username }}</p>
                     </div>
+                    <div class="flex flex-row mb-3">
+                        <label class="mr-3">Role:</label>
+                        <p class="text-slate-600">{{ $user->role->role }}</p>
+                    </div>
                 </div>
             </div>
             <div class="bg-white rounded-lg shadow-md p-6 mb-3">

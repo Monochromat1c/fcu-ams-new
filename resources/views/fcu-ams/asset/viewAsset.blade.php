@@ -11,7 +11,7 @@
             <a href="{{ route('profile.index') }}" class="flex gap-3" style="min-width:100px;">
                 <!-- <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset=""> -->
                 <div>
-                     @if(auth()->user()->profile_picture)
+                    @if(auth()->user()->profile_picture)
                         <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
                             class="w-14 h-14 rounded-full mx-auto">
                     @else
@@ -28,8 +28,8 @@
             <div class="flex justify-between mb-3">
                 <h2 class="text-2xl font-bold my-auto">View Asset</h2>
                 <div class="flex align-items-center gap-3">
-                    <a href="{{ route('asset.qrCode', $asset->id) }}"
-                        class="rounded-md shadow-md px-5 py-2 bg-blue-600 hover:shadow-md hover:bg-blue-500 transition-all
+                    @if(Auth::user()->role->role != 'Viewer')
+                    <a href="{{ route('asset.qrCode', $asset->id) }}" class="rounded-md shadow-md px-5 py-2 bg-blue-600 hover:shadow-md hover:bg-blue-500 transition-all
                         duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
@@ -40,6 +40,7 @@
                         </svg>
                         Generate Asset Tag
                     </a>
+                    @endif
                     <a href="{{ route('asset.list') }}"
                         class="rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500 transition-all duration-200 hover:scale-105 
                         ease-in hover:shadow-inner text-white flex gap-2">

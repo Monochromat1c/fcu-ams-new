@@ -84,6 +84,7 @@
                         </button>
                     </form>
                 </div> -->
+                @if(Auth::user()->role->role != 'Viewer')
                 <div class="export-list my-auto">
                     <button type="button" onclick="window.location.href='{{ route('asset.export') }}'"
                         class="flex gap-2 items-center bg-indigo-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
@@ -99,6 +100,7 @@
                         Export to Excel
                     </button>
                 </div>
+                @endif
             </div>
             <div class="pagination-here flex justify-between align-items-center">
                 <div class="flex align-items-center">
@@ -330,6 +332,7 @@
                                                     d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                                             </svg>
                                         </a>
+                                        @if(Auth::user()->role->role != 'Viewer')
                                         <a href="{{ route('asset.edit', ['id' => $asset->id]) }}"
                                             class="text-blue-600 hover:text-blue-900">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -352,6 +355,7 @@
                                             @csrf
                                             @method('DELETE')
                                         </form>
+                                        @endif
                                     </div>
                                 </td>
                             </tr>
