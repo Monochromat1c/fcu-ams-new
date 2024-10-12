@@ -19,14 +19,12 @@
                 <h2 class="mb-4 text-lg font-bold text-black">View User</h2>
                 <div class="flex flex-col gap-3">
                     <div class="mb-2">
-                        <label for="profile_picture" class="block text-gray-700 font-bold mb-1">Profile
-                            Picture:</label>
                             @if($user->profile_picture)
                                 <img src="{{ asset($user->profile_picture) }}" alt="User Profile"
-                                class="w-14 h-14 rounded-full mx-auto">
+                                class="w-20 h-20 object-cover bg-no-repeat rounded-full mx-auto">
                             @else
                                 <img src="{{ asset('profile/defaultProfile.png') }}"
-                                    alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
+                                    alt="Default Image" class="w-20 h-20 object-cover bg-no-repeat rounded-full mx-auto">
                             @endif
                     </div>
                     <div class="mb-2">

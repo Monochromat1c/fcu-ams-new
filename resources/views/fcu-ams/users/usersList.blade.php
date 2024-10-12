@@ -9,12 +9,12 @@
             <h1 class="my-auto text-3xl">Users</h1>
             <a href="{{ route('profile.index') }}" class="flex gap-3" style="min-width:100px;">
                 <div>
-                     @if(auth()->user()->profile_picture)
+                    @if(auth()->user()->profile_picture)
                         <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
-                            class="w-14 h-14 rounded-full mx-auto">
+                            class="w-14 h-14  object-cover bg-no-repeat rounded-full mx-auto">
                     @else
                         <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
-                            class="w-14 h-14 rounded-full mx-auto">
+                            class="w-14 h-14  object-cover bg-no-repeat rounded-full mx-auto">
                     @endif
                 </div>
                 <p class="my-auto">
@@ -170,6 +170,7 @@
                     </tbody>
                     @include('layouts.modals.user.viewUser')
                     @include('layouts.modals.user.editUser')
+                    @include('layouts.modals.user.deleteUser')
                 </table>
             </div>
         </div>

@@ -55,6 +55,60 @@ class UserController extends Controller
         return redirect()->route('user.index')->with('success', 'User created successfully!');
     }
 
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'first_name' => 'required|string',
+            'middle_name' => 'nullable|string',
+            'last_name' => 'required|string',
+            'address' => 'required|string',
+            'contact_number' => 'required|string',
+            'role_id' => 'required|exists:roles,id',
+            'email' => 'required|email|unique:users,email,'.$id,
+            'username' => 'required|string|unique:users,username,'.$id,
+        ]);
+
+        $user = User::find($id);
+        $user->first_name = $request->input('first_name');
+        $user->middle_name = $request->input('middle_name');
+        $user->last_name = $request->input('last_name');
+        $user->address = $request->input('address');
+        $user->contact_number = $request->input('contact_number');
+        $user->role_id = $request->input('role_id');
+        $user->email = $request->input('email');
+        $user->username = $request->input('username');
+
+        if ($request->hasFile('profile_picture')) {
+            if ($user->profile_picture) {
+                unlink(public_path($user->profile_picture));
+            }
+            $imageName = time().'.'.$request->profile_picture->extension();
+            $request->profile_picture->move(public_path('profile'), $imageName);
+            $user->profile_picture = 'profile/'.$imageName;
+        }
+
+        $user->save();
+
+        return redirect()->route('user.index')->with('success', 'User updated successfully!');
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+
+        if ($user->profile_picture) {
+            unlink(public_path($user->profile_picture));
+        }
+
+        try {
+            $user->delete();
+            return redirect()->route('user.index')->with('success', 'User deleted successfully!');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect()->route('user.index')->withErrors(['error' => 'Cannot delete user because it is associated with other data.']);
+        }
+    }
+
     public function signup(Request $request)
     {
         $request->validate([

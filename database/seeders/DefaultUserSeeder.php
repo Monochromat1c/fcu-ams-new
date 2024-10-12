@@ -17,9 +17,9 @@ class DefaultUserSeeder extends Seeder
     public function run()
     {
         $adminRole = Role::where('role', 'Administrator')->first();
-        $profilePicturePath = 'profile/profile.png';
 
         User::create([
+            'profile_picture' => 'profile/bg3.jpg',
             'first_name' => 'Wealyn',
             'last_name' => 'Yap',
             'address' => 'Abx Xyz, 123',
@@ -31,6 +31,7 @@ class DefaultUserSeeder extends Seeder
         ]);
 
         User::create([
+            'profile_picture' => 'profile/user.jpg',
             'first_name' => 'Admin',
             'last_name' => '01',
             'address' => 'Abx Xyz, 123',
