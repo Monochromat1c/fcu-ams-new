@@ -19,7 +19,7 @@ class SiteController extends Controller
         $site->site = $validatedData['site'];
         $site->save();
 
-        return redirect()->route('site.index')->with('success', 'Site added successfully!');
+        return redirect()->back()->with('success', 'Site added successfully!');
     }
 
     public function index() {
@@ -38,7 +38,7 @@ class SiteController extends Controller
         $site->site = $validatedData['site'];
         $site->save();
 
-        return redirect()->route('site.index')->with('success', 'Site updated successfully!');
+        return redirect()->back()->with('success', 'Site updated successfully!');
     }
 
     public function destroy($id)
@@ -49,9 +49,9 @@ class SiteController extends Controller
         if ($site) {
             try {
                 $site->delete();
-                return redirect()->route('site.index')->with('success', 'Site deleted successfully!');
+                return redirect()->back()->with('success', 'Site deleted successfully!');
             } catch (\Illuminate\Database\QueryException $e) {
-                return redirect()->route('site.index')->withErrors(['error' => 'Cannot delete site because it is
+                return redirect()->back()->withErrors(['error' => 'Cannot delete site because it is
                 associated with other data.']);
             }
         } else {

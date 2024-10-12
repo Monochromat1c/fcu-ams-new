@@ -30,7 +30,7 @@ class SupplierController extends Controller
         $supplier->supplier = $validatedData['supplier'];
         $supplier->save();
 
-        return redirect()->route('supplier.index')->with('success', 'Supplier added successfully!');
+        return redirect()->back()->with('success', 'Supplier added successfully!');
     }
 
     public function index() {
@@ -60,9 +60,9 @@ class SupplierController extends Controller
         if ($supplier) {
             try {
                 $supplier->delete();
-                return redirect()->route('supplier.index')->with('success', 'Supplier deleted successfully!');
+                return redirect()->back()->with('success', 'Supplier deleted successfully!');
             } catch (\Illuminate\Database\QueryException $e) {
-                return redirect()->route('supplier.index')->withErrors(['error' => 'Cannot delete supplier because it is
+                return redirect()->back()->withErrors(['error' => 'Cannot delete supplier because it is
                 associated with other data.']);
             }
         } else {

@@ -124,7 +124,7 @@
                                 <td class="border border-slate-300 px-4 py-2">
                                     <div class="mx-auto flex justify-center space-x-2">
                                         <button type="button" class="text-blue-600 hover:text-blue-900"
-                                            onclick="document.getElementById('modal{{ $site->id }}').classList.toggle('hidden')">
+                                            onclick="document.getElementById('edit-site-modal{{ $site->id }}').classList.toggle('hidden')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -132,7 +132,7 @@
                                             </svg>
                                         </button>
                                         <button type="button" class="text-red-600 hover:text-red-900"
-                                            onclick="document.getElementById('delete-modal{{ $site->id }}').classList.toggle('hidden')">
+                                            onclick="document.getElementById('delete-site-modal{{ $site->id }}').classList.toggle('hidden')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"

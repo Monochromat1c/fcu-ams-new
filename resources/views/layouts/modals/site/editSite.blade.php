@@ -1,12 +1,12 @@
 @foreach($sites as $site)
-    <div id="modal{{ $site->id }}" style="min-height:100vh;" tabindex="-1" aria-hidden="true"
+    <div id="edit-site-modal{{ $site->id }}" style="min-height:100vh;" tabindex="-1" aria-hidden="true"
         class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
         <div class="relative my-auto mx-auto p-4 w-full max-w-2xl h-full md:h-auto">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
                 <button type="button"
                     class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                    onclick="document.getElementById('modal{{ $site->id }}').classList.toggle('hidden')">
+                    onclick="document.getElementById('edit-site-modal{{ $site->id }}').classList.toggle('hidden')">
                     <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
                         xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd"
