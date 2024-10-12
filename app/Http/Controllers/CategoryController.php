@@ -10,16 +10,16 @@ class CategoryController extends Controller
     public function add(Request $request)
     {
         $validatedData = $request->validate([
-            'category' => 'required|string',
+            'category' => 'required|string|unique:categories,category',
+        ], [
+            'category.unique' => 'Category already exists.',
         ]);
 
         $category = new Category();
         $category->category = $validatedData['category'];
         $category->save();
 
-        $request->session()->put('input', $request->all());
-
-        return response()->json(['reload' => true]);
+        return redirect()->route('category.index')->with('success', 'Category added successfully!');
     }
 
     public function index() {
