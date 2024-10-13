@@ -22,6 +22,9 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class AssetController extends Controller
 {
     public function index(Request $request) {
+        $categories = DB::table('categories')->get();
+        $category = $request->input('category');
+
         $totalAssets = DB::table('assets')->whereNull('deleted_at')->count();
         $totalCost = DB::table('assets')->whereNull('deleted_at')->sum('cost');
         $lowValueAssets = DB::table('assets')->where('cost', '<', 1000)->whereNull('deleted_at')->count();
@@ -52,6 +55,10 @@ class AssetController extends Controller
             });
         }
 
+        if ($request->input('category')) {
+            $query->where('assets.category_id', $request->input('category'));
+        }
+
         if ($request->input('clear') == 'true') {
             return redirect()->route('asset.list');
         }
@@ -64,7 +71,8 @@ class AssetController extends Controller
 
         $assets = $query->whereNull('assets.deleted_at')->paginate(15);
 
-        return view('fcu-ams/asset/assetList', compact('totalAssets', 'totalCost', 'lowValueAssets', 'highValueAssets', 'assets', 'sort', 'direction', 'search'));
+        return view('fcu-ams/asset/assetList', compact('totalAssets', 'totalCost', 'lowValueAssets', 'highValueAssets',
+        'assets', 'sort', 'direction', 'search', 'categories', 'category'));
     }
 
     public function create() {
@@ -75,7 +83,8 @@ class AssetController extends Controller
         $departments = DB::table('departments')->get();
         $conditions = DB::table('conditions')->get();
         $statuses = DB::table('statuses')->get();
-        return view('fcu-ams/asset/addAsset', compact('suppliers', 'sites', 'locations', 'categories', 'departments', 'conditions', 'statuses'));
+        return view('fcu-ams/asset/addAsset', compact('suppliers', 'category', 'sites', 'locations', 'categories',
+        'departments', 'conditions', 'statuses'));
     }
 
     public function show($id)
