@@ -60,7 +60,7 @@ class ReportController extends Controller
                 ['path' => $request->url(), 'query' => $request->query()]
             );
 
-            $assets = Asset::with('supplier')
+            $assets = Asset::with('supplier', 'brand')
                 ->whereDate('purchase_date', '>=', now()->startOfMonth())
                 ->whereDate('purchase_date', '<=', now()->endOfMonth())
                 ->orderBy('asset_tag_id', 'asc')

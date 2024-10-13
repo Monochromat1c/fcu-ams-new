@@ -89,7 +89,7 @@
                             </td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->asset_tag_id }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->specs }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->brand }}</td>
+                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->brand->brand }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->model }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->serial_number }}</td>
                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->category->category }}</td>

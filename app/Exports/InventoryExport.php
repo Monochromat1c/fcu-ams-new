@@ -19,7 +19,7 @@ class InventoryExport implements FromCollection, WithHeadings
                 return [
                     'Unique Tag' => $inventory->unique_tag,
                     'Items Specs' => $inventory->items_specs,
-                    'Brand' => $inventory->brand,
+                    'Brand' => $inventory->brand->brand,
                     'Quantity' => $inventory->quantity,
                     'Unit' => $inventory->unit->unit,
                     'Unit Price' => $inventory->unit_price,

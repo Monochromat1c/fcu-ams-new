@@ -12,6 +12,7 @@ use App\Models\Location;
 use App\Models\Category;
 use App\Models\Condition;
 use App\Models\Department;
+use App\Models\Brand;
 use App\Models\StockOut;
 use App\Models\AssetEditHistory;
 use Maatwebsite\Excel\Facades\Excel;
@@ -67,7 +68,12 @@ class InventoryController extends Controller
         }
 
         $query->where('inventories.quantity', '>', 0);
-        $inventories = $query->whereNull('inventories.deleted_at')->paginate(15);
+        $inventories = Inventory::whereNull('deleted_at')
+            ->with('supplier', 'unit', 'brand')
+            ->orderBy('unique_tag', 'asc')
+            ->paginate(15);
+
+
 
         return view('fcu-ams/inventory/inventoryList', compact('totalItems', 'totalValue', 'lowStock', 'outOfStock', 'inventories', 'sort', 'direction', 'search'));
     }
@@ -104,15 +110,16 @@ class InventoryController extends Controller
     public function create() {
         $suppliers = DB::table('suppliers')->get();
         $units = DB::table('units')->get();
-        return view('fcu-ams/inventory/stockIn', compact('suppliers', 'units'));
+        $brands = DB::table('brands')->get();
+        return view('fcu-ams/inventory/stockIn', compact('suppliers', 'units', 'brands'));
     }
 
     public function store(Request $request)
     {
         $validatedData = $request->validate([
-            'brand' => 'required|string',
             'items_specs' => 'required|string',
             'unit_id' => 'required|integer|exists:units,id',
+            'brand_id' => 'required|integer|exists:brands,id',
             'quantity' => 'required|numeric',
             'unit_price' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
@@ -120,7 +127,7 @@ class InventoryController extends Controller
         ]);
 
         $existingInventory = Inventory::where('items_specs', $validatedData['items_specs'])
-            ->where('brand', $validatedData['brand'])
+            ->where('brand_id', $validatedData['brand_id'])
             ->where('unit_id', $validatedData['unit_id'])
             ->where('unit_price', $validatedData['unit_price'])
             ->where('supplier_id', $validatedData['supplier_id'])
@@ -132,7 +139,7 @@ class InventoryController extends Controller
             $existingInventory->save();
         } else {
             $inventory = new Inventory();
-            $inventory->brand = $validatedData['brand'];
+            $inventory->brand_id = $validatedData['brand_id'];
             $inventory->items_specs = $validatedData['items_specs'];
             $inventory->unit_id = $validatedData['unit_id'];
             $inventory->quantity = $validatedData['quantity'];
@@ -158,20 +165,21 @@ class InventoryController extends Controller
         $inventory = Inventory::findOrFail($id);
         $suppliers = DB::table('suppliers')->get();
         $units = DB::table('units')->get();
+        $brands = DB::table('brands')->get();
 
-        return view('fcu-ams/inventory/updateStock', compact('inventory', 'suppliers', 'units'));
+        return view('fcu-ams/inventory/updateStock', compact('inventory', 'suppliers', 'units', 'brands'));
     }
 
     public function update(Request $request, $id)
     {
         $validatedData = $request->validate([
-            'brand' => 'required|string',
             'items_specs' => [
                 'required',
                 'string',
                 Rule::unique('inventories', 'items_specs')->ignore($id)->whereNull('deleted_at'),
             ],
             'unit_id' => 'required|integer|exists:units,id',
+            'brand_id' => 'required|integer|exists:brands,id',
             'quantity' => 'required|numeric',
             'unit_price' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
@@ -179,9 +187,9 @@ class InventoryController extends Controller
         ]);
 
         $inventory = Inventory::findOrFail($id);
-        $inventory->brand = $validatedData['brand'];
         $inventory->items_specs = $validatedData['items_specs'];
         $inventory->unit_id = $validatedData['unit_id'];
+        $inventory->brand_id = $validatedData['brand_id'];
         $inventory->quantity = $validatedData['quantity'];
         $inventory->unit_price = $validatedData['unit_price'];
         $inventory->supplier_id = $validatedData['supplier_id'];

@@ -22,6 +22,7 @@ class Asset extends Model
         'site_id',
         'location_id',
         'category_id',
+        'brand_id',
         'department_id',
         'maintenance_start_date',
         'maintenance_end_date',
@@ -32,6 +33,11 @@ class Asset extends Model
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
     }
 
     public function site()

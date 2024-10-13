@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\Department;
 use App\Models\Condition;
 use App\Models\Status;
+use App\Models\Brand;
 
 class AssetSeeder extends Seeder
 {
@@ -27,12 +28,22 @@ class AssetSeeder extends Seeder
         $department = Department::where('department', 'CCS Department')->first();
         $conditions = Condition::all();
         $status = Status::all();
+        $Canon = Brand::where('brand', 'Canon')->first();
+        $FaberCastell = Brand::where('brand', 'Faber-Castell')->first();
+        $Pilot = Brand::where('brand', 'Pilot')->first();
+        $Staedtler = Brand::where('brand', 'Staedtler')->first();
+        $StaedtlerNoris = Brand::where('brand', 'Staedtler Noris')->first();
+        $Tombow = Brand::where('brand', 'Tombow')->first();
+        $Zebra = Brand::where('brand', 'Zebra')->first();
+        $HP = Brand::where('brand', 'HP')->first();
+        $Dell = Brand::where('brand', 'Dell')->first();
+        $Cisco = Brand::where('brand', 'Cisco')->first();
 
         if ($supplier && $site && $location && $category && $department) {
             Asset::create([
                 'asset_tag_id' => 'FCCPC001',
                 'specs' => 'Desktop',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP OMEN',
                 'serial_number' => '4CE8061CQG',
                 'cost' => 12350.00,
@@ -49,7 +60,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPC002',
                 'specs' => 'Desktop',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP OMEN',
                 'serial_number' => 'CZC7139K48',
                 'cost' => 11425.00,
@@ -66,7 +77,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPC003',
                 'specs' => 'Desktop',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP OMEN',
                 'serial_number' => 'CZC7139K4B',
                 'cost' => 11425.00,
@@ -83,7 +94,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPC004',
                 'specs' => 'Desktop',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP OMEN',
                 'serial_number' => '4CE80966NT',
                 'cost' => 10224.00,
@@ -100,7 +111,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPC005',
                 'specs' => 'Desktop',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP OMEN',
                 'serial_number' => '4CE8061CP0',
                 'cost' => 10224.00,
@@ -117,7 +128,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPC006',
                 'specs' => 'Desktop',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP OMEN',
                 'serial_number' => '4CE8061CPG',
                 'cost' => 10224.00,
@@ -134,7 +145,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPC007',
                 'specs' => 'Desktop',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP OMEN',
                 'serial_number' => 'CZC7139K0W',
                 'cost' => 11425.00,
@@ -151,7 +162,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCMO001',
                 'specs' => 'Monitor',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP EliteDisplay',
                 'serial_number' => 'CNC634P8KD',
                 'cost' => 3859.00,
@@ -168,7 +179,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCMO002',
                 'specs' => 'Monitor',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP EliteDisplay',
                 'serial_number' => 'CNC801NT2X',
                 'cost' => 4680.00,
@@ -185,7 +196,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCMO003',
                 'specs' => 'Monitor',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP EliteDisplay',
                 'serial_number' => 'CNC72816TB',
                 'cost' => 4680.00,
@@ -202,7 +213,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCMO004',
                 'specs' => 'Monitor',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP EliteDisplay',
                 'serial_number' => 'CNC72816VF',
                 'cost' => 3859.00,
@@ -219,7 +230,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCMO005',
                 'specs' => 'Monitor',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP EliteDisplay',
                 'serial_number' => 'CNC801NT1L',
                 'cost' => 3859.00,
@@ -236,7 +247,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCMO006',
                 'specs' => 'Monitor',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP EliteDisplay',
                 'serial_number' => 'CNC634PDVV',
                 'cost' => 3859.00,
@@ -253,7 +264,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCMO007',
                 'specs' => 'Monitor',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP EliteDisplay',
                 'serial_number' => 'CNC540NZWL',
                 'cost' => 4680.00,
@@ -270,7 +281,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCLT001',
                 'specs' => 'Laptop',
-                'brand' => 'Dell',
+                'brand_id' => $Dell->id,
                 'model' => 'Alienware',
                 'serial_number' => '8C2W533',
                 'cost' => 125520.00,
@@ -287,7 +298,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCLT002',
                 'specs' => 'Laptop',
-                'brand' => 'Dell',
+                'brand_id' => $Dell->id,
                 'model' => 'Alienware',
                 'serial_number' => 'BVCX533',
                 'cost' => 125520.00,
@@ -304,7 +315,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCLT003',
                 'specs' => 'Laptop',
-                'brand' => 'Dell',
+                'brand_id' => $Dell->id,
                 'model' => 'Alienware',
                 'serial_number' => '9B2W533',
                 'cost' => 125520.00,
@@ -321,7 +332,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCLT004',
                 'specs' => 'Laptop',
-                'brand' => 'Dell',
+                'brand_id' => $Dell->id,
                 'model' => 'Alienware',
                 'serial_number' => '66M1633',
                 'cost' => 110872.00,
@@ -338,7 +349,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCLT005',
                 'specs' => 'Laptop',
-                'brand' => 'Dell',
+                'brand_id' => $Dell->id,
                 'model' => 'Alienware',
                 'serial_number' => '6A693415Q',
                 'cost' => 110872.00,
@@ -355,7 +366,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCLT006',
                 'specs' => 'Laptop',
-                'brand' => 'Dell',
+                'brand_id' => $Dell->id,
                 'model' => 'Alienware',
                 'serial_number' => 'B90X533',
                 'cost' => 110872.00,
@@ -372,7 +383,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCLT007',
                 'specs' => 'Laptop',
-                'brand' => 'Dell',
+                'brand_id' => $Dell->id,
                 'model' => 'Alienware',
                 'serial_number' => '92GW533',
                 'cost' => 110872.00,
@@ -389,7 +400,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPR001',
                 'specs' => 'Printer',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP Color LaserJet',
                 'serial_number' => 'NLBVM8H0LX',
                 'cost' => 63299.00,
@@ -406,7 +417,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPR002',
                 'specs' => 'Printer',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP Color LaserJet',
                 'serial_number' => 'NLBVM8H045',
                 'cost' => 63299.00,
@@ -423,7 +434,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPR003',
                 'specs' => 'Printer',
-                'brand' => 'HP',
+                'brand_id' => $HP->id,
                 'model' => 'HP Color LaserJet',
                 'serial_number' => 'NLBVM8H08F',
                 'cost' => 63299.00,
@@ -440,7 +451,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPH001',
                 'specs' => 'IP Phone',
-                'brand' => 'Cisco',
+                'brand_id' => $Cisco->id,
                 'model' => 'Cisco IP Phone',
                 'serial_number' => '20EZIZCL30229E46',
                 'cost' => 14259.00,
@@ -457,7 +468,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPH002',
                 'specs' => 'IP Phone',
-                'brand' => 'Cisco',
+                'brand_id' => $Cisco->id,
                 'model' => 'Cisco IP Phone',
                 'serial_number' => '20EZIZCL30229E49',
                 'cost' => 14259.00,
@@ -474,7 +485,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPH003',
                 'specs' => 'IP Phone',
-                'brand' => 'Cisco',
+                'brand_id' => $Cisco->id,
                 'model' => 'Cisco IP Phone',
                 'serial_number' => '20EZIZCL30229E47',
                 'cost' => 14259.00,
@@ -491,7 +502,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPH004',
                 'specs' => 'IP Phone',
-                'brand' => 'Cisco',
+                'brand_id' => $Cisco->id,
                 'model' => 'Cisco IP Phone',
                 'serial_number' => '20EZIZCL30229E51',
                 'cost' => 14259.00,
@@ -508,7 +519,7 @@ class AssetSeeder extends Seeder
             Asset::create([
                 'asset_tag_id' => 'FCCPH005',
                 'specs' => 'IP Phone',
-                'brand' => 'Cisco',
+                'brand_id' => $Cisco->id,
                 'model' => 'Cisco IP Phone',
                 'serial_number' => '20EZIZCL30229E3B',
                 'cost' => 14259.00,

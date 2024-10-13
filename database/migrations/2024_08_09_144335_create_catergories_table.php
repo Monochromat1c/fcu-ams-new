@@ -13,10 +13,17 @@ return new class extends Migration
             $table->string('category');
             $table->timestamps();
         });
+
+        Schema::create('brands', function (Blueprint $table) {
+            $table->id();
+            $table->string('brand');
+            $table->timestamps();
+        });
     }
 
     public function down()
     {
         Schema::dropIfExists('categories');
+        Schema::dropIfExists('brands');
     }
 };

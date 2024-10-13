@@ -11,6 +11,7 @@ use App\Models\Category;
 use App\Models\Department;
 use App\Models\Status;
 use App\Models\Unit;
+use App\Models\Brand;
 
 class ForeignRelatedTablesSeeder extends Seeder
 {
@@ -31,6 +32,24 @@ class ForeignRelatedTablesSeeder extends Seeder
 
         foreach ($suppliers as $supplier) {
             Supplier::create($supplier);
+        }
+
+        // Brand seeder
+        $brands = [
+            ['brand' => 'Canon'],
+            ['brand' => 'Faber-Castell'],
+            ['brand' => 'Pilot'],
+            ['brand' => 'Staedtler'],
+            ['brand' => 'Staedtler Noris'],
+            ['brand' => 'Tombow'],
+            ['brand' => 'Zebra'],
+            ['brand' => 'HP'],
+            ['brand' => 'Dell'],
+            ['brand' => 'Cisco'],
+        ];
+
+        foreach ($brands as $brand) {
+            Brand::create($brand);
         }
 
         // Seed Site

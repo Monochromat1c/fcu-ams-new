@@ -24,7 +24,8 @@ return new class extends Migration
             $table->id();
             $table->string('asset_image')->nullable();
             $table->string('asset_tag_id');
-            $table->string('brand');
+            $table->unsignedBigInteger('brand_id');
+            $table->foreign('brand_id')->references('id')->on('brands');
             $table->string('model');
             $table->string('specs')->nullable();
             $table->string('serial_number');
@@ -53,7 +54,8 @@ return new class extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('assets');
         Schema::dropIfExists('conditions');
+        Schema::dropIfExists('statuses');
+        Schema::dropIfExists('assets');
     }
 };

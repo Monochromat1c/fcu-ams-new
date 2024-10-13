@@ -39,11 +39,6 @@
                             value="{{ $asset->asset_tag_id }}" required>
                     </div>
                     <div class="mb-4">
-                        <label for="brand" class="block text-gray-700 font-bold mb-2">Brand:</label>
-                        <input type="text" id="brand" name="brand" class="w-full p-2 border rounded-md bg-gray-100"
-                            value="{{ $asset->brand }}" required>
-                    </div>
-                    <div class="mb-4">
                         <label for="model" class="block text-gray-700 font-bold mb-2">Model:</label>
                         <input type="text" id="model" name="model" class="w-full p-2 border rounded-md bg-gray-100"
                             value="{{ $asset->model }}" required>
@@ -114,6 +109,17 @@
                                 <option value="{{ $department->id }}"
                                     {{ $department->id == $asset->department_id ? 'selected' : '' }}>
                                     {{ $department->department }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="brand_id" class="block text-gray-700 font-bold mb-2">Brand:</label>
+                        <select id="brand_id" name="brand_id" class="w-full p-2 border rounded-md bg-gray-100" required>
+                            @foreach($brands as $brand)
+                                <option value="{{ $brand->id }}"
+                                    {{ $brand->id == $asset->brand_id ? 'selected' : '' }}>
+                                    {{ $brand->brand }}
                                 </option>
                             @endforeach
                         </select>

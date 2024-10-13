@@ -14,7 +14,8 @@ class Inventory extends Model
         'unique_tag',
         'stock_image',
         'quantity',
-        'unit',
+        'unit_id',
+        'brand_id',
         'items_specs',
         'unit_price',
         'deleted_at',
@@ -30,6 +31,11 @@ class Inventory extends Model
     public function unit()
     {
         return $this->belongsTo(Unit::class);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
     }
 
     public function department()

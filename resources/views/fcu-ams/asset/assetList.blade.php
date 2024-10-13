@@ -209,16 +209,6 @@
                     </form>
                 </div>
             </div>
-            <table class="search-results">
-                <thead>
-                    <tr>
-                        <th>Asset Tag ID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Search results will be displayed here -->
-                </tbody>
-            </table>
             <div class="overflow-x-auto overflow-y-auto">
                 <table class="table-auto w-full">
                     <thead>
@@ -229,11 +219,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'asset_tag_id', 'direction' => ($direction == 'asc' && $sort == 'asset_tag_id') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
+                                        </svg> -->
                                     </a>
                                     <span class="mx-2">Asset Tag ID</span>
                                 </div>
@@ -242,11 +232,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'cost', 'direction' => ($direction == 'asc' && $sort == 'cost') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
+                                        </svg> -->
                                     </a>
                                     <span class="mx-2">Cost</span>
                                 </div>
@@ -255,11 +245,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'supplier_name', 'direction' => ($direction == 'asc' && $sort == 'supplier_name') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
+                                        </svg> -->
                                     </a>
                                     <span class="mx-2">Supplier</span>
                                 </div>
@@ -268,11 +258,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'site_name', 'direction' => ($direction == 'asc' && $sort == 'site_name') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
+                                        </svg> -->
                                     </a>
                                     <span class="mx-2">Site</span>
                                 </div>
@@ -281,11 +271,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'category_name', 'direction' => ($direction == 'asc' && $sort == 'category_name') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
+                                        </svg> -->
                                     </a>
                                     <span class="mx-2">Category</span>
                                 </div>
@@ -294,11 +284,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'status_name', 'direction' => ($direction == 'asc' && $sort == 'status_name') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
+                                        </svg> -->
                                     </a>
                                     <span class="mx-2">Status</span>
                                 </div>
@@ -307,11 +297,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'condition_name', 'direction' => ($direction == 'asc' && $sort == 'condition_name') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
+                                        </svg> -->
                                     </a>
                                     <span class="mx-2">Condition</span>
                                 </div>
@@ -396,43 +386,6 @@
 
 @include('layouts.modals.asset.deleteAsset')
 <script src="{{ asset('js/chart.js') }}"></script>
-<script>
-    // Get the search input field
-const searchInput = document.querySelector('input[name="search"]');
-
-// Add an event listener to the search input field
-searchInput.addEventListener('input', function() {
-    // Get the search query
-    const searchQuery = searchInput.value;
-
-    // Send an AJAX request to the search route
-    fetch('/search?search=' + searchQuery)
-        .then(response => response.json())
-        .then(data => {
-            // Update the search results on the page
-            const searchResults = document.querySelector('.search-results');
-            const tbody = searchResults.querySelector('tbody');
-            tbody.innerHTML = '';
-            data.forEach(asset => {
-                const assetHtml = `
-                    <tr>
-                        <td>${asset.asset_tag_id}</td>
-                        <td>${asset.cost}</td>
-                        <td>${asset.supplier_name}</td>
-                        <td>${asset.site_name}</td>
-                        <td>${asset.category_name}</td>
-                        <td>${asset.status_name}</td>
-                        <td>${asset.condition_name}</td>
-
-                    </tr>
-                `;
-                tbody.innerHTML += assetHtml;
-            });
-        });
-});
-
-</script>
-
 <script>
     document.querySelector('select[name="category"]').addEventListener('change', function() {
         document.getElementById('searchboxForm').submit();

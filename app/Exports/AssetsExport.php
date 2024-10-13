@@ -19,7 +19,7 @@ class AssetsExport implements FromCollection, WithHeadings
                 return [
                     'Asset Tag ID' => $asset->asset_tag_id,
                     'Specification' => $asset->specs,
-                    'Brand' => $asset->brand,
+                    'Brand' => $asset->brand->brand,
                     'Model' => $asset->model,
                     'Serial Number' => $asset->serial_number,
                     'Category' => $asset->category->category,

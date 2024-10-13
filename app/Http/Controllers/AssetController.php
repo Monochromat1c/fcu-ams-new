@@ -11,6 +11,7 @@ use App\Models\Location;
 use App\Models\Category;
 use App\Models\Condition;
 use App\Models\Status;
+use App\Models\Brand;
 use App\Models\Department;
 use App\Models\AssetEditHistory;
 use Maatwebsite\Excel\Facades\Excel;
@@ -95,7 +96,6 @@ class AssetController extends Controller
 
     }
 
-
     public function create() {
         $suppliers = DB::table('suppliers')->get();
         $sites = DB::table('sites')->get();
@@ -104,8 +104,9 @@ class AssetController extends Controller
         $departments = DB::table('departments')->get();
         $conditions = DB::table('conditions')->get();
         $statuses = DB::table('statuses')->get();
-        return view('fcu-ams/asset/addAsset', compact('suppliers', 'category', 'sites', 'locations', 'categories',
-        'departments', 'conditions', 'statuses'));
+        $brands = DB::table('brands')->get();
+        return view('fcu-ams/asset/addAsset', compact('suppliers', 'sites', 'locations', 'categories',
+        'departments', 'conditions', 'statuses', 'brands'));
     }
 
     public function show($id)
@@ -125,7 +126,7 @@ class AssetController extends Controller
                 'string',
                 Rule::unique('assets', 'asset_tag_id')->whereNull('deleted_at'),
             ],
-            'brand' => 'required|string',
+            'brand_id' => 'required|integer|exists:brands,id',
             'model' => 'required|string',
             'specs' => 'nullable|string',
             'serial_number' => 'required|string',
@@ -141,12 +142,12 @@ class AssetController extends Controller
 
         $asset = new Asset();
         $asset->asset_tag_id = $validatedData['asset_tag_id'];
-        $asset->brand = $validatedData['brand'];
         $asset->model = $validatedData['model'];
         $asset->specs = $validatedData['specs'] ?? '';
         $asset->serial_number = $validatedData['serial_number'];
         $asset->cost = $validatedData['cost'];
         $asset->supplier_id = $validatedData['supplier_id'];
+        $asset->brand_id = $validatedData['brand_id'];
         $asset->site_id = $validatedData['site_id'];
         $asset->location_id = $validatedData['location_id'];
         $asset->category_id = $validatedData['category_id'];
@@ -175,10 +176,11 @@ class AssetController extends Controller
         $categories = DB::table('categories')->get();
         $departments = DB::table('departments')->get();
         $conditions = DB::table('conditions')->get();
+        $brands = DB::table('brands')->get();
         $statuses = DB::table('statuses')->get();
 
         return view('fcu-ams/asset/updateAsset', compact('asset', 'suppliers', 'sites', 'locations', 'categories',
-        'departments', 'conditions', 'statuses'));
+        'departments', 'conditions', 'statuses', 'brands'));
     }
 
     public function update(Request $request, $id)
@@ -189,12 +191,12 @@ class AssetController extends Controller
                 'string',
                 Rule::unique('assets', 'asset_tag_id')->ignore($id)->whereNull('deleted_at'),
             ],
-            'brand' => 'required|string',
             'model' => 'required|string',
             'specs' => 'nullable|string',
             'serial_number' => 'required|string',
             'cost' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
+            'brand_id' => 'required|integer|exists:brands,id',
             'site_id' => 'required|integer|exists:sites,id',
             'location_id' => 'required|integer|exists:locations,id',
             'category_id' => 'required|integer|exists:categories,id',
@@ -207,7 +209,6 @@ class AssetController extends Controller
 
         $asset = Asset::findOrFail($id);
         $asset->asset_tag_id = $validatedData['asset_tag_id'];
-        $asset->brand = $validatedData['brand'];
         $asset->model = $validatedData['model'];
         $asset->specs = $validatedData['specs'] ?? '';
         $asset->serial_number = $validatedData['serial_number'];
@@ -215,6 +216,7 @@ class AssetController extends Controller
         $asset->supplier_id = $validatedData['supplier_id'];
         $asset->site_id = $validatedData['site_id'];
         $asset->location_id = $validatedData['location_id'];
+        $asset->brand_id = $validatedData['brand_id'];
         $asset->category_id = $validatedData['category_id'];
         $asset->department_id = $validatedData['department_id'];
         $asset->condition_id = $validatedData['condition_id'];
@@ -266,7 +268,7 @@ class AssetController extends Controller
         $changes = [];
         $fields = [
             'asset_tag_id' => 'Asset Tag ID',
-            'brand' => 'Brand',
+            'brand_id' => 'Brand',
             'model' => 'Model',
             'specs' => 'Specification',
             'serial_number' => 'Serial Number',
@@ -286,16 +288,19 @@ class AssetController extends Controller
                 $oldValue = $oldAsset->$field;
                 $newValue = $asset->$field;
 
-                if (in_array($field, ['supplier_id', 'site_id', 'location_id', 'category_id', 'department_id', 'condition_id', 'status_id'])) {
+                if (in_array($field, ['supplier_id', 'site_id', 'location_id', 'category_id', 'department_id',
+                'condition_id', 'status_id', 'brand_id'])) {
                     $relationship = str_replace('_id', '', $field);
                     $oldValue = $oldAsset->$relationship->name ?? $oldAsset->$relationship->supplier ??
                         $oldAsset->$relationship->site ?? $oldAsset->$relationship->location ??
                         $oldAsset->$relationship->category ?? $oldAsset->$relationship->department ??
-                        $oldAsset->$relationship->condition ?? $oldAsset->$relationship->status;
+                        $oldAsset->$relationship->condition ?? $oldAsset->$relationship->status ??
+                        $oldAsset->$relationship->brand;
                     $newValue = $asset->$relationship->name ?? $asset->$relationship->supplier ??
                         $asset->$relationship->site ?? $asset->$relationship->location ?? $asset->$relationship->category ??
                         $asset->$relationship->department ?? $asset->$relationship->condition ??
-                        $asset->$relationship->status;
+                        $asset->$relationship->status ??
+                        $asset->$relationship->brand;
                 }
 
                 $changes[] = "Updated $header from '$oldValue' to '$newValue'.";

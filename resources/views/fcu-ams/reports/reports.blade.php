@@ -365,7 +365,7 @@
                                 <tr class="hover:bg-slate-100">
                                     <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->unique_tag }}</td>
                                     <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->items_specs }}</td>
-                                    <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->brand }}</td>
+                                    <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->brand->brand }}</td>
                                     <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->quantity }}</td>
                                     <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->unit_price }}</td>
                                     <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
@@ -579,7 +579,7 @@
                                         <tr class="hover:bg-slate-100">
                                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->asset_tag_id }}</td>
                                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->specs }}</td>
-                                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->brand }}</td>
+                                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->brand->brand }}</td>
                                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->model }}</td>
                                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->serial_number }}</td>
                                             <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->category->category }}</td>
@@ -629,7 +629,7 @@
                             <tr class="hover:bg-slate-100">
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->specs }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->brand }}</td>
+                                <td class="border border-slate-300 px-4 py-2">{{ $asset->brand->brand }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->model }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->serial_number }}</td>
                                 <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>

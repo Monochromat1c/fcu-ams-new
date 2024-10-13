@@ -63,7 +63,7 @@
                                         alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
                                 @endif
                             </td>
-                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->brand }}</td>
+                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->brand->brand }}</td>
                             <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->items_specs }}</td>
                             <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->quantity }}</td>
                             <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">{{ $inventory->unit->unit }}</td>

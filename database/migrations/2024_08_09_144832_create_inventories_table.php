@@ -22,7 +22,8 @@ return new class extends Migration
             $table->unsignedBigInteger('unit_id');
             $table->foreign('unit_id')->references('id')->on('units');
             $table->string('items_specs');
-            $table->string('brand')->nullable();
+            $table->unsignedBigInteger('brand_id');
+            $table->foreign('brand_id')->references('id')->on('brands');
             $table->decimal('unit_price', 10, 2);
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers');
