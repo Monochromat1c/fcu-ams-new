@@ -84,24 +84,34 @@
                                                 <thead>
                                                     <tr>
                                                         <th
-                                                            class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                                             Item</th>
                                                         <th
-                                                            class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                                             Quantity</th>
                                                         <th
-                                                            class="px-4 py-2 text-center bg-slate-100 border border-slate-400">
+                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
+                                                            Unit</th>
+                                                        <th
+                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
+                                                            Unit Price</th>
+                                                        <th
+                                                            class="px-4 py-2 text-center bg-slate-200 border border-slate-400">
                                                             Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     @foreach($inventories as $inventory)
-                                                        <tr>
+                                                        <tr class="hover:bg-slate-100">
                                                             <td class="border text-left border-slate-300 px-4 py-2">
-                                                                {{ $inventory->brand }}
+                                                                {{ $inventory->brand->brand }}
                                                                 {{ $inventory->items_specs }}</td>
                                                             <td class="border border-slate-300 px-4 py-2">
                                                                 {{ $inventory->quantity }}</td>
+                                                            <td class="border border-slate-300 px-4 py-2">
+                                                                {{ $inventory->unit->unit }}</td>
+                                                            <td class="border border-slate-300 px-4 py-2">
+                                                                {{ $inventory->unit_price }}</td>
                                                             <td class="border border-slate-300 text-center px-4 py-2">
                                                                 <div class="flex my-auto gap-2">
                                                                     <input type="checkbox"

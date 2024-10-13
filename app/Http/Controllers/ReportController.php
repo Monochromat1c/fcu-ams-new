@@ -98,7 +98,7 @@ class ReportController extends Controller
         foreach ($stockOutRecords as $stockOutRecord) {
             $inventory = $stockOutRecord->inventory;
             $stockOutDetails[] = [
-                'item' => $inventory->brand . ' ' . $inventory->items_specs,
+                'item' => $inventory->brand->brand . ' ' . $inventory->items_specs,
                 'quantity' => $stockOutRecord->quantity,
                 'price' => $inventory->unit_price,
             ];
