@@ -52,6 +52,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/maintenance', 'maintenance')->name('maintenance');
         Route::get('/asset/export', 'export')->name('asset.export');
         Route::get('/asset/{id}/qrCode', 'generateQrCode')->name('asset.qrCode');
+        Route::get('/search', 'search');
         Route::post('/asset/add', 'store')->name('asset.add.store');
         Route::post('/asset/{id}', 'update')->name('asset.update');
         Route::post('/asset/import', 'import')->name('asset.import');

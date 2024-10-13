@@ -75,6 +75,27 @@ class AssetController extends Controller
         'assets', 'sort', 'direction', 'search', 'categories', 'category'));
     }
 
+    public function search(Request $request)
+    {
+        $searchQuery = $request->input('search');
+        $assets = Asset::where('asset_tag_id', 'like', '%' . $searchQuery . '%')->get();
+        return response()->json([
+            'assets' => $assets->map(function ($asset) {
+                return [
+                    'asset_tag_id' => $asset->asset_tag_id,
+                    'cost' => $asset->cost,
+                    'supplier_name' => $asset->supplier->supplier,
+                    'site_name' => $asset->site->site,
+                    'category_name' => $asset->category->category,
+                    'status_name' => $asset->status->status,
+                    'condition_name' => $asset->condition->condition,
+                ];
+            }),
+        ]);
+
+    }
+
+
     public function create() {
         $suppliers = DB::table('suppliers')->get();
         $sites = DB::table('sites')->get();

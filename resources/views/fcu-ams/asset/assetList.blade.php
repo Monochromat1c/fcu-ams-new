@@ -172,10 +172,10 @@
             <div class="flex justify-between mb-3">
                 <h2 class="text-2xl font-bold my-auto">Asset List</h2>
                 <div class="searchBox">
-                    <form action="{{ route('asset.list') }}" method="GET" class=" flex gap-1">
+                    <form id="searchboxForm" action="{{ route('asset.list') }}" method="GET" class=" flex gap-1">
                         <div class="flex align-items-center gap-1">
                             <select name="category"
-                                class="py-3 px-3 border rounded-md border-red-950 w-96 max-w-40 text-sm bg-white text-gray-700 my-auto">
+                                class="py-3 px-3 border rounded-md border-blue-500 w-96 max-w-40 text-sm bg-white text-blue-500 my-auto">
                                 <option value="">All Categories</option>
                                 @foreach($categories as $cat)
                                     <option value="{{ $cat->id }}"
@@ -184,18 +184,10 @@
                                     </option>
                                 @endforeach
                             </select>
-                            <button type="submit" style="padding: 0.35rem 0.75rem;"
-                                class=" border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white transition-all duration-200 ease-in rounded-md">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
-                                </svg>
-                            </button>
                         </div>
                         <input type="hidden" name="submitted" value="true">
-                        <input type="text" name="search" placeholder="Search for assets..."
-                            class="py-2 px-3 border rounded-md border-red-950 w-96 text-sm text-gray-700 my-auto">
+                        <input type="text" name="search" placeholder="Search for assets..." style="padding-top:.69rem;padding-bottom:.69rem;"
+                            class="px-3 border rounded-md border-red-950 w-96 text-sm text-gray-700 my-auto">
                         <div class="flex align-items-center gap-1">
                             <button type="submit" style="padding: 0.35rem 0.75rem;"
                                 class=" border border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-200 ease-in rounded-md">
@@ -217,6 +209,16 @@
                     </form>
                 </div>
             </div>
+            <table class="search-results">
+                <thead>
+                    <tr>
+                        <th>Asset Tag ID</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Search results will be displayed here -->
+                </tbody>
+            </table>
             <div class="overflow-x-auto overflow-y-auto">
                 <table class="table-auto w-full">
                     <thead>
@@ -394,6 +396,48 @@
 
 @include('layouts.modals.asset.deleteAsset')
 <script src="{{ asset('js/chart.js') }}"></script>
+<script>
+    // Get the search input field
+const searchInput = document.querySelector('input[name="search"]');
+
+// Add an event listener to the search input field
+searchInput.addEventListener('input', function() {
+    // Get the search query
+    const searchQuery = searchInput.value;
+
+    // Send an AJAX request to the search route
+    fetch('/search?search=' + searchQuery)
+        .then(response => response.json())
+        .then(data => {
+            // Update the search results on the page
+            const searchResults = document.querySelector('.search-results');
+            const tbody = searchResults.querySelector('tbody');
+            tbody.innerHTML = '';
+            data.forEach(asset => {
+                const assetHtml = `
+                    <tr>
+                        <td>${asset.asset_tag_id}</td>
+                        <td>${asset.cost}</td>
+                        <td>${asset.supplier_name}</td>
+                        <td>${asset.site_name}</td>
+                        <td>${asset.category_name}</td>
+                        <td>${asset.status_name}</td>
+                        <td>${asset.condition_name}</td>
+
+                    </tr>
+                `;
+                tbody.innerHTML += assetHtml;
+            });
+        });
+});
+
+</script>
+
+<script>
+    document.querySelector('select[name="category"]').addEventListener('change', function() {
+        document.getElementById('searchboxForm').submit();
+    });
+</script>
 <script>
     function clearSearch() {
         document.querySelector('input[name="search"]').value = '';
