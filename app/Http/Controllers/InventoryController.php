@@ -200,9 +200,19 @@ class InventoryController extends Controller
     public function destroy($id)
     {
         $inventory = Inventory::findOrFail($id);
-        $inventory->delete();
 
-        return redirect()->route('inventory.list')->with('success', 'Inventory item deleted successfully.');
+        $inventory = Inventory::find($id);
+        if ($inventory) {
+            try {
+                $inventory->delete();
+                return redirect()->back()->with('success', 'Inventory deleted successfully!');
+            } catch (\Illuminate\Database\QueryException $e) {
+                return redirect()->back()->withErrors(['error' => 'Cannot delete inventory because it is
+                associated with other data.']);
+            }
+        } else {
+            return redirect()->back()->withErrors(['error' => 'Inventory not found']);
+        }
     }
 
     public function createStockOut()

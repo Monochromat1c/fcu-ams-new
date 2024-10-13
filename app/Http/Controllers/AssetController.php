@@ -210,9 +210,19 @@ class AssetController extends Controller
     public function destroy($id)
     {
         $asset = Asset::findOrFail($id);
-        $asset->delete();
 
-        return redirect()->route('asset.list')->with('success', 'Asset deleted successfully.');
+        $asset = Asset::find($id);
+        if ($asset) {
+            try {
+                $asset->delete();
+                return redirect()->back()->with('success', 'Asset deleted successfully!');
+            } catch (\Illuminate\Database\QueryException $e) {
+                return redirect()->back()->withErrors(['error' => 'Cannot delete asset because it is
+                associated with other data.']);
+            }
+        } else {
+            return redirect()->back()->withErrors(['error' => 'Asset not found']);
+        }
     }
 
     public function maintenance()

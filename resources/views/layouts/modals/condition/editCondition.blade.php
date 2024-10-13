@@ -22,7 +22,8 @@
                         <h3 class="text-lg font-semibold mb-3">Condition Details</h3>
                         <input type="hidden" name="id" value="{{ $condition->id }}">
                         <div class="mb-4">
-                            <input type="text" id="condition" name="condition" class="w-full p-2 border rounded-md"
+                            <input type="text" id="condition" name="condition"
+                                class="w-full p-2 bg-gray-100 border rounded-md"
                                 value="{{ $condition->condition }}" required>
                         </div>
                         <div class="flex justify-end space-x-2">

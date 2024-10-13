@@ -31,41 +31,41 @@
                 <div class="grid grid-cols-2 gap-3">
                     <div class="mb-4 col-span-2">
                         <label for="asset_image" class="block text-gray-700 font-bold mb-2">Asset Image:</label>
-                        <input type="file" id="asset_image" name="asset_image" class="w-full border rounded-md">
+                        <input type="file" id="asset_image" name="asset_image" class="w-full border rounded-md bg-gray-100">
                     </div>
                     <div class="mb-4">
                         <label for="asset_tag_id" class="block text-gray-700 font-bold mb-2">Asset Tag ID:</label>
-                        <input type="text" id="asset_tag_id" name="asset_tag_id" class="w-full p-2 border rounded-md"
+                        <input type="text" id="asset_tag_id" name="asset_tag_id" class="w-full p-2 border rounded-md bg-gray-100"
                             value="{{ $asset->asset_tag_id }}" required>
                     </div>
                     <div class="mb-4">
                         <label for="brand" class="block text-gray-700 font-bold mb-2">Brand:</label>
-                        <input type="text" id="brand" name="brand" class="w-full p-2 border rounded-md"
+                        <input type="text" id="brand" name="brand" class="w-full p-2 border rounded-md bg-gray-100"
                             value="{{ $asset->brand }}" required>
                     </div>
                     <div class="mb-4">
                         <label for="model" class="block text-gray-700 font-bold mb-2">Model:</label>
-                        <input type="text" id="model" name="model" class="w-full p-2 border rounded-md"
+                        <input type="text" id="model" name="model" class="w-full p-2 border rounded-md bg-gray-100"
                             value="{{ $asset->model }}" required>
                     </div>
                     <div class="mb-2">
                         <label for="spec" class="block text-gray-700 font-bold mb-2">Specification:</label>
-                        <input type="text" id="specs" name="specs" class="w-full p-2 border rounded-md"
+                        <input type="text" id="specs" name="specs" class="w-full p-2 border rounded-md bg-gray-100"
                             value="{{ $asset->specs }}">
                     </div>
                     <div class="mb-4">
                         <label for="serial_number" class="block text-gray-700 font-bold mb-2">Serial Number:</label>
-                        <input type="text" id="serial_number" name="serial_number" class="w-full p-2 border rounded-md"
+                        <input type="text" id="serial_number" name="serial_number" class="w-full p-2 border rounded-md bg-gray-100"
                             value="{{ $asset->serial_number }}" required>
                     </div>
                     <div class="mb-4">
                         <label for="cost" class="block text-gray-700 font-bold mb-2">Cost:</label>
-                        <input type="number" id="cost" name="cost" class="w-full p-2 border rounded-md"
+                        <input type="number" id="cost" name="cost" class="w-full p-2 border rounded-md bg-gray-100"
                             value="{{ $asset->cost }}" min="0" required>
                     </div>
                     <div class="mb-4">
                         <label for="supplier_id" class="block text-gray-700 font-bold mb-2">Supplier:</label>
-                        <select id="supplier_id" name="supplier_id" class="w-full p-2 border rounded-md" required>
+                        <select id="supplier_id" name="supplier_id" class="w-full p-2 border rounded-md bg-gray-100" required>
                             @foreach($suppliers as $supplier)
                                 <option value="{{ $supplier->id }}"
                                     {{ $supplier->id == $asset->supplier_id ? 'selected' : '' }}>
@@ -76,7 +76,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="site_id" class="block text-gray-700 font-bold mb-2">Site:</label>
-                        <select id="site_id" name="site_id" class="w-full p-2 border rounded-md" required>
+                        <select id="site_id" name="site_id" class="w-full p-2 border rounded-md bg-gray-100" required>
                             @foreach($sites as $site)
                                 <option value="{{ $site->id }}"
                                     {{ $site->id == $asset->site_id ? 'selected' : '' }}>
@@ -87,7 +87,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="location_id" class="block text-gray-700 font-bold mb-2">Location:</label>
-                        <select id="location_id" name="location_id" class="w-full p-2 border rounded-md" required>
+                        <select id="location_id" name="location_id" class="w-full p-2 border rounded-md bg-gray-100" required>
                             @foreach($locations as $location)
                                 <option value="{{ $location->id }}"
                                     {{ $location->id == $asset->location_id ? 'selected' : '' }}>
@@ -98,7 +98,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="category_id" class="block text-gray-700 font-bold mb-2">Category:</label>
-                        <select id="category_id" name="category_id" class="w-full p-2 border rounded-md" required>
+                        <select id="category_id" name="category_id" class="w-full p-2 border rounded-md bg-gray-100" required>
                             @foreach($categories as $category)
                                 <option value="{{ $category->id }}"
                                     {{ $category->id == $asset->category_id ? 'selected' : '' }}>
@@ -109,7 +109,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="department_id" class="block text-gray-700 font-bold mb-2">Department:</label>
-                        <select id="department_id" name="department_id" class="w-full p-2 border rounded-md" required>
+                        <select id="department_id" name="department_id" class="w-full p-2 border rounded-md bg-gray-100" required>
                             @foreach($departments as $department)
                                 <option value="{{ $department->id }}"
                                     {{ $department->id == $asset->department_id ? 'selected' : '' }}>
@@ -119,13 +119,8 @@
                         </select>
                     </div>
                     <div class="mb-4">
-                        <label for="purchase_date" class="block text-gray-700 font-bold mb-2">Purchase Date:</label>
-                        <input type="date" id="purchase_date" name="purchase_date" class="w-full p-2 border rounded-md"
-                            value="{{ $asset->purchase_date }}" required>
-                    </div>
-                    <div class="mb-4">
                         <label for="status_id" class="block text-gray-700 font-bold mb-2">Status:</label>
-                        <select id="status_id" name="status_id" class="w-full p-2 border rounded-md" required>
+                        <select id="status_id" name="status_id" class="w-full p-2 border rounded-md bg-gray-100" required>
                             @foreach($statuses as $status)
                                 <option value="{{ $status->id }}"
                                     {{ $status->id == $asset->status_id ? 'selected' : '' }}>
@@ -136,7 +131,7 @@
                     </div>
                     <div class="mb-4">
                         <label for="condition_id" class="block text-gray-700 font-bold mb-2">Condition:</label>
-                        <select id="condition_id" name="condition_id" class="w-full p-2 border rounded-md" required>
+                        <select id="condition_id" name="condition_id" class="w-full p-2 border rounded-md bg-gray-100" required>
                             @foreach($conditions as $condition)
                                 <option value="{{ $condition->id }}"
                                     {{ $condition->id == $asset->condition_id ? 'selected' : '' }}>
@@ -144,6 +139,12 @@
                                 </option>
                             @endforeach
                         </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="purchase_date" class="block text-gray-700 font-bold mb-2">Purchase Date:</label>
+                        <input type="date" id="purchase_date" name="purchase_date"
+                            class="w-full p-2 border rounded-md bg-gray-100" value="{{ $asset->purchase_date }}"
+                            required>
                     </div>
                 </div>
                 <!-- Add this inside your edit asset form, after the condition field -->

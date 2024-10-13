@@ -19,7 +19,8 @@
                 <form method="POST" action="{{ route('location.add') }}">
                     @csrf
                     <div class="mb-4">
-                        <input type="text" id="location" name="location" class="w-full p-2 border rounded-md" required>
+                        <input type="text" id="location" name="location"
+                            class="w-full p-2 bg-gray-100 border rounded-md" required>
                     </div>
                     <div class="flex justify-end space-x-2">
                         <button type="submit"

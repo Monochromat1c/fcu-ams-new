@@ -19,7 +19,7 @@ class LocationController extends Controller
         $location->location = $validatedData['location'];
         $location->save();
 
-        return redirect()->route('location.index')->with('success', 'Location added successfully!');
+        return redirect()->back()->with('success', 'Location added successfully!');
     }
 
     public function index() {
@@ -38,7 +38,7 @@ class LocationController extends Controller
         $location->location = $validatedData['location'];
         $location->save();
 
-        return redirect()->route('location.index')->with('success', 'Location updated successfully!');
+        return redirect()->back()->with('success', 'Location updated successfully!');
     }
 
     public function destroy($id)
@@ -49,9 +49,9 @@ class LocationController extends Controller
         if ($location) {
             try {
                 $location->delete();
-                return redirect()->route('location.index')->with('success', 'Location deleted successfully!');
+                return redirect()->back()->with('success', 'Location deleted successfully!');
             } catch (\Illuminate\Database\QueryException $e) {
-                return redirect()->route('location.index')->withErrors(['error' => 'Cannot delete location because it is
+                return redirect()->back()->withErrors(['error' => 'Cannot delete location because it is
                 associated with other data.']);
             }
         } else {

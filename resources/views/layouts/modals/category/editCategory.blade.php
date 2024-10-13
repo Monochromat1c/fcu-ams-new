@@ -22,7 +22,7 @@
                         <h3 class="text-lg font-semibold mb-3">Category Details</h3>
                         <input type="hidden" name="id" value="{{ $category->id }}">
                         <div class="mb-4">
-                            <input type="text" id="category" name="category" class="w-full p-2 border rounded-md"
+                            <input type="text" id="category" name="category" class="w-full p-2 border bg-gray-100 rounded-md"
                                 value="{{ $category->category }}" required>
                         </div>
                         <div class="flex justify-end space-x-2">

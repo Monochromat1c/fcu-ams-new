@@ -19,7 +19,8 @@
                 <form method="POST" action="{{ route('supplier.add') }}">
                     @csrf
                     <div class="mb-4">
-                        <input type="text" id="supplier" name="supplier" class="w-full p-2 border rounded-md" required>
+                        <input type="text" id="supplier" name="supplier"
+                            class="w-full bg-gray-100 p-2 border rounded-md" required>
                     </div>
                     <div class="flex justify-end space-x-2">
                         <button type="submit"

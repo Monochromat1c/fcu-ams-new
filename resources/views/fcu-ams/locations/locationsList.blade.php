@@ -132,7 +132,7 @@
                                             </svg>
                                         </button>
                                         <button type="button" class="text-red-600 hover:text-red-900"
-                                            onclick="document.getElementById('delete-modal{{ $location->id }}').classList.toggle('hidden')">
+                                            onclick="document.getElementById('delete-location-modal{{ $location->id }}').classList.toggle('hidden')">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="size-6">
                                                 <path stroke-linecap="round" stroke-linejoin="round"

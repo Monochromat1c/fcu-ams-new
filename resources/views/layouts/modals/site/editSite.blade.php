@@ -22,7 +22,7 @@
                         <h3 class="text-lg font-semibold mb-3">Site Details</h3>
                         <input type="hidden" name="id" value="{{ $site->id }}">
                         <div class="mb-4">
-                            <input type="text" id="site" name="site" class="w-full p-2 border rounded-md"
+                            <input type="text" id="site" name="site" class="w-full bg-gray-100 p-2 border rounded-md"
                                 value="{{ $site->site }}" required>
                         </div>
                         <div class="flex justify-end space-x-2">

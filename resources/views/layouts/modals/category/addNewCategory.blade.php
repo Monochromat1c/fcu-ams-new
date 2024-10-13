@@ -19,7 +19,7 @@
                 <form method="POST" action="{{ route('category.add') }}">
                     @csrf
                     <div class="mb-4">
-                        <input type="text" id="category" name="category" class="w-full p-2 border rounded-md" required>
+                        <input type="text" id="category" name="category" class="w-full p-2 border bg-gray-100 rounded-md" required>
                     </div>
                     <div class="flex justify-end space-x-2">
                         <button type="submit"

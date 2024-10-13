@@ -19,7 +19,7 @@ class CategoryController extends Controller
         $category->category = $validatedData['category'];
         $category->save();
 
-        return redirect()->route('category.index')->with('success', 'Category added successfully!');
+        return redirect()->back()->with('success', 'Category added successfully!');
     }
 
     public function index() {
@@ -38,7 +38,7 @@ class CategoryController extends Controller
         $category->category = $validatedData['category'];
         $category->save();
 
-        return redirect()->route('category.index')->with('success', 'Category updated successfully!');
+        return redirect()->back()->with('success', 'Category updated successfully!');
     }
 
     public function destroy($id)
@@ -49,9 +49,9 @@ class CategoryController extends Controller
         if ($category) {
             try {
                 $category->delete();
-                return redirect()->route('category.index')->with('success', 'Category deleted successfully!');
+                return redirect()->back()->with('success', 'Category deleted successfully!');
             } catch (\Illuminate\Database\QueryException $e) {
-                return redirect()->route('category.index')->withErrors(['error' => 'Cannot delete category because it is
+                return redirect()->back()->withErrors(['error' => 'Cannot delete category because it is
                 associated with other data.']);
             }
         } else {

@@ -12,22 +12,7 @@
                 <h1 class=" text-blue-900 text-center text-5xl">FCU</h1>
                 <h2 class=" text-blue-900 text-center text-2xl">Asset Management System</h2>
                 <h2 class=" text-2xl my-3">Create New Account:</h2>
-                @if(session('success'))
-                    <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
-                        role="alert">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                @if($errors->any())
-                    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
-                        role="alert">
-                        <ul>
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
+                @include('layouts.messageWithoutTimerForError')
                 <div class="grid grid-cols-2 gap-3">
                     <div class="mb-2 col-span-2">
                         <label for="profile_picture" class="block text-gray-700 font-bold mb-2">Profile Picture:</label>

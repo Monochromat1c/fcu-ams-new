@@ -19,7 +19,7 @@ class DepartmentController extends Controller
         $department->department = $validatedData['department'];
         $department->save();
 
-        return redirect()->route('department.index')->with('success', 'Department added successfully!');
+        return redirect()->back()->with('success', 'Department added successfully!');
     }
 
     public function index() {
@@ -38,7 +38,7 @@ class DepartmentController extends Controller
         $department->department = $validatedData['department'];
         $department->save();
 
-        return redirect()->route('department.index')->with('success', 'Department updated successfully!');
+        return redirect()->back()->with('success', 'Department updated successfully!');
     }
 
     public function destroy($id)
@@ -49,9 +49,9 @@ class DepartmentController extends Controller
         if ($department) {
             try {
                 $department->delete();
-                return redirect()->route('department.index')->with('success', 'Department deleted successfully!');
+                return redirect()->back()->with('success', 'Department deleted successfully!');
             } catch (\Illuminate\Database\QueryException $e) {
-                return redirect()->route('department.index')->withErrors(['error' => 'Cannot delete department because it is
+                return redirect()->back()->withErrors(['error' => 'Cannot delete department because it is
                 associated with other data.']);
             }
         } else {

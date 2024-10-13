@@ -55,7 +55,8 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/asset/add', 'store')->name('asset.add.store');
         Route::post('/asset/{id}', 'update')->name('asset.update');
         Route::post('/asset/import', 'import')->name('asset.import');
-        Route::delete('/asset/{id}', 'destroy')->name('asset.delete');
+        Route::delete('/asset/{id}', 'destroy')->name('asset.destroy');
+
     }); 
 
     Route::controller(InventoryController::class)->group(function (){
@@ -66,11 +67,11 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/inventory/stock/out', 'createStockOut')->name('inventory.stock.out');
         Route::get('/inventory/low-stock', 'lowStock')->name('inventory.low.stock');
         Route::get('/inventory/out-of-stock', 'outOfStock')->name('inventory.out.of.stock');
+        Route::get('/inventories/export', 'export')->name('inventories.export');
         Route::post('/inventory/stock/in', 'store')->name('inventory.stock.in.store');
         Route::post('/inventory/stock/in/{id}', 'update')->name('inventory.stock.in.update');
         Route::post('/inventory/stock/out', 'storeStockOut')->name('inventory.stock.out.store');
-        Route::delete('/inventory/{id}', 'destroy')->name('inventory.delete');
-        Route::get('/inventories/export', 'export')->name('inventories.export');
+        Route::delete('/inventory/{id}', 'destroy')->name('inventory.destroy');
     });
 
     // Route::controller(UserController::class)->group(function () {

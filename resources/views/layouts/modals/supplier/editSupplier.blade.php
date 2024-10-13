@@ -22,7 +22,8 @@
                         <h3 class="text-lg font-semibold mb-3">Supplier Details</h3>
                         <input type="hidden" name="id" value="{{ $supplier->id }}">
                         <div class="mb-4">
-                            <input type="text" id="supplier" name="supplier" class="w-full p-2 border rounded-md"
+                            <input type="text" id="supplier" name="supplier"
+                                class="w-full bg-gray-100 p-2 border rounded-md"
                                 value="{{ $supplier->supplier }}" required>
                         </div>
                         <div class="flex justify-end space-x-2">

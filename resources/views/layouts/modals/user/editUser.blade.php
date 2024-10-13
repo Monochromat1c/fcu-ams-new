@@ -34,40 +34,40 @@
                                     class="text-left block text-gray-700 font-bold mb-2">Profile
                                     Picture:</label>
                                 <input type="file" id="profile_picture" name="profile_picture"
-                                    class="w-full border rounded-md">
+                                    class="w-full border rounded-md  bg-gray-100">
                             </div>
                             <div class="mb-2">
                                 <label for="first_name" class="text-left block text-gray-700 font-bold mb-2">First
                                     Name:</label>
                                 <input type="text" id="first_name" name="first_name" value="{{ $user->first_name }}"
-                                    class="w-full p-2 border rounded-md" required>
+                                    class="w-full p-2 border rounded-md  bg-gray-100" required>
                             </div>
                             <div class="mb-2">
                                 <label for="middle_name" class="text-left block text-gray-700 font-bold mb-2">Middle
                                     Name:</label>
                                 <input type="text" id="middle_name" name="middle_name"
-                                    value="{{ $user->middle_name }}" class="w-full p-2 border rounded-md">
+                                    value="{{ $user->middle_name }}" class="w-full p-2 border rounded-md  bg-gray-100">
                             </div>
                             <div class="mb-2">
                                 <label for="last_name" class="text-left block text-gray-700 font-bold mb-2">Last
                                     Name:</label>
                                 <input type="text" id="last_name" name="last_name" value="{{ $user->last_name }}"
-                                    class="w-full p-2 border rounded-md" required>
+                                    class="w-full p-2 border rounded-md  bg-gray-100" required>
                             </div>
                                                     <div class="mb-2">
                             <label for="contact_number" class="text-left block text-gray-700 font-bold mb-2">Contact
                                 Number:</label>
-                            <input type="text" id="contact_number" name="contact_number" value="{{ $user->contact_number }}" class="w-full p-2 border rounded-md"
+                            <input type="text" id="contact_number" name="contact_number" value="{{ $user->contact_number }}" class="w-full p-2 border rounded-md  bg-gray-100"
                                 required>
                         </div>
                         <div class="mb-2">
                             <label for="address" class="text-left block text-gray-700 font-bold mb-2">Address:</label>
-                            <input type="text" id="address" name="address" value="{{ $user->address }}" class="w-full p-2 border rounded-md"
+                            <input type="text" id="address" name="address" value="{{ $user->address }}" class="w-full p-2 border rounded-md  bg-gray-100"
                                 required>
                         </div>
                         <div class="mb-2">
                             <label for="role_id" class="text-left block text-gray-700 font-bold mb-2">Role:</label>
-                            <select id="role_id" name="role_id" class="w-full p-2 border rounded-md" required>
+                            <select id="role_id" name="role_id" class="w-full p-2 border rounded-md  bg-gray-100" required>
                                 <option value="">Select a role</option>
                                 @foreach($roles as $role)
                                     <option value="{{ $role->id }}" {{ $user->role_id == $role->id ? 'selected' : '' }}>{{ $role->role }}</option>
@@ -76,11 +76,11 @@
                         </div>
                         <div class="mb-2">
                             <label for="email" class="text-left block text-gray-700 font-bold mb-2">Email:</label>
-                            <input type="email" id="email" name="email" value="{{ $user->email }}" class="w-full p-2 border rounded-md" required>
+                            <input type="email" id="email" name="email" value="{{ $user->email }}" class="w-full p-2 border rounded-md  bg-gray-100" required>
                         </div>
                         <div class="mb-2">
                             <label for="username" class="text-left block text-gray-700 font-bold mb-2">Username:</label>
-                            <input type="text" id="username" name="username" value="{{ $user->username }}" class="w-full p-2 border rounded-md" required>
+                            <input type="text" id="username" name="username" value="{{ $user->username }}" class="w-full p-2 border rounded-md  bg-gray-100" required>
                         </div>
                     </div>
                     <div class="flex justify-end space-x-2">

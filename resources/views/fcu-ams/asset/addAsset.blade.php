@@ -140,61 +140,31 @@
                                     @foreach($locations as $location)
                                         <option value="{{ $location->id }}">{{ $location->location }}</option>
                                     @endforeach
-                                    <option value="add_new">ADD NEW LOCATION</option>
                                 </select>
-                                <!-- <div
+                                <div
+                                    class="ml-2 rounded-md shadow-md px-2 py-1 flex align-items-center bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
+                                    <button type="button"
+                                        onclick="document.getElementById('add-location-modal').classList.toggle('hidden')"
+                                        class="flex my-auto">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div
                                     class="ml-2 rounded-md shadow-md px-2 py-1 flex align-items-center bg-red-600 hover:shadow-md hover:bg-red-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
-                                    <a href="#"
-                                        onclick="document.getElementById('').classList.toggle('hidden')"
+                                    <button type="button"
+                                        onclick="document.getElementById('delete-location-modal{{ $location->id }}').classList.toggle('hidden')"
                                         class="flex my-auto">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6 ">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                         </svg>
-                                    </a>
-                                </div> -->
-                            </div>
-                            <div class="modal-container ">
-                                <!-- Modal for adding new location -->
-                                <div id="add-location-modal" tabindex="-1" aria-hidden="true"
-                                    class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
-                                    <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
-                                        <!-- Modal content -->
-                                        <div
-                                            class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
-                                            <button type="button"
-                                                class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                                                onclick="document.getElementById('add-location-modal').classList.toggle('hidden')">
-                                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor"
-                                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                                <span class="sr-only">Close modal</span>
-                                            </button>
-                                            <div class="p-6 text-center">
-                                                <h2 class="mb-4 text-lg font-bold text-black">Add New Location</h2>
-                                                <input type="text" id="new_location" name="new_location"
-                                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
-                                                <div class="flex flex-end">
-                                                    <button type="button" id="add-location-btn"
-                                                        class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                                                        Location</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="hidden" id="add-location-form">
-                                <label for="new_location" class="block text-gray-700 font-bold mb-2">New Location:</label>
-                                <input type="text" id="new_location" name="new_location"
-                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
-                                <button type="button" id="add-location-btn"
-                                    class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                                    Location</button>
                             </div>
                         </div>
                         <div class="mb-2">
@@ -206,61 +176,31 @@
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->category }}</option>
                                     @endforeach
-                                    <option value="add_new">ADD NEW CATEGORY</option>
                                 </select>
-                                <!-- <div
+                                <div
+                                    class="ml-2 rounded-md shadow-md px-2 py-1 flex align-items-center bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
+                                    <button type="button"
+                                        onclick="document.getElementById('add-category-modal').classList.toggle('hidden')"
+                                        class="flex my-auto">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div
                                     class="ml-2 rounded-md shadow-md px-2 py-1 flex align-items-center bg-red-600 hover:shadow-md hover:bg-red-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
-                                    <a href="#" onclick="document.getElementById('').classList.toggle('hidden')"
+                                    <button type="button"
+                                        onclick="document.getElementById('delete-category-modal{{ $category->id }}').classList.toggle('hidden')"
                                         class="flex my-auto">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6 ">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                         </svg>
-                                    </a>
-                                </div> -->
-                            </div>
-                            <div class="modal-container ">
-                                <!-- Modal for adding new category -->
-                                <div id="add-category-modal" tabindex="-1" aria-hidden="true"
-                                    class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
-                                    <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
-                                        <!-- Modal content -->
-                                        <div
-                                            class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
-                                            <button type="button"
-                                                class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                                                onclick="document.getElementById('add-category-modal').classList.toggle('hidden')">
-                                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor"
-                                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                                <span class="sr-only">Close modal</span>
-                                            </button>
-                                            <div class="p-6 text-center">
-                                                <h2 class="mb-4 text-lg font-bold text-black">Add New Category</h2>
-                                                <input type="text" id="new_category" name="new_category"
-                                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
-                                                <div class="flex flex-end">
-                                                    <button type="button" id="add-category-btn"
-                                                        class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                                                        Category</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="hidden" id="add-category-form">
-                                <label for="new_category" class="block text-gray-700 font-bold mb-2">New
-                                    Category:</label>
-                                <input type="text" id="new_category" name="new_category"
-                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
-                                <button type="button" id="add-category-btn"
-                                    class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                                    Category</button>
                             </div>
                         </div>
                         <div class="mb-2">
@@ -272,61 +212,31 @@
                                     @foreach($departments as $department)
                                         <option value="{{ $department->id }}">{{ $department->department }}</option>
                                     @endforeach
-                                    <option value="add_new">ADD NEW DEPARTMENT</option>
                                 </select>
-                                <!-- <div
+                                <div
+                                    class="ml-2 rounded-md shadow-md px-2 py-1 flex align-items-center bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
+                                    <button type="button"
+                                        onclick="document.getElementById('add-department-modal').classList.toggle('hidden')"
+                                        class="flex my-auto">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div
                                     class="ml-2 rounded-md shadow-md px-2 py-1 flex align-items-center bg-red-600 hover:shadow-md hover:bg-red-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
-                                    <a href="#" onclick="document.getElementById('').classList.toggle('hidden')"
+                                    <button type="button"
+                                        onclick="document.getElementById('delete-department-modal{{ $department->id }}').classList.toggle('hidden')"
                                         class="flex my-auto">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6 ">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                         </svg>
-                                    </a>
-                                </div> -->
-                            </div>
-                            <div class="modal-container ">
-                                <!-- Modal for adding new department -->
-                                <div id="add-department-modal" tabindex="-1" aria-hidden="true"
-                                    class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
-                                    <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
-                                        <!-- Modal content -->
-                                        <div
-                                            class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
-                                            <button type="button"
-                                                class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                                                onclick="document.getElementById('add-department-modal').classList.toggle('hidden')">
-                                                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor"
-                                                    viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                    <path fill-rule="evenodd"
-                                                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"></path>
-                                                </svg>
-                                                <span class="sr-only">Close modal</span>
-                                            </button>
-                                            <div class="p-6 text-center">
-                                                <h2 class="mb-4 text-lg font-bold text-black">Add New Department</h2>
-                                                <input type="text" id="new_department" name="new_department"
-                                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
-                                                <div class="flex flex-end">
-                                                    <button type="button" id="add-department-btn"
-                                                        class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                                                        Department</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </button>
                                 </div>
-                            </div>
-                            <div class="hidden" id="add-department-form">
-                                <label for="new_department" class="block text-gray-700 font-bold mb-2">New
-                                    Department:</label>
-                                <input type="text" id="new_department" name="new_department"
-                                    class="w-full p-2 border rounded-md mb-2 bg-gray-100">
-                                <button type="button" id="add-department-btn"
-                                    class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                                    Department</button>
                             </div>
                         </div>
                         <!-- <div class="mb-2">
@@ -360,51 +270,18 @@
                     </div>
             </form>
         </div>
-        <!-- DELETE CONFIRMATION MODAL -->
-        <!-- Delete supplier modal -->
-        <div id="delete-supplier-modal" tabindex="-1" aria-hidden="true"
-            class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
-            <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
-                <!-- Modal content -->
-                <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
-                    <!-- <button type="button"
-                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                        onclick="document.getElementById('delete-supplier-modal').classList.toggle('hidden')">
-                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd"
-                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                clip-rule="evenodd"></path>
-                        </svg>
-                        <span class="sr-only">Close modal</span>
-                    </button> -->
-                    <div class="p-6 text-center">
-                        <h2 class="mb-4 text-lg font-bold text-black">Delete Supplier</h2>
-                        <p class="mb-4">Are you sure you want to delete this supplier?</p>
-                        <div class="flex justify-between">
-                            <button type="button"
-                                onclick="document.getElementById('delete-supplier-modal').classList.toggle('hidden')"
-                                id=""
-                                class="rounded-md shadow-md px-5 py-2 bg-orange-600 hover:shadow-md hover:bg-orange-500 
-                                transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
-                                No
-                            </button>
-                            <button type="button" id="delete-supplier-btn"
-                                class="rounded-md shadow-md px-5 py-2 bg-green-600 
-                                hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">
-                                Yes
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 @include('layouts.modals.supplier.addNewSupplier')
 @include('layouts.modals.supplier.deleteSupplier')
 @include('layouts.modals.site.addNewSite')
 @include('layouts.modals.site.deleteSite')
+@include('layouts.modals.location.addNewLocation')
+@include('layouts.modals.location.deleteLocation')
+@include('layouts.modals.category.addNewCategory')
+@include('layouts.modals.category.deleteCategory')
+@include('layouts.modals.department.addNewDepartment')
+@include('layouts.modals.department.deleteDepartment')
 <script src="{{ asset('js/chart.js') }}"></script>
 
 @endsection
