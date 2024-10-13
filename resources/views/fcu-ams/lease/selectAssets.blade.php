@@ -1,6 +1,11 @@
 @extends('layouts.layout')
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/addAsset.css') }}">
+<style>
+    .max-h-30-rem{
+        max-height: 35rem;
+    }
+</style>
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
@@ -11,46 +16,55 @@
             <div></div>
         </nav>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
-            <form action="{{ route('lease.create.form.add') }}" method="POST">
+            <form action="{{ route('lease.create.form.add') }}" method="POST" class="mb-0">
                 @csrf
-                <div class="overflow-x-auto overflow-y-auto">
+                <div class="overflow-auto max-h-30-rem">
                     <table class="table-auto w-full">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
-                                    <input type="checkbox" id="selectAll" />
+                                <th class="px-4 py-2 max-w-4 text-center bg-slate-200 border border-slate-400">
+                                    Checkbox
                                 </th>
-                                <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                <!-- <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                     ID
                                 </th> -->
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                     Asset Tag ID
                                 </th>
-                                <!-- <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
+                                    Specification
+                                </th>
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
+                                    Model
+                                </th>
+                                <!-- <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                     Cost
                                 </th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                     Supplier
                                 </th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                     Site
                                 </th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                     Category
                                 </th>
-                                <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">
+                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                     Condition
                                 </th> -->
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($assets as $asset)
-                                <tr>
+                                <tr class="hover:bg-slate-100">
                                     <td class="border border-slate-300 px-4 py-2">
-                                        <input type="checkbox" name="selected_assets[]" value="{{ $asset->id }}" />
+                                        <input class="mx-auto flex" type="checkbox" name="selected_assets[]"
+                                            value="{{ $asset->id }}" />
                                     </td>
                                     <!-- <td class="border border-slate-300 px-4 py-2">{{ $asset->id }}</td> -->
                                     <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->specs }}</td>
+                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->model }}</td>
                                     <!-- <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier_name }}</td>
                                     <td class="border border-slate-300 px-4 py-2">{{ $asset->site_name }}</td>
