@@ -107,14 +107,7 @@
 </div>
 
 <script src="{{ asset('js/chart.js') }}"></script>
-<script>
-    function confirmLogout() {
-        if (confirm('Are you sure you want to logout?')) {
-            document.getElementById('logout-form').submit();
-        }
-    }
-
-</script>
+  
  
 <script>
     function confirmDelete(id) {
