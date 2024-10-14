@@ -11,10 +11,10 @@
 </style>
 
 <div class="sidebar flex-grow flex flex-col overflow-y-auto">
-    <div class="flex flex-col mx-auto">
+    <div class="flex flex-col p-1 mx-auto">
         <img class="fcu-icon mb-1 mx-auto" src="/img/login/fcu-icon.png" alt="" srcset="">
         <h1 class="text-blue-900 text-center text-3xl">FCU</h1>
-        <h2 class="text-blue-900 text-center text-2xl">Asset Management System</h2>
+        <h2 class="text-blue-900 text-center text-xl">Asset Management System</h2>
     </div>
     <!-- <div class="bg-blue-900 break-line"></div> -->
     <div class=" break-line"></div>

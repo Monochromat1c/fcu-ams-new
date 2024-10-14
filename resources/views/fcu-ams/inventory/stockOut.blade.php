@@ -84,19 +84,19 @@
                                                 <thead>
                                                     <tr>
                                                         <th
-                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
+                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
                                                             Item</th>
                                                         <th
-                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
+                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
                                                             Quantity</th>
                                                         <th
-                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
+                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
                                                             Unit</th>
                                                         <th
-                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
+                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
                                                             Unit Price</th>
                                                         <th
-                                                            class="px-4 py-2 text-center bg-slate-200 border border-slate-400">
+                                                            class="px-4 py-2 text-center bg-slate-200 border border-slate-400 whitespace-nowrap">
                                                             Action</th>
                                                     </tr>
                                                 </thead>
