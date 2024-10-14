@@ -68,7 +68,7 @@
                             <path
                                 d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
                         </svg>
-                        <h3 class="text-lg font-semibold my-auto">Total Inventory Supplies</h3>
+                        <h3 class="text-lg font-semibold my-auto whitespace-nowrap">Total Inventory Supplies</h3>
                     </div>
                     <p class="text-3xl font-bold">{{ $totalInventoryStocks }}</p>
                 </div>
@@ -80,7 +80,7 @@
                         <path stroke-linecap="round" stroke-linejoin="round"
                             d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                     </svg>
-                    <h3 class="text-lg font-semibold my-auto">Total Inventory Value</h3>
+                    <h3 class="text-lg font-semibold my-auto whitespace-nowrap">Total Inventory Value</h3>
                 </div>
                 <p class="text-3xl font-bold">₱{{ number_format($totalInventoryValue, 2) }}</p>
             </div>

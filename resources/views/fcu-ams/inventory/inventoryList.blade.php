@@ -231,11 +231,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'unique_tag', 'direction' => ($direction == 'asc' && $sort == 'unique_tag') ? 'desc' : 'asc']) }}">
-                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg> -->
+                                        </svg>
                                     </a>
                                     <span class="mx-2">Unique Tag</span>
                                 </div>
@@ -244,11 +244,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'items_specs', 'direction' => ($direction == 'asc' && $sort == 'items_specs') ? 'desc' : 'asc']) }}">
-                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg> -->
+                                        </svg>
                                     </a>
                                     <span class="mx-2">Items & Specs</span>
                                 </div>
@@ -257,11 +257,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'brand', 'direction' => ($direction == 'asc' && $sort == 'brand') ? 'desc' : 'asc']) }}">
-                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg> -->
+                                        </svg>
                                     </a>
                                     <span class="mx-2">Brand</span>
                                 </div>
@@ -270,11 +270,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'quantity', 'direction' => ($direction == 'asc' && $sort == 'quantity') ? 'desc' : 'asc']) }}">
-                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg> -->
+                                        </svg>
                                     </a>
                                     <span class="mx-2">Quantity</span>
                                 </div>
@@ -283,11 +283,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'unit', 'direction' => ($direction == 'asc' && $sort == 'unit') ? 'desc' : 'asc']) }}">
-                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg> -->
+                                        </svg>
                                     </a>
                                     <span class="mx-2">Unit</span>
                                 </div>
@@ -296,11 +296,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'unit_price', 'direction' => ($direction == 'asc' && $sort == 'unit_price') ? 'desc' : 'asc']) }}">
-                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg> -->
+                                        </svg>
                                     </a>
                                     <span class="mx-2">Unit Price</span>
                                 </div>
@@ -322,11 +322,11 @@
                                 <div class="flex">
                                     <a class="my-auto"
                                         href="{{ route('inventory.list', ['sort' => 'total_item_price', 'direction' => ($direction == 'asc' && $sort == 'total_item_price') ? 'desc' : 'asc']) }}">
-                                          <!-- <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                             stroke-width="1.5" stroke="currentColor" class="size-6">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg> -->
+                                        </svg>
                                     </a>
                                     <span class="mx-2">Total Item Price</span>
                                 </div>

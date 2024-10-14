@@ -221,9 +221,18 @@ class AssetController extends Controller
         $asset->department_id = $validatedData['department_id'];
         $asset->condition_id = $validatedData['condition_id'];
         $asset->status_id = $validatedData['status_id'];
-        $asset->maintenance_start_date = $request->input('maintenance_start_date') !== '' ? $request->input('maintenance_start_date') : null;
-        $asset->maintenance_end_date = $request->input('maintenance_end_date') !== '' ? $request->input('maintenance_end_date') : null;
+        // $asset->maintenance_start_date = $request->input('maintenance_start_date') !== '' ? $request->input('maintenance_start_date') : null;
+        // $asset->maintenance_end_date = $request->input('maintenance_end_date') !== '' ? $request->input('maintenance_end_date') : null;
         $asset->purchase_date = $validatedData['purchase_date'];
+        
+        if ($request->input('condition_id') == Condition::where('condition', 'Maintenance')->first()->id) {
+            if ($request->input('maintenance_start_date') !== '') {
+                $asset->maintenance_start_date = $request->input('maintenance_start_date');
+            }
+            if ($request->input('maintenance_end_date') !== '') {
+                $asset->maintenance_end_date = $request->input('maintenance_end_date');
+            }
+        }
 
         if ($request->hasFile('asset_image')) {
             $imageName = time().'.'.$request->asset_image->extension();
@@ -236,7 +245,7 @@ class AssetController extends Controller
 
         $asset->save();
 
-        return redirect()->route('asset.list')->with('success', 'Asset updated successfully.');
+        return redirect()->back()->with('success', 'Asset updated successfully.');
     }
 
     public function destroy($id)
