@@ -25,6 +25,8 @@ use Illuminate\Support\Str;
 class InventoryController extends Controller
 {
     public function index(Request $request) {
+        $brands = DB::table('brands')->get();
+        $brand_id = $request->input('brand');
         $totalItems = DB::table('inventories')->count();
         $totalValue = DB::table('inventories')->sum(DB::raw('unit_price * quantity'));
         $lowStock = DB::table('inventories')
@@ -40,10 +42,12 @@ class InventoryController extends Controller
         $direction = $request->input('direction', 'asc');
         $search = $request->input('search');
 
-        $query = DB::table('inventories')
+        $query = Inventory::whereNull('deleted_at')
+            ->with('supplier', 'unit', 'brand')
             ->leftJoin('suppliers', 'inventories.supplier_id', '=', 'suppliers.id')
             ->leftJoin('units', 'inventories.unit_id', '=', 'units.id')
-            ->select('inventories.*', 'suppliers.supplier as supplier_name', 'units.unit as unit_name');
+            ->leftJoin('brands', 'inventories.brand_id', '=', 'brands.id')
+            ->select('inventories.*', 'suppliers.supplier as supplier_name', 'units.unit as unit_name', 'brands.brand as brand_name');
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -57,6 +61,10 @@ class InventoryController extends Controller
             return redirect()->route('inventory.list');
         }
 
+        if ($request->input('brand')) {
+            $query->where('inventories.brand_id', $request->input('brand'));
+        }
+
         if ($sort && $direction) {
             if ($sort == 'total_item_price') {
                 $query->orderBy(DB::raw('unit_price * quantity'), $direction);
@@ -68,15 +76,13 @@ class InventoryController extends Controller
         }
 
         $query->where('inventories.quantity', '>', 0);
-        $inventories = Inventory::whereNull('deleted_at')
-            ->with('supplier', 'unit', 'brand')
-            ->orderBy('unique_tag', 'asc')
-            ->paginate(15);
 
+        $inventories = $query->paginate(15);
 
-
-        return view('fcu-ams/inventory/inventoryList', compact('totalItems', 'totalValue', 'lowStock', 'outOfStock', 'inventories', 'sort', 'direction', 'search'));
+        return view('fcu-ams/inventory/inventoryList', compact('brands', 'brand_id', 'totalItems', 'totalValue',
+        'lowStock', 'outOfStock', 'inventories', 'sort', 'direction', 'search'));
     }
+
 
     public function lowStock(Request $request)
     {

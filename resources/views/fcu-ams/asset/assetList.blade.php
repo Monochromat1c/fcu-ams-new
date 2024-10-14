@@ -217,93 +217,93 @@
                             </th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
+                                    <span class="mx-2  whitespace-nowrap">Asset Tag ID</span>
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'asset_tag_id', 'direction' => ($direction == 'asc' && $sort == 'asset_tag_id') ? 'desc' : 'asc']) }}">
                                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
                                         </svg>
                                     </a>
-                                    <span class="mx-2">Asset Tag ID</span>
                                 </div>
                             </th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
+                                    <span class="mx-2  whitespace-nowrap">Cost</span>
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'cost', 'direction' => ($direction == 'asc' && $sort == 'cost') ? 'desc' : 'asc']) }}">
                                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
                                         </svg>
                                     </a>
-                                    <span class="mx-2">Cost</span>
                                 </div>
                             </th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
+                                    <span class="mx-2  whitespace-nowrap">Supplier</span>
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'supplier_name', 'direction' => ($direction == 'asc' && $sort == 'supplier_name') ? 'desc' : 'asc']) }}">
                                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
                                         </svg>
                                     </a>
-                                    <span class="mx-2">Supplier</span>
                                 </div>
                             </th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
+                                    <span class="mx-2  whitespace-nowrap">Site</span>
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'site_name', 'direction' => ($direction == 'asc' && $sort == 'site_name') ? 'desc' : 'asc']) }}">
                                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
                                         </svg>
                                     </a>
-                                    <span class="mx-2">Site</span>
                                 </div>
                             </th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
+                                    <span class="mx-2  whitespace-nowrap">Category</span>
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'category_name', 'direction' => ($direction == 'asc' && $sort == 'category_name') ? 'desc' : 'asc']) }}">
                                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
                                         </svg>
                                     </a>
-                                    <span class="mx-2">Category</span>
                                 </div>
                             </th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
+                                    <span class="mx-2  whitespace-nowrap">Status</span>
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'status_name', 'direction' => ($direction == 'asc' && $sort == 'status_name') ? 'desc' : 'asc']) }}">
                                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
                                         </svg>
                                     </a>
-                                    <span class="mx-2">Status</span>
                                 </div>
                             </th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
                                 <div class="flex">
+                                    <span class="mx-2  whitespace-nowrap">Condition</span>
                                     <a class="my-auto"
                                         href="{{ route('asset.list', ['sort' => 'condition_name', 'direction' => ($direction == 'asc' && $sort == 'condition_name') ? 'desc' : 'asc']) }}">
                                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6">
+                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
                                             <path stroke-linecap="round" stroke-linejoin="round"
                                                 d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
                                         </svg>
                                     </a>
-                                    <span class="mx-2">Condition</span>
                                 </div>
                             </th>
                             <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 text-center">
