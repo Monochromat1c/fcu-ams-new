@@ -190,7 +190,7 @@
                                         <button type="button" id="save-maintenance-btn"
                                             class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Save</button>
                                     </div>
-                                </div>
+                                </div>4
                             </div>
                         </div>
                     </div>

@@ -58,7 +58,7 @@
                 </div>
                 <p class="text-3xl mb-2 font-bold">{{ $lowStock }}</p>
                 <a href="{{ route('inventory.low.stock') }}"
-                    class="text-orange-600 hover:text-orange-900 flex gap-1">
+                    class="whitespace-nowrap text-orange-600 hover:text-orange-900 flex gap-1">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round"
