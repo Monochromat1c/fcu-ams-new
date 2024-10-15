@@ -231,8 +231,9 @@
             Asset</a>
         <!-- <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dispose</a> -->
         <a href="{{ route('lease.index') }}"
-            class="block px-4 py-2 text-gray-700 hover:bg-gray-100
-            {{ Request::is('lease') ? 'bg-gray-100' : '' }}">Lease</a>
+        class="block px-4 py-2 text-gray-700 hover:bg-gray-100
+        {{ Request::is('lease') ? 'bg-gray-100' : '' }}"
+        onclick="window.location.reload()">Lease</a>
         <!-- <a href="#" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Lease Return</a> -->
         <a href="{{ route('maintenance') }}"
             class="block px-4 py-2 text-gray-700 hover:bg-gray-100

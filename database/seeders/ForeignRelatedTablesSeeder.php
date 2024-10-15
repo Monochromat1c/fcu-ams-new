@@ -70,6 +70,7 @@ class ForeignRelatedTablesSeeder extends Seeder
         $statuses = [
             ['status' => 'Available'],
             ['status' => 'Unavailable'],
+            ['status' => 'Leased'],
         ];
 
         foreach ($statuses as $status) {

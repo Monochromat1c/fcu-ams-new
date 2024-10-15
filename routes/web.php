@@ -83,6 +83,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/lease/create/form', 'createForm')->name('lease.create.form');
         Route::post('/lease/create/form', 'createForm')->name('lease.create.form.add');
         Route::post('/lease', 'store')->name('lease.store');
+        Route::post('/lease/{lease}/end', 'endLease')->name('lease.end');
     });
     
     Route::controller(ReportController::class)->group(function () {

@@ -13,7 +13,7 @@ return new class extends Migration
             $table->date('lease_date');
             $table->date('lease_expiration');
             $table->string('customer');
-            $table->text('note');
+            $table->string('note')->nullable();
             $table->timestamps();
         });
     }

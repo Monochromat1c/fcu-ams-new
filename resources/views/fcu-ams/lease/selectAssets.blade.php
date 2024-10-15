@@ -15,6 +15,9 @@
             <h1 class="my-auto text-3xl">Select Assets to Lease</h1>
             <div></div>
         </nav>
+        <div class="m-3">
+            @include('layouts.messageWithTimerForError')
+        </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <form action="{{ route('lease.create.form.add') }}" method="POST" class="mb-0">
                 @csrf
@@ -76,7 +79,13 @@
                     </table>
                 </div>
                 <div class="flex justify-end mt-3">
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 transition-all duration-200 hover:scale-105 ease-in rounded flex gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="m15 15 6-6m0 0-6-6m6 6H9a6 6 0 0 0 0 12h3" />
+                        </svg>
                         Next
                     </button>
                 </div>

@@ -69,4 +69,23 @@ class Asset extends Model
         return $this->hasMany(AssetEditHistory::class);
     }
 
+    public function updateStatusToLeased()
+    {
+        $leasedStatus = Status::where('status', 'Leased')->first();
+        $this->status_id = $leasedStatus->id;
+        $this->save();
+    }
+
+    public function updateStatusToAvailable()
+    {
+        $this->status_id = Status::where('status', 'Available')->first()->id;
+        $this->save();
+    }
+
+    public function updateConditionToUsed()
+    {
+        $this->condition_id = Condition::where('condition', 'Used')->first()->id;
+        $this->save();
+    }
+
 }
