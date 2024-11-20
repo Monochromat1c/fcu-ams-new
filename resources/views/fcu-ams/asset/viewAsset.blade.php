@@ -53,70 +53,130 @@
                     </a>
                 </div>
             </div>
-            <div class="overflow-x-auto overflow-y-auto">
-                <table class="table-auto w-full">
-                    <thead>
-                        <tr>
-                            <th class="px-4 py-2 text-center bg-slate-200 border border-slate-400 whitespace-nowrap">Asset Image</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Asset Tag ID</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Specification</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Brand</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Model</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Serial Number</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Category</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Site</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Location</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Department</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Cost</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Supplier</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Purchase Date</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Status</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Condition</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">Start of Maintenance</th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">End of Maintenance</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="border border-slate-300 px-4 py-2 min-width">
-                                @if($asset->asset_image)
-                                    <img src="{{ asset($asset->asset_image) }}" alt="Asset Image"
-                                        class="mx-auto rounded-full" style="width:2.7rem;height:2.7rem;">
-                                @else
-                                    <img src="{{ asset('profile/defaultIcon.png') }}"
-                                        alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
-                                @endif
-                            </td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->asset_tag_id }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->specs }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->brand->brand }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->model }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->serial_number }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->category->category }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->site->site }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->location->location }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->department->department }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->cost }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->supplier->supplier }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->purchase_date }}</td>
-                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
-                                <div class="flex items-center gap-1">
-                                    @if($asset->status->status == 'Available')
-                                        <span class="inline-block w-4 h-4 bg-green-500 rounded-full"></span>
-                                    @elseif($asset->status->status == 'Not Available')
-                                        <span class="inline-block w-4 h-4 bg-red-500 rounded-full"></span>
-                                    @endif
-                                    {{ $asset->status->status }}
-                                </div>
-                            </td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->condition->condition }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
-                                {{ $asset->maintenance_start_date ?? 'N/A' }}</td>
-                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
-                                {{ $asset->maintenance_end_date ?? 'N/A' }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="mb-4">
+                    <label for="asset_tag_id" class="block text-gray-700 font-bold mb-2">Asset Tag ID:</label>
+                    <input type="text" id="asset_tag_id" name="asset_tag_id"
+                        class="w-full p-2 border rounded-md bg-gray-100" value="{{ $asset->asset_tag_id }}" disabled>
+                </div>
+                <div class="mb-4">
+                    <label for="model" class="block text-gray-700 font-bold mb-2">Model:</label>
+                    <input type="text" id="model" name="model" class="w-full p-2 border rounded-md bg-gray-100"
+                        value="{{ $asset->model }}" disabled>
+                </div>
+                <div class="mb-2">
+                    <label for="spec" class="block text-gray-700 font-bold mb-2">Specification:</label>
+                    <input type="text" id="specs" name="specs" class="w-full p-2 border rounded-md bg-gray-100"
+                        value="{{ $asset->specs }}">
+                </div>
+                <div class="mb-4">
+                    <label for="serial_number" class="block text-gray-700 font-bold mb-2">Serial Number:</label>
+                    <input type="text" id="serial_number" name="serial_number"
+                        class="w-full p-2 border rounded-md bg-gray-100" value="{{ $asset->serial_number }}" disabled>
+                </div>
+                <div class="mb-4">
+                    <label for="cost" class="block text-gray-700 font-bold mb-2">Cost:</label>
+                    <input type="number" id="cost" name="cost" class="w-full p-2 border rounded-md bg-gray-100"
+                        value="{{ $asset->cost }}" min="0" disabled>
+                </div>
+                <div class="mb-4">
+                    <label for="supplier_id" class="block text-gray-700 font-bold mb-2">Supplier:</label>
+                    <select id="supplier_id" name="supplier_id" class="w-full p-2 border rounded-md bg-gray-100"
+                        disabled>
+                        @foreach($suppliers as $supplier)
+                            <option value="{{ $supplier->id }}"
+                                {{ $supplier->id == $asset->supplier_id ? 'selected' : '' }}>
+                                {{ $supplier->supplier }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="site_id" class="block text-gray-700 font-bold mb-2">Site:</label>
+                    <select id="site_id" name="site_id" class="w-full p-2 border rounded-md bg-gray-100" disabled>
+                        @foreach($sites as $site)
+                            <option value="{{ $site->id }}"
+                                {{ $site->id == $asset->site_id ? 'selected' : '' }}>
+                                {{ $site->site }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="location_id" class="block text-gray-700 font-bold mb-2">Location:</label>
+                    <select id="location_id" name="location_id" class="w-full p-2 border rounded-md bg-gray-100"
+                        disabled>
+                        @foreach($locations as $location)
+                            <option value="{{ $location->id }}"
+                                {{ $location->id == $asset->location_id ? 'selected' : '' }}>
+                                {{ $location->location }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="category_id" class="block text-gray-700 font-bold mb-2">Category:</label>
+                    <select id="category_id" name="category_id" class="w-full p-2 border rounded-md bg-gray-100"
+                        disabled>
+                        @foreach($categories as $category)
+                            <option value="{{ $category->id }}"
+                                {{ $category->id == $asset->category_id ? 'selected' : '' }}>
+                                {{ $category->category }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="department_id" class="block text-gray-700 font-bold mb-2">Department:</label>
+                    <select id="department_id" name="department_id" class="w-full p-2 border rounded-md bg-gray-100"
+                        disabled>
+                        @foreach($departments as $department)
+                            <option value="{{ $department->id }}"
+                                {{ $department->id == $asset->department_id ? 'selected' : '' }}>
+                                {{ $department->department }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="brand_id" class="block text-gray-700 font-bold mb-2">Brand:</label>
+                    <select id="brand_id" name="brand_id" class="w-full p-2 border rounded-md bg-gray-100" disabled>
+                        @foreach($brands as $brand)
+                            <option value="{{ $brand->id }}"
+                                {{ $brand->id == $asset->brand_id ? 'selected' : '' }}>
+                                {{ $brand->brand }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="status_id" class="block text-gray-700 font-bold mb-2">Status:</label>
+                    <select id="status_id" name="status_id" class="w-full p-2 border rounded-md bg-gray-100" disabled>
+                        @foreach($statuses as $status)
+                            <option value="{{ $status->id }}"
+                                {{ $status->id == $asset->status_id ? 'selected' : '' }}>
+                                {{ $status->status }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="condition_id" class="block text-gray-700 font-bold mb-2">Condition:</label>
+                    <select id="condition_id" name="condition_id" class="w-full p-2 border rounded-md bg-gray-100"
+                        disabled>
+                        @foreach($conditions as $condition)
+                            <option value="{{ $condition->id }}"
+                                {{ $condition->id == $asset->condition_id ? 'selected' : '' }}>
+                                {{ $condition->condition }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="purchase_date" class="block text-gray-700 font-bold mb-2">Purchase Date:</label>
+                    <input type="date" id="purchase_date" name="purchase_date"
+                        class="w-full p-2 border rounded-md bg-gray-100" value="{{ $asset->purchase_date }}" disabled>
+                </div>
             </div>
         </div>
         @if($asset->editHistory->isNotEmpty())

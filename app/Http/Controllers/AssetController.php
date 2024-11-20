@@ -114,8 +114,19 @@ class AssetController extends Controller
         $asset = Asset::with(['supplier', 'site', 'location', 'category', 'department', 'editHistory' => function ($query) {
             $query->orderBy('created_at', 'desc');
         }, 'condition'])->findOrFail($id);
+
+        $asset = Asset::findOrFail($id);
+        $suppliers = DB::table('suppliers')->get();
+        $sites = DB::table('sites')->get();
+        $locations = DB::table('locations')->get();
+        $categories = DB::table('categories')->get();
+        $departments = DB::table('departments')->get();
+        $conditions = DB::table('conditions')->get();
+        $brands = DB::table('brands')->get();
+        $statuses = DB::table('statuses')->get();
         
-        return view('fcu-ams/asset/viewAsset', compact('asset'));
+        return view('fcu-ams/asset/viewAsset', compact('asset','suppliers', 'sites', 'locations', 'categories',
+        'departments', 'conditions', 'statuses', 'brands'));
     }
 
     public function store(Request $request)
