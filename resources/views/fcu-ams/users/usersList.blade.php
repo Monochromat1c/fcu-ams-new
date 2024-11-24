@@ -112,9 +112,9 @@
                             <th class="px-4 py-2 text-left bg-slate-200 whitespace-nowrap border border-slate-400">
                                 Name
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-200 whitespace-nowrap border border-slate-400">
+                            <!-- <th class="px-4 py-2 text-left bg-slate-200 whitespace-nowrap border border-slate-400">
                                 Username
-                            </th>
+                            </th> -->
                             <th class="px-4 py-2 text-left bg-slate-200 whitespace-nowrap border border-slate-400">
                                 Role
                             </th>
@@ -127,7 +127,7 @@
                         @foreach($users as $user)
                             <tr class="hover:bg-slate-100">
                                 <td class="border border-slate-300 whitespace-nowrap px-4 py-2">{{ $user->first_name . ' ' . $user->last_name }}</td>
-                                <td class="border border-slate-300 whitespace-nowrap px-4 py-2">{{ $user->username }}</td>
+                                <!-- <td class="border border-slate-300 whitespace-nowrap px-4 py-2">{{ $user->username }}</td> -->
                                 <td class="border border-slate-300 whitespace-nowrap px-4 py-2">{{ $user->role->role }}</td>
                                 <td class="border border-slate-300 whitespace-nowrap px-4 py-2">
                                     <div class="mx-auto flex justify-center space-x-2">
