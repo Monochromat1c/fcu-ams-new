@@ -24,10 +24,22 @@ class AssetController extends Controller
 {
     public function index(Request $request) {
         $categories = DB::table('categories')->get();
+        $departments = DB::table('departments')->get();
+        $locations = DB::table('locations')->get();
+        $sites = DB::table('sites')->get();
+        $suppliers = DB::table('suppliers')->get();
+        $brands = DB::table('brands')->get();
+
         $category = $request->input('category');
+        $department = $request->input('department');
+        $location = $request->input('location');
+        $site = $request->input('site');
+        $supplier = $request->input('supplier');
+        $brand = $request->input('brand');
 
         $totalAssets = DB::table('assets')->whereNull('deleted_at')->count();
         $totalCost = DB::table('assets')->whereNull('deleted_at')->sum('cost');
+        
         $lowValueAssets = DB::table('assets')->where('cost', '<', 1000)->whereNull('deleted_at')->count();
         $highValueAssets = DB::table('assets')->where('cost', '>=', 1000)->whereNull('deleted_at')->count();
 
@@ -43,7 +55,17 @@ class AssetController extends Controller
             ->leftJoin('departments', 'assets.department_id', '=', 'departments.id')
             ->leftJoin('conditions', 'assets.condition_id', '=', 'conditions.id')
             ->leftJoin('statuses', 'assets.status_id', '=', 'statuses.id')
-            ->select('assets.*', 'suppliers.supplier as supplier_name', 'sites.site as site_name', 'statuses.status as status_name','conditions.condition as condition_name','locations.location as location_name', 'categories.category as category_name', 'departments.department as department_name');
+            ->leftJoin('brands', 'assets.brand_id', '=', 'brands.id')
+            ->select('assets.*', 
+                'suppliers.supplier as supplier_name', 
+                'sites.site as site_name', 
+                'statuses.status as status_name',
+                'conditions.condition as condition_name',
+                'locations.location as location_name', 
+                'categories.category as category_name', 
+                'departments.department as department_name',
+                'brands.brand as brand_name'
+            );
 
         if ($search) {
             $query->where(function ($q) use ($search) {
@@ -52,28 +74,62 @@ class AssetController extends Controller
                     ->orWhere('sites.site', 'like', '%' . $search . '%')
                     ->orWhere('locations.location', 'like', '%' . $search . '%')
                     ->orWhere('categories.category', 'like', '%' . $search . '%')
-                    ->orWhere('departments.department', 'like', '%' . $search . '%');
+                    ->orWhere('departments.department', 'like', '%' . $search . '%')
+                    ->orWhere('brands.brand', 'like', '%' . $search . '%');
             });
         }
 
-        if ($request->input('category')) {
-            $query->where('assets.category_id', $request->input('category'));
+        if ($category) {
+            $query->where('assets.category_id', $category);
+        }
+        if ($department) {
+            $query->where('assets.department_id', $department);
+        }
+        if ($location) {
+            $query->where('assets.location_id', $location);
+        }
+        if ($site) {
+            $query->where('assets.site_id', $site);
+        }
+        if ($supplier) {
+            $query->where('assets.supplier_id', $supplier);
+        }
+        if ($brand) {
+            $query->where('assets.brand_id', $brand);
         }
 
         if ($request->input('clear') == 'true') {
             return redirect()->route('asset.list');
         }
 
-        if ($sort && $direction) {
-            $query->orderBy($sort, $direction);
-        } else {
-            $query->orderBy('asset_tag_id', 'asc');
-        }
+        $query->orderBy($sort, $direction);
 
-        $assets = $query->whereNull('assets.deleted_at')->paginate(15);
+        $assets = $query->whereNull('assets.deleted_at')
+            ->paginate(15)
+            ->appends($request->all());
 
-        return view('fcu-ams/asset/assetList', compact('totalAssets', 'totalCost', 'lowValueAssets', 'highValueAssets',
-        'assets', 'sort', 'direction', 'search', 'categories', 'category'));
+        return view('fcu-ams/asset/assetList', compact(
+            'totalAssets', 
+            'totalCost', 
+            'lowValueAssets',   
+            'highValueAssets',  
+            'assets', 
+            'sort', 
+            'direction', 
+            'search', 
+            'categories', 
+            'category',
+            'departments',
+            'department',
+            'locations',
+            'location',
+            'sites',
+            'site',
+            'suppliers',
+            'supplier',
+            'brands',
+            'brand'
+        ));
     }
 
     public function search(Request $request)
@@ -93,7 +149,6 @@ class AssetController extends Controller
                 ];
             }),
         ]);
-
     }
 
     public function create() {

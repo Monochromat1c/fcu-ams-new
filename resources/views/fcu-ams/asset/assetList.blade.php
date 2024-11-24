@@ -154,7 +154,7 @@
                                     <g id="next">
                                         <g id="next_2">
                                             <path id="Combined Shape" fill-rule="evenodd" clip-rule="evenodd"
-                                                d="M18.9792 32.3759L8.69035 39.3951C6.69889 40.7537 3.99878 39.3269 3.99878 36.917V11.005C3.99878 8.59361 6.69843 7.166 8.69028 8.52489L27.6843 21.4809C29.4304 22.672 29.4304 25.249 27.6843 26.4371L20.9792 31.0114V36.9144C20.9792 37.7185 21.8791 38.1937 22.5432 37.7406L41.5107 24.787C42.0938 24.3882 42.0938 23.5316 41.5112 23.1342L22.5436 10.1805C21.8791 9.72714 20.9792 10.2023 20.9792 11.0064V11.9464C20.9792 12.4987 20.5315 12.9464 19.9792 12.9464C19.4269 12.9464 18.9792 12.4987 18.9792 11.9464V11.0064C18.9792 8.59492 21.6789 7.16945 23.6711 8.52861L42.6387 21.4823C44.3845 22.6732 44.3845 25.2446 42.6391 26.4382L23.6707 39.3925C21.6789 40.7514 18.9792 39.3259 18.9792 36.9144V32.3759ZM18.9792 29.9548L7.56322 37.7429C6.89939 38.1958 5.99878 37.7199 5.99878 36.917V11.005C5.99878 10.2003 6.89924 9.72409 7.56321 10.1771L26.5573 23.1331C27.1391 23.53 27.1391 24.389 26.5582 24.7842L20.9792 28.5904V24.9184C20.9792 24.3661 20.5315 23.9184 19.9792 23.9184C19.4269 23.9184 18.9792 24.3661 18.9792 24.9184V29.9548Z"
+                                                d="M18.9792 32.3759L8.69035 39.3951C6.69889 40.7537 3.99878 39.3269 3.99878 36.917V11.005C3.99878 8.59361 6.69843 7.166 8.69028 8.52489L27.6843 21.4809C29.4304 22.672 29.4304 25.249 27.6843 26.4371L20.9792 31.0114V36.9144C20.9792 37.7185 21.8791 38.1937 22.5432 37.7406L41.5107 24.787C42.0938 24.3882 42.0938 23.5316 41.5112 23.1342L22.5436 10.1805C21.8791 9.72714 20.9792 10.2023 20.9792 11.0064V11.9464C20.9792 12.4987 20.5315 12.9464 19.9792 12.9464C19.4269 12.9464 18.9792 12.4987 18.9792 11.9464V11.0064C18.9792 8.59492 21.6789 7.16945 23.6711 8.52861L42.6387 21.4823C44.3845 22.6732 44.3845 25.2446 42.6391 26.4382L23.6707 39.3925C21.6789 40.7514 18.9792 39.3259 18.9792 36.9144V32.3759ZM18.9792 29.9548L7.56322 37.7429C6.89939 38.1958 5.99878 37.7199 5.99878 36.917V11.005C5.99878 10.2003 6.89924 9.72409 7.56321 10.1771L26.5573 23.1331C27.1391 23.53 27.1391  24.389 26.5573 24.785L18.9792 29.9548Z"
                                                 fill="#000000" />
                                         </g>
                                     </g>
@@ -171,39 +171,125 @@
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex justify-between mb-3">
                 <h2 class="text-2xl font-bold my-auto">Asset List</h2>
-                <div class="searchBox">
-                    <form id="searchboxForm" action="{{ route('asset.list') }}" method="GET" class=" flex gap-1">
-                        <div class="flex align-items-center gap-1">
-                            <select name="category"
-                                class="py-3 px-3 border rounded-md border-blue-500 w-96 max-w-40 text-sm bg-white text-blue-500 my-auto">
-                                <option value="">All Categories</option>
-                                @foreach($categories as $cat)
-                                    <option value="{{ $cat->id }}"
-                                        {{ $cat->id == $category ? 'selected' : '' }}>
-                                        {{ $cat->category }}
-                                    </option>
-                                @endforeach
-                            </select>
+                <div class="searchBox flex gap-2">
+                    <button type="button" onclick="document.getElementById('filterModal').classList.remove('hidden')"
+                        class="flex gap-1 items-center bg-blue-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 my-auto" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor">
+                            <path d="M3 3h18v18H3V3z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        Filters
+                    </button>
+                    <!-- Filter Modal -->
+                    <div id="filterModal"
+                        class="fixed inset-0 flex items-center justify-center z-50 hidden bg-black bg-opacity-50">
+                        <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-1/3">
+                            <h2 class="text-2xl font-bold mb-4">Filter Assets</h2>
+                            <form id="filterForm" action="{{ route('asset.list') }}" method="GET"
+                                class="flex flex-col gap-4">
+                                <select name="category"
+                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
+                                    <option value="">All Categories</option>
+                                    @foreach($categories as $cat)
+                                        <option value="{{ $cat->id }}"
+                                            {{ $cat->id == $category ? 'selected' : '' }}>
+                                            {{ $cat->category }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <select name="department"
+                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
+                                    <option value="">All Departments</option>
+                                    @foreach($departments as $dept)
+                                        <option value="{{ $dept->id }}"
+                                            {{ $dept->id == $department ? 'selected' : '' }}>
+                                            {{ $dept->department }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <select name="location"
+                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
+                                    <option value="">All Locations</option>
+                                    @foreach($locations as $loc)
+                                        <option value="{{ $loc->id }}"
+                                            {{ $loc->id == $location ? 'selected' : '' }}>
+                                            {{ $loc->location }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <select name="site"
+                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
+                                    <option value="">All Sites</option>
+                                    @foreach($sites as $site_item)
+                                        <option value="{{ $site_item->id }}"
+                                            {{ $site_item->id == $site ? 'selected' : '' }}>
+                                            {{ $site_item->site }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <select name="supplier"
+                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
+                                    <option value="">All Suppliers</option>
+                                    @foreach($suppliers as $sup)
+                                        <option value="{{ $sup->id }}"
+                                            {{ $sup->id == $supplier ? 'selected' : '' }}>
+                                            {{ $sup->supplier }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <select name="brand"
+                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
+                                    <option value="">All Brands</option>
+                                    @foreach($brands as $brand_item)
+                                        <option value="{{ $brand_item->id }}"
+                                            {{ $brand_item->id == $brand ? 'selected' : '' }}>
+                                            {{ $brand_item->brand }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <div class="flex justify-between">
+                                    <button type="button"
+                                        onclick="document.getElementById('filterModal').classList.add('hidden')"
+                                        class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md">
+                                        Cancel
+                                    </button>
+                                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">
+                                        Apply Filters
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                        <input type="hidden" name="submitted" value="true">
-                        <input type="text" name="search" placeholder="Search for assets..." style="padding-top:.69rem;padding-bottom:.69rem;"
-                            class="px-3 border rounded-md border-red-950 w-96 text-sm text-gray-700 my-auto">
+                    </div>
+                    <form id="searchboxForm" action="{{ route('asset.list') }}" method="GET"
+                        class="flex gap-1">
+                        <input type="text" name="search" placeholder="Search for assets..."
+                            class="px-3 py-3 border rounded-md border-red-950 w-96 text-sm text-gray-700 my-auto">
                         <div class="flex align-items-center gap-1">
-                            <button type="submit" style="padding: 0.35rem 0.75rem;"
-                                class=" border border-green-600 text-green-600 hover:bg-green-600 hover:text-white transition-all duration-200 ease-in rounded-md">
+                            <button type="submit"
+                                class="flex gap-1 items-center bg-green-600 text-white hover:scale-105 transition-all
+                                duration-200 ease-in rounded-md px-4 p-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                                 </svg>
+                                Search
                             </button>
-                            <button type="submit" style="padding: 0.35rem 0.75rem;" name="clear" value="true"
-                                class="border border-amber-600 hover:text-white text-amber-600 hover:bg-amber-600 transition-all duration-200 ease-in rounded-md">
+                            <button type="submit" name="clear" value="true"
+                                class="flex gap-1 items-center bg-amber-600 text-white hover:scale-105 transition-all
+                                duration-200 ease-in rounded-md px-4 p-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6">
                                     <path stroke-linecap="round" stroke-linejoin="round"
                                         d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                 </svg>
+                                Clear
                             </button>
                         </div>
                     </form>
@@ -387,9 +473,21 @@
 @include('layouts.modals.asset.deleteAsset')
 <script src="{{ asset('js/chart.js') }}"></script>
 <script>
-    document.querySelector('select[name="category"]').addEventListener('change', function() {
-        document.getElementById('searchboxForm').submit();
-    });
+    document.querySelectorAll(
+            'select[name="category"], select[name="department"], select[name="location"], select[name="site"], select[name="supplier"], select[name="brand"]'
+        )
+        .forEach(function (select) {
+            var old_element = select;
+            var new_element = old_element.cloneNode(true);
+            old_element.parentNode.replaceChild(new_element, old_element);
+        });
+
+    window.onclick = function (event) {
+        const modal = document.getElementById('filterModal');
+        if (event.target == modal) {
+            modal.classList.add('hidden');
+        }
+    }
 </script>
 <script>
     function clearSearch() {
@@ -398,12 +496,28 @@
     }
 </script>
 <script>
-    window.onload = function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (window.performance.navigation.type === 1 && urlParams.has('search')) {
-            window.location.href = "{{ route('asset.list') }}";
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check if the page was reloaded
+        if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
+            // Clear search input
+            const searchInput = document.querySelector('input[name="search"]');
+            if (searchInput) {
+                searchInput.value = '';
+            }
+            
+            // Clear all select filters
+            const selectFilters = document.querySelectorAll('select[name="category"], select[name="department"], select[name="location"], select[name="site"], select[name="supplier"], select[name="brand"]');
+            selectFilters.forEach(function(select) {
+                if (select) {
+                    select.selectedIndex = 0;
+                }
+            });
+
+            // Optional: Remove query parameters from URL
+            const cleanUrl = window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
         }
-    };
+    });
 </script>
 
 @endsection

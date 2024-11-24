@@ -81,9 +81,14 @@ class ForeignRelatedTablesSeeder extends Seeder
         };
 
         // Seed Department
-        Department::create([
-            'department' => 'CCS Department',
-        ]);
+        $departments = [
+            ['department' => 'CCS Department'],
+            ['department' => 'CAS Department'],
+        ];
+        
+        foreach ($departments as $department){
+            Department::create($department);
+        }
         
         // Seed Status
         $statuses = [
