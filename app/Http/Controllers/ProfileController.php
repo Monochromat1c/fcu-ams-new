@@ -53,10 +53,21 @@ class ProfileController extends Controller
             'email' => 'required|email',
             'contact_number' => 'required|string',
             'address' => 'required|string',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:10000',
         ]);
 
         $user = auth()->user();
         $nameParts = explode(' ', $request->input('full_name'));
+
+        if ($request->hasFile('profile_picture')) {
+            if ($user->profile_picture && file_exists(public_path($user->profile_picture)) && basename($user->profile_picture) != 'mele.png') {
+                unlink(public_path($user->profile_picture));
+            }
+
+            $imageName = time() . '.' . $request->profile_picture->extension();
+            $request->profile_picture->move(public_path('profile'), $imageName);
+            $user->profile_picture = 'profile/' . $imageName;
+        }
 
         if (count($nameParts) === 2) {
             $user->first_name = $nameParts[0];
@@ -73,9 +84,8 @@ class ProfileController extends Controller
         $user->email = $request->input('email');
         $user->contact_number = $request->input('contact_number');
         $user->address = $request->input('address');
-
         $user->save();
 
-        return redirect()->route('profile.index')->with('profile_success', 'Profile updated successfully!');
+        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
 }

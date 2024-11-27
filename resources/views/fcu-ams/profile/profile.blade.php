@@ -8,17 +8,50 @@
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
             <h1 class="my-auto mx-auto text-3xl">Profile</h1>
         </nav>
+        <div class="m-3">
+            @if(session('success'))
+                <div class="successMessage bg-green-600 border border-green-600 text-white px-4 py-3 rounded relative mt-2 mb-2">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if($errors->any())
+                <div class="errorMessage bg-red-900 border border-red-900 text-white px-4 py-3 rounded relative mt-2 mb-2">
+                    <ul>
+                        @foreach($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+        </div>
         <div class="content-area mx-3">
             <div class="bg-white rounded-lg shadow-md p-6 mb-3">
+                <form method="POST" action="{{ route('profile.updatePersonalInformation') }}"
+                    enctype="multipart/form-data">
+                @csrf
                 <div class="flex items-center">
-                    <div class="pr-3 py-2">
+                    <div class="relative px-2 py-2 mr-2 cursor-pointer bg-gray-100 border rounded-md"
+                        onclick="document.getElementById('profile-picture-input').click();">
                         @if(auth()->user()->profile_picture)
-                            <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
-                                class=" object-cover bg-no-repeat rounded-full mx-auto w-24 h-24">
+                            <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User  Profile"
+                                class="object-cover bg-no-repeat rounded-full mx-auto w-24 h-24">
                         @else
                             <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
-                                class="w-14 h-14 object-cover bg-no-repeat rounded-full mx-auto">
+                                class="w-24 h-24 object-cover bg-no-repeat rounded-full mx-auto">
                         @endif
+                        <input type="file" id="profile-picture-input" name="profile_picture" accept="image/*"
+                            class="hidden" onchange="this.form.submit();">
+
+                        <!-- Camera Icon -->
+                        <div class="absolute bottom-0 right-0 mb-1 mr-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M6.827 6.175A2.31 2.31 0 0 1 5.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 0 0-1.134-.175 2.31 2.31 0 0 1-1.64-1.055l-.822-1.316a2.192 2.192 0 0 0-1.736-1.039 48.774 48.774 0 0 0-5.232 0 2.192 2.192 0 0 0-1.736 1.039l-.821 1.316Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M16.5 12.75a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0ZM18.75 10.5h.008v.008h-.008V10.5Z" />
+                            </svg>
+                        </div>
                     </div>
                     <div class="flex flex-col">
                         <h1 class="text text-xl">
@@ -27,22 +60,6 @@
                         <p class="text-slate-600">{{ $user->email }}</p>
                     </div>
                 </div>
-                @if(session('profile_success'))
-                    <div class="successMessage bg-green-600 border border-green-600 text-white px-4 py-3 rounded relative mt-2 mb-2">
-                        {{ session('profile_success') }}
-                    </div>
-                @endif
-                @if($errors->any())
-                    <div class="errorMessage bg-red-900 border border-red-900 text-white px-4 py-3 rounded relative mt-2 mb-2">
-                        <ul>
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                    <form method="POST" action="{{ route('profile.updatePersonalInformation') }}">
-                        @csrf
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <h1 class="text-lg segoe font-bold">Personal Information</h1>
@@ -102,20 +119,6 @@
             </div>
             <div class="bg-white rounded-lg shadow-md p-6 mb-3">
                 <h2 class="text-2xl mb-2">Change Password</h2>
-                @if(session('success'))
-                <div class="successMessage bg-green-600 border border-green-600 text-white px-4 py-3 rounded relative mt-2 mb-2">
-                    {{ session('success') }}
-                </div>
-                @endif
-                @if($errors->any())
-                    <div class="errorMessage bg-red-900 border border-red-900 text-white px-4 py-3 rounded relative mt-2 mb-2">
-                        <ul>
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
                 <form method="POST" action="{{ route('profile.update') }}">
                     @csrf
                     <div class="flex flex-col mb-3">

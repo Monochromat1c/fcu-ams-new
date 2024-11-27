@@ -33,7 +33,7 @@ class DefaultUserSeeder extends Seeder
         ]);
 
         User::create([
-            'profile_picture' => 'profile/mele.jpg',
+            'profile_picture' => 'profile/mele.png',
             'first_name' => 'Gimelle Jen',
             'last_name' => 'Galera',
             'address' => 'Roxas City',
