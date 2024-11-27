@@ -449,7 +449,7 @@
                                 <div class="flex items-center gap-1">
                                     @if($asset->status_name == 'Available')
                                         <span class="inline-block w-4 h-4 bg-green-500 rounded-full"></span>
-                                    @elseif($asset->status_name == 'Not Available')
+                                    @elseif($asset->status_name == 'Unavailable')
                                         <span class="inline-block w-4 h-4 bg-red-500 rounded-full"></span>
                                     @elseif($asset->status_name == 'Leased')
                                         <span class="inline-block w-4 h-4 bg-blue-500 rounded-full"></span>

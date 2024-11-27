@@ -103,6 +103,8 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(AlertController::class)->group(function () {
         Route::get('/alerts', 'index')->name('alerts.index');
+        Route::get('/assets/{asset}', 'show')->name('asset.show');
+        Route::get('/alerts/maintenance', 'maintenance')->name('alerts.maintenance');
     });
 
     Route::controller(UnitController::class)->group(function () {

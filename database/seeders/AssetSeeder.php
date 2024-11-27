@@ -13,6 +13,7 @@ use App\Models\Department;
 use App\Models\Condition;
 use App\Models\Status;
 use App\Models\Brand;
+use Carbon\Carbon;
 
 class AssetSeeder extends Seeder
 {
@@ -39,6 +40,8 @@ class AssetSeeder extends Seeder
         $HP = Brand::where('brand', 'HP')->first();
         $Dell = Brand::where('brand', 'Dell')->first();
         $Cisco = Brand::where('brand', 'Cisco')->first();
+        $maintenanceStartDate = Carbon::now()->subDays(rand(30, 365)); 
+        $maintenanceEndDate = Carbon::now()->subDays(rand(1, 29)); 
 
         if ($supplier && $site && $location && $category && $ccsDepartment) {
             Asset::create([
@@ -54,8 +57,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 1,
                 'department_id' => $ccsDepartment->id,
                 'purchase_date' => '2024-01-24',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
         
             Asset::create([
@@ -105,8 +110,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 1,
                 'department_id' => $casDepartment->id,
                 'purchase_date' => '2024-01-24',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
         
             Asset::create([
@@ -122,8 +129,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 1,
                 'department_id' => $casDepartment->id,
                 'purchase_date' => '2024-02-24',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
         
             Asset::create([
@@ -156,8 +165,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 1,
                 'department_id' => $casDepartment->id,
                 'purchase_date' => '2024-01-24',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             Asset::create([
@@ -190,8 +201,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 2,
                 'department_id' => $casDepartment->id,
                 'purchase_date' => '2024-02-17',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             Asset::create([
@@ -224,8 +237,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 2,
                 'department_id' => $casDepartment->id,
                 'purchase_date' => '2024-02-17',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             Asset::create([
@@ -275,8 +290,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 2,
                 'department_id' => $ccsDepartment->id,
                 'purchase_date' => '2024-02-17',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             Asset::create([
@@ -326,8 +343,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 3,
                 'department_id' => $ccsDepartment->id,
                 'purchase_date' => '2024-04-17',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             Asset::create([
