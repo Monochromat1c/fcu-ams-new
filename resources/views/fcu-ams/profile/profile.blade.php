@@ -10,47 +10,95 @@
         </nav>
         <div class="content-area mx-3">
             <div class="bg-white rounded-lg shadow-md p-6 mb-3">
-                <h2 class="text-2xl mb-2">User Profile</h2>
-                <div class="flex flex-col">
-                    <div class="flex flex-row mb-3">
-                        <label class="mr-3">Profile Picture:</label>
-                        <div class="border border-slate-300 px-4 py-2">
-                            @if(auth()->user()->profile_picture)
-                                <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
-                                    class="w-14 h-14 object-cover bg-no-repeat rounded-full mx-auto">
-                            @else
-                                <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
-                                    class="w-14 h-14 object-cover bg-no-repeat rounded-full mx-auto">
-                            @endif
-                        </div>
+                <div class="flex items-center">
+                    <div class="pr-3 py-2">
+                        @if(auth()->user()->profile_picture)
+                            <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
+                                class=" object-cover bg-no-repeat rounded-full mx-auto w-24 h-24">
+                        @else
+                            <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
+                                class="w-14 h-14 object-cover bg-no-repeat rounded-full mx-auto">
+                        @endif
                     </div>
-                    <div class="flex flex-row mb-3">
-                        <label class="mr-3">Name:</label>
-                        <p class="text-slate-600">
+                    <div class="flex flex-col">
+                        <h1 class="text text-xl">
                             {{ $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name }}
-                        </p>
-                    </div>
-                    <div class="flex flex-row mb-3">
-                        <label class="mr-3">Address:</label>
-                        <p class="text-slate-600">{{ $user->address }}</p>
-                    </div>
-                    <div class="flex flex-row mb-3">
-                        <label class="mr-3">Contact Number:</label>
-                        <p class="text-slate-600">{{ $user->contact_number }}</p>
-                    </div>
-                    <div class="flex flex-row mb-3">
-                        <label class="mr-3">Email:</label>
+                        </h1>
                         <p class="text-slate-600">{{ $user->email }}</p>
                     </div>
-                    <div class="flex flex-row mb-3">
-                        <label class="mr-3">Username:</label>
-                        <p class="text-slate-600">{{ $user->username }}</p>
-                    </div>
-                    <div class="flex flex-row mb-3">
-                        <label class="mr-3">Role:</label>
-                        <p class="text-slate-600">{{ $user->role->role }}</p>
-                    </div>
                 </div>
+                @if(session('profile_success'))
+                    <div class="successMessage bg-green-600 border border-green-600 text-white px-4 py-3 rounded relative mt-2 mb-2">
+                        {{ session('profile_success') }}
+                    </div>
+                @endif
+                @if($errors->any())
+                    <div class="errorMessage bg-red-900 border border-red-900 text-white px-4 py-3 rounded relative mt-2 mb-2">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                    <form method="POST" action="{{ route('profile.updatePersonalInformation') }}">
+                        @csrf
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <h1 class="text-lg segoe font-bold">Personal Information</h1>
+                                <p
+                                    class="flex text-nowrap items-center gap-2 w-full p-2 border rounded-md bg-gray-100 segoe text-slate-600 font-bold my-3">
+                                    Full
+                                    Name:
+                                    <input type="text" name="full_name"
+                                        value="{{ $user->first_name . ' ' . $user->middle_name . ' ' . $user->last_name }}"
+                                        class="border rounded-md py-1 px-2 w-full urbanist" />
+                                </p>
+                                <p
+                                    class="flex text-nowrap items-center gap-2  w-full p-2 border rounded-md bg-gray-100 segoe text-slate-600 font-bold my-3">
+                                    Email:
+                                    <input type="email" name="email" value="{{ $user->email }}"
+                                        class="border rounded-md py-1 px-2 w-full urbanist" />
+                                </p>
+                                <p
+                                    class="flex text-nowrap items-center gap-2  w-full p-2 border rounded-md bg-gray-100 segoe text-slate-600 font-bold my-3">
+                                    Contact Number:
+                                    <input type="text" name="contact_number" value="{{ $user->contact_number }}"
+                                        class="border rounded-md py-1 px-2 w-full urbanist" />
+                                </p>
+                                <p
+                                    class="flex text-nowrap items-center gap-2  w-full p-2 border rounded-md bg-gray-100 segoe text-slate-600 font-bold my-3">
+                                    Address:
+                                    <input type="text" name="address" value="{{ $user->address }}"
+                                        class="border rounded-md py-1 px-2 w-full urbanist" />
+                                </p>
+                            </div>
+                            <div>
+                                <h1 class="text-lg segoe font-bold">Account Information</h1>
+                                <p class="w-full p-3 border rounded-md bg-gray-100 segoe text-slate-600 font-bold my-3">
+                                    Username:
+                                    <span>{{ $user->username }}</span>
+                                </p>
+                                <p class="w-full p-3 border rounded-md bg-gray-100 segoe text-slate-600 font-bold my-3">
+                                    Role:
+                                    <span>{{ $user->role->role }}</span>
+                                </p>
+                                <p class="w-full p-3 border rounded-md bg-gray-100 segoe text-slate-600 font-bold my-3">
+                                    Member Since:
+                                    <span>{{ $user->created_at->format('F j, Y') }}</span>
+                                </p>
+                            </div>
+                        </div>
+                    <button type="submit" class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
+                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex gap-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="size-6">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                        </svg>
+                        Update Information
+                    </button>
+                </form>
             </div>
             <div class="bg-white rounded-lg shadow-md p-6 mb-3">
                 <h2 class="text-2xl mb-2">Change Password</h2>
@@ -58,16 +106,16 @@
                 <div class="successMessage bg-green-600 border border-green-600 text-white px-4 py-3 rounded relative mt-2 mb-2">
                     {{ session('success') }}
                 </div>
-            @endif
-            @if($errors->any())
-                <div class="errorMessage bg-red-900 border border-red-900 text-white px-4 py-3 rounded relative mt-2 mb-2">
-                    <ul>
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+                @endif
+                @if($errors->any())
+                    <div class="errorMessage bg-red-900 border border-red-900 text-white px-4 py-3 rounded relative mt-2 mb-2">
+                        <ul>
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 <form method="POST" action="{{ route('profile.update') }}">
                     @csrf
                     <div class="flex flex-col mb-3">

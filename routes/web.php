@@ -97,6 +97,8 @@ Route::middleware(['auth.user'])->group(function () {
     Route::controller(ProfileController::class)->group(function () {
         Route::get('/user/profile', 'index')->name('profile.index');
         Route::post('/user/profile/update', 'update')->name('profile.update');
+        Route::post('/user/profile/updatePersonalInformation',
+        'updatePersonalInformation')->name('profile.updatePersonalInformation');
     });
 
     Route::controller(AlertController::class)->group(function () {

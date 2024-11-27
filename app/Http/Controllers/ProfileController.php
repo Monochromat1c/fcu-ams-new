@@ -45,4 +45,37 @@ class ProfileController extends Controller
 
         return back()->with('success', 'Password updated successfully');
     }
+
+    public function updatePersonalInformation(Request $request)
+    {
+        $request->validate([
+            'full_name' => 'required|string',
+            'email' => 'required|email',
+            'contact_number' => 'required|string',
+            'address' => 'required|string',
+        ]);
+
+        $user = auth()->user();
+        $nameParts = explode(' ', $request->input('full_name'));
+
+        if (count($nameParts) === 2) {
+            $user->first_name = $nameParts[0];
+            $user->middle_name = null;
+            $user->last_name = $nameParts[1];
+        } elseif (count($nameParts) >= 3) {
+            $user->first_name = $nameParts[0];
+            $user->middle_name = $nameParts[1];
+            $user->last_name = implode(' ', array_slice($nameParts, 2));
+        } else {
+            return back()->withErrors(['full_name' => 'Please provide a valid full name.']);
+        }
+
+        $user->email = $request->input('email');
+        $user->contact_number = $request->input('contact_number');
+        $user->address = $request->input('address');
+
+        $user->save();
+
+        return redirect()->route('profile.index')->with('profile_success', 'Profile updated successfully!');
+    }
 }

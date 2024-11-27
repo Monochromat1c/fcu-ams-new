@@ -22,6 +22,14 @@ h1 {
     font-family: "Archivo", sans-serif;
 }
 
+.segoe {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.urbanist {
+    font-family: 'Urbanist', sans-serif;
+}
+
 * {
     font-family: 'Urbanist', sans-serif;
     /* outline: 1px dotted red; */
