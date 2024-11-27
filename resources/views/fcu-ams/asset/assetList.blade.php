@@ -183,77 +183,102 @@
                     <!-- Filter Modal -->
                     <div id="filterModal"
                         class="fixed inset-0 flex items-center justify-center z-50 hidden bg-black bg-opacity-50">
-                        <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-1/3">
+                        <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-1/2 max-h-[80vh] overflow-y-auto">
                             <h2 class="text-2xl font-bold mb-4">Filter Assets</h2>
                             <form id="filterForm" action="{{ route('asset.list') }}" method="GET"
-                                class="flex flex-col gap-4">
-                                <select name="category"
-                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
-                                    <option value="">All Categories</option>
-                                    @foreach($categories as $cat)
-                                        <option value="{{ $cat->id }}"
-                                            {{ $cat->id == $category ? 'selected' : '' }}>
-                                            {{ $cat->category }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                class="space-y-4">
+                                <!-- Categories Filter -->
+                                <div class="border-b border-gray-300 pb-4 mb-4">
+                                    <h3 class="segoe font-semibold mb-2">Categories</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        @foreach($allCategories as $cat)
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox" name="categories[]" value="{{ $cat->id }}"
+                                                    class="form-checkbox"
+                                                    {{ in_array($cat->id, $selectedCategories) ? 'checked' : '' }}>
+                                                <span class="ml-2">{{ $cat->category }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
 
-                                <select name="department"
-                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
-                                    <option value="">All Departments</option>
-                                    @foreach($departments as $dept)
-                                        <option value="{{ $dept->id }}"
-                                            {{ $dept->id == $department ? 'selected' : '' }}>
-                                            {{ $dept->department }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <!-- Departments Filter -->
+                                <div class="border-b border-gray-300 pb-4 mb-4">
+                                    <h3 class="segoe font-semibold mb-2">Departments</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        @foreach($allDepartments as $dept)
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox" name="departments[]" value="{{ $dept->id }}"
+                                                    class="form-checkbox"
+                                                    {{ in_array($dept->id, $selectedDepartments) ? 'checked' : '' }}>
+                                                <span class="ml-2">{{ $dept->department }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
 
-                                <select name="location"
-                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
-                                    <option value="">All Locations</option>
-                                    @foreach($locations as $loc)
-                                        <option value="{{ $loc->id }}"
-                                            {{ $loc->id == $location ? 'selected' : '' }}>
-                                            {{ $loc->location }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <!-- Locations Filter -->
+                                <div class="border-b border-gray-300 pb-4 mb-4">
+                                    <h3 class="segoe font-semibold mb-2">Locations</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        @foreach($allLocations as $loc)
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox" name="locations[]" value="{{ $loc->id }}"
+                                                    class="form-checkbox"
+                                                    {{ in_array($loc->id, $selectedLocations) ? 'checked' : '' }}>
+                                                <span class="ml-2">{{ $loc->location }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
 
-                                <select name="site"
-                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
-                                    <option value="">All Sites</option>
-                                    @foreach($sites as $site_item)
-                                        <option value="{{ $site_item->id }}"
-                                            {{ $site_item->id == $site ? 'selected' : '' }}>
-                                            {{ $site_item->site }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <!-- Sites Filter -->
+                                <div class="border-b border-gray-300 pb-4 mb-4">
+                                    <h3 class="segoe font-semibold mb-2">Sites</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        @foreach($allSites as $site_item)
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox" name="sites[]" value="{{ $site_item->id }}"
+                                                    class="form-checkbox"
+                                                    {{ in_array($site_item->id, $selectedSites) ? 'checked' : '' }}>
+                                                <span class="ml-2">{{ $site_item->site }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
 
-                                <select name="supplier"
-                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
-                                    <option value="">All Suppliers</option>
-                                    @foreach($suppliers as $sup)
-                                        <option value="{{ $sup->id }}"
-                                            {{ $sup->id == $supplier ? 'selected' : '' }}>
-                                            {{ $sup->supplier }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <!-- Suppliers Filter -->
+                                <div class="border-b border-gray-300 pb-4 mb-4">
+                                    <h3 class="segoe font-semibold mb-2">Suppliers</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        @foreach($allSuppliers as $sup)
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox" name="suppliers[]" value="{{ $sup->id }}"
+                                                    class="form-checkbox"
+                                                    {{ in_array($sup->id, $selectedSuppliers) ? 'checked' : '' }}>
+                                                <span class="ml-2">{{ $sup->supplier }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
 
-                                <select name="brand"
-                                    class="py-2 px-3 border rounded-md border-blue-500 text-sm bg-white text-blue-500">
-                                    <option value="">All Brands</option>
-                                    @foreach($brands as $brand_item)
-                                        <option value="{{ $brand_item->id }}"
-                                            {{ $brand_item->id == $brand ? 'selected' : '' }}>
-                                            {{ $brand_item->brand }}
-                                        </option>
-                                    @endforeach
-                                </select>
+                                <!-- Brands Filter -->
+                                <div class="border-b border-gray-300 pb-4 mb-4">
+                                    <h3 class="segoe font-semibold mb-2">Brands</h3>
+                                    <div class="grid grid-cols-3 gap-2">
+                                        @foreach($allBrands as $brand_item)
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox" name="brands[]" value="{{ $brand_item->id }}"
+                                                    class="form-checkbox"
+                                                    {{ in_array($brand_item->id, $selectedBrands) ? 'checked' : '' }}>
+                                                <span class="ml-2">{{ $brand_item->brand }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
 
-                                <div class="flex justify-between">
+                                <!-- Action Buttons -->
+                                <div class="flex justify-between mt-4">
                                     <button type="button"
                                         onclick="document.getElementById('filterModal').classList.add('hidden')"
                                         class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md">
@@ -266,6 +291,12 @@
                             </form>
                         </div>
                     </div>
+
+                    <style>
+                        .form-checkbox {
+                            @applyh-4 w-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500;
+                        }
+                    </style>
                     <form id="searchboxForm" action="{{ route('asset.list') }}" method="GET"
                         class="flex gap-1">
                         <input type="text" name="search" placeholder="Search for assets..."

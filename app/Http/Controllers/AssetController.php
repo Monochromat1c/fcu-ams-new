@@ -23,12 +23,12 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 class AssetController extends Controller
 {
     public function index(Request $request) {
-        $categories = DB::table('categories')->get();
-        $departments = DB::table('departments')->get();
-        $locations = DB::table('locations')->get();
-        $sites = DB::table('sites')->get();
-        $suppliers = DB::table('suppliers')->get();
-        $brands = DB::table('brands')->get();
+        $categories = $request->input('categories', []);
+        $departments = $request->input('departments', []);
+        $locations = $request->input('locations', []);
+        $sites = $request->input('sites', []);
+        $suppliers = $request->input('suppliers', []);
+        $brands = $request->input('brands', []);
 
         $category = $request->input('category');
         $department = $request->input('department');
@@ -79,23 +79,23 @@ class AssetController extends Controller
             });
         }
 
-        if ($category) {
-            $query->where('assets.category_id', $category);
+        if (!empty($categories)) {
+            $query->whereIn('assets.category_id', $categories);
         }
-        if ($department) {
-            $query->where('assets.department_id', $department);
+        if (!empty($departments)) {
+            $query->whereIn('assets.department_id', $departments);
         }
-        if ($location) {
-            $query->where('assets.location_id', $location);
+        if (!empty($locations)) {
+            $query->whereIn('assets.location_id', $locations);
         }
-        if ($site) {
-            $query->where('assets.site_id', $site);
+        if (!empty($sites)) {
+            $query->whereIn('assets.site_id', $sites);
         }
-        if ($supplier) {
-            $query->where('assets.supplier_id', $supplier);
+        if (!empty($suppliers)) {
+            $query->whereIn('assets.supplier_id', $suppliers);
         }
-        if ($brand) {
-            $query->where('assets.brand_id', $brand);
+        if (!empty($brands)) {
+            $query->whereIn('assets.brand_id', $brands);
         }
 
         if ($request->input('clear') == 'true') {
@@ -108,27 +108,38 @@ class AssetController extends Controller
             ->paginate(15)
             ->appends($request->all());
 
-        return view('fcu-ams/asset/assetList', compact(
-            'totalAssets', 
-            'totalCost', 
-            'lowValueAssets',   
-            'highValueAssets',  
-            'assets', 
-            'sort', 
-            'direction', 
-            'search', 
-            'categories', 
-            'category',
-            'departments',
-            'department',
-            'locations',
-            'location',
-            'sites',
-            'site',
-            'suppliers',
-            'supplier',
-            'brands',
-            'brand'
+        $allCategories = DB::table('categories')->get();
+        $allDepartments = DB::table('departments')->get();
+        $allLocations = DB::table('locations')->get();
+        $allSites = DB::table('sites')->get();
+        $allSuppliers = DB::table('suppliers')->get();
+        $allBrands = DB::table('brands')->get();
+        
+        return view('fcu-ams/asset/assetList', array_merge(
+            compact(
+                'totalAssets',
+                'totalCost',
+                'lowValueAssets',
+                'highValueAssets',
+                'assets',
+                'sort',
+                'direction',
+                'search'
+            ),
+            [
+                'allCategories' => $allCategories,
+                'allDepartments' => $allDepartments,
+                'allLocations' => $allLocations,
+                'allSites' => $allSites,
+                'allSuppliers' => $allSuppliers,
+                'allBrands' => $allBrands,
+                'selectedCategories' => $categories,
+                'selectedDepartments' => $departments,
+                'selectedLocations' => $locations,
+                'selectedSites' => $sites,
+                'selectedSuppliers' => $suppliers,
+                'selectedBrands' => $brands,
+            ]
         ));
     }
 
