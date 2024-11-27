@@ -29,7 +29,7 @@
                 <form method="POST" action="{{ route('profile.updatePersonalInformation') }}"
                     enctype="multipart/form-data">
                 @csrf
-                <div class="flex items-center">
+                <div class="flex items-center mb-3">
                     <div class="relative px-2 py-2 mr-2 cursor-pointer bg-gray-100 border rounded-md"
                         onclick="document.getElementById('profile-picture-input').click();">
                         @if(auth()->user()->profile_picture)
