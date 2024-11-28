@@ -8,6 +8,7 @@ use App\Models\Inventory;
 use App\Models\Supplier;
 use App\Models\Unit;
 use App\Models\Brand;
+use Carbon\Carbon;
 
 class InventorySeeder extends Seeder
 {
@@ -28,6 +29,8 @@ class InventorySeeder extends Seeder
         $HP = Brand::where('brand', 'HP')->first();
         $Dell = Brand::where('brand', 'Dell')->first();
         $Cisco = Brand::where('brand', 'Cisco')->first();
+        $pastMonth = Carbon::now()->subMonth()->startOfMonth();
+        $pastPastMonth = Carbon::now()->subMonths(2)->startOfMonth();
 
         if ($supplier) {
             Inventory::create([
@@ -136,6 +139,7 @@ class InventorySeeder extends Seeder
                 'brand_id' => $Pilot->id,
                 'unit_price' => 35.00, 
                 'supplier_id' => 1,
+                'created_at' => $pastPastMonth,
             ]);
 
             Inventory::create([
@@ -157,12 +161,13 @@ class InventorySeeder extends Seeder
             ]);
 
             Inventory::create([
-                'quantity' => 0, 
+                'quantity' => 1, 
                 'unit_id' => 2, 
                 'items_specs' => 'Fudenosuke Brush Pen', 
                 'brand_id' => $Tombow->id,
                 'unit_price' => 40.00, 
                 'supplier_id' => 1,
+                'created_at' => $pastPastMonth,
             ]);
 
             Inventory::create([
@@ -175,12 +180,13 @@ class InventorySeeder extends Seeder
             ]);
 
             Inventory::create([
-                'quantity' => 0, 
+                'quantity' => 1, 
                 'unit_id' => 2, 
                 'items_specs' => 'FriXion Erasable Pen', 
                 'brand_id' => $Pilot->id,
                 'unit_price' => 35.00, 
                 'supplier_id' => 1,
+                'created_at' => $pastPastMonth,
             ]);
 
             Inventory::create([
@@ -226,7 +232,8 @@ class InventorySeeder extends Seeder
                 'brand_id' => $Canon->id,
                 'unit_price' => 450.00,
                 'supplier_id' => 2,
-            ]);
+                'created_at' => $pastMonth,
+            ]); 
 
             Inventory::create([
                 'quantity' => 100, 
@@ -235,6 +242,7 @@ class InventorySeeder extends Seeder
                 'brand_id' => $Canon->id,
                 'unit_price' => 350.00,
                 'supplier_id' => 2,
+                'created_at' => $pastMonth,
             ]);
 
         } else {

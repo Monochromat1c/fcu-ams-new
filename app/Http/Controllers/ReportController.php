@@ -20,12 +20,20 @@ use App\Exports\AssetsExport;
 use App\Imports\AssetsImport;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Validation\Rule;
-
+use App\Models\Brand;
+use App\Models\Unit;
+use Carbon\Carbon;
 class ReportController extends Controller
 {
     public function index(Request $request) {
-        $inventories = Inventory::with('supplier')
-            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+        $month = $request->input('month', now()->month);
+        $year = $request->input('year', now()->year);
+
+        $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+        $endDate = Carbon::createFromDate($year, $month, 1)->endOfMonth();
+
+        $inventories = Inventory::with('supplier', 'brand', 'unit')
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->where('quantity', '>', 0)
             ->orderBy('unique_tag', 'asc')
             ->paginate(10);
@@ -83,8 +91,12 @@ class ReportController extends Controller
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
-        return view('fcu-ams/reports/reports', compact('inventories', 'lowStockInventories', 'stockOutRecords',
-        'assets', 'purchaseOrders', 'inventoriesForPrint'));
+        return view('fcu-ams/reports/reports', compact('lowStockInventories', 'stockOutRecords',
+        'assets', 'purchaseOrders', 'inventoriesForPrint'), [
+        'inventories' => $inventories,
+        'selectedMonth' => $month,
+        'selectedYear' => $year
+        ]);
     }
 
     public function stockOutDetails($id)
