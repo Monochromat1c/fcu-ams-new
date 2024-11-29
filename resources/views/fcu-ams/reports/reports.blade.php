@@ -555,8 +555,10 @@
                     <!-- <img class="fcu-icon mb-3 w-28 mx-auto" src="/img/login/fcu-icon.png" alt="" srcset=""> -->
                     <h2 class="text-2xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>
                     <h2 class="text-xl font-bold mb-3">Roxas Avenue, Roxas City</h2>
-                    <h2 class="text-xl font-bold">OFFICE SUPPLIES INVENTORY (Per Month)</h2>
-                    <h2 class="text-xl font-bold">on {{ now()->format('M j, Y') }}
+                    <h2 class="text-xl font-bold">OFFICE SUPPLIES INVENTORY</h2>
+                    <h2 class="text-xl font-bold">on
+                        {{ \Carbon\Carbon::createFromDate($selectedYear, $selectedMonth, 1)->format('F Y') }}
+                    </h2>
                     </h2>
                 </div>
                 <table class="table-auto w-full">

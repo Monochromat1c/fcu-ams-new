@@ -23,6 +23,7 @@ use Illuminate\Validation\Rule;
 use App\Models\Brand;
 use App\Models\Unit;
 use Carbon\Carbon;
+
 class ReportController extends Controller
 {
     public function index(Request $request) {
@@ -39,7 +40,7 @@ class ReportController extends Controller
             ->paginate(10);
 
         $inventoriesForPrint = Inventory::with('supplier')
-            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
+            ->whereBetween('created_at', [$startDate, $endDate])
             ->where('quantity', '>', 0)
             ->orderBy('unique_tag', 'asc')
             ->get();

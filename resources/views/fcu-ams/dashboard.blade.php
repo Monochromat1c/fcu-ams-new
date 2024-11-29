@@ -85,16 +85,30 @@
                 <p class="text-3xl font-bold">₱{{ number_format($totalInventoryValue, 2) }}</p>
             </div>
         </div>
-        <div class="m-3 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="m-3 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-lg font-semibold mb-4">Asset Category Distribution</h3>
-                <canvas id="assetDistributionChart"></canvas>
+                <h3 class="text-lg font-semibold mb-4">Asset Value Distribution</h3>
+                <canvas id="assetValueDistributionChart"></canvas>
+                <div id="assetValueLegend" class="mt-4"></div>
             </div>
+            <!-- <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold">Asset Category Distribution</h3>
+                <canvas id="assetDistributionChart"></canvas>
+            </div> -->
             <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="text-lg font-semibold mb-4">Monthly Asset Acquisition</h3>
+                <h3 class="text-lg font-semibold mb-4">Inventory Value Distribution</h3>
+                <canvas id="inventoryValueDistributionChart"></canvas>
+                <div id="inventoryValueLegend" class="mt-4"></div>
+            </div>
+            <div class="bg-white rounded-lg shadow-md p-6 s col-span-2">
+                <h3 class="text-lg font-semibold">Monthly Asset Acquisition</h3>
                 <canvas id="assetAcquisitionChart" class="mb-2"></canvas>
                 {{ $assetAcquisition->links() }}
             </div>
+            <!-- <div class="bg-white rounded-lg shadow-md p-6">
+                <h3 class="text-lg font-semibold">Asset Depreciation Trends</h3>
+                <canvas id="depreciationTrendsChart"></canvas>
+            </div> -->
         </div>
         <div class="m-3 grid grid-cols-1 md:grid-cols-2 gap-6">
             <!-- <div class="bg-white rounded-lg shadow-md p-6">
@@ -149,7 +163,7 @@
 <script src="{{ asset('js/chart.js') }}"></script>
 <script>
     const assetAcquisitionChart = document.getElementById('assetAcquisitionChart').getContext('2d');
-    const assetAcquisitionData = {!! json_encode($assetAcquisition->items()) !!}; // get the items of the paginated collection
+    const assetAcquisitionData = {!! json_encode($assetAcquisition->items()) !!};
     const assetAcquisitionLabels = assetAcquisitionData.map(data => data.month);
     const assetAcquisitionValues = assetAcquisitionData.map(data => data.count);
     const assetAcquisitionAssetTags = assetAcquisitionData.map(data => data.asset_tags);
@@ -181,6 +195,8 @@
             }]
         },
         options: {
+            responsive: true,
+            aspectRatio: 3,
             title: {
                 display: true,
                 text: 'Monthly Asset Acquisition'
@@ -198,7 +214,6 @@
         }
     });
 </script>
- 
 <script>
     // Asset Distribution Chart
     const assetDistributionChart = document.getElementById('assetDistributionChart').getContext('2d');
@@ -313,5 +328,366 @@
             aspectRatio: 1.5
         }
     });
+</script>
+<script>
+    // Depreciation Trends Chart
+    const depreciationTrendsChart = document.getElementById('depreciationTrendsChart').getContext('2d');
+    const depreciationTrendsData = {!! json_encode($depreciationTrends) !!};
+    const depreciationYears = depreciationTrendsData.map(data => data.year);
+    const totalCosts = depreciationTrendsData.map(data => data.total_cost);
+    const currentValues = depreciationTrendsData.map(data => data.current_value);
+    const depreciationAmounts = depreciationTrendsData.map(data => data.depreciation);
+
+    new Chart(depreciationTrendsChart, {
+        type: 'line',
+        data: {
+            labels: depreciationYears,
+            datasets: [
+                {
+                    label: 'Total Cost',
+                    data: totalCosts,
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: false
+                },
+                {
+                    label: 'Current Value',
+                    data: currentValues,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: false
+                },
+                {
+                    label: 'Depreciation',
+                    data: depreciationAmounts,
+                    borderColor: 'rgba(255, 206, 86, 1)',
+                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Asset Depreciation Trends'
+            },
+            tooltips: {
+                mode: 'index',
+                intersect: false,
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        callback: function(value) {
+                            return '₱' + value.toLocaleString();
+                        }
+                    }
+                }]
+            }
+        }
+    });
+</script>
+<script>
+    // Asset Value Distribution Chart
+    const assetValueDistributionChart = document.getElementById('assetValueDistributionChart').getContext('2d');
+    const assetValueDistributionData = {!! json_encode($assetValueDistribution) !!};
+    
+    // Function to process asset data
+    function processAssetData(data, thresholdPercentage = 3) {
+        // Sort data by total value in descending order
+        const sortedData = data.sort((a, b) => b.total_value - a.total_value);
+        
+        // Separate major and minor categories
+        const majorCategories = sortedData.filter(item => item.percentage >= thresholdPercentage);
+        const minorCategories = sortedData.filter(item => item.percentage < thresholdPercentage);
+        
+        // Combine minor categories
+        const combinedMinorCategories = {
+            category: 'Other Categories',
+            total_value: minorCategories.reduce((sum, item) => sum + item.total_value, 0),
+            asset_count: minorCategories.reduce((sum, item) => sum + item.asset_count, 0),
+            percentage: minorCategories.reduce((sum, item) => sum + item.percentage, 0).toFixed(2)
+        };
+
+        // Combine results
+        return [...majorCategories, combinedMinorCategories];
+    }
+
+    // Function to generate unique colors
+    function generateUniqueColors(count) {
+        const colors = [];
+        for (let i = 0; i < count; i++) {
+            // Generate a unique hue for each category
+            const hue = (i * 360 / count) % 360;
+            const color = `hsla(${hue}, 70%, 50%, 0.8)`;
+            colors.push(color);
+        }
+        return colors;
+    }
+
+    // Process the asset data
+    const processedAssetData = processAssetData(assetValueDistributionData);
+    
+    // Generate colors for processed data
+    const backgroundColors = generateUniqueColors(processedAssetData.length);
+
+    // Prepare data for chart
+    const categories = processedAssetData.map(item => item.category);
+    const totalValues = processedAssetData.map(item => item.total_value);
+
+    // Create expandable legend functionality
+    function createAssetExpandableLegend() {
+        const container = document.getElementById('assetValueLegend');
+        container.innerHTML = ''; // Clear previous content
+        
+        // Create legend container wrapper
+        const legendWrapper = document.createElement('div');
+        legendWrapper.className = 'relative';
+        
+        // Create scrollable legend content
+        const legendContent = document.createElement('div');
+        legendContent.id = 'assetLegendContent';
+        legendContent.className = 'max-h-32 overflow-hidden transition-all duration-300 relative';
+        
+        // Append legend items
+        processedAssetData.forEach((item, index) => {
+            const legendItem = document.createElement('div');
+            legendItem.className = 'flex items-center mb-2';
+            legendItem.innerHTML = `
+                <span class="inline-block w-4 h-4 mr-2" style="background-color: ${backgroundColors[index]}"></span>
+                <span class="mr-2">${item.category}:</span>
+                <span class="font-bold">₱${item.total_value.toLocaleString()} (${item.percentage}%)</span>
+                <span class="ml-2 text-gray-500">(${item.asset_count} assets)</span>
+            `;
+            legendContent.appendChild(legendItem);
+        });
+        
+        // Create toggle button
+        const toggleBtn = document.createElement('button');
+        toggleBtn.textContent = 'Show More';
+        toggleBtn.className = 'mt-2 text-blue-500 hover:underline focus:outline-none';
+        
+        // Toggle functionality
+        toggleBtn.addEventListener('click', () => {
+            const content = document.getElementById('assetLegendContent');
+            if (content.classList.contains('max-h-32')) {
+                content.classList.remove('max-h-32', 'relative');
+                content.classList.add('max-h-96');
+                toggleBtn.textContent = 'Show Less';
+            } else {
+                content.classList.remove('max-h-96');
+                content.classList.add('max-h-32', 'relative');
+                toggleBtn.textContent = 'Show More';
+            }
+        });
+        
+        // Append to container only if there are more than 3 items
+        if (processedAssetData.length > 3) {
+            legendWrapper.appendChild(legendContent);
+            legendWrapper.appendChild(toggleBtn);
+            container.appendChild(legendWrapper);
+        } else {
+            // If 3 or fewer items, just append directly
+            processedAssetData.forEach((item, index) => {
+                const legendItem = document.createElement('div');
+                legendItem.className = 'flex items-center mb-2';
+                legendItem.innerHTML = `
+                    <span class="inline-block w-4 h-4 mr-2" style="background-color: ${backgroundColors[index]}"></span>
+                    <span class="mr-2">${item.category}:</span>
+                    <span class="font-bold">₱${item.total_value.toLocaleString()} (${item.percentage}%)</span>
+                    <span class="ml-2 text-gray-500">(${item.asset_count} assets)</span>
+                `;
+                container.appendChild(legendItem);
+            });
+        }
+    }
+
+    const chart = new Chart(assetValueDistributionChart, {
+        type: 'doughnut',
+        data: {
+            labels: categories,
+            datasets: [{
+                data: totalValues,
+                backgroundColor: backgroundColors,
+                borderColor: backgroundColors.map(color => color.replace('0.8)', '1)')),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            aspectRatio: 2.5,
+            title: {
+                display: true,
+                text: 'Asset Value Distribution by Category'
+            },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        const dataset = data.datasets[tooltipItem.datasetIndex];
+                        const total = dataset.data.reduce((a, b) => a + b, 0);
+                        const currentValue = dataset.data[tooltipItem.index];
+                        const percentage = ((currentValue/total)*100).toFixed(2);
+                        return `₱${currentValue.toLocaleString()} (${percentage}%)`;
+                    }
+                }
+            }
+        }
+    });
+
+    // Create the expandable legend
+    createAssetExpandableLegend();
+</script>
+<script>
+    // Inventory Value Distribution Chart
+    const inventoryValueDistributionChart = document.getElementById('inventoryValueDistributionChart').getContext('2d');
+    const inventoryValueDistributionData = {!! json_encode($inventoryValueDistribution) !!};
+    
+    // Function to process inventory data
+    function processInventoryData(data, thresholdPercentage = 3) {
+        // Sort data by total value in descending order
+        const sortedData = data.sort((a, b) => b.total_value - a.total_value);
+        
+        // Separate major and minor brands
+        const majorBrands = sortedData.filter(item => item.percentage >= thresholdPercentage);
+        const minorBrands = sortedData.filter(item => item.percentage < thresholdPercentage);
+        
+        // Combine minor brands
+        const combinedMinorBrands = {
+            brand: 'Other Brands',
+            total_value: minorBrands.reduce((sum, item) => sum + item.total_value, 0),
+            inventory_count: minorBrands.reduce((sum, item) => sum + item.inventory_count, 0),
+            percentage: minorBrands.reduce((sum, item) => sum + item.percentage, 0).toFixed(2)
+        };
+
+        // Combine results
+        return [...majorBrands, combinedMinorBrands];
+    }
+
+    // Function to generate unique colors
+    function generateUniqueColors(count) {
+        const colors = [];
+        for (let i = 0; i < count; i++) {
+            // Generate a unique hue for each brand
+            const hue = (i * 360 / count) % 360;
+            const color = `hsla(${hue}, 70%, 50%, 0.8)`;
+            colors.push(color);
+        }
+        return colors;
+    }
+
+    // Process the inventory data
+    const processedInventoryData = processInventoryData(inventoryValueDistributionData);
+    
+    // Generate colors for processed data
+    const inventoryBackgroundColors = generateUniqueColors(processedInventoryData.length);
+
+    // Prepare data for chart
+    const inventoryBrands = processedInventoryData.map(item => item.brand);
+    const inventoryTotalValues = processedInventoryData.map(item => item.total_value);
+
+    // Create expandable legend functionality
+    function createExpandableLegend() {
+        const container = document.getElementById('inventoryValueLegend');
+        container.innerHTML = ''; // Clear previous content
+        
+        // Create legend container wrapper
+        const legendWrapper = document.createElement('div');
+        legendWrapper.className = 'relative';
+        
+        // Create scrollable legend content
+        const legendContent = document.createElement('div');
+        legendContent.id = 'inventoryLegendContent';
+        legendContent.className = 'max-h-32 overflow-hidden transition-all duration-300 relative';
+        
+        // Append legend items
+        processedInventoryData.forEach((item, index) => {
+            const legendItem = document.createElement('div');
+            legendItem.className = 'flex items-center mb-2';
+            legendItem.innerHTML = `
+                <span class="inline-block w-4 h-4 mr-2" style="background-color: ${inventoryBackgroundColors[index]}"></span>
+                <span class="mr-2">${item.brand}:</span>
+                <span class="font-bold">₱${item.total_value.toLocaleString()} (${item.percentage}%)</span>
+                <span class="ml-2 text-gray-500">(${item.inventory_count} items)</span>
+            `;
+            legendContent.appendChild(legendItem);
+        });
+        
+        // Create toggle button
+        const toggleBtn = document.createElement('button');
+        toggleBtn.textContent = 'Show More';
+        toggleBtn.className = 'mt-2 text-blue-500 hover:underline focus:outline-none';
+        
+        // Toggle functionality
+        toggleBtn.addEventListener('click', () => {
+            const content = document.getElementById('inventoryLegendContent');
+            if (content.classList.contains('max-h-32')) {
+                content.classList.remove('max-h-32', 'relative');
+                content.classList.add('max-h-96');
+                toggleBtn.textContent = 'Show Less';
+            } else {
+                content.classList.remove('max-h-96');
+                content.classList.add('max-h-32', 'relative');
+                toggleBtn.textContent = 'Show More';
+            }
+        });
+        
+        // Append to container only if there are more than 3 items
+        if (processedInventoryData.length > 3) {
+            legendWrapper.appendChild(legendContent);
+            legendWrapper.appendChild(toggleBtn);
+            container.appendChild(legendWrapper);
+        } else {
+            // If 3 or fewer items, just append directly
+            processedInventoryData.forEach((item, index) => {
+                const legendItem = document.createElement('div');
+                legendItem.className = 'flex items-center mb-2';
+                legendItem.innerHTML = `
+                    <span class="inline-block w-4 h-4 mr-2" style="background-color: ${inventoryBackgroundColors[index]}"></span>
+                    <span class="mr-2">${item.brand}:</span>
+                    <span class="font-bold">₱${item.total_value.toLocaleString()} (${item.percentage}%)</span>
+                    <span class="ml-2 text-gray-500">(${item.inventory_count} items)</span>
+                `;
+                container.appendChild(legendItem);
+            });
+        }
+    }
+
+    // Create the chart
+    const inventoryChart = new Chart(inventoryValueDistributionChart, {
+        type: 'doughnut',
+        data: {
+            labels: inventoryBrands,
+            datasets: [{
+                data: inventoryTotalValues,
+                backgroundColor: inventoryBackgroundColors,
+                borderColor: inventoryBackgroundColors.map(color => color.replace('0.8)', '1)')),
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            aspectRatio: 2.5,
+            title: {
+                display: true,
+                text: 'Inventory Value Distribution by Brand'
+            },
+            tooltips: {
+                callbacks: {
+                    label: function(tooltipItem, data) {
+                        const dataset = data.datasets[tooltipItem.datasetIndex];
+                        const total = dataset.data.reduce((a, b) => a + b, 0);
+                        const currentValue = dataset.data[tooltipItem.index];
+                        const percentage = ((currentValue/total)*100).toFixed(2);
+                        return `₱${currentValue.toLocaleString()} (${percentage}%)`;
+                    }
+                }
+            }
+        }
+    });
+
+    // Create the expandable legend
+    createExpandableLegend();
 </script>
 @endsection

@@ -138,6 +138,10 @@ class DashboardController extends Controller
             ],
         ];
 
+        $depreciationTrends = $this->getDepreciationTrends();
+        $assetValueDistribution = $this->getAssetValueDistribution();
+        $inventoryValueDistribution = $this->getInventoryValueDistribution();
+
         return view('fcu-ams/dashboard', compact(
             'totalAssets',
             'totalAssetValue',
@@ -154,6 +158,9 @@ class DashboardController extends Controller
             'mostValuedInventorySupplierName',
             'analyticsData',
             'distributionData',
+            'depreciationTrends',
+            'assetValueDistribution',
+            'inventoryValueDistribution',
         ));
     }
 
@@ -195,5 +202,79 @@ class DashboardController extends Controller
                 'date' => $item->created_at->diffForHumans(),
             ];
         });
+    }
+
+    private function getDepreciationTrends()
+    {
+        $depreciationRate = 0.2;
+
+        $depreciationTrends = Asset::select(
+            DB::raw('YEAR(purchase_date) as year'),
+            DB::raw('SUM(cost) as total_cost')
+        )
+        ->groupBy('year')
+        ->orderBy('year')
+        ->get()
+        ->map(function ($item) use ($depreciationRate) {
+            $yearsSincePurchase = now()->diffInYears($item->year . '-01-01');
+            
+            $currentValue = $item->total_cost * pow((1 - $depreciationRate), $yearsSincePurchase);
+            
+            return [
+                'year' => $item->year,
+                'total_cost' => round($item->total_cost, 2),
+                'current_value' => round(max(0, $currentValue), 2),
+                'depreciation' => round($item->total_cost - max(0, $currentValue), 2)
+            ];
+        });
+
+        return $depreciationTrends;
+    }
+
+    private function getAssetValueDistribution()
+    {
+        $assetValueDistribution = Asset::join('categories', 'assets.category_id', '=', 'categories.id')
+            ->select(
+                'categories.category',
+                DB::raw('SUM(assets.cost) as total_value'),
+                DB::raw('COUNT(*) as asset_count')
+            )
+            ->groupBy('categories.category')
+            ->orderBy('total_value', 'desc')
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'category' => $item->category,
+                    'total_value' => round($item->total_value, 2),
+                    'asset_count' => $item->asset_count,
+                    'percentage' => round(($item->total_value / Asset::sum('cost')) * 100, 2)
+                ];
+            });
+
+        return $assetValueDistribution;
+    }
+
+    private function getInventoryValueDistribution()
+    {
+        $inventoryValueDistribution = Inventory::join('brands', 'inventories.brand_id', '=', 'brands.id')
+            ->select(
+                'brands.brand',
+                DB::raw('SUM(inventories.unit_price * inventories.quantity) as total_value'),
+                DB::raw('COUNT(*) as inventory_count')
+            )
+            ->groupBy('brands.brand')
+            ->orderBy('total_value', 'desc')
+            ->get()
+            ->map(function ($item) {
+                $totalInventoryValue = Inventory::sum(DB::raw('unit_price * quantity'));
+                return [
+                    'brand' => $item->brand,
+                    'total_value' => round($item->total_value, 2),
+                    'inventory_count' => $item->inventory_count,
+                    'percentage' => round(($item->total_value / $totalInventoryValue) * 100, 2)
+                ];
+            });
+
+        return $inventoryValueDistribution;
     }
 }
