@@ -101,9 +101,24 @@
                 <div id="inventoryValueLegend" class="mt-4"></div>
             </div>
             <div class="bg-white rounded-lg shadow-md p-6 s col-span-2">
-                <h3 class="text-lg font-semibold">Monthly Asset Acquisition</h3>
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold">Monthly Asset Acquisition</h3>
+
+                    <!-- Year Filter Dropdown -->
+                    <form method="GET" action="{{ route('dashboard') }}" class="flex items-center">
+                        <label for="yearFilter" class="mr-2">Year:</label>
+                        <select name="year" id="yearFilter" class="form-select border rounded px-2 py-1"
+                            onchange="this.form.submit()">
+                            @foreach($availableYears as $year)
+                                <option value="{{ $year }}"
+                                    {{ $selectedYear == $year ? 'selected' : '' }}>
+                                    {{ $year }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
+                </div>
                 <canvas id="assetAcquisitionChart" class="mb-2"></canvas>
-                {{ $assetAcquisition->links() }}
             </div>
             <!-- <div class="bg-white rounded-lg shadow-md p-6">
                 <h3 class="text-lg font-semibold">Asset Depreciation Trends</h3>
@@ -162,35 +177,51 @@
 
 <script src="{{ asset('js/chart.js') }}"></script>
 <script>
+    // Monthly asset acquisition 
     const assetAcquisitionChart = document.getElementById('assetAcquisitionChart').getContext('2d');
-    const assetAcquisitionData = {!! json_encode($assetAcquisition->items()) !!};
+    const assetAcquisitionData = {!! json_encode($assetAcquisition) !!};
+    const selectedYear = {{ $selectedYear }};
+    
+    // Prepare data for chart
     const assetAcquisitionLabels = assetAcquisitionData.map(data => data.month);
     const assetAcquisitionValues = assetAcquisitionData.map(data => data.count);
     const assetAcquisitionAssetTags = assetAcquisitionData.map(data => data.asset_tags);
 
-    new Chart(assetAcquisitionChart, {
+    // Color palette for consistent and visually appealing colors
+    const colorPalette = [
+        'rgba(255, 99, 132, 0.8)',   // Pink
+        'rgba(54, 162, 235, 0.8)',   // Blue
+        'rgba(255, 206, 86, 0.8)',   // Yellow
+        'rgba(75, 192, 192, 0.8)',   // Teal
+        'rgba(153, 102, 255, 0.8)',  // Purple
+        'rgba(255, 159, 64, 0.8)',   // Orange
+        'rgba(199, 199, 199, 0.8)',  // Gray
+        'rgba(83, 102, 255, 0.8)',   // Indigo
+        'rgba(40, 159, 64, 0.8)',    // Green
+        'rgba(210, 99, 132, 0.8)',   // Coral
+        'rgba(90, 162, 235, 0.8)',   // Sky Blue
+        'rgba(255, 77, 77, 0.8)'     // Bright Red
+    ];
+
+    // Generate dynamic colors for each month
+    const backgroundColor = assetAcquisitionLabels.map((label, index) => 
+        colorPalette[index % colorPalette.length]
+    );
+
+    const borderColor = backgroundColor.map(color => 
+        color.replace('0.8)', '1)')
+    );
+
+    // Create the chart
+    const chart = new Chart(assetAcquisitionChart, {
         type: 'bar',
         data: {
             labels: assetAcquisitionLabels,
             datasets: [{
-                label: 'Monthly Asset Acquisition',
+                label: `Monthly Asset Acquisition (${selectedYear})`,
                 data: assetAcquisitionValues,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.8)',
-                    'rgba(54, 162, 235, 0.8)',
-                    'rgba(255, 206, 86, 0.8)',
-                    'rgba(75, 192, 192, 0.8)',
-                    'rgba(153, 102, 255, 0.8)',
-                    'rgba(255, 159, 64, 0.8)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                ],
+                backgroundColor: backgroundColor,
+                borderColor: borderColor,
                 borderWidth: 1
             }]
         },
@@ -199,134 +230,60 @@
             aspectRatio: 3,
             title: {
                 display: true,
-                text: 'Monthly Asset Acquisition'
+                text: `Monthly Asset Acquisition (${selectedYear})`
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        precision: 0  // Ensure whole numbers
+                    }
+                }]
             },
             tooltips: {
+                mode: 'index',
+                intersect: false,
                 callbacks: {
                     label: function(tooltipItem, data) {
                         const index = tooltipItem.index;
                         const count = assetAcquisitionValues[index];
                         const assetTags = assetAcquisitionAssetTags[index];
-                        return `Assets: ${count} (${assetTags})`;
+                        
+                        // Customize tooltip to show more information
+                        return [
+                            `Assets Acquired: ${count}`,
+                            `Asset Tags: ${assetTags || 'No specific tags'}`
+                        ];
+                    },
+                    title: function(tooltipItems) {
+                        return `${tooltipItems[0].label} ${selectedYear}`;
+                    }
+                }
+            },
+            hover: {
+                mode: 'nearest',
+                intersect: true
+            },
+            legend: {
+                display: false  // Hide legend as it's a single dataset
+            },
+            plugins: {
+                // Optional: Add data labels
+                datalabels: {
+                    color: 'black',
+                    anchor: 'end',
+                    align: 'top',
+                    formatter: function(value) {
+                        return value > 0 ? value : '';
                     }
                 }
             }
         }
     });
-</script>
-<script>
-    // Asset Distribution Chart
-    const assetDistributionChart = document.getElementById('assetDistributionChart').getContext('2d');
-    const assetDistributionData = {!! json_encode($assetDistribution) !!};
-    const assetDistributionLabels = assetDistributionData.map(data => data.label);
-    const assetDistributionValues = assetDistributionData.map(data => data.value);
 
-    new Chart(assetDistributionChart, {
-        type: 'pie',
-        data: {
-            labels: assetDistributionLabels,
-            datasets: [{
-                label: 'Asset Distribution',
-                data: assetDistributionValues,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.8)',
-                    'rgba(54, 162, 235, 0.8)',
-                    'rgba(255, 206, 86, 0.8)',
-                    'rgba(75, 192, 192, 0.8)',
-                    'rgba(153, 102, 255, 0.8)',
-                    'rgba(255, 159, 64, 0.8)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Asset Distribution'
-            },
-            responsive: true,
-            aspectRatio: 1.5
-        }
-    });
-</script>
-<script>
-    // Analytics Chart
-    const analyticsChart = document.getElementById('analyticsChart').getContext('2d');
-    const analyticsData = {!! json_encode($analyticsData) !!};
-    const analyticsLabels = analyticsData.map(data => data.label);
-    const analyticsValues = analyticsData.map(data => data.value);
-
-    new Chart(analyticsChart, {
-        type: 'line',
-        data: {
-            labels: analyticsLabels,
-            datasets: [{
-                label: 'Analytics',
-                data: analyticsValues,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.8)',
-                    'rgba(54, 162, 235, 0.8)',
-                    'rgba(255, 206, 86, 0.8)',
-                    'rgba(75, 192, 192, 0.8)',
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Analytics'
-            }
-        }
-    });
-</script>
-<script>
-    // Distribution Chart
-    const distributionChart = document.getElementById('distributionChart').getContext('2d');
-    const distributionData = {!! json_encode($distributionData) !!};
-    const distributionLabels = distributionData.map(data => data.value);
-    const distributionValues = [1, 1];
-
-    new Chart(distributionChart, {
-        type: 'doughnut',
-        data: {
-            labels: distributionLabels,
-            datasets: [{
-                label: 'Inventory and Supplier Distribution',
-                data: distributionValues,
-                backgroundColor: [
-                    'rgba(0, 48, 73, 0.8)',
-                    'rgba(184, 97, 37, 0.8)'
-                ],
-                borderColor: [
-                    'rgba(0, 48, 73, 1)',
-                    'rgba(184, 97, 37, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            title: {
-                display: true,
-                text: 'Inventory and Supplier Distribution'
-            },
-            responsive: true,
-            aspectRatio: 1.5
-        }
+    // Optional: Responsive resize handler
+    window.addEventListener('resize', function() {
+        chart.resize();
     });
 </script>
 <script>
@@ -396,6 +353,12 @@
     
     // Function to process asset data
     function processAssetData(data, thresholdPercentage = 3) {
+        // Validate input data
+        if (!data || data.length === 0) {
+            console.error('No asset data available');
+            return [];
+        }
+
         // Sort data by total value in descending order
         const sortedData = data.sort((a, b) => b.total_value - a.total_value);
         
@@ -412,14 +375,15 @@
         };
 
         // Combine results
-        return [...majorCategories, combinedMinorCategories];
+        const processedData = [...majorCategories, combinedMinorCategories];
+        
+        return processedData;
     }
 
     // Function to generate unique colors
     function generateUniqueColors(count) {
         const colors = [];
         for (let i = 0; i < count; i++) {
-            // Generate a unique hue for each category
             const hue = (i * 360 / count) % 360;
             const color = `hsla(${hue}, 70%, 50%, 0.8)`;
             colors.push(color);
@@ -430,66 +394,71 @@
     // Process the asset data
     const processedAssetData = processAssetData(assetValueDistributionData);
     
-    // Generate colors for processed data
-    const backgroundColors = generateUniqueColors(processedAssetData.length);
+    // Safety check
+    if (processedAssetData.length === 0) {
+        console.error('No processed asset data to display');
+        document.getElementById('assetValueDistributionChart').innerHTML = 'No Asset Data Available';
+    } else {
+        // Generate colors for processed data
+        const backgroundColors = generateUniqueColors(processedAssetData.length);
 
-    // Prepare data for chart
-    const categories = processedAssetData.map(item => item.category);
-    const totalValues = processedAssetData.map(item => item.total_value);
+        // Prepare data for chart
+        const categories = processedAssetData.map(item => item.category);
+        const totalValues = processedAssetData.map(item => item.total_value);
 
-    // Create expandable legend functionality
-    function createAssetExpandableLegend() {
-        const container = document.getElementById('assetValueLegend');
-        container.innerHTML = ''; // Clear previous content
-        
-        // Create legend container wrapper
-        const legendWrapper = document.createElement('div');
-        legendWrapper.className = 'relative';
-        
-        // Create scrollable legend content
-        const legendContent = document.createElement('div');
-        legendContent.id = 'assetLegendContent';
-        legendContent.className = 'max-h-32 overflow-hidden transition-all duration-300 relative';
-        
-        // Append legend items
-        processedAssetData.forEach((item, index) => {
-            const legendItem = document.createElement('div');
-            legendItem.className = 'flex items-center mb-2';
-            legendItem.innerHTML = `
-                <span class="inline-block w-4 h-4 mr-2" style="background-color: ${backgroundColors[index]}"></span>
-                <span class="mr-2">${item.category}:</span>
-                <span class="font-bold">₱${item.total_value.toLocaleString()} (${item.percentage}%)</span>
-                <span class="ml-2 text-gray-500">(${item.asset_count} assets)</span>
-            `;
-            legendContent.appendChild(legendItem);
-        });
-        
-        // Create toggle button
-        const toggleBtn = document.createElement('button');
-        toggleBtn.textContent = 'Show More';
-        toggleBtn.className = 'mt-2 text-blue-500 hover:underline focus:outline-none';
-        
-        // Toggle functionality
-        toggleBtn.addEventListener('click', () => {
-            const content = document.getElementById('assetLegendContent');
-            if (content.classList.contains('max-h-32')) {
-                content.classList.remove('max-h-32', 'relative');
-                content.classList.add('max-h-96');
-                toggleBtn.textContent = 'Show Less';
-            } else {
-                content.classList.remove('max-h-96');
-                content.classList.add('max-h-32', 'relative');
-                toggleBtn.textContent = 'Show More';
+        // Create the chart
+        const chart = new Chart(assetValueDistributionChart, {
+            type: 'doughnut',
+            data: {
+                labels: categories,
+                datasets: [{
+                    data: totalValues,
+                    backgroundColor: backgroundColors,
+                    borderColor: backgroundColors.map(color => color.replace('0.8)', '1)')),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                aspectRatio: 2.5,
+                title: {
+                    display: true,
+                    text: 'Asset Value Distribution by Category'
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            const dataset = data.datasets[tooltipItem.datasetIndex];
+                            const total = dataset.data.reduce((a, b) => a + b, 0);
+                            const currentValue = dataset.data[tooltipItem.index];
+                            const percentage = ((currentValue/total)*100).toFixed(2);
+                            return `₱${currentValue.toLocaleString()} (${percentage}%)`;
+                        }
+                    }
+                }
             }
         });
-        
-        // Append to container only if there are more than 3 items
-        if (processedAssetData.length > 3) {
-            legendWrapper.appendChild(legendContent);
-            legendWrapper.appendChild(toggleBtn);
-            container.appendChild(legendWrapper);
-        } else {
-            // If 3 or fewer items, just append directly
+
+        // Expandable Legend 
+        function createAssetExpandableLegend() {
+            const container = document.getElementById('assetValueLegend');
+            container.innerHTML = ''; // Clear previous content
+            
+            if (processedAssetData.length === 0) {
+                container.innerHTML = 'No legend data available';
+                return;
+            }
+
+            // Create legend container wrapper
+            const legendWrapper = document.createElement('div');
+            legendWrapper.className = 'relative';
+            
+            // Create scrollable legend content
+            const legendContent = document.createElement('div');
+            legendContent.id = 'assetLegendContent';
+            legendContent.className = 'max-h-32 overflow-hidden transition-all duration-300 relative';
+            
+            // Append legend items
             processedAssetData.forEach((item, index) => {
                 const legendItem = document.createElement('div');
                 legendItem.className = 'flex items-center mb-2';
@@ -499,45 +468,52 @@
                     <span class="font-bold">₱${item.total_value.toLocaleString()} (${item.percentage}%)</span>
                     <span class="ml-2 text-gray-500">(${item.asset_count} assets)</span>
                 `;
-                container.appendChild(legendItem);
+                legendContent.appendChild(legendItem);
             });
-        }
-    }
-
-    const chart = new Chart(assetValueDistributionChart, {
-        type: 'doughnut',
-        data: {
-            labels: categories,
-            datasets: [{
-                data: totalValues,
-                backgroundColor: backgroundColors,
-                borderColor: backgroundColors.map(color => color.replace('0.8)', '1)')),
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            aspectRatio: 2.5,
-            title: {
-                display: true,
-                text: 'Asset Value Distribution by Category'
-            },
-            tooltips: {
-                callbacks: {
-                    label: function(tooltipItem, data) {
-                        const dataset = data.datasets[tooltipItem.datasetIndex];
-                        const total = dataset.data.reduce((a, b) => a + b, 0);
-                        const currentValue = dataset.data[tooltipItem.index];
-                        const percentage = ((currentValue/total)*100).toFixed(2);
-                        return `₱${currentValue.toLocaleString()} (${percentage}%)`;
-                    }
+            
+            // Create toggle button
+            const toggleBtn = document.createElement('button');
+            toggleBtn.textContent = 'Show More';
+            toggleBtn.className = 'mt-2 text-blue-500 hover:underline focus:outline-none';
+            
+            // Toggle functionality
+            toggleBtn.addEventListener('click', () => {
+                const content = document.getElementById('assetLegendContent');
+                if (content.classList.contains('max-h-32')) {
+                    content.classList.remove('max-h-32', 'relative');
+                    content.classList.add('max-h-96');
+                    toggleBtn.textContent = 'Show Less';
+                } else {
+                    content.classList.remove('max-h-96');
+                    content.classList.add('max-h-32', 'relative');
+                    toggleBtn.textContent = 'Show More';
                 }
+            });
+            
+            // Append to container only if there are more than 3 items
+            if (processedAssetData.length > 3) {
+                legendWrapper.appendChild(legendContent);
+                legendWrapper.appendChild(toggleBtn);
+                container.appendChild(legendWrapper);
+            } else {
+                // If 3 or fewer items, just append directly
+                processedAssetData.forEach((item, index) => {
+                    const legendItem = document.createElement('div');
+                    legendItem.className = 'flex items-center mb-2';
+                    legendItem.innerHTML = `
+                        <span class="inline-block w-4 h-4 mr-2" style="background-color: ${backgroundColors[index]}"></span>
+                        <span class="mr-2">${item.category}:</span>
+                        <span class="font-bold">₱${item.total_value.toLocaleString()} (${item.percentage}%)</span>
+                        <span class="ml-2 text-gray-500">(${item.asset_count} assets)</span>
+                    `;
+                    container.appendChild(legendItem);
+                });
             }
         }
-    });
 
-    // Create the expandable legend
-    createAssetExpandableLegend();
+        // Create the expandable legend
+        createAssetExpandableLegend();
+    }
 </script>
 <script>
     // Inventory Value Distribution Chart

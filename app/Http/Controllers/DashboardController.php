@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    public function dashboard()
+    public function dashboard(Request $request)
     {
         $totalAssets = Asset::count();
         $totalAssetValue = Asset::sum('cost');
@@ -71,18 +71,27 @@ class DashboardController extends Controller
             ];
         });
 
+        $selectedYear = $request->input('year', now()->year);
+
         $assetAcquisition = Asset::select(DB::raw('MONTH(purchase_date) as month'), DB::raw('COUNT(*) as count'))
+            ->whereYear('purchase_date', $selectedYear)  // Filter by selected year
             ->groupBy('month')
             ->orderBy('month')
-            ->paginate(6);
+            ->get();
 
         $assetAcquisition->transform(function ($item) {
             $item->month = date('F', mktime(0, 0, 0, $item->month, 1));
-            $item->asset_tags = Asset::whereMonth('purchase_date', $item->month)->pluck('asset_tag_id')->implode(', ');
+            $item->asset_tags = Asset::whereMonth('purchase_date', $item->month)
+                ->whereYear('purchase_date', $item->year)  // Add year filter to asset tags
+                ->pluck('asset_tag_id')
+                ->implode(', ');
             return $item;
         });
 
-            // Most Acquired Inventory Supplier
+        $availableYears = Asset::select(DB::raw('DISTINCT YEAR(purchase_date) as year'))
+            ->orderBy('year', 'desc')
+            ->pluck('year');
+
             $mostAcquiredInventorySupplier = Inventory::select('supplier_id', DB::raw('COUNT(*) as count'))
                 ->groupBy('supplier_id')
                 ->orderBy('count', 'desc')
@@ -94,7 +103,6 @@ class DashboardController extends Controller
                 $mostAcquiredInventorySupplierName = 'No Data Available';
             }
 
-            // Most Valued Inventory Supplier
             $mostValuedInventorySupplier = Inventory::select('supplier_id', DB::raw('SUM(unit_price * quantity) as value_sum'))
                 ->groupBy('supplier_id')
                 ->orderBy('value_sum', 'desc')
@@ -161,6 +169,7 @@ class DashboardController extends Controller
             'depreciationTrends',
             'assetValueDistribution',
             'inventoryValueDistribution',
+            'assetAcquisition', 'availableYears', 'selectedYear',
         ));
     }
 
