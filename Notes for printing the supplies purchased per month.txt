@@ -1,0 +1,7 @@
+Files used:
+    resources\views\fcu-ams\reports\reports.blade.php
+    app\Http\Controllers\ReportController.php
+    app\View\Components\MonthlySupplierReport.php
+    resources\views\components\monthly-supplier-report.blade.php
+    app\Services\ReportPrintService.php
+    config\app.php (registered the Barryvdh in providers and aliases)

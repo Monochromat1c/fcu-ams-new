@@ -140,4 +140,25 @@ class ReportController extends Controller
 
         return view('fcu-ams/reports/purchase-order-details', compact('purchaseOrderDetails', 'totalPrice', 'record'));
     }
+
+    public function printReport(Request $request, ReportPrintService $printService)
+    {
+        $month = $request->input('month', now()->month);
+        $year = $request->input('year', now()->year);
+        $inventories = $this->getMonthlyInventories($month, $year);
+        
+        return $printService->printMonthlySupplierReport($inventories, $month, $year);
+    }
+
+    private function getMonthlyInventories($month, $year)
+    {
+        $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
+        $endDate = Carbon::createFromDate($year, $month, 1)->endOfMonth();
+
+        return Inventory::with(['supplier', 'brand', 'unit'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('quantity', '>', 0)
+            ->orderBy('unique_tag')
+            ->paginate(10);
+    }
 }

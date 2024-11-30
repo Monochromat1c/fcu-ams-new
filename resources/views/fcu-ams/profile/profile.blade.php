@@ -135,7 +135,7 @@
                         <input type="password" name="confirm_new_password"
                             class="rounded-md border border-gray-300 p-2" required>
                     </div>
-                    <button type="submit" class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
+                    <button type="submit" class="ml-auto rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500
                         transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                             stroke="currentColor" class="size-6">
