@@ -1,5 +1,6 @@
 @extends('layouts.layout')
 @section('content')
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
 <style>
     .max-h-30-rem{
