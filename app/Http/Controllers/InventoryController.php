@@ -234,6 +234,7 @@ class InventoryController extends Controller
     {
         $inventories = Inventory::whereNull('deleted_at')
             ->where('quantity', '>=', 1)
+            ->with(['brand', 'unit']) // Eager load relationships
             ->paginate(10);
         $departments = Department::all();
         return view('fcu-ams/inventory/stockOut', compact('inventories', 'departments'));
@@ -255,7 +256,7 @@ class InventoryController extends Controller
             $inventory = Inventory::findOrFail($itemId);
 
             if ($inventory->quantity < $validatedData['quantity'][$key]) {
-                return redirect()->back()->with('error', 'Insufficient quantity for item ' . $inventory->brand . ' ' . $inventory->items_specs);
+                return redirect()->back()->withErrors(['error' => 'Insufficient quantity for item ' . $inventory->brand->brand . ' ' . $inventory->items_specs]);
             }
 
             $inventory->quantity -= $validatedData['quantity'][$key];

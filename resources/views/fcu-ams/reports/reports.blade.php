@@ -2,7 +2,7 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/asset.css') }}">
 <style>
-    <blade media|%20print%20%7B>body {
+    body {
         background-color: white;
     }
 
@@ -14,13 +14,8 @@
         display: none;
     }
 
-    <blade page|%20%7B>size: auto;
-    margin: 0mm;
-    }
-
     .shadow-lg {
         box-shadow: none;
-    }
     }
 
 </style>
