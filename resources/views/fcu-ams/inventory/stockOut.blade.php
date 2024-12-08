@@ -35,115 +35,125 @@
                             Select Items
                         </button>
                         <div class="overflow-y-auto max-h-64 hidden mt-3" id="selected-items-container">
-                            <table class="table-auto w-full">
-                                <thead>
-                                    <tr>
-                                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Item</th>
-                                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Quantity
-                                        </th>
-                                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Price</th>
-                                        <th class="px-4 py-2 text-left bg-slate-100 border border-slate-400">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="selected-items">
-                                </tbody>
-                                <tfoot>
-                                    <tr class="font-bold">
-                                        <td class="px-4 py-2 invisible" colspan="">Overall Price:</td>
-                                        <td class="px-4 py-2 invisible" colspan="">Overall Price:</td>
-                                        <td class="px-4 py-2 text-right" colspan="">Overall Price:</td>
-                                        <td class="px-4 py-2" id="overall-price">₱0.00</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                            <div class="max-w-4xl mx-auto overflow-x-auto overflow-y-auto rounded-lg">
+                                <table class="min-w-full divide-y divide-gray-200 border">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200" id="selected-items">
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="font-bold bg-gray-50">
+                                            <td class="px-6 py-3 invisible" colspan="">Overall Price:</td>
+                                            <td class="px-6 py-3 invisible" colspan="">Overall Price:</td>
+                                            <td class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" colspan="">Overall Price:</td>
+                                            <td class="px-6 py-3 text-sm font-semibold text-gray-900" id="overall-price">₱0.00</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                        <!-- <div id="defaultModal" tabindex="-1" aria-hidden="true"
-                            class="fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden"> -->
-                        <div id="defaultModal" style="min-height:100vh;" tabindex="-1" aria-hidden="true"
+                        <div id="defaultModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
                             class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
-                            <div class="relative my-auto mx-auto p-4 w-full max-w-2xl h-full md:h-auto">
+                            <div class="relative my-auto mx-auto p-4 w-full max-w-4xl h-full md:h-auto">
                                 <!-- Modal content -->
-                                <div
-                                    class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
-                                    <button type="button"
-                                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                                        onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
-                                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                        <span class="sr-only">Close modal</span>
-                                    </button>
-                                    <div class="p-6 text-center">
-                                        <h2 class="mb-4 text-lg font-bold text-black">Select Items to Stock Out</h2>
-                                        <div class="overflow-y-auto h-96 mb-3">
-                                            <table class="table-auto w-full">
-                                                <thead>
-                                                    <tr>
-                                                        <th
-                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                                            Item</th>
-                                                        <th
-                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                                            Quantity</th>
-                                                        <th
-                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                                            Unit</th>
-                                                        <th
-                                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                                            Unit Price</th>
-                                                        <th
-                                                            class="px-4 py-2 text-center bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                                            Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach($inventories as $inventory)
-                                                        <tr class="hover:bg-slate-100">
-                                                            <td class="border text-left border-slate-300 px-4 py-2">
-                                                                {{ $inventory->brand->brand }}
-                                                                {{ $inventory->items_specs }}</td>
-                                                            <td class="border border-slate-300 px-4 py-2">
-                                                                {{ $inventory->quantity }}</td>
-                                                            <td class="border border-slate-300 px-4 py-2">
-                                                                {{ $inventory->unit->unit }}</td>
-                                                            <td class="border border-slate-300 px-4 py-2">
-                                                                {{ $inventory->unit_price }}</td>
-                                                            <td class="border border-slate-300 text-center px-4 py-2">
-                                                                <div class="flex my-auto gap-2">
-                                                                    <input type="checkbox"
-                                                                        id="item_id_{{ $inventory->id }}" name="item_id[]"
-                                                                        value="{{ $inventory->id }}"
-                                                                        onchange="document.getElementById('quantity_{{ $inventory->id }}').disabled = !this.checked">
-                                                                    <input type="number"
-                                                                        id="quantity_{{ $inventory->id }}"
-                                                                        name="quantity[]"
-                                                                    class="w-full p-2 border rounded-md"
-                                                                    placeholder="Quantity" min="0" disabled>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
+                                <div class="relative bg-white rounded-lg shadow-xl dark:bg-white border-0">
+                                    <!-- Modal header -->
+                                    <div class="flex items-center justify-between p-4 border-b rounded-t">
+                                        <h3 class="text-xl font-semibold text-gray-900">
+                                            Select Items to Stock Out
+                                        </h3>
+                                        <div class="flex items-center space-x-4">
+                                            <div class="relative">
+                                                <input type="text" id="modal-search" placeholder="Search items..." 
+                                                    class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 w-64">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                                </svg>
+                                            </div>
+                                            <button type="button"
+                                                class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center"
+                                                onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
+                                                <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                                </svg>
+                                                <span class="sr-only">Close modal</span>
+                                            </button>
                                         </div>
-                                        <button type="button" class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
-                                            transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-1"
+                                    </div>
+                                    <!-- Modal body -->
+                                    <div class="p-6">
+                                        <div class="max-w-5xl mx-auto overflow-x-auto overflow-y-auto rounded-lg shadow">
+                                            <div class="max-h-[60vh] overflow-y-auto">
+                                                <table class="min-w-full divide-y divide-gray-200">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                                                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                                                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
+                                                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+                                                            <th scope="col" class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="bg-white divide-y divide-gray-200">
+                                                        @foreach($inventories as $inventory)
+                                                            <tr class="hover:bg-gray-50 transition-colors duration-200">
+                                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                                    {{ $inventory->brand->brand }}
+                                                                    {{ $inventory->items_specs }}</td>
+                                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                                    {{ $inventory->quantity }}</td>
+                                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                                    {{ $inventory->unit->unit }}</td>
+                                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                                    ₱{{ number_format($inventory->unit_price, 2) }}</td>
+                                                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                                    <div class="flex items-center gap-3 justify-center">
+                                                                        <input type="checkbox"
+                                                                            id="item_id_{{ $inventory->id }}" 
+                                                                            name="item_id[]"
+                                                                            value="{{ $inventory->id }}"
+                                                                            class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                                                            onchange="document.getElementById('quantity_{{ $inventory->id }}').disabled = !this.checked">
+                                                                        <input type="number"
+                                                                            id="quantity_{{ $inventory->id }}"
+                                                                            name="quantity[]"
+                                                                            class="w-24 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-500"
+                                                                            placeholder="Qty"
+                                                                            min="1"
+                                                                            max="{{ $inventory->quantity }}"
+                                                                            disabled>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal footer -->
+                                    <div class="flex items-center justify-end p-4 border-t border-gray-200">
+                                        <button type="button"
+                                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 mr-2"
                                             onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="m4.5 12.75 6 6 9-13.5" />
-                                            </svg>
-                                            Done
+                                            Cancel
+                                        </button>
+                                        <button type="button"
+                                            class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
+                                            onclick="document.getElementById('defaultModal').classList.toggle('hidden'); document.getElementById('selected-items-container').classList.remove('hidden');">
+                                            Select Items
                                         </button>
                                     </div>
                                 </div>
                             </div>
-                    </div>
+                        </div>
                     <div class="mb-4">
                         <label for="department_id" class="block text-gray-700 font-bold mb-2">Department:</label>
                         <select id="department_id" name="department_id" class="w-full p-2 border rounded-md bg-gray-100" required>
@@ -206,48 +216,50 @@
         if (event.target.type === 'checkbox') {
             var checkbox = event.target;
             var quantityInput = checkbox.nextElementSibling;
-            var label = checkbox.closest('tr').cells[0].textContent;
+            var row = checkbox.closest('tr');
+            var label = row.cells[0].textContent.trim();
             var id = checkbox.value;
-            var price = checkbox.closest('tr').cells[1].textContent;
-            var quantity = quantityInput.value;
+            var quantity = quantityInput.value || '1';
+            var price = row.cells[3].textContent.trim().replace('₱', '').replace(',', '');
 
             if (checkbox.checked) {
-                var row = document.createElement('tr');
+                var newRow = document.createElement('tr');
                 var itemCell = document.createElement('td');
                 var quantityCell = document.createElement('td');
                 var priceCell = document.createElement('td');
                 var totalPriceCell = document.createElement('td');
 
                 itemCell.textContent = label;
-                itemCell.className = 'border border-slate-300 px-4 py-2';
+                itemCell.className = 'px-6 py-4';
 
                 quantityCell.textContent = quantity;
-                quantityCell.className = 'border border-slate-300 px-4 py-2';
+                quantityCell.className = 'px-6 py-4';
 
-                priceCell.textContent = price;
-                priceCell.className = 'border border-slate-300 px-4 py-2';
+                priceCell.textContent = '₱' + parseFloat(price).toFixed(2);
+                priceCell.className = 'px-6 py-4';
 
-                totalPriceCell.textContent = parseFloat(price) * parseInt(quantity);
-                totalPriceCell.className = 'border border-slate-300 px-4 py-2';
+                var total = parseFloat(price) * parseInt(quantity);
+                totalPriceCell.textContent = '₱' + total.toFixed(2);
+                totalPriceCell.className = 'px-6 py-4';
 
-                row.appendChild(itemCell);
-                row.appendChild(quantityCell);
-                row.appendChild(priceCell);
-                row.appendChild(totalPriceCell);
+                newRow.appendChild(itemCell);
+                newRow.appendChild(quantityCell);
+                newRow.appendChild(priceCell);
+                newRow.appendChild(totalPriceCell);
 
-                selectedItemsTable.appendChild(row);
+                selectedItemsTable.appendChild(newRow);
                 document.getElementById('selected-items-container').classList.remove('hidden');
 
                 updateOverallPrice();
             } else {
                 var rows = selectedItemsTable.rows;
                 for (var i = 0; i < rows.length; i++) {
-                    if (rows[i].cells[0].textContent == label) {
+                    if (rows[i].cells[0].textContent.trim() === label) {
                         rows[i].remove();
                         break;
                     }
                 }
-                if (selectedItemsTable.rows.length == 0) {
+                if (selectedItemsTable.rows.length === 0) {
                     document.getElementById('selected-items-container').classList.add('hidden');
                 }
 
@@ -260,15 +272,17 @@
         if (event.target.type === 'number') {
             var quantityInput = event.target;
             var checkbox = quantityInput.previousElementSibling;
-            var label = checkbox.closest('tr').cells[0].textContent;
-            var price = checkbox.closest('tr').cells[1].textContent;
-            var quantity = quantityInput.value;
+            var row = checkbox.closest('tr');
+            var label = row.cells[0].textContent.trim();
+            var price = row.cells[3].textContent.trim().replace('₱', '').replace(',', '');
+            var quantity = quantityInput.value || '0';
 
             var rows = selectedItemsTable.rows;
             for (var i = 0; i < rows.length; i++) {
-                if (rows[i].cells[0].textContent == label) {
+                if (rows[i].cells[0].textContent.trim() === label) {
                     rows[i].cells[1].textContent = quantity;
-                    rows[i].cells[3].textContent = parseFloat(price) * parseInt(quantity);
+                    var total = parseFloat(price) * parseInt(quantity);
+                    rows[i].cells[3].textContent = '₱' + total.toFixed(2);
                     break;
                 }
             }
@@ -281,10 +295,23 @@
         var rows = selectedItemsTable.rows;
         var overallPrice = 0;
         for (var i = 0; i < rows.length; i++) {
-            overallPrice += parseFloat(rows[i].cells[3].textContent);
+            var totalPrice = rows[i].cells[3].textContent.trim().replace('₱', '').replace(',', '');
+            overallPrice += parseFloat(totalPrice);
         }
         overallPriceCell.textContent = '₱' + overallPrice.toFixed(2);
     }
+});
+
+// Search functionality for modal
+const modalSearchInput = document.getElementById('modal-search');
+modalSearchInput.addEventListener('input', function() {
+    const searchTerm = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#defaultModal tbody tr');
+
+    rows.forEach(row => {
+        const text = row.textContent.toLowerCase();
+        row.style.display = text.includes(searchTerm) ? '' : 'none';
+    });
 });
 </script>
 @endsection

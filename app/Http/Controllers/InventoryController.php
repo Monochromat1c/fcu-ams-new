@@ -235,7 +235,10 @@ class InventoryController extends Controller
         $inventories = Inventory::whereNull('deleted_at')
             ->where('quantity', '>=', 1)
             ->with(['brand', 'unit']) // Eager load relationships
-            ->paginate(10);
+            ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+            ->orderBy('brands.brand', 'asc')
+            ->select('inventories.*')
+            ->get();
         $departments = Department::all();
         return view('fcu-ams/inventory/stockOut', compact('inventories', 'departments'));
     }
