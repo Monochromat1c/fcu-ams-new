@@ -25,8 +25,9 @@ use Illuminate\Support\Str;
 class InventoryController extends Controller
 {
     public function index(Request $request) {
-        $brands = DB::table('brands')->get();
-        $brand_id = $request->input('brand');
+        $brands = $request->input('brands', []);
+        $selectedBrands = $brands;
+        
         $totalItems = DB::table('inventories')->count();
         $totalValue = DB::table('inventories')->sum(DB::raw('unit_price * quantity'));
         $lowStock = DB::table('inventories')
@@ -38,6 +39,7 @@ class InventoryController extends Controller
             ->where('quantity', '=', '0')
             ->whereNull('deleted_at')
             ->count();
+        
         $sort = $request->input('sort', 'items_specs');
         $direction = $request->input('direction', 'asc');
         $search = $request->input('search');
@@ -49,38 +51,37 @@ class InventoryController extends Controller
             ->leftJoin('brands', 'inventories.brand_id', '=', 'brands.id')
             ->select('inventories.*', 'suppliers.supplier as supplier_name', 'units.unit as unit_name', 'brands.brand as brand_name');
 
+        if (!empty($brands)) {
+            $query->whereIn('inventories.brand_id', $brands);
+        }
+
         if ($search) {
-            $query->where(function ($q) use ($search) {
-                $q->where('inventories.items_specs', 'like', '%' . $search . '%')
-                    ->orWhere('suppliers.supplier', 'like', '%' . $search . '%')
-                    ->orWhere('inventories.unit_id', 'like', '%' . $search . '%');
+            $query->where(function($q) use ($search) {
+                $q->where('inventories.unique_tag', 'like', "%{$search}%")
+                  ->orWhere('inventories.items_specs', 'like', "%{$search}%")
+                  ->orWhere('brands.brand', 'like', "%{$search}%")
+                  ->orWhere('units.unit', 'like', "%{$search}%");
             });
         }
 
-        if ($request->input('clear') == 'true') {
-            return redirect()->route('inventory.list');
-        }
-
-        if ($request->input('brand')) {
-            $query->where('inventories.brand_id', $request->input('brand'));
-        }
-
         if ($sort && $direction) {
-            if ($sort == 'total_item_price') {
-                $query->orderBy(DB::raw('unit_price * quantity'), $direction);
-            } else {
-                $query->orderBy($sort, $direction);
-            }
-        } else {
-            $query->orderBy('items_specs', 'asc');
+            $query->orderBy($sort, $direction);
         }
 
-        $query->where('inventories.quantity', '>', 0);
+        $inventories = $query->paginate(10);
+        $allBrands = Brand::all();
 
-        $inventories = $query->paginate(15);
-
-        return view('fcu-ams/inventory/inventoryList', compact('brands', 'brand_id', 'totalItems', 'totalValue',
-        'lowStock', 'outOfStock', 'inventories', 'sort', 'direction', 'search'));
+        return view('fcu-ams.inventory.inventoryList', [
+            'inventories' => $inventories,
+            'brands' => $allBrands,
+            'selectedBrands' => $selectedBrands,
+            'sort' => $sort,
+            'direction' => $direction,
+            'totalItems' => $totalItems,
+            'totalValue' => $totalValue,
+            'lowStock' => $lowStock,
+            'outOfStock' => $outOfStock
+        ]);
     }
 
 

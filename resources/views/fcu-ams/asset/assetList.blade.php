@@ -275,7 +275,7 @@
                                 </div>
 
                                 <!-- Action Buttons -->
-                                <div class="flex justify-between mt-4">
+                                <div class="flex justify-end gap-2 mt-4">
                                     <button type="button"
                                         onclick="document.getElementById('filterModal').classList.add('hidden')"
                                         class="flex gap-1 items-center bg-gray-300 text-gray-700 hover:bg-gray-400 transition-all duration-200 ease-in rounded-md px-4 py-2">
@@ -393,7 +393,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->supplier_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->category_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    <span class="px-6 py-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                         @if($asset->status_name == 'Available') bg-green-100 text-green-800 
                                         @elseif($asset->status_name == 'In Use') bg-blue-100 text-blue-800
                                         @else bg-red-100 text-red-800 
