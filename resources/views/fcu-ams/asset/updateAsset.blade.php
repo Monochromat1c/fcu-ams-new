@@ -1,273 +1,350 @@
 @extends('layouts.layout')
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/addAsset.css') }}">
-
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
-    <div class="content min-h-screen bg-slate-100 col-span-5">
-        <nav class="m-3 mt-6">
-            <h1 class="text-center text-4xl">Edit the Asset</h1>
-        </nav>
-        <div class="stockin-form bg-white m-3 shadow-md rounded-md p-5">
-            <form method="POST" enctype="multipart/form-data"
-                action="{{ route('asset.update', ['id' => $asset->id]) }}">
-                @csrf
-                <input type="hidden" name="id" value="{{ $asset->id }}">
-                @if(session('success'))
-                    <div class="successMessage bg-lime-800 border border-lime-800 text-white px-4 py-3 rounded relative mt-2 mb-2">
-                        {{ session('success') }}
-                    </div>
-                @endif
-                @if($errors->any())
-                    <div class="errorMessage bg-red-900 border border-red-900 text-white px-4 py-3 rounded relative mt-2 mb-2">
-                        <ul>
-                            @foreach($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
-                <h3 class="text-lg font-semibold mb-3">Asset Details</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <div class="mb-4 col-span-2">
-                        <label for="asset_image" class="block text-gray-700 font-bold mb-2">Asset Image:</label>
-                        <input type="file" id="asset_image" name="asset_image" class="w-full border rounded-md bg-gray-100">
-                    </div>
-                    <div class="mb-4">
-                        <label for="asset_tag_id" class="block text-gray-700 font-bold mb-2">Asset Tag ID:</label>
-                        <input type="text" id="asset_tag_id" name="asset_tag_id" class="w-full p-2 border rounded-md bg-gray-100"
-                            value="{{ $asset->asset_tag_id }}" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="model" class="block text-gray-700 font-bold mb-2">Model:</label>
-                        <input type="text" id="model" name="model" class="w-full p-2 border rounded-md bg-gray-100"
-                            value="{{ $asset->model }}" required>
-                    </div>
-                    <div class="mb-2">
-                        <label for="spec" class="block text-gray-700 font-bold mb-2">Specification:</label>
-                        <input type="text" id="specs" name="specs" class="w-full p-2 border rounded-md bg-gray-100"
-                            value="{{ $asset->specs }}">
-                    </div>
-                    <div class="mb-4">
-                        <label for="serial_number" class="block text-gray-700 font-bold mb-2">Serial Number:</label>
-                        <input type="text" id="serial_number" name="serial_number" class="w-full p-2 border rounded-md bg-gray-100"
-                            value="{{ $asset->serial_number }}" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="cost" class="block text-gray-700 font-bold mb-2">Cost:</label>
-                        <input type="number" id="cost" name="cost" class="w-full p-2 border rounded-md bg-gray-100"
-                            value="{{ $asset->cost }}" min="0" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="supplier_id" class="block text-gray-700 font-bold mb-2">Supplier:</label>
-                        <select id="supplier_id" name="supplier_id" class="w-full p-2 border rounded-md bg-gray-100" required>
-                            @foreach($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}"
-                                    {{ $supplier->id == $asset->supplier_id ? 'selected' : '' }}>
-                                    {{ $supplier->supplier }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="site_id" class="block text-gray-700 font-bold mb-2">Site:</label>
-                        <select id="site_id" name="site_id" class="w-full p-2 border rounded-md bg-gray-100" required>
-                            @foreach($sites as $site)
-                                <option value="{{ $site->id }}"
-                                    {{ $site->id == $asset->site_id ? 'selected' : '' }}>
-                                    {{ $site->site }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="location_id" class="block text-gray-700 font-bold mb-2">Location:</label>
-                        <select id="location_id" name="location_id" class="w-full p-2 border rounded-md bg-gray-100" required>
-                            @foreach($locations as $location)
-                                <option value="{{ $location->id }}"
-                                    {{ $location->id == $asset->location_id ? 'selected' : '' }}>
-                                    {{ $location->location }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="category_id" class="block text-gray-700 font-bold mb-2">Category:</label>
-                        <select id="category_id" name="category_id" class="w-full p-2 border rounded-md bg-gray-100" required>
-                            @foreach($categories as $category)
-                                <option value="{{ $category->id }}"
-                                    {{ $category->id == $asset->category_id ? 'selected' : '' }}>
-                                    {{ $category->category }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="department_id" class="block text-gray-700 font-bold mb-2">Department:</label>
-                        <select id="department_id" name="department_id" class="w-full p-2 border rounded-md bg-gray-100" required>
-                            @foreach($departments as $department)
-                                <option value="{{ $department->id }}"
-                                    {{ $department->id == $asset->department_id ? 'selected' : '' }}>
-                                    {{ $department->department }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="brand_id" class="block text-gray-700 font-bold mb-2">Brand:</label>
-                        <select id="brand_id" name="brand_id" class="w-full p-2 border rounded-md bg-gray-100" required>
-                            @foreach($brands as $brand)
-                                <option value="{{ $brand->id }}"
-                                    {{ $brand->id == $asset->brand_id ? 'selected' : '' }}>
-                                    {{ $brand->brand }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="status_id" class="block text-gray-700 font-bold mb-2">Status:</label>
-                        <select id="status_id" name="status_id" class="w-full p-2 border rounded-md bg-gray-100" required>
-                            @foreach($statuses as $status)
-                                <option value="{{ $status->id }}"
-                                    {{ $status->id == $asset->status_id ? 'selected' : '' }}>
-                                    {{ $status->status }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="condition_id" class="block text-gray-700 font-bold mb-2">Condition:</label>
-                        <select id="condition_id" name="condition_id" class="w-full p-2 border rounded-md bg-gray-100" required>
-                            @foreach($conditions as $condition)
-                                <option value="{{ $condition->id }}"
-                                    {{ $condition->id == $asset->condition_id ? 'selected' : '' }}>
-                                    {{ $condition->condition }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="purchase_date" class="block text-gray-700 font-bold mb-2">Purchase Date:</label>
-                        <input type="date" id="purchase_date" name="purchase_date"
-                            class="w-full p-2 border rounded-md bg-gray-100" value="{{ $asset->purchase_date }}"
-                            required>
+    <div class="content min-h-screen bg-gray-100 col-span-5">
+        <!-- Header -->
+        <div class="bg-white m-3 shadow-md rounded-md 2xl:max-w-7xl 2xl:mx-auto">
+            <div class="px-4 sm:px-6 lg:px-8 py-6">
+                <div class="flex justify-between">
+                    <h1 class="text-2xl font-semibold text-gray-900">Update Asset</h1>
+                    <a href="{{ route('asset.list') }}" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        Back to List
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="m-3 2xl:max-w-7xl 2xl:mx-auto mb-6">
+            <!-- Alert messages -->
+            @if(session('success'))
+                <div class="mb-4 rounded-md bg-green-50 p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
+                        </div>
                     </div>
                 </div>
-                <!-- Add this inside your edit asset form, after the condition field -->
-                <div class="modal-container">
-                    <div id="maintenance-modal" tabindex="-1" aria-hidden="true"
-                        class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
-                        <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
-                            <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
-                                <button type="button"
-                                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                                    onclick="document.getElementById('maintenance-modal').classList.toggle('hidden')">
-                                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span class="sr-only">Close modal</span>
-                                </button>
-                                <div class="p-6 text-center">
-                                    <h2 class="mb-4 text-lg font-bold text-black">Maintenance Date</h2>
-                                    <div class="mb-4">
-                                        <label for="maintenance_start_date"
-                                            class="block text-left text-gray-700 font-bold mb-2">Start Date:</label>
-                                        <input type="date" id="maintenance_start_date" name="maintenance_start_date"
-                                            class="w-full p-2 border rounded-md"
-                                            value="{{ old('maintenance_start_date') ?? $asset->maintenance_start_date }}">
-                                    </div>
-                                    <div class="mb-4">
-                                        <label for="maintenance_end_date" class="block text-left text-gray-700 font-bold mb-2">End
-                                            Date:</label>
-                                        <input type="date" id="maintenance_end_date" name="maintenance_end_date"
-                                            class="w-full p-2 border rounded-md"
-                                            value="{{ old('maintenance_end_date') ?? $asset->maintenance_end_date }}">
-                                    </div>
-                                    <div class="flex flex-end">
-                                        <button type="button" id="save-maintenance-btn"
-                                            class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Save</button>
-                                    </div>
-                                </div>
+            @endif
+
+            @if($errors->any())
+                <div class="mb-4 rounded-md bg-red-50 p-4">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg class="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-red-800">There were errors with your submission</h3>
+                            <div class="mt-2 text-sm text-red-700">
+                                <ul class="list-disc pl-5 space-y-1">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="flex justify-end space-x-2">
-                    <button type="button" class="ml-auto rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2"
-                        onclick="history.back()">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
-                        </svg>
-                        Back
-                    </button>
-                    <button type="submit" class="rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
-                        </svg>
-                        Update Asset
-                    </button>
-                </div>
-            </form>
+            @endif
+
+            <!-- Form -->
+            <div class="bg-white shadow rounded-lg">
+                <form method="POST" enctype="multipart/form-data" action="{{ route('asset.update', ['id' => $asset->id]) }}" class="space-y-6 p-6">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $asset->id }}">
+
+                    <!-- Asset Image -->
+                    <div class="space-y-1">
+                        <label for="asset_image" class="block text-sm font-medium text-gray-700">Asset Image</label>
+                        <div class="mt-1 flex items-center">
+                            <div class="flex-shrink-0 h-32 w-32 border rounded-lg overflow-hidden bg-gray-100">
+                                @if($asset->asset_image)
+                                    <img src="{{ asset($asset->asset_image) }}" alt="Asset image" class="h-32 w-32 object-cover">
+                                @else
+                                    <div class="h-32 w-32 flex items-center justify-center text-gray-400">
+                                        <svg class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                        </svg>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="ml-2">
+                                <div class="relative">
+                                    <input type="file" id="asset_image" name="asset_image" class="hidden" accept="image/*">
+                                    <label for="asset_image" class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Change Image
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                        <!-- Asset Tag ID -->
+                        <div>
+                            <label for="asset_tag_id" class="block text-sm font-medium text-gray-700">Asset Tag ID</label>
+                            <div class="mt-1">
+                                <input type="text" id="asset_tag_id" name="asset_tag_id" value="{{ $asset->asset_tag_id }}" required
+                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                            </div>
+                        </div>
+
+                        <!-- Model -->
+                        <div>
+                            <label for="model" class="block text-sm font-medium text-gray-700">Model</label>
+                            <div class="mt-1">
+                                <input type="text" id="model" name="model" value="{{ $asset->model }}" required
+                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                            </div>
+                        </div>
+
+                        <!-- Specification -->
+                        <div>
+                            <label for="specs" class="block text-sm font-medium text-gray-700">Specification</label>
+                            <div class="mt-1">
+                                <input type="text" id="specs" name="specs" value="{{ $asset->specs }}"
+                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                            </div>
+                        </div>
+
+                        <!-- Serial Number -->
+                        <div>
+                            <label for="serial_number" class="block text-sm font-medium text-gray-700">Serial Number</label>
+                            <div class="mt-1">
+                                <input type="text" id="serial_number" name="serial_number" value="{{ $asset->serial_number }}" required
+                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                            </div>
+                        </div>
+
+                        <!-- Cost -->
+                        <div>
+                            <label for="cost" class="block text-sm font-medium text-gray-700">Cost</label>
+                            <div class="mt-1 relative rounded-md shadow-sm">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <span class="text-gray-500 sm:text-sm">₱</span>
+                                </div>
+                                <input type="number" id="cost" name="cost" value="{{ $asset->cost }}" min="0" required
+                                    class="focus:ring-indigo-500 p-2 border  focus:border-indigo-500 block w-full pl-7 sm:text-sm border-gray-300 rounded-md">
+                            </div>
+                        </div>
+
+                        <!-- Purchase Date -->
+                        <div>
+                            <label for="purchase_date" class="block text-sm font-medium text-gray-700">Purchase Date</label>
+                            <div class="mt-1">
+                                <input type="date" id="purchase_date" name="purchase_date" value="{{ $asset->purchase_date }}" required
+                                    class="shadow-sm  p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                            </div>
+                        </div>
+                        
+                        <!-- Supplier -->
+                        <div>
+                            <label for="supplier_id" class="block text-sm font-medium text-gray-700">Supplier</label>
+                            <select id="supplier_id" name="supplier_id" required
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                @foreach($suppliers as $supplier)
+                                    <option value="{{ $supplier->id }}" {{ $supplier->id == $asset->supplier_id ? 'selected' : '' }}>
+                                        {{ $supplier->supplier }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Site -->
+                        <div>
+                            <label for="site_id" class="block text-sm font-medium text-gray-700">Site</label>
+                            <select id="site_id" name="site_id" required
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                @foreach($sites as $site)
+                                    <option value="{{ $site->id }}" {{ $site->id == $asset->site_id ? 'selected' : '' }}>
+                                        {{ $site->site }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Location -->
+                        <div>
+                            <label for="location_id" class="block text-sm font-medium text-gray-700">Location</label>
+                            <select id="location_id" name="location_id" required
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                @foreach($locations as $location)
+                                    <option value="{{ $location->id }}" {{ $location->id == $asset->location_id ? 'selected' : '' }}>
+                                        {{ $location->location }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Category -->
+                        <div>
+                            <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
+                            <select id="category_id" name="category_id" required
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                @foreach($categories as $category)
+                                    <option value="{{ $category->id }}" {{ $category->id == $asset->category_id ? 'selected' : '' }}>
+                                        {{ $category->category }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Department -->
+                        <div>
+                            <label for="department_id" class="block text-sm font-medium text-gray-700">Department</label>
+                            <select id="department_id" name="department_id" required
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                @foreach($departments as $department)
+                                    <option value="{{ $department->id }}" {{ $department->id == $asset->department_id ? 'selected' : '' }}>
+                                        {{ $department->department }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Brand -->
+                        <div>
+                            <label for="brand_id" class="block text-sm font-medium text-gray-700">Brand</label>
+                            <select id="brand_id" name="brand_id" required
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                @foreach($brands as $brand)
+                                    <option value="{{ $brand->id }}" {{ $brand->id == $asset->brand_id ? 'selected' : '' }}>
+                                        {{ $brand->brand }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Status -->
+                        <div>
+                            <label for="status_id" class="block text-sm font-medium text-gray-700">Status</label>
+                            <select id="status_id" name="status_id" required
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                @foreach($statuses as $status)
+                                    <option value="{{ $status->id }}" {{ $status->id == $asset->status_id ? 'selected' : '' }}>
+                                        {{ $status->status }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Condition -->
+                        <div>
+                            <label for="condition_id" class="block text-sm font-medium text-gray-700">Condition</label>
+                            <select id="condition_id" name="condition_id" required
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                @foreach($conditions as $condition)
+                                    <option value="{{ $condition->id }}" {{ $condition->id == $asset->condition_id ? 'selected' : '' }}>
+                                        {{ $condition->condition }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        
+                        <!-- Maintenance Modal -->
+                        <div class="modal-container">
+                            <div id="maintenance-modal" tabindex="-1" aria-hidden="true"
+                                class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
+                                <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
+                                    <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
+                                        <button type="button"
+                                            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
+                                            onclick="document.getElementById('maintenance-modal').classList.toggle('hidden')">
+                                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path fill-rule="evenodd"
+                                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                                    clip-rule="evenodd"></path>
+                                            </svg>
+                                            <span class="sr-only">Close modal</span>
+                                        </button>
+                                        <div class="p-6 text-center">
+                                            <h2 class="mb-4 text-lg font-bold text-black">Maintenance Date</h2>
+                                            <div class="mb-4">
+                                                <label for="maintenance_start_date"
+                                                    class="block text-left text-gray-700 font-bold mb-2">Start Date:</label>
+                                                <input type="date" id="maintenance_start_date" name="maintenance_start_date"
+                                                    class="w-full p-2 border rounded-md"
+                                                    value="{{ old('maintenance_start_date') ?? $asset->maintenance_start_date }}">
+                                            </div>
+                                            <div class="mb-4">
+                                                <label for="maintenance_end_date" class="block text-left text-gray-700 font-bold mb-2">End
+                                                    Date:</label>
+                                                <input type="date" id="maintenance_end_date" name="maintenance_end_date"
+                                                    class="w-full p-2 border rounded-md"
+                                                    value="{{ old('maintenance_end_date') ?? $asset->maintenance_end_date }}">
+                                            </div>
+                                            <div class="flex flex-end">
+                                                <button type="button" id="save-maintenance-btn"
+                                                    class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="flex justify-end space-x-3 pt-6 border-t">
+                        <a href="{{ route('asset.list') }}" 
+                           class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Cancel
+                        </a>
+                        <button type="submit"
+                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Update Asset
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
-<script src="{{ asset('js/chart.js') }}"></script>
-  
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get the current URL
-        var currentUrl = window.location.href;
-
-        // Get all dropdown buttons
-        var dropdownButtons = document.querySelectorAll('.relative button');
-
-        // Loop through each dropdown button
-        dropdownButtons.forEach(function (button) {
-            // Get the dropdown links
-            var dropdownLinks = button.nextElementSibling.querySelectorAll('a');
-
-            // Loop through each dropdown link
-            dropdownLinks.forEach(function (link) {
-                // Check if the current URL matches the link's href
-                if (currentUrl === link.href) {
-                    // Open the dropdown
-                    button.click();
+    // Preview image before upload
+    document.getElementById('asset_image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.querySelector('.h-32.w-32 img, .h-32.w-32 div');
+                if (preview.tagName === 'IMG') {
+                    preview.src = e.target.result;
+                } else {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.className = 'h-32 w-32 object-cover';
+                    preview.parentNode.replaceChild(img, preview);
                 }
-            });
-        });
-    });
-
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const conditionSelect = document.getElementById('condition_id');
-        const maintenanceModal = document.getElementById('maintenance-modal');
-        const saveMaintenanceBtn = document.getElementById('save-maintenance-btn');
-
-        conditionSelect.addEventListener('change', function () {
-            const selectedCondition = conditionSelect.options[conditionSelect.selectedIndex].text;
-            if (selectedCondition === 'Maintenance') {
-                maintenanceModal.classList.remove('hidden');
-            } else {
-                maintenanceModal.classList.add('hidden');
-                document.getElementById('maintenance_start_date').value = '';
-                document.getElementById('maintenance_end_date').value = '';
             }
-        });
+            reader.readAsDataURL(file);
+        }
+    });
 
-        saveMaintenanceBtn.addEventListener('click', function () {
-            maintenanceModal.classList.add('hidden');
-        });
+    // Show maintenance modal when maintenance condition is selected
+    document.getElementById('condition_id').addEventListener('change', function(e) {
+        const selectedOption = e.target.options[e.target.selectedIndex];
+        const conditionText = selectedOption.textContent.trim();
+        if (conditionText === 'Maintenance') {
+            document.getElementById('maintenance-modal').classList.remove('hidden');
+        }
+    });
+
+    // Handle save maintenance button click
+    document.getElementById('save-maintenance-btn').addEventListener('click', function() {
+        document.getElementById('maintenance-modal').classList.add('hidden');
     });
 </script>
+
 @endsection
