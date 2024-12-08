@@ -84,6 +84,18 @@
                                     <label class="text-xs font-medium text-gray-500 uppercase">Cost</label>
                                     <p class="text-sm font-medium text-gray-900">{{ $asset->cost }}</p>
                                 </div>
+                                <div class="space-y-1">
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Category</label>
+                                    <p class="text-sm font-medium text-gray-900">{{ $asset->category->category }}</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Brand</label>
+                                    <p class="text-sm font-medium text-gray-900">{{ $asset->brand->brand }}</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Purchase Date</label>
+                                    <p class="text-sm font-medium text-gray-900">{{ $asset->purchase_date }}</p>
+                                </div>
                             </div>
                         </div>
 
@@ -128,7 +140,7 @@
                                 <div class="space-y-1">
                                     <label class="text-xs font-medium text-gray-500 uppercase">Status</label>
                                     <p class="text-sm font-medium">
-                                        <span class="px-2 py-1 rounded-full text-xs font-semibold
+                                        <span class="px-4 py-2 rounded-full text-xs font-semibold
                                             @if($asset->status_id == 1) bg-green-100 text-green-800
                                             @elseif($asset->status_id == 2) bg-yellow-100 text-yellow-800
                                             @else bg-red-100 text-red-800
@@ -140,7 +152,7 @@
                                 <div class="space-y-1">
                                     <label class="text-xs font-medium text-gray-500 uppercase">Condition</label>
                                     <p class="text-sm font-medium">
-                                        <span class="px-2 py-1 rounded-full text-xs font-semibold
+                                        <span class="px-4 py-2 rounded-full text-xs font-semibold
                                             @if($asset->condition_id == 1) bg-green-100 text-green-800
                                             @elseif($asset->condition_id == 2) bg-yellow-100 text-yellow-800
                                             @else bg-red-100 text-red-800
@@ -148,18 +160,6 @@
                                             {{ $asset->condition->condition }}
                                         </span>
                                     </p>
-                                </div>
-                                <div class="space-y-1">
-                                    <label class="text-xs font-medium text-gray-500 uppercase">Category</label>
-                                    <p class="text-sm font-medium text-gray-900">{{ $asset->category->category }}</p>
-                                </div>
-                                <div class="space-y-1">
-                                    <label class="text-xs font-medium text-gray-500 uppercase">Brand</label>
-                                    <p class="text-sm font-medium text-gray-900">{{ $asset->brand->brand }}</p>
-                                </div>
-                                <div class="space-y-1">
-                                    <label class="text-xs font-medium text-gray-500 uppercase">Purchase Date</label>
-                                    <p class="text-sm font-medium text-gray-900">{{ $asset->purchase_date }}</p>
                                 </div>
                             </div>
                         </div>
