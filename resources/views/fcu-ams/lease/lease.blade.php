@@ -5,24 +5,37 @@
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-100 col-span-5">
         <!-- Enhanced Navigation Bar -->
-        <nav class="bg-white flex justify-between items-center py-4 px-6 m-4 shadow-sm rounded-lg border border-gray-100">
-            <div></div>
-            <h1 class="text-3xl font-semibold text-gray-800">Lease Management</h1>
-            <a href="{{ route('profile.index') }}" class="flex items-center gap-4 hover:bg-gray-50 p-2 rounded-lg transition-all duration-200">
-                <div class="relative">
-                    @if(auth()->user()->profile_picture)
+        <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
+            <a href="{{ route('profile.index') }}" class="flex gap-3 invisible" style="min-width:100px;">
+                <!-- <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset=""> -->
+                <div>
+                     @if(auth()->user()->profile_picture)
                         <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
-                            class="w-12 h-12 object-cover bg-no-repeat rounded-full ring-2 ring-gray-100">
+                            class="w-14 h-14  object-cover bg-no-repeat rounded-full mx-auto">
                     @else
                         <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
-                            class="w-12 h-12 object-cover bg-no-repeat rounded-full ring-2 ring-gray-100">
+                            class="w-14 h-14  object-cover bg-no-repeat rounded-full mx-auto">
                     @endif
                 </div>
+                <p class="my-auto">
+                    {{ (auth()->user() ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'N/A') }}
+                </p>
+            </a>
+            <h1 class="my-auto text-3xl">Lease Management</h1>
+            <a href="{{ route('profile.index') }}" class="flex gap-3" style="min-width:100px;">
+                <!-- <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset=""> -->
                 <div>
-                    <p class="text-gray-700 font-medium">
-                        {{ (auth()->user() ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'N/A') }}
-                    </p>
+                     @if(auth()->user()->profile_picture)
+                        <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
+                            class="w-14 h-14  object-cover bg-no-repeat rounded-full mx-auto">
+                    @else
+                        <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
+                            class="w-14 h-14  object-cover bg-no-repeat rounded-full mx-auto">
+                    @endif
                 </div>
+                <p class="my-auto">
+                    {{ (auth()->user() ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'N/A') }}
+                </p>
             </a>
         </nav>
 

@@ -398,7 +398,7 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-6 py-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                         @if($asset->status_name == 'Available') bg-green-100 text-green-800 
-                                        @elseif($asset->status_name == 'In Use') bg-blue-100 text-blue-800
+                                        @elseif($asset->status_name == 'Leased') bg-blue-100 text-blue-800
                                         @else bg-red-100 text-red-800 
                                         @endif">
                                         {{ $asset->status_name }}
