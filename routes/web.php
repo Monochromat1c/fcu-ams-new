@@ -83,6 +83,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/lease', 'index')->name('lease.index');
         Route::get('/lease/create', 'create')->name('lease.create');
         Route::get('/lease/create/form', 'createForm')->name('lease.create.form');
+        Route::get('/lease/{id}', 'show')->name('lease.show');
         Route::post('/lease/create/form', 'createForm')->name('lease.create.form.add');
         Route::post('/lease', 'store')->name('lease.store');
         Route::post('/lease/{lease}/end', 'endLease')->name('lease.end');

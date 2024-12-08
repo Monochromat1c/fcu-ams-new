@@ -4,7 +4,7 @@
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
-    <div class="content min-h-screen bg-slate-50 col-span-5">
+    <div class="content min-h-screen bg-slate-100 col-span-5">
         <!-- Enhanced Header -->
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
             <div></div>
@@ -103,8 +103,10 @@
                                 </tr>
                             @endforeach
                         </tbody>
-                        <!-- Pagination Controls -->
-                        <div class="mt-4 flex items-center justify-between px-4 mb-3">
+                    </table>
+                </div>
+                <!-- Pagination Controls -->
+                <div class="mt-4 flex items-center justify-between px-4 mb-3">
                             <div class="flex items-center gap-2">
                                 <a href="{{ $assets->url(1) }}" class="p-2 inline-flex items-center justify-center rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -135,8 +137,6 @@
                                 </a>
                             </div>
                         </div>
-                    </table>
-                </div>
             @endif
         </div>
     </div>

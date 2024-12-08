@@ -14,12 +14,9 @@ class LeaseController extends Controller
     public function index(Request $request)
     {
         $this->removeExpiredLeases();
-
-        $sort = $request->input('sort', 'id');
-        $direction = $request->input('direction', 'asc');
         $search = $request->input('search');
 
-        $leases = Lease::with('assets');
+        $leases = Lease::with('assets')->orderBy('id', 'desc');
 
         if ($search) {
             $leases = $leases->where(function ($q) use ($search) {
@@ -37,25 +34,9 @@ class LeaseController extends Controller
             return redirect()->route('lease.index');
         }
 
-        if ($sort && $direction) {
-            if ($sort == 'lease_date') {
-                $leases = $leases->orderBy('leases.lease_date', $direction);
-            } elseif ($sort == 'lease_expiration') {
-                $leases = $leases->orderBy('leases.lease_expiration', $direction);
-            } elseif ($sort == 'customer') {
-                $leases = $leases->orderBy('leases.customer', $direction);
-            } elseif ($sort == 'asset_tag_id') {
-                $leases = $leases->orderBy('assets.asset_tag_id', $direction);
-            } else {
-                $leases = $leases->orderBy($sort, $direction);
-            }
-        } else {
-            $leases = $leases->orderBy('id', 'asc');
-        }
+        $leases = $leases->paginate(15);
 
-        $leases = $leases->paginate(5);
-
-        return view('fcu-ams/lease/lease', compact('leases', 'sort', 'direction', 'search'));
+        return view('fcu-ams/lease/lease', compact('leases'));
     }
 
     private function removeExpiredLeases()
@@ -124,6 +105,12 @@ class LeaseController extends Controller
         } else {
             return view('fcu-ams/lease/leaseForm')->with('error', 'Please select at least one asset.');
         }
+    }
+
+    public function show($id)
+    {
+        $lease = Lease::with(['assets.category', 'assets.brand'])->findOrFail($id);
+        return view('fcu-ams.lease.view-lease', compact('lease'));
     }
 
     // public function endLease(Request $request, Lease $lease)
