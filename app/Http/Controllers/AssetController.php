@@ -352,7 +352,10 @@ class AssetController extends Controller
 
     public function maintenance()
     {
-        $assets = Asset::where('condition_id', 2)->get();
+        $assets = Asset::with(['brand', 'supplier', 'site', 'location', 'category', 'department', 'condition'])
+            ->where('condition_id', 2)
+            ->orderBy('maintenance_start_date', 'desc')
+            ->paginate(15);
         return view('fcu-ams/asset/maintenance', compact('assets'));
     }
 
