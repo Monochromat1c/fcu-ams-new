@@ -177,11 +177,13 @@ class AssetController extends Controller
 
     public function show($id)
     {
-        $asset = Asset::with(['supplier', 'site', 'location', 'category', 'department', 'editHistory' => function ($query) {
-            $query->orderBy('created_at', 'desc');
-        }, 'condition'])->findOrFail($id);
+        $asset = Asset::with(['supplier', 'site', 'location', 'category', 'department', 'condition'])->findOrFail($id);
+        
+        // Get paginated edit history
+        $editHistory = $asset->editHistory()
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
-        $asset = Asset::findOrFail($id);
         $suppliers = DB::table('suppliers')->get();
         $sites = DB::table('sites')->get();
         $locations = DB::table('locations')->get();
@@ -191,7 +193,7 @@ class AssetController extends Controller
         $brands = DB::table('brands')->get();
         $statuses = DB::table('statuses')->get();
         
-        return view('fcu-ams/asset/viewAsset', compact('asset','suppliers', 'sites', 'locations', 'categories',
+        return view('fcu-ams/asset/viewAsset', compact('asset', 'editHistory', 'suppliers', 'sites', 'locations', 'categories',
         'departments', 'conditions', 'statuses', 'brands'));
     }
 

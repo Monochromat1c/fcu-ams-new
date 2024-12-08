@@ -89,8 +89,7 @@
                     <button type="button" onclick="window.location.href='{{ route('asset.export') }}'"
                         class="flex gap-2 items-center bg-indigo-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 my-auto" viewBox="0 0 384 512">
-                            <path fill="#FFFFFF" d="M48 448L48 64c0-8.8 7.2-16 16-16l160 0 0 80c0 17.7 14.3 32 32 32l80 0 0 288c0 8.8-7.2
-                                16-16 16L64 464c-8.8 0-16-7.2-16-16zM64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64
+                            <path fill="#FFFFFF" d="M48 448L48 64c0-8.8 7.2-16 16-16l160 0 0 80c0 17.7 14.3 32 32 32l80 0 0 288c0 8.8-7.2 16-16 16L64 464c-8.8 0-16-7.2-16-16zM64 0C28.7 0 0 28.7 0 64L0 448c0 35.3 28.7 64 64
                                 64l256 0c35.3 0 64-28.7 64-64l0-293.5c0-17-6.7-33.3-18.7-45.3L274.7 18.7C262.7 6.7 246.5
                                 0 229.5 0L64 0zm90.9 233.3c-8.1-10.5-23.2-12.3-33.7-4.2s-12.3 23.2-4.2 33.7L161.6
                                 320l-44.5 57.3c-8.1 10.5-6.3 25.5 4.2 33.7s25.5 6.3 33.7-4.2L192 359.1l37.1 47.6c8.1
@@ -169,24 +168,22 @@
             @include('layouts.messageWithoutTimerForError')
         </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
-            <div class="flex justify-between mb-3">
+            <div class="flex justify-between mb-6">
                 <h2 class="text-2xl font-bold my-auto">Asset List</h2>
                 <div class="searchBox flex gap-2">
                     <button type="button" onclick="document.getElementById('filterModal').classList.remove('hidden')"
                         class="flex gap-1 items-center bg-blue-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 my-auto" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor">
-                            <path d="M3 3h18v18H3V3z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
                         </svg>
-                        Filters
+                        Filter
                     </button>
+                    
                     <!-- Filter Modal -->
-                    <div id="filterModal"
-                        class="fixed inset-0 flex items-center justify-center z-50 hidden bg-black bg-opacity-50">
+                    <div id="filterModal" class="fixed inset-0 flex items-center justify-center z-50 hidden bg-black bg-opacity-50">
                         <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-1/2 max-h-[80vh] overflow-y-auto">
                             <h2 class="text-2xl font-bold mb-4">Filter Assets</h2>
-                            <form id="filterForm" action="{{ route('asset.list') }}" method="GET"
-                                class="space-y-4">
+                            <form id="filterForm" action="{{ route('asset.list') }}" method="GET" class="space-y-4">
                                 <!-- Categories Filter -->
                                 <div class="border-b border-gray-300 pb-4 mb-4">
                                     <h3 class="segoe font-semibold mb-2">Categories</h3>
@@ -281,44 +278,39 @@
                                 <div class="flex justify-between mt-4">
                                     <button type="button"
                                         onclick="document.getElementById('filterModal').classList.add('hidden')"
-                                        class="bg-gray-300 text-gray-700 px-4 py-2 rounded-md">
+                                        class="flex gap-1 items-center bg-gray-300 text-gray-700 hover:bg-gray-400 transition-all duration-200 ease-in rounded-md px-4 py-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                                        </svg>
                                         Cancel
                                     </button>
-                                    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-md">
+                                    <button type="submit" 
+                                        class="flex gap-1 items-center bg-blue-600 text-white hover:bg-blue-700 transition-all duration-200 ease-in rounded-md px-4 py-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z" />
+                                        </svg>
                                         Apply Filters
                                     </button>
                                 </div>
                             </form>
                         </div>
                     </div>
-
-                    <style>
-                        .form-checkbox {
-                            @applyh-4 w-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500;
-                        }
-                    </style>
-                    <form id="searchboxForm" action="{{ route('asset.list') }}" method="GET"
-                        class="flex gap-1">
-                        <input type="text" name="search" placeholder="Search for assets..."
-                            class="px-3 py-3 border rounded-md border-red-950 w-96 text-sm text-gray-700 my-auto">
-                        <div class="flex align-items-center gap-1">
+                    <form action="{{ route('asset.list') }}" method="GET" class="flex gap-2">
+                        <div class="flex gap-2">
+                            <input type="text" name="search" value="{{ request('search') }}"
+                                class="rounded-md border-0 py-1.5 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                placeholder="Search assets...">
                             <button type="submit"
-                                class="flex gap-1 items-center bg-green-600 text-white hover:scale-105 transition-all
-                                duration-200 ease-in rounded-md px-4 p-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                class="flex gap-1 items-center bg-blue-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                                 </svg>
                                 Search
                             </button>
-                            <button type="submit" name="clear" value="true"
-                                class="flex gap-1 items-center bg-amber-600 text-white hover:scale-105 transition-all
-                                duration-200 ease-in rounded-md px-4 p-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                            <button type="button" onclick="window.location.href='{{ route('asset.list') }}'"
+                                class="flex gap-1 items-center bg-red-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
                                 </svg>
                                 Clear
                             </button>
@@ -326,166 +318,114 @@
                     </form>
                 </div>
             </div>
-            <div class="overflow-x-auto overflow-y-auto">
-                <table class="table-auto w-full">
+            <div class="overflow-x-auto overflow-y-auto rounded-lg shadow">
+                <table class="min-w-full divide-y divide-gray-200">
                     <thead>
                         <tr>
-                            <!-- <th class="px-4 py-2 bg-slate-100 border border-slate-400 text-center">Asset Image -->
-                            </th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
-                                <div class="flex">
-                                    <span class="mx-2  whitespace-nowrap">Asset Tag ID</span>
-                                    <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'asset_tag_id', 'direction' => ($direction == 'asc' && $sort == 'asset_tag_id') ? 'desc' : 'asc']) }}">
-                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center">
+                                    <span>Asset Tag ID</span>
+                                    <a class="ml-2" href="{{ route('asset.list', ['sort' => 'asset_tag_id', 'direction' => ($direction == 'asc' && $sort == 'asset_tag_id') ? 'desc' : 'asc']) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                         </svg>
                                     </a>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
-                                <div class="flex">
-                                    <span class="mx-2  whitespace-nowrap">Cost</span>
-                                    <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'cost', 'direction' => ($direction == 'asc' && $sort == 'cost') ? 'desc' : 'asc']) }}">
-                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center">
+                                    <span>Cost</span>
+                                    <a class="ml-2" href="{{ route('asset.list', ['sort' => 'cost', 'direction' => ($direction == 'asc' && $sort == 'cost') ? 'desc' : 'asc']) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                         </svg>
                                     </a>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
-                                <div class="flex">
-                                    <span class="mx-2  whitespace-nowrap">Supplier</span>
-                                    <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'supplier_name', 'direction' => ($direction == 'asc' && $sort == 'supplier_name') ? 'desc' : 'asc']) }}">
-                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center">
+                                    <span>Supplier</span>
+                                    <a class="ml-2" href="{{ route('asset.list', ['sort' => 'supplier_name', 'direction' => ($direction == 'asc' && $sort == 'supplier_name') ? 'desc' : 'asc']) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                         </svg>
                                     </a>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
-                                <div class="flex">
-                                    <span class="mx-2  whitespace-nowrap">Site</span>
-                                    <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'site_name', 'direction' => ($direction == 'asc' && $sort == 'site_name') ? 'desc' : 'asc']) }}">
-                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center">
+                                    <span>Category</span>
+                                    <a class="ml-2" href="{{ route('asset.list', ['sort' => 'category_name', 'direction' => ($direction == 'asc' && $sort == 'category_name') ? 'desc' : 'asc']) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                         </svg>
                                     </a>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
-                                <div class="flex">
-                                    <span class="mx-2  whitespace-nowrap">Category</span>
-                                    <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'category_name', 'direction' => ($direction == 'asc' && $sort == 'category_name') ? 'desc' : 'asc']) }}">
-                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center">
+                                    <span>Status</span>
+                                    <a class="ml-2" href="{{ route('asset.list', ['sort' => 'status_name', 'direction' => ($direction == 'asc' && $sort == 'status_name') ? 'desc' : 'asc']) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                         </svg>
                                     </a>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
-                                <div class="flex">
-                                    <span class="mx-2  whitespace-nowrap">Status</span>
-                                    <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'status_name', 'direction' => ($direction == 'asc' && $sort == 'status_name') ? 'desc' : 'asc']) }}">
-                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
+                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center">
+                                    <span>Condition</span>
+                                    <a class="ml-2" href="{{ route('asset.list', ['sort' => 'condition_name', 'direction' => ($direction == 'asc' && $sort == 'condition_name') ? 'desc' : 'asc']) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                         </svg>
                                     </a>
                                 </div>
                             </th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">
-                                <div class="flex">
-                                    <span class="mx-2  whitespace-nowrap">Condition</span>
-                                    <a class="my-auto"
-                                        href="{{ route('asset.list', ['sort' => 'condition_name', 'direction' => ($direction == 'asc' && $sort == 'condition_name') ? 'desc' : 'asc']) }}">
-                                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="size-6 invisible">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5" />
-                                        </svg>
-                                    </a>
-                                </div>
-                            </th>
-                            <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400 text-center">
-                                Action
-                            </th>
+                            <th scope="col" class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="bg-white divide-y divide-gray-200">
                         @foreach($assets as $asset)
-                            <tr class="hover:bg-slate-100">
-                                <!-- <td class="border border-slate-300 px-4 py-2" style="min-width:100px;">
-@if($asset->asset_image)
-                                        <img src="{{ asset($asset->asset_image) }}" alt="Asset Image"
-                                            class="mx-auto rounded-full" style="width:2.7rem;height:2.7rem;">
-@else
-                                        <img src="{{ asset('profile/default.png') }}"
-                                            alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
-@endif
-                                </td> -->
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier_name }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->site_name }}</td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->category_name }}</td>
-                                <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
-                                <div class="flex items-center gap-1">
-                                    @if($asset->status_name == 'Available')
-                                        <span class="inline-block w-4 h-4 bg-green-500 rounded-full"></span>
-                                    @elseif($asset->status_name == 'Unavailable')
-                                        <span class="inline-block w-4 h-4 bg-red-500 rounded-full"></span>
-                                    @elseif($asset->status_name == 'Leased')
-                                        <span class="inline-block w-4 h-4 bg-blue-500 rounded-full"></span>
-                                    @endif
-                                    {{ $asset->status_name }}
-                                </div>
-                            </td>
-                                <td class="border border-slate-300 px-4 py-2">{{ $asset->condition_name }}
+                            <tr class="hover:bg-gray-50 transition-colors duration-200">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->asset_tag_id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱{{ number_format($asset->cost, 2) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->supplier_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->category_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                        @if($asset->status_name == 'Available') bg-green-100 text-green-800 
+                                        @elseif($asset->status_name == 'In Use') bg-blue-100 text-blue-800
+                                        @else bg-red-100 text-red-800 
+                                        @endif">
+                                        {{ $asset->status_name }}
+                                    </span>
                                 </td>
-                                <td class="border border-slate-300 px-4 py-2">
-                                    <div class="mx-auto flex justify-center space-x-2">
-                                        <a href="{{ route('asset.view', ['id' => $asset->id]) }}"
-                                            class="text-green-600 hover:text-green-900">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+                                        {{ $asset->condition_name }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                                    <div class="flex justify-center space-x-2">
+                                        <a href="{{ route('asset.show', $asset->id) }}" 
+                                           class="text-green-600 hover:text-blue-900">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                             </svg>
                                         </a>
                                         @if(Auth::user()->role->role != 'Viewer')
-                                        <a href="{{ route('asset.edit', ['id' => $asset->id]) }}"
-                                            class="text-blue-600 hover:text-blue-900">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                        <a href="{{ route('asset.edit', $asset->id) }}" 
+                                           class="text-indigo-600 hover:text-indigo-900">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                             </svg>
                                         </a>
-                                        <button type="button" class="text-red-600 hover:text-red-900"
-                                            onclick="document.getElementById('delete-asset-modal{{ $asset->id }}').classList.toggle('hidden')">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                stroke-width="1.5" stroke="currentColor" class="size-6">
-                                                <path stroke-linecap="round" stroke-linejoin="round"
-                                                    d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                        <button onclick="document.getElementById('deleteAssetModal').classList.remove('hidden'); document.getElementById('assetId').value = '{{ $asset->id }}'"
+                                                class="text-red-600 hover:text-red-900">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
                                         </button>
                                         @endif
@@ -498,7 +438,6 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 
 @include('layouts.modals.asset.deleteAsset')
