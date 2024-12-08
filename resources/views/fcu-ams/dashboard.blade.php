@@ -189,18 +189,18 @@
 
     // Color palette for consistent and visually appealing colors
     const colorPalette = [
-        'rgba(255, 99, 132, 0.8)',   // Pink
-        'rgba(54, 162, 235, 0.8)',   // Blue
-        'rgba(255, 206, 86, 0.8)',   // Yellow
-        'rgba(75, 192, 192, 0.8)',   // Teal
-        'rgba(153, 102, 255, 0.8)',  // Purple
-        'rgba(255, 159, 64, 0.8)',   // Orange
-        'rgba(199, 199, 199, 0.8)',  // Gray
-        'rgba(83, 102, 255, 0.8)',   // Indigo
-        'rgba(40, 159, 64, 0.8)',    // Green
-        'rgba(210, 99, 132, 0.8)',   // Coral
-        'rgba(90, 162, 235, 0.8)',   // Sky Blue
-        'rgba(255, 77, 77, 0.8)'     // Bright Red
+        'rgba(69, 123, 157, 0.8)',   // Soft Blue
+        'rgba(124, 181, 236, 0.8)',  // Light Blue
+        'rgba(144, 237, 125, 0.8)',  // Soft Green
+        'rgba(247, 163, 92, 0.8)',   // Soft Orange
+        'rgba(128, 133, 233, 0.8)',  // Periwinkle
+        'rgba(241, 92, 128, 0.8)',   // Soft Red
+        'rgba(228, 211, 84, 0.8)',   // Soft Yellow
+        'rgba(175, 216, 248, 0.8)',  // Sky Blue
+        'rgba(187, 155, 176, 0.8)',  // Soft Purple
+        'rgba(153, 198, 142, 0.8)',  // Sage Green
+        'rgba(242, 140, 40, 0.8)',   // Tangerine
+        'rgba(166, 216, 184, 0.8)'   // Mint Green
     ];
 
     // Generate dynamic colors for each month
@@ -303,22 +303,22 @@
                 {
                     label: 'Total Cost',
                     data: totalCosts,
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(69, 123, 157, 1)',  // Soft Blue
+                    backgroundColor: 'rgba(69, 123, 157, 0.2)',
                     fill: false
                 },
                 {
                     label: 'Current Value',
                     data: currentValues,
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(124, 181, 236, 1)',  // Light Blue
+                    backgroundColor: 'rgba(124, 181, 236, 0.2)',
                     fill: false
                 },
                 {
                     label: 'Depreciation',
                     data: depreciationAmounts,
-                    borderColor: 'rgba(255, 206, 86, 1)',
-                    backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                    borderColor: 'rgba(247, 163, 92, 1)',  // Soft Orange
+                    backgroundColor: 'rgba(247, 163, 92, 0.2)',
                     fill: false
                 }
             ]
@@ -382,10 +382,25 @@
 
     // Function to generate unique colors
     function generateUniqueColors(count) {
-        const colors = [];
-        for (let i = 0; i < count; i++) {
+        const baseColors = [
+            'hsla(210, 50%, 45%, 0.8)',  // Muted Blue
+            'hsla(150, 50%, 45%, 0.8)',  // Muted Green
+            'hsla(20, 50%, 45%, 0.8)',   // Muted Orange
+            'hsla(270, 50%, 45%, 0.8)',  // Muted Purple
+            'hsla(180, 50%, 45%, 0.8)',  // Muted Teal
+            'hsla(0, 50%, 45%, 0.8)',    // Muted Red
+            'hsla(45, 50%, 45%, 0.8)',   // Muted Gold
+            'hsla(330, 50%, 45%, 0.8)',  // Muted Pink
+        ];
+
+        if (count <= baseColors.length) {
+            return baseColors.slice(0, count);
+        }
+
+        const colors = [...baseColors];
+        for (let i = baseColors.length; i < count; i++) {
             const hue = (i * 360 / count) % 360;
-            const color = `hsla(${hue}, 70%, 50%, 0.8)`;
+            const color = `hsla(${hue}, 50%, 45%, 0.8)`;
             colors.push(color);
         }
         return colors;
@@ -543,11 +558,25 @@
 
     // Function to generate unique colors
     function generateUniqueColors(count) {
-        const colors = [];
-        for (let i = 0; i < count; i++) {
-            // Generate a unique hue for each brand
+        const baseColors = [
+            'hsla(210, 50%, 45%, 0.8)',  // Muted Blue
+            'hsla(150, 50%, 45%, 0.8)',  // Muted Green
+            'hsla(20, 50%, 45%, 0.8)',   // Muted Orange
+            'hsla(270, 50%, 45%, 0.8)',  // Muted Purple
+            'hsla(180, 50%, 45%, 0.8)',  // Muted Teal
+            'hsla(0, 50%, 45%, 0.8)',    // Muted Red
+            'hsla(45, 50%, 45%, 0.8)',   // Muted Gold
+            'hsla(330, 50%, 45%, 0.8)',  // Muted Pink
+        ];
+
+        if (count <= baseColors.length) {
+            return baseColors.slice(0, count);
+        }
+
+        const colors = [...baseColors];
+        for (let i = baseColors.length; i < count; i++) {
             const hue = (i * 360 / count) % 360;
-            const color = `hsla(${hue}, 70%, 50%, 0.8)`;
+            const color = `hsla(${hue}, 50%, 45%, 0.8)`;
             colors.push(color);
         }
         return colors;
