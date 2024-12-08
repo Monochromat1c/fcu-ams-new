@@ -309,6 +309,11 @@ class AssetController extends Controller
             if ($request->input('maintenance_end_date') !== '') {
                 $asset->maintenance_end_date = $request->input('maintenance_end_date');
             }
+            // Set status to Unavailable when condition is maintenance
+            $unavailableStatus = Status::where('status', 'Unavailable')->first();
+            if ($unavailableStatus) {
+                $asset->status_id = $unavailableStatus->id;
+            }
         }
 
         if ($request->hasFile('asset_image')) {
