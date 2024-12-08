@@ -51,7 +51,7 @@
                 </div>
             @else
                 <div class="bg-white rounded-lg shadow-md p-6 lowStock mb-3">
-                    <div class="flex justify-between align-items-center">
+                    <div class="flex justify-between align-items-center ">
                         <h2 class="text-2xl mb-2">Purchase Order Record</h2>
                         <div class="pagination-here flex justify-between align-items-center">
                             <div class="flex align-items-center">
@@ -121,22 +121,20 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table-auto w-full">
+                    <table class="min-w-full divide-y divide-gray-200 border">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Requesting
-                                    Department</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">PO Date</th>
-                                <th class="px-4 py-2 text-center bg-slate-200 border border-slate-400">Action</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requesting Department</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PO Date</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($purchaseOrders as $record)
                                 <tr class="hover:bg-slate-100">
-                                    <td class="border border-slate-300 px-4 py-2">
-                                        {{ $record->department->department }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $record->po_date }}</td>
-                                    <td class="border border-slate-300 text-center px-4 py-2">
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $record->department->department }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $record->po_date }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <a href="{{ route('purchase-order-details', $record->id) }}"
                                             class="text-green-600 mx-auto">View Details</a>
                                     </td>
@@ -225,20 +223,20 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table-auto w-full">
+                    <table class="min-w-full divide-y divide-gray-200 border">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Receiver</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Stock Out Date</th>
-                                <th class="px-4 py-2 text-center bg-slate-200 border border-slate-400">Action</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receiver</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock Out Date</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($stockOutRecords as $record)
                                 <tr class="hover:bg-slate-100">
-                                    <td class="border border-slate-300 px-4 py-2">{{ $record->receiver }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $record->stock_out_date }}</td>
-                                    <td class="border border-slate-300 text-center px-4 py-2">
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $record->receiver }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $record->stock_out_date }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
                                         <a href="{{ route('stock.out.details', $record->id) }}"
                                             class="text-green-600 mx-auto">View Details</a>
                                     </td>
@@ -448,8 +446,8 @@
                                     <ul class="pagination my-auto flex">
                                         <li class="page-item p-1">
                                             <a class="page-link" href="{{ $inventories->nextPageUrl() }}">
-                                                <svg fill="#000000" class="w-5 h-5 my-auto" viewBox="0 0 24 24"
-                                                    id="next" data-name="Line Color" xmlns="http://www.w3.org/2000/svg"
+                                                <svg fill="#000000" class="w-5 h-5 my-auto" viewBox="0 0 24 24" id="next"
+                                                    data-name="Line Color" xmlns="http://www.w3.org/2000/svg"
                                                     class="icon line-color">
                                                     <path id="primary" d="M17,12,5,21V3Z"
                                                         style="fill: none; stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;">
@@ -478,28 +476,26 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table-auto w-full">
+                    <table class="min-w-full divide-y divide-gray-200 border">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unique Tag</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Items & Specs</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Quantity</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unit</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unit Price</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Supplier</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unique Tag</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items & Specs</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($inventories as $inventory)
                                 <tr class="hover:bg-slate-100">
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unique_tag }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->quantity }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit->unit }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit_price }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">
-                                        {{ $inventory->supplier->supplier }}
-                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->unique_tag }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->items_specs }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->quantity }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->unit->unit }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->unit_price }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->supplier->supplier }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -575,8 +571,8 @@
                                     <ul class="pagination my-auto flex">
                                         <li class="page-item p-1">
                                             <a class="page-link" href="{{ $assets->nextPageUrl() }}">
-                                                <svg fill="#000000" class="w-5 h-5 my-auto" viewBox="0 0 24 24"
-                                                    id="next" data-name="Line Color" xmlns="http://www.w3.org/2000/svg"
+                                                <svg fill="#000000" class="w-5 h-5 my-auto" viewBox="0 0 24 24" id="next"
+                                                    data-name="Line Color" xmlns="http://www.w3.org/2000/svg"
                                                     class="icon line-color">
                                                     <path id="primary" d="M17,12,5,21V3Z"
                                                         style="fill: none; stroke: rgb(0, 0, 0); stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;">
@@ -603,131 +599,29 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- FOR PRINTING ASSETS PURCHASED EVERY MONTH -->
-                        <div id="printableAssetsTable" class="hidden my-5">
-                            <div class="text-center mb-5">
-                                <!-- <img class="fcu-icon mb-3 w-28 mx-auto" src="/img/login/fcu-icon.png" alt="" srcset=""> -->
-                                <h2 class="text-2xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>
-                                <h2 class="text-xl font-bold mb-3">Roxas Avenue, Roxas City</h2>
-                                <h2 class="text-xl font-bold">ASSETS (Per Month)</h2>
-                                <h2 class="text-xl font-bold">on {{ now()->format('M j, Y') }}
-                                </h2>
-                            </div>
-                            <table class="table-auto w-full">
-                                <thead>
-                                    <tr>
-                                        <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Asset Tag ID</th>
-                                        <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Specification</th>
-                                        <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Brand</th>
-                                        <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Model</th>
-                                        <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Serial Number</th>
-                                        <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Category</th>
-                                        <!-- <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Site</th> -->
-                                        <!-- <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Location</th> -->
-                                        <!-- <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Department</th> -->
-                                        <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Cost</th>
-                                        <!-- <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Supplier</th> -->
-                                        <!-- <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Purchase Date</th> -->
-                                        <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Status</th>
-                                        <th
-                                            class="px-4 py-2 text-left bg-slate-200 border border-slate-400 whitespace-nowrap">
-                                            Condition</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($assets as $asset)
-                                        <tr class="hover:bg-slate-100">
-                                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
-                                                {{ $asset->asset_tag_id }}</td>
-                                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
-                                                {{ $asset->specs }}</td>
-                                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
-                                                {{ $asset->brand->brand }}</td>
-                                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
-                                                {{ $asset->model }}</td>
-                                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
-                                                {{ $asset->serial_number }}</td>
-                                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
-                                                {{ $asset->category->category }}</td>
-                                            <!-- <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->site->site }}</td> -->
-                                            <!-- <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->location->location }}</td> -->
-                                            <!-- <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->department->department }}</td> -->
-                                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
-                                                {{ $asset->cost }}</td>
-                                            <!-- <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->supplier->supplier }}</td> -->
-                                            <!-- <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">{{ $asset->purchase_date }}</td> -->
-                                            <td class="border border-slate-300 px-4 py-2 whitespace-nowrap">
-                                                {{ $asset->status->status }}</td>
-                                            <td class="border border-slate-300 px-4 py-2  whitespace-nowrap">
-                                                {{ $asset->condition->condition }}</td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            <div class="flex w-full flex-col">
-                                <div class="m ml-auto my-2">
-                                    <div class="flex gap-2">
-                                        <span class="text-lg">Total Asset Value: </span>
-                                        <span
-                                            class="text-lg">{{ number_format($assets->sum('cost'), 2) }}</span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h2 class="text-xl font-bold">SHERALYN A. DE LEON</h2>
-                                    <h2 class="text-lg italic font-bold">Acting - Property Custodian</h2>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- END -->
                     </div>
-                    <table class="table-auto w-full">
+                    <table class="min-w-full divide-y divide-gray-200 border">
                         <thead>
                             <tr>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Asset Tag ID</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Specification</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Brand</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Model</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Serial Number</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Cost</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Supplier</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Asset Tag ID</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specification</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Brand</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Serial Number</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost</th>
+                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($assets as $asset)
                                 <tr class="hover:bg-slate-100">
-                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->specs }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->brand->brand }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->model }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->serial_number }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->cost }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $asset->supplier->supplier }}
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $asset->asset_tag_id }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $asset->specs }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $asset->brand->brand }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $asset->model }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $asset->serial_number }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $asset->cost }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $asset->supplier->supplier }}
                                     </td>
                                 </tr>
                             @endforeach
@@ -737,7 +631,6 @@
             @endif
         </div>
     </div>
-</div>
 </div>
 
 <script src="{{ asset('js/chart.js') }}"></script>
