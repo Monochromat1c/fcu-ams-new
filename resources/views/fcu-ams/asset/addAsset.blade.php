@@ -68,10 +68,10 @@
                                     </svg>
                                 </div>
                             </div>
-                            <div class="ml-4">
+                            <div class="ml-2">
                                 <div class="relative">
                                     <input type="file" id="asset_image" name="asset_image" class="hidden" accept="image/*">
-                                    <label for="asset_image" class="cursor-pointer ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <label for="asset_image" class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         Choose Image
                                     </label>
                                 </div>
@@ -262,10 +262,6 @@
 
                     <!-- Form Actions -->
                     <div class="flex justify-end space-x-3 pt-6 border-t">
-                        <a href="{{ route('asset.list') }}" 
-                           class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                            Cancel
-                        </a>
                         <button type="submit"
                                 class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Add Asset
