@@ -28,6 +28,7 @@ class Asset extends Model
         'maintenance_end_date',
         'purchase_date',
         'condition_id',
+        'assigned_to'
     ];
 
     public function supplier()

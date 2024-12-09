@@ -137,6 +137,19 @@
                             </div>
                         </div>
 
+                        <!-- Assigned To -->
+                        <div>
+                            <label for="assigned_to" class="block text-sm font-medium text-gray-700">Assigned To</label>
+                            <div class="mt-1">
+                                <input type="text" name="assigned_to" id="assigned_to"
+                                    class="shadow-sm  p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    value="{{ old('assigned_to') }}">
+                            </div>
+                            @error('assigned_to')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                        </div>
+                        
                         <!-- Supplier -->
                         <div>
                             <label for="supplier_id" class="block text-sm font-medium text-gray-700">Supplier</label>
@@ -237,6 +250,9 @@
                                     </svg>
                                 </button>
                             </div>
+                            @error('department_id')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <!-- Brand -->

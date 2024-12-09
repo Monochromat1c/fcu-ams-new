@@ -144,6 +144,16 @@
                                     class="shadow-sm  p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
                             </div>
                         </div>
+
+                        <!-- Assigned To -->
+                        <div>
+                            <label for="assigned_to" class="block text-sm font-medium text-gray-700">Assigned To</label>
+                            <div class="mt-1">
+                                <input type="text" name="assigned_to" id="assigned_to"
+                                    class="shadow-sm  p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                                    value="{{ old('assigned_to', $asset->assigned_to) }}">
+                            </div>
+                        </div>
                         
                         <!-- Supplier -->
                         <div>
@@ -208,6 +218,9 @@
                                     </option>
                                 @endforeach
                             </select>
+                            @error('department_id')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
                         </div>
 
                         <!-- Brand -->

@@ -217,6 +217,7 @@ class AssetController extends Controller
             'department_id' => 'required|integer|exists:departments,id',
             'purchase_date' => 'required|date',
             'asset_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'assigned_to' => 'nullable|string|max:255',
         ]);
 
         $asset = new Asset();
@@ -234,6 +235,7 @@ class AssetController extends Controller
         $asset->condition_id = Condition::where('condition', 'New')->first()->id;
         $asset->status_id = Status::where('status', 'Available')->first()->id;
         $asset->purchase_date = $validatedData['purchase_date'];
+        $asset->assigned_to = $validatedData['assigned_to'];
 
         if ($request->hasFile('asset_image')) {
             $imageName = time().'.'.$request->asset_image->extension();
@@ -268,14 +270,14 @@ class AssetController extends Controller
             'asset_tag_id' => [
                 'required',
                 'string',
-                Rule::unique('assets', 'asset_tag_id')->ignore($id)->whereNull('deleted_at'),
+                Rule::unique('assets', 'asset_tag_id')->whereNull('deleted_at')->ignore($id),
             ],
+            'brand_id' => 'required|integer|exists:brands,id',
             'model' => 'required|string',
             'specs' => 'nullable|string',
             'serial_number' => 'required|string',
             'cost' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
-            'brand_id' => 'required|integer|exists:brands,id',
             'site_id' => 'required|integer|exists:sites,id',
             'location_id' => 'required|integer|exists:locations,id',
             'category_id' => 'required|integer|exists:categories,id',
@@ -284,26 +286,28 @@ class AssetController extends Controller
             'condition_id' => 'required|integer|exists:conditions,id',
             'purchase_date' => 'required|date',
             'asset_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'assigned_to' => 'nullable|string|max:255',
         ]);
 
         $asset = Asset::findOrFail($id);
+        $oldAsset = clone $asset;
+
         $asset->asset_tag_id = $validatedData['asset_tag_id'];
         $asset->model = $validatedData['model'];
         $asset->specs = $validatedData['specs'] ?? '';
         $asset->serial_number = $validatedData['serial_number'];
         $asset->cost = $validatedData['cost'];
         $asset->supplier_id = $validatedData['supplier_id'];
+        $asset->brand_id = $validatedData['brand_id'];
         $asset->site_id = $validatedData['site_id'];
         $asset->location_id = $validatedData['location_id'];
-        $asset->brand_id = $validatedData['brand_id'];
         $asset->category_id = $validatedData['category_id'];
         $asset->department_id = $validatedData['department_id'];
-        $asset->condition_id = $validatedData['condition_id'];
         $asset->status_id = $validatedData['status_id'];
-        // $asset->maintenance_start_date = $request->input('maintenance_start_date') !== '' ? $request->input('maintenance_start_date') : null;
-        // $asset->maintenance_end_date = $request->input('maintenance_end_date') !== '' ? $request->input('maintenance_end_date') : null;
+        $asset->condition_id = $validatedData['condition_id'];
         $asset->purchase_date = $validatedData['purchase_date'];
-        
+        $asset->assigned_to = $validatedData['assigned_to'];
+
         if ($request->input('condition_id') == Condition::where('condition', 'Maintenance')->first()->id) {
             if ($request->input('maintenance_start_date') !== '') {
                 $asset->maintenance_start_date = $request->input('maintenance_start_date');
@@ -324,7 +328,6 @@ class AssetController extends Controller
             $asset->asset_image = 'profile/'.$imageName;
         }
 
-        $oldAsset = Asset::findOrFail($id);
         $this->storeEditHistory($asset, auth()->user(), $oldAsset);
 
         $asset->save();
@@ -377,6 +380,7 @@ class AssetController extends Controller
             'purchase_date' => 'Purchase Date',
             'condition_id' => 'Condition',
             'status_id' => 'Status',
+            'assigned_to' => 'Assigned To',
         ];
 
         foreach ($fields as $field => $header) {
