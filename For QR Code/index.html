@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCU Asset Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 min-h-screen py-8">
+    <div class="max-w-2xl mx-auto px-4">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <div class="text-center mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">FCU Asset Details</h1>
+                <p class="text-gray-600" id="assetTagId"></p>
+            </div>
+
+            <div id="assetImage" class="hidden mb-6">
+                <img id="assetImageElement" src="" alt="Asset Image" class="mx-auto max-h-48 object-contain">
+            </div>
+
+            <div class="space-y-6">
+                <!-- Basic Info -->
+                <div class="border-b pb-4">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-3">Basic Information</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Assigned To</p>
+                            <p id="assignedTo" class="font-medium"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Brand</p>
+                            <p id="brand" class="font-medium"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Model</p>
+                            <p id="model" class="font-medium"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Serial Number</p>
+                            <p id="serial" class="font-medium"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Location Info -->
+                <div class="border-b pb-4">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-3">Location Information</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Site</p>
+                            <p id="site" class="font-medium"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Location</p>
+                            <p id="location" class="font-medium"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Department</p>
+                            <p id="department" class="font-medium"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Details -->
+                <div class="border-b pb-4">
+                    <h2 class="text-lg font-semibold text-gray-700 mb-3">Asset Details</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Category</p>
+                            <p id="category" class="font-medium"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Status</p>
+                            <p id="status" class="font-medium"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Condition</p>
+                            <p id="condition" class="font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <p class="text-sm text-gray-500">Specifications</p>
+                        <p id="specs" class="font-medium"></p>
+                    </div>
+                </div>
+
+                <!-- Purchase Info -->
+                <div>
+                    <h2 class="text-lg font-semibold text-gray-700 mb-3">Purchase Information</h2>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-sm text-gray-500">Supplier</p>
+                            <p id="supplier" class="font-medium"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Cost</p>
+                            <p id="cost" class="font-medium"></p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Purchase Date</p>
+                            <p id="purchaseDate" class="font-medium"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get the data parameter from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedData = urlParams.get('data');
+
+            if (encodedData) {
+                try {
+                    // Decode the base64 data
+                    const jsonString = atob(encodedData);
+                    const data = JSON.parse(jsonString);
+
+                    // Update all fields
+                    document.getElementById('assetTagId').textContent = `Asset Tag ID: ${data.tag_id}`;
+                    document.getElementById('assignedTo').textContent = data.assigned_to;
+                    document.getElementById('brand').textContent = data.brand;
+                    document.getElementById('model').textContent = data.model;
+                    document.getElementById('serial').textContent = data.serial;
+                    document.getElementById('site').textContent = data.site;
+                    document.getElementById('location').textContent = data.location;
+                    document.getElementById('department').textContent = data.department;
+                    document.getElementById('category').textContent = data.category;
+                    document.getElementById('status').textContent = data.status;
+                    document.getElementById('condition').textContent = data.condition;
+                    document.getElementById('specs').textContent = data.specs;
+                    document.getElementById('supplier').textContent = data.supplier;
+                    document.getElementById('cost').textContent = data.cost;
+                    document.getElementById('purchaseDate').textContent = data.purchase_date;
+
+                    // Handle image if present
+                    if (data.image) {
+                        document.getElementById('assetImage').classList.remove('hidden');
+                        document.getElementById('assetImageElement').src = data.image;
+                    }
+                } catch (error) {
+                    console.error('Error parsing asset data:', error);
+                    document.body.innerHTML = '<div class="max-w-2xl mx-auto px-4 py-8"><div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert"><strong class="font-bold">Error!</strong><span class="block sm:inline"> Unable to load asset details.</span></div></div>';
+                }
+            } else {
+                document.body.innerHTML = '<div class="max-w-2xl mx-auto px-4 py-8"><div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert"><strong class="font-bold">No Data!</strong><span class="block sm:inline"> No asset data provided.</span></div></div>';
+            }
+        });
+    </script>
+</body>
+</html>

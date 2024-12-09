@@ -19,6 +19,7 @@ use App\Exports\AssetsExport;
 use App\Imports\AssetsImport;
 use Illuminate\Validation\Rule;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Support\Facades\Storage;
 
 class AssetController extends Controller
 {
@@ -436,24 +437,37 @@ class AssetController extends Controller
     public function generateQrCode($id)
     {
         $asset = Asset::findOrFail($id);
-        $assetDetails = [
-            'Asset Tag ID: ' . $asset->asset_tag_id,
-            'Specification: ' . $asset->specs,
-            'Brand: ' . $asset->brand,
-            'Model: ' . $asset->model,
-            'Serial Number: ' . $asset->serial_number,
-            'Category: ' . $asset->category->category,
-            'Site: ' . $asset->site->site,
-            'Location: ' . $asset->location->location,
-            'Department: ' . $asset->department->department,
-            'Cost: ' . $asset->cost,
-            'Supplier: ' . $asset->supplier->supplier,
-            'Purchase Date: ' . $asset->purchase_date,
-            'Status: ' . $asset->status->status,
-            'Condition: ' . $asset->condition->condition,
+
+        $assetData = [
+            'tag_id' => $asset->asset_tag_id,
+            'assigned_to' => $asset->assigned_to ?? 'Not Assigned',
+            'specs' => $asset->specs,
+            'brand' => $asset->brand->brand,
+            'model' => $asset->model,
+            'serial' => $asset->serial_number,
+            'category' => $asset->category->category,
+            'site' => $asset->site->site,
+            'location' => $asset->location->location,
+            'department' => $asset->department->department,
+            'cost' => $asset->cost,
+            'supplier' => $asset->supplier->supplier,
+            'purchase_date' => $asset->purchase_date,
+            'status' => $asset->status->status,
+            'condition' => $asset->condition->condition,
         ];
 
-        $qrCode = QrCode::generate(implode("\n", $assetDetails));
+        // Create GitHub Pages URL with base64 encoded data
+        $encodedData = base64_encode(json_encode($assetData));
+        $githubUrl = "https://monochromat1c.github.io/forViewingAssetThroughQRCode/?data=" . $encodedData;
+
+        $qrCode = QrCode::size(200)
+            ->margin(2)
+            ->backgroundColor(255, 255, 255)
+            ->color(0, 0, 0)
+            ->format('svg')
+            ->errorCorrection('H')
+            ->generate($githubUrl);
+            
         return view('fcu-ams/asset/qrCode', compact('qrCode', 'id', 'asset'));
     }
 }
