@@ -23,6 +23,7 @@ use Illuminate\Validation\Rule;
 use App\Models\Brand;
 use App\Models\Unit;
 use Carbon\Carbon;
+use App\Services\ReportPrintService;
 
 class ReportController extends Controller
 {
@@ -32,6 +33,9 @@ class ReportController extends Controller
 
         $startDate = Carbon::parse($startDate)->startOfDay();
         $endDate = Carbon::parse($endDate)->endOfDay();
+
+        // Date range display method
+        $dateRangeDisplay = $this->formatDateRange($startDate, $endDate);
 
         $inventories = Inventory::with('supplier', 'brand', 'unit')
             ->whereBetween('created_at', [$startDate, $endDate])
@@ -95,10 +99,36 @@ class ReportController extends Controller
 
         return view('fcu-ams/reports/reports', compact('lowStockInventories', 'stockOutRecords',
         'assets', 'purchaseOrders', 'inventoriesForPrint'), [
-        'inventories' => $inventories,
-        'startDate' => $startDate->toDateString(),
-        'endDate' => $endDate->toDateString()
+            'inventories' => $inventories,
+            'startDate' => $startDate->toDateString(),
+            'endDate' => $endDate->toDateString(),
+            'dateRangeDisplay' => $dateRangeDisplay
         ]);
+    }
+
+    // Date range formatting method
+    private function formatDateRange(Carbon $startDate, Carbon $endDate): string {
+        // Same month scenario
+        if ($startDate->month == $endDate->month && $startDate->year == $endDate->year) {
+            return sprintf(
+                "Supplies Purchased in %s %d from %d to %d", 
+                $startDate->translatedFormat('F'), 
+                $startDate->year, 
+                $startDate->day, 
+                $endDate->day
+            );
+        }
+
+        // Different months scenario
+        return sprintf(
+            "Supplies Purchased from %s %d %d to %s %d %d",
+            $startDate->translatedFormat('F'), 
+            $startDate->day, 
+            $startDate->year,
+            $endDate->translatedFormat('F'), 
+            $endDate->day, 
+            $endDate->year
+        );
     }
 
     public function stockOutDetails($id)
