@@ -4,7 +4,7 @@
         <h3 class="text-xl font-bold mb-3 segoe">Roxas Avenue, Roxas City</h3>
         <h3 class="text-xl font-bold segoe">OFFICE SUPPLIES INVENTORY</h3>
         <h4 class="text-lg font-bold segoe">
-            {{ \Carbon\Carbon::createFromDate($selectedYear, $selectedMonth, 1)->format('F Y') }}
+            {{ $startDate }} - {{ $endDate }}
         </h4>
     </div>
 

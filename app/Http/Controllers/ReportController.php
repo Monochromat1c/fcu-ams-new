@@ -27,21 +27,20 @@ use Carbon\Carbon;
 class ReportController extends Controller
 {
     public function index(Request $request) {
-        $month = $request->input('month', now()->month);
-        $year = $request->input('year', now()->year);
+        $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
+        $endDate = $request->input('end_date', now()->endOfMonth()->toDateString());
 
-        $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();
-        $endDate = Carbon::createFromDate($year, $month, 1)->endOfMonth();
+        $startDate = Carbon::parse($startDate)->startOfDay();
+        $endDate = Carbon::parse($endDate)->endOfDay();
 
         $inventories = Inventory::with('supplier', 'brand', 'unit')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->where('quantity', '>', 0)
             ->orderBy('unique_tag', 'asc')
-            ->paginate(10);
+            ->paginate(10)
+            ->appends($request->query());
 
         $inventoriesForPrint = Inventory::with('supplier')
             ->whereBetween('created_at', [$startDate, $endDate])
-            ->where('quantity', '>', 0)
             ->orderBy('unique_tag', 'asc')
             ->get();
 
@@ -50,7 +49,8 @@ class ReportController extends Controller
             ->where('quantity', '<', 20)
             ->whereNull('deleted_at')
             ->orderBy('unique_tag', 'asc')
-            ->paginate(10);
+            ->paginate(10)
+            ->appends($request->query());
 
         $stockOutRecords = StockOut::with('inventory', 'department')
             ->orderBy('stock_out_date', 'desc')
@@ -61,19 +61,20 @@ class ReportController extends Controller
                 return $records->first();
             });
 
-            $stockOutRecords = new LengthAwarePaginator(
-                $stockOutRecords->forPage($request->page, 10),
-                $stockOutRecords->count(),
-                10,
-                $request->page,
-                ['path' => $request->url(), 'query' => $request->query()]
-            );
+        $stockOutRecords = new LengthAwarePaginator(
+            $stockOutRecords->forPage($request->page, 10),
+            $stockOutRecords->count(),
+            10,
+            $request->page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
 
-            $assets = Asset::with('supplier', 'brand')
-                ->whereDate('purchase_date', '>=', now()->startOfMonth())
-                ->whereDate('purchase_date', '<=', now()->endOfMonth())
-                ->orderBy('asset_tag_id', 'asc')
-                ->paginate(10);
+        $assets = Asset::with('supplier', 'brand')
+            ->whereDate('purchase_date', '>=', now()->startOfMonth())
+            ->whereDate('purchase_date', '<=', now()->endOfMonth())
+            ->orderBy('asset_tag_id', 'asc')
+            ->paginate(10)
+            ->appends($request->query());
 
         $purchaseOrders = PurchaseOrder::with('supplier', 'department')
             ->orderBy('po_date', 'desc')
@@ -95,8 +96,8 @@ class ReportController extends Controller
         return view('fcu-ams/reports/reports', compact('lowStockInventories', 'stockOutRecords',
         'assets', 'purchaseOrders', 'inventoriesForPrint'), [
         'inventories' => $inventories,
-        'selectedMonth' => $month,
-        'selectedYear' => $year
+        'startDate' => $startDate->toDateString(),
+        'endDate' => $endDate->toDateString()
         ]);
     }
 
@@ -143,11 +144,18 @@ class ReportController extends Controller
 
     public function printReport(Request $request, ReportPrintService $printService)
     {
-        $month = $request->input('month', now()->month);
-        $year = $request->input('year', now()->year);
-        $inventories = $this->getMonthlyInventories($month, $year);
+        $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
+        $endDate = $request->input('end_date', now()->endOfMonth()->toDateString());
         
-        return $printService->printMonthlySupplierReport($inventories, $month, $year);
+        $startDate = Carbon::parse($startDate)->startOfDay();
+        $endDate = Carbon::parse($endDate)->endOfDay();
+
+        $inventories = Inventory::with('supplier')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->orderBy('unique_tag', 'asc')
+            ->get();
+        
+        return $printService->printMonthlySupplierReport($inventories, $startDate, $endDate);
     }
 
     private function getMonthlyInventories($month, $year)

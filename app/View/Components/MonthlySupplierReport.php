@@ -9,15 +9,15 @@ use Carbon\Carbon;
 class MonthlySupplierReport extends Component
 {
     public $inventories;
-    public $selectedMonth;
-    public $selectedYear;
+    public $startDate;
+    public $endDate;
     public $totalValue;
 
-    public function __construct($inventories, $selectedMonth, $selectedYear)
+    public function __construct($inventories, $startDate, $endDate)
     {
         $this->inventories = $inventories;
-        $this->selectedMonth = $selectedMonth;
-        $this->selectedYear = $selectedYear;
+        $this->startDate = Carbon::parse($startDate)->format('F j, Y');
+        $this->endDate = Carbon::parse($endDate)->format('F j, Y');
         $this->totalValue = $this->calculateTotalValue();
     }
 
