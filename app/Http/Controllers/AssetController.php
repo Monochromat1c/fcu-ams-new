@@ -208,7 +208,7 @@ class AssetController extends Controller
             ],
             'brand_id' => 'required|integer|exists:brands,id',
             'model' => 'required|string',
-            'specs' => 'nullable|string',
+            'specs' => 'nullable',
             'serial_number' => 'required|string',
             'cost' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
@@ -275,7 +275,7 @@ class AssetController extends Controller
             ],
             'brand_id' => 'required|integer|exists:brands,id',
             'model' => 'required|string',
-            'specs' => 'nullable|string',
+            'specs' => 'nullable',
             'serial_number' => 'required|string',
             'cost' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
@@ -452,8 +452,6 @@ class AssetController extends Controller
             'cost' => $asset->cost,
             'supplier' => $asset->supplier->supplier,
             'purchase_date' => $asset->purchase_date,
-            'status' => $asset->status->status,
-            'condition' => $asset->condition->condition,
         ];
 
         // Create GitHub Pages URL with base64 encoded data

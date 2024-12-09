@@ -27,7 +27,7 @@ return new class extends Migration
             $table->unsignedBigInteger('brand_id');
             $table->foreign('brand_id')->references('id')->on('brands');
             $table->string('model');
-            $table->string('specs')->nullable();
+            $table->text('specs')->nullable();
             $table->string('serial_number');
             $table->decimal('cost', 10, 2);
             $table->unsignedBigInteger('supplier_id');
