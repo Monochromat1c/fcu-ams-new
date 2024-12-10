@@ -461,7 +461,7 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                @foreach($inventories as $inventory)
+                                @foreach($inventories->where('quantity', '>', 0) as $inventory)
                                     <tr class="hover:bg-slate-100">
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->unique_tag }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->items_specs }}</td>
