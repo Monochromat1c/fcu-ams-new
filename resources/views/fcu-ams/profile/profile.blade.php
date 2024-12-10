@@ -117,13 +117,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
                         </svg>
-                        Update Information
+                        Save
                     </button>
                 </div>
                 </form>
             </div>
             <div class="bg-white rounded-xl shadow-lg p-8 mb-6 transition-all duration-300 hover:shadow-xl">
-                <h2 class="text-xl font-bold text-gray-800 mb-6">Change Password</h2>
+                <h1 class="text-xl font-bold text-gray-800 mb-6">Change Password</h1>
                 <form method="POST" action="{{ route('profile.update') }}" class="space-y-4">
                     @csrf
                     <div class="space-y-4">

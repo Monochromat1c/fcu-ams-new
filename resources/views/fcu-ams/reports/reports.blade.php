@@ -123,10 +123,10 @@
                     </div>
                     <table class="min-w-full divide-y divide-gray-200 border">
                         <thead>
-                            <tr>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requesting Department</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">PO Date</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Requesting Department</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">PO Date</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Action</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -225,10 +225,10 @@
                     </div>
                     <table class="min-w-full divide-y divide-gray-200 border">
                         <thead>
-                            <tr>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Receiver</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stock Out Date</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                            <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Receiver</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Stock Out Date</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Action</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
