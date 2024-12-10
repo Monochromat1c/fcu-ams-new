@@ -55,7 +55,7 @@ class AssetSeeder extends Seeder
             // Desktop PCs (FCCPC)
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPC', 1),
-                'specs' => 'Desktop',
+                'specs' => 'HP OMEN Desktop PC with Intel Core i7 processor, 16GB RAM, 1TB SSD, and NVIDIA RTX 3060 graphics card',
                 'brand_id' => $HP->id,
                 'model' => 'HP OMEN',
                 'serial_number' => '4CE8061CQG',
@@ -74,7 +74,7 @@ class AssetSeeder extends Seeder
 
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPC', 2),
-                'specs' => 'Desktop',
+                'specs' => 'HP OMEN Desktop PC featuring Intel Core i5 processor, 8GB RAM, 512GB SSD, and NVIDIA GTX 1660 Super graphics card',
                 'brand_id' => $HP->id,
                 'model' => 'HP OMEN',
                 'serial_number' => 'CZC7139K48',
@@ -92,7 +92,7 @@ class AssetSeeder extends Seeder
             // Additional Desktop PCs (FCCPC)
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPC', 3),
-                'specs' => 'Desktop',
+                'specs' => 'Dell OptiPlex 7090 Desktop with Intel Core i7-11700 processor, 32GB RAM, 1TB NVMe SSD, and integrated Intel UHD Graphics',
                 'brand_id' => $Dell->id,
                 'model' => 'OptiPlex 7090',
                 'serial_number' => 'DLL7090X441',
@@ -109,7 +109,7 @@ class AssetSeeder extends Seeder
 
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPC', 4),
-                'specs' => 'Desktop',
+                'specs' => 'HP ProDesk 600 G6 Desktop featuring Intel Core i5-10500 processor, 16GB RAM, 512GB SSD, and integrated Intel UHD Graphics',
                 'brand_id' => $HP->id,
                 'model' => 'ProDesk 600 G6',
                 'serial_number' => 'HP600G6X552',
@@ -127,7 +127,7 @@ class AssetSeeder extends Seeder
             // Additional Desktop PCs with different configurations
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPC', 5),
-                'specs' => 'Desktop Workstation',
+                'specs' => 'HP Z4 G4 Workstation powered by Intel Xeon W-2245 processor, 64GB RAM, 2TB NVMe SSD, and NVIDIA Quadro RTX 4000',
                 'brand_id' => $HP->id,
                 'model' => 'Z4 G4',
                 'serial_number' => 'HPZ4G4X661',
@@ -144,7 +144,7 @@ class AssetSeeder extends Seeder
 
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPC', 6),
-                'specs' => 'Desktop',
+                'specs' => 'Dell Precision 3660 Workstation with Intel Xeon W-2223 processor, 32GB RAM, 1TB SSD, and NVIDIA RTX A2000',
                 'brand_id' => $Dell->id,
                 'model' => 'Precision 3660',
                 'serial_number' => 'DLL3660X772',
@@ -162,7 +162,7 @@ class AssetSeeder extends Seeder
             // Monitors (FCCMO)
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCMO', 1),
-                'specs' => 'Monitor',
+                'specs' => 'HP EliteDisplay 23.8-inch FHD IPS monitor with 1920x1080 resolution, 60Hz refresh rate, and built-in speakers',
                 'brand_id' => $HP->id,
                 'model' => 'HP EliteDisplay',
                 'serial_number' => 'CNC634P8KD',
@@ -180,7 +180,7 @@ class AssetSeeder extends Seeder
             // Additional Monitors (FCCMO)
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCMO', 2),
-                'specs' => 'Monitor 24-inch',
+                'specs' => 'Dell P2419H 24-inch Professional monitor with 1920x1080 resolution, 60Hz refresh rate, and anti-glare coating',
                 'brand_id' => $Dell->id,
                 'model' => 'P2419H',
                 'serial_number' => 'DLL2419H773',
@@ -197,7 +197,7 @@ class AssetSeeder extends Seeder
 
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCMO', 3),
-                'specs' => 'Monitor 27-inch',
+                'specs' => 'HP Z27n G2 27-inch QHD monitor with 2560x1440 resolution, 60Hz refresh rate, and USB-C connectivity',
                 'brand_id' => $HP->id,
                 'model' => 'Z27n G2',
                 'serial_number' => 'HPZ27G2X884',
@@ -215,7 +215,7 @@ class AssetSeeder extends Seeder
             // Additional High-End Monitors
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCMO', 4),
-                'specs' => 'Monitor 32-inch 4K',
+                'specs' => 'Dell UltraSharp U3219Q 32-inch 4K monitor with 3840x2160 resolution, HDR support, and USB-C hub functionality',
                 'brand_id' => $Dell->id,
                 'model' => 'UltraSharp U3219Q',
                 'serial_number' => 'DLLU3219X883',
@@ -232,7 +232,7 @@ class AssetSeeder extends Seeder
 
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCMO', 5),
-                'specs' => 'Monitor 27-inch QHD',
+                'specs' => 'HP E27q G4 27-inch QHD monitor with 2560x1440 resolution, 75Hz refresh rate, and integrated USB hub',
                 'brand_id' => $HP->id,
                 'model' => 'E27q G4',
                 'serial_number' => 'HPE27Q4X994',
@@ -250,7 +250,7 @@ class AssetSeeder extends Seeder
             // Laptops (FCCLT)
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCLT', 1),
-                'specs' => 'Laptop',
+                'specs' => 'Dell Alienware laptop with Intel Core i9 processor, 32GB RAM, 1TB NVMe SSD, and NVIDIA RTX 3080 mobile GPU',
                 'brand_id' => $Dell->id,
                 'model' => 'Alienware',
                 'serial_number' => '8C2W533',
@@ -268,7 +268,7 @@ class AssetSeeder extends Seeder
             // Additional Laptops (FCCLT)
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCLT', 2),
-                'specs' => 'Laptop',
+                'specs' => 'HP ProBook 450 G8 laptop featuring Intel Core i5-1135G7 processor, 16GB RAM, 512GB SSD, and integrated Intel Iris Xe graphics',
                 'brand_id' => $HP->id,
                 'model' => 'ProBook 450 G8',
                 'serial_number' => 'HP450G8X995',
@@ -285,7 +285,7 @@ class AssetSeeder extends Seeder
 
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCLT', 3),
-                'specs' => 'Laptop',
+                'specs' => 'Dell Latitude 5520 laptop with Intel Core i7-1165G7 processor, 16GB RAM, 512GB SSD, and Intel Iris Xe graphics',
                 'brand_id' => $Dell->id,
                 'model' => 'Latitude 5520',
                 'serial_number' => 'DLL5520X116',
@@ -303,7 +303,7 @@ class AssetSeeder extends Seeder
             // Additional High-Performance Laptops
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCLT', 4),
-                'specs' => 'Laptop Workstation',
+                'specs' => 'HP ZBook Fury 15 G8 mobile workstation with Intel Xeon W-11955M processor, 64GB RAM, 2TB NVMe SSD, and NVIDIA RTX A5000',
                 'brand_id' => $HP->id,
                 'model' => 'ZBook Fury 15 G8',
                 'serial_number' => 'HPZBK15X105',
@@ -320,7 +320,7 @@ class AssetSeeder extends Seeder
 
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCLT', 5),
-                'specs' => 'Laptop',
+                'specs' => 'Dell Precision 5570 mobile workstation featuring Intel Core i9-12900H processor, 32GB RAM, 1TB SSD, and NVIDIA RTX A3000',
                 'brand_id' => $Dell->id,
                 'model' => 'Precision 5570',
                 'serial_number' => 'DLLP5570X216',
@@ -338,7 +338,7 @@ class AssetSeeder extends Seeder
             // Printers (FCCPR)
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPR', 1),
-                'specs' => 'Printer',
+                'specs' => 'HP Color LaserJet Enterprise printer with automatic duplex printing, 30ppm color/black, and network connectivity',
                 'brand_id' => $HP->id,
                 'model' => 'HP Color LaserJet',
                 'serial_number' => 'NLBVM8H0LX',
@@ -356,7 +356,7 @@ class AssetSeeder extends Seeder
             // Additional Printers (FCCPR)
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPR', 2),
-                'specs' => 'Printer',
+                'specs' => 'HP LaserJet Pro M404dn monochrome printer with 40ppm print speed, automatic duplex printing, and Gigabit Ethernet',
                 'brand_id' => $HP->id,
                 'model' => 'LaserJet Pro M404dn',
                 'serial_number' => 'HPM404X227',
@@ -373,7 +373,7 @@ class AssetSeeder extends Seeder
 
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPR', 3),
-                'specs' => 'Printer',
+                'specs' => 'Canon PIXMA G7070 all-in-one printer with high-yield ink tanks, wireless connectivity, and automatic document feeder',
                 'brand_id' => $Canon->id,
                 'model' => 'PIXMA G7070',
                 'serial_number' => 'CNG7070X338',
@@ -391,7 +391,7 @@ class AssetSeeder extends Seeder
             // Additional Enterprise Printers
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPR', 4),
-                'specs' => 'Enterprise Printer',
+                'specs' => 'HP Color LaserJet Enterprise M555x with 40ppm color printing, 2GB RAM, and advanced security features',
                 'brand_id' => $HP->id,
                 'model' => 'Color LaserJet Enterprise M555x',
                 'serial_number' => 'HPM555X327',
@@ -408,7 +408,7 @@ class AssetSeeder extends Seeder
 
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPR', 5),
-                'specs' => 'Enterprise Printer',
+                'specs' => 'Canon imageRUNNER 2630i multifunction printer with 30ppm printing, scanning, copying, and advanced document handling',
                 'brand_id' => $Canon->id,
                 'model' => 'imageRUNNER 2630i',
                 'serial_number' => 'CNI2630X438',
@@ -426,7 +426,7 @@ class AssetSeeder extends Seeder
             // IP Phones (FCCPH)
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPH', 1),
-                'specs' => 'IP Phone',
+                'specs' => 'Cisco IP Phone with 5-inch display, HD voice, and Power over Ethernet capability',
                 'brand_id' => $Cisco->id,
                 'model' => 'Cisco IP Phone',
                 'serial_number' => '20EZIZCL30229E46',
@@ -444,7 +444,7 @@ class AssetSeeder extends Seeder
             // Additional IP Phones (FCCPH)
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPH', 2),
-                'specs' => 'IP Phone',
+                'specs' => 'Cisco IP Phone 8841 with 5-inch color display, HD audio, and advanced calling features',
                 'brand_id' => $Cisco->id,
                 'model' => 'IP Phone 8841',
                 'serial_number' => 'CSC8841X449',
@@ -461,7 +461,7 @@ class AssetSeeder extends Seeder
 
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPH', 3),
-                'specs' => 'IP Phone',
+                'specs' => 'Cisco IP Phone 7821 with 3.5-inch grayscale display, dual Gigabit Ethernet ports, and basic calling features',
                 'brand_id' => $Cisco->id,
                 'model' => 'IP Phone 7821',
                 'serial_number' => 'CSC7821X550',
@@ -479,7 +479,7 @@ class AssetSeeder extends Seeder
             // Additional Advanced IP Phones
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPH', 4),
-                'specs' => 'Advanced IP Phone',
+                'specs' => 'Cisco IP Phone 8861 with 5-inch color display, built-in Bluetooth, Wi-Fi, and USB port for headsets',
                 'brand_id' => $Cisco->id,
                 'model' => 'IP Phone 8861',
                 'serial_number' => 'CSC8861X549',
@@ -496,7 +496,7 @@ class AssetSeeder extends Seeder
 
             Asset::create([
                 'asset_tag_id' => $this->generateUniqueAssetTag('FCCPH', 5),
-                'specs' => 'Advanced IP Phone',
+                'specs' => 'Cisco IP Phone 8845 with 5-inch color display, 720p HD video calling, and advanced telephony features',
                 'brand_id' => $Cisco->id,
                 'model' => 'IP Phone 8845',
                 'serial_number' => 'CSC8845X650',
