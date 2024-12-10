@@ -81,28 +81,28 @@
             <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                        <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
                                 <div class="flex items-center space-x-1">
                                     <span>Customer</span>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
                                 <div class="flex items-center space-x-1">
                                     <span>Lease Date</span>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
                                 <div class="flex items-center space-x-1">
                                     <span>Lease Expiration</span>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
                                 <div class="flex items-center space-x-1">
                                     <span>Assets Count</span>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-4 text-left text-xs font-semibold text-white uppercase tracking-wider">
                                 <div class="flex items-center space-x-1">
                                     <span>Actions</span>
                                 </div>

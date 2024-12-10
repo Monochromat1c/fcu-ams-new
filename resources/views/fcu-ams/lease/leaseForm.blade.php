@@ -44,24 +44,29 @@
             </form>
         </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md max-h-96 overflow-auto">
-            <table class="table-auto w-full">
+            <table class="w-full border-collapse rounded-lg overflow-hidden shadow-md">
                 <thead>
-                    <tr>
-                        <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Asset Tag ID</th>
-                        <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Specs</th>
-                        <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Model</th>
+                    <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
+                        <th class="px-4 py-3 text-left font-semibold tracking-wider uppercase text-sm">Asset Tag ID</th>
+                        <th class="px-4 py-3 text-left font-semibold tracking-wider uppercase text-sm">Specs</th>
+                        <th class="px-4 py-3 text-left font-semibold tracking-wider uppercase text-sm">Model</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-gray-200">
                     @foreach($assets as $asset)
-                        <tr class="hover:bg-slate-100">
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->asset_tag_id }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->specs }}</td>
-                            <td class="border border-slate-300 px-4 py-2">{{ $asset->model }}</td>
+                        <tr class="transition-all duration-200 hover:bg-blue-50">
+                            <td class="px-4 py-3 text-gray-700">{{ $asset->asset_tag_id }}</td>
+                            <td class="px-4 py-3 text-gray-700">{{ $asset->specs }}</td>
+                            <td class="px-4 py-3 text-gray-700">{{ $asset->model }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
+            @if($assets->isEmpty())
+                <div class="text-center py-4 text-gray-500">
+                    No assets available
+                </div>
+            @endif
         </div>
     </div>
 </div>

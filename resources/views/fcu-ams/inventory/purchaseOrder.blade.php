@@ -129,15 +129,15 @@
                                     Add Item
                                 </button>
                             </div>
-                            <div class="overflow-x-auto">
+                            <div class="overflow-x-auto rounded-lg">
                                 <table class="min-w-full border divide-y divide-gray-200" id="purchase-order-table">
                                     <thead class="bg-gray-50">
-                                        <tr>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items/Specs</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
-                                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                                        <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">Items/Specs</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">Quantity</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">Unit</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">Unit Price</th>
+                                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium  uppercase tracking-wider">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody id="purchase-order-table-body" class="bg-white divide-y divide-gray-200">

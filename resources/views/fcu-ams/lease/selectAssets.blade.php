@@ -49,19 +49,19 @@
                 <div class="overflow-auto max-h-30-rem rounded-lg border border-gray-200">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-gray-50 shadow-sm">
+                            <tr >
+                                <th scope="col" class="px-6 py-3 text-center text-xs font-medium bg-gradient-to-r from-blue-400 to-blue-400 text-white uppercase tracking-wider sticky top-0 bg-gray-50 shadow-sm">
                                     <div class="flex items-center justify-center">
                                         <input type="checkbox" class="custom-checkbox" id="select-all">
                                     </div>
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-gray-50 shadow-sm">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium bg-gradient-to-r from-blue-400 to-blue-400 text-white uppercase tracking-wider sticky top-0 bg-gray-50 shadow-sm">
                                     Asset Tag ID
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-gray-50 shadow-sm">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium bg-gradient-to-r from-blue-400 to-blue-400 text-white uppercase tracking-wider sticky top-0 bg-gray-50 shadow-sm">
                                     Specification
                                 </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider sticky top-0 bg-gray-50 shadow-sm">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium bg-gradient-to-r from-blue-400 to-blue-400 text-white uppercase tracking-wider sticky top-0 bg-gray-50 shadow-sm">
                                     Model
                                 </th>
                             </tr>

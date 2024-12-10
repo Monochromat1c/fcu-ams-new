@@ -65,7 +65,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 1,
                 'department_id' => $ccsDepartment->id,
-                'purchase_date' => '2024-01-24',
+                'purchase_date' => Carbon::now(),
                 'condition_id' => 2,
                 'status_id' => 2,
                 'maintenance_start_date' => $maintenanceStartDate,
@@ -102,7 +102,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 1,
                 'department_id' => $ccsDepartment->id,
-                'purchase_date' => '2024-01-15',
+                'purchase_date' => Carbon::now(),
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -137,7 +137,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 1,
                 'department_id' => $ccsDepartment->id,
-                'purchase_date' => '2024-06-01',
+                'purchase_date' => Carbon::now(),
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -172,7 +172,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 2,
                 'department_id' => $ccsDepartment->id,
-                'purchase_date' => '2024-02-17',
+                'purchase_date' => Carbon::now(),
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -225,7 +225,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 2,
                 'department_id' => $ccsDepartment->id,
-                'purchase_date' => '2024-07-01',
+                'purchase_date' => Carbon::now(),
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -260,7 +260,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 3,
                 'department_id' => $ccsDepartment->id,
-                'purchase_date' => '2024-03-17',
+                'purchase_date' => Carbon::now(),
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -313,7 +313,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 3,
                 'department_id' => $ccsDepartment->id,
-                'purchase_date' => '2024-08-01',
+                'purchase_date' => Carbon::now(),
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -348,7 +348,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 4,
                 'department_id' => $ccsDepartment->id,
-                'purchase_date' => '2024-07-17',
+                'purchase_date' => Carbon::now(),
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -436,7 +436,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 5,
                 'department_id' => $ccsDepartment->id,
-                'purchase_date' => '2024-09-17',
+                'purchase_date' => Carbon::now(),
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);
@@ -489,7 +489,7 @@ class AssetSeeder extends Seeder
                 'location_id' => $location->id,
                 'category_id' => 5,
                 'department_id' => $ccsDepartment->id,
-                'purchase_date' => '2024-10-01',
+                'purchase_date' => Carbon::now(),
                 'condition_id' => 1,
                 'status_id' => 1,
             ]);

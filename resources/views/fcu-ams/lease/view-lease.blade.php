@@ -12,14 +12,12 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
-                Back to Leases
             </a>
             <h1 class="text-3xl font-semibold text-gray-800">Lease Details</h1>
             <a href="{{ route('lease.index') }}" class="flex items-center text-gray-600 invisible hover:text-gray-900">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>
-                Back to Leases
             </a>
         </nav>
 
@@ -76,12 +74,12 @@
                 <div class="overflow-x-auto rounded-lg border border-gray-200">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
-                            <tr>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Asset Tag ID</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Category</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Brand</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Model</th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Serial Number</th>
+                            <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Asset Tag ID</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Category</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Brand</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Model</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Serial Number</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">

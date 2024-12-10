@@ -283,8 +283,8 @@
             <div class="overflow-x-auto overflow-y-auto rounded-lg shadow">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead>
-                        <tr>
-                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
+                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <span>Unique Tag</span>
                                     <a class="ml-2" href="{{ route('inventory.list', ['sort' => 'unique_tag', 'direction' => ($direction == 'asc' && $sort == 'unique_tag') ? 'desc' : 'asc']) }}">
@@ -294,7 +294,7 @@
                                     </a>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <span>Items & Specs</span>
                                     <a class="ml-2" href="{{ route('inventory.list', ['sort' => 'items_specs', 'direction' => ($direction == 'asc' && $sort == 'items_specs') ? 'desc' : 'asc']) }}">
@@ -304,7 +304,7 @@
                                     </a>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <span>Brand</span>
                                     <a class="ml-2" href="{{ route('inventory.list', ['sort' => 'brand_name', 'direction' => ($direction == 'asc' && $sort == 'brand_name') ? 'desc' : 'asc']) }}">
@@ -314,7 +314,7 @@
                                     </a>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <span>Quantity</span>
                                     <a class="ml-2" href="{{ route('inventory.list', ['sort' => 'quantity', 'direction' => ($direction == 'asc' && $sort == 'quantity') ? 'desc' : 'asc']) }}">
@@ -324,7 +324,7 @@
                                     </a>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <span>Unit</span>
                                     <a class="ml-2" href="{{ route('inventory.list', ['sort' => 'unit', 'direction' => ($direction == 'asc' && $sort == 'unit') ? 'desc' : 'asc']) }}">
@@ -334,7 +334,7 @@
                                     </a>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <span>Unit Price</span>
                                     <a class="ml-2" href="{{ route('inventory.list', ['sort' => 'unit_price', 'direction' => ($direction == 'asc' && $sort == 'unit_price') ? 'desc' : 'asc']) }}">
@@ -344,7 +344,7 @@
                                     </a>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <span>Total Item Price</span>
                                     <a class="ml-2" href="{{ route('inventory.list', ['sort' => 'total_item_price', 'direction' => ($direction == 'asc' && $sort == 'total_item_price') ? 'desc' : 'asc']) }}">
@@ -354,7 +354,7 @@
                                     </a>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-3 bg-gray-50 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-center text-xs font-medium uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">

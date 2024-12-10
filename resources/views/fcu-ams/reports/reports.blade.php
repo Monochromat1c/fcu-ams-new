@@ -448,30 +448,32 @@
                             </div>
                         </div>
                     </div>
-                    <table class="min-w-full divide-y divide-gray-200 border">
-                        <thead>
-                            <tr>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unique Tag</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items & Specs</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Unit Price</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($inventories as $inventory)
-                                <tr class="hover:bg-slate-100">
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->unique_tag }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->items_specs }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->quantity }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->unit->unit }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->unit_price }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->supplier->supplier }}</td>
+                    <div class="rounded-lg min-w-full border">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead>
+                                <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unique Tag</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Items & Specs</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Quantity</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit Price</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Supplier</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($inventories as $inventory)
+                                    <tr class="hover:bg-slate-100">
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->unique_tag }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->items_specs }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->quantity }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->unit->unit }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->unit_price }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $inventory->supplier->supplier }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             @endif
         </div>
@@ -565,21 +567,19 @@
                     </div>
                     <table class="min-w-full divide-y divide-gray-200 border">
                         <thead>
-                            <tr>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Asset Tag ID</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Specification</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Brand</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Serial Number</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cost</th>
-                                <th scope="col" class="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
+                            <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Asset Tag ID</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Brand</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Model</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Serial Number</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Cost</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Supplier</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($assets as $asset)
                                 <tr class="hover:bg-slate-100">
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $asset->asset_tag_id }}</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $asset->specs }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $asset->brand->brand }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $asset->model }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $asset->serial_number }}</td>
