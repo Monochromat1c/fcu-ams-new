@@ -193,6 +193,39 @@
                                 </button>
                             </div>
                             <form id="filterForm" action="{{ route('asset.list') }}" method="GET" class="space-y-6">
+                                <!-- Condition Filter -->
+                                <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Conditions</h3>
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                        @foreach($allConditions as $condition)
+                                            <label
+                                                class="inline-flex items-center hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
+                                                <input type="checkbox" name="conditions[]"
+                                                    value="{{ $condition->id }}"
+                                                    class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                                    {{ in_array($condition->id, $selectedConditions) ? 'checked' : '' }}>
+                                                <span class="ml-3 text-gray-700">{{ $condition->condition }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <!-- Status Filter -->
+                                <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Statuses</h3>
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                                        @foreach($allStatuses as $status)
+                                            <label
+                                                class="inline-flex items-center hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
+                                                <input type="checkbox" name="statuses[]" value="{{ $status->id }}"
+                                                    class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                                    {{ in_array($status->id, $selectedStatuses) ? 'checked' : '' }}>
+                                                <span class="ml-3 text-gray-700">{{ $status->status }}</span>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            
                                 <!-- Categories Filter -->
                                 <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
                                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Categories</h3>

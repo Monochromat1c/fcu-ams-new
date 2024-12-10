@@ -30,6 +30,8 @@ class AssetController extends Controller
         $sites = $request->input('sites', []);
         $suppliers = $request->input('suppliers', []);
         $brands = $request->input('brands', []);
+        $conditions = $request->input('conditions', []);
+        $statuses = $request->input('statuses', []);
 
         $category = $request->input('category');
         $department = $request->input('department');
@@ -102,6 +104,12 @@ class AssetController extends Controller
         if ($request->input('clear') == 'true') {
             return redirect()->route('asset.list');
         }
+        if (!empty($conditions)) {
+            $query->whereIn('assets.condition_id', $conditions);
+        }
+        if (!empty($statuses)) {
+            $query->whereIn('assets.status_id', $statuses);
+        }
 
         $query->orderBy($sort, $direction);
 
@@ -140,6 +148,10 @@ class AssetController extends Controller
                 'selectedSites' => $sites,
                 'selectedSuppliers' => $suppliers,
                 'selectedBrands' => $brands,
+                'allConditions' => DB::table('conditions')->get(),
+                'allStatuses' => DB::table('statuses')->get(),
+                'selectedConditions' => $conditions,
+                'selectedStatuses' => $statuses,
             ]
         ));
     }
