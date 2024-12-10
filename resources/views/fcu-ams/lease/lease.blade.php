@@ -52,14 +52,13 @@
             </div>
         </div>
 
-        <!-- Messages Section -->
-        <div class="mx-4">
-            @include('layouts.messageWithTimerForError')
+        <div class="m-3">
+            @include('layouts.messageWithoutTimerForError')
         </div>
 
         <!-- Main Content -->
         @if($leases->isEmpty())
-        <div class="bg-white p-8 shadow-sm rounded-lg mx-4 border border-gray-100">
+        <div class="bg-white p-8 shadow-sm rounded-lg mx-3 border border-gray-100">
             <h2 class="text-2xl font-bold text-gray-800 mb-4">Leased Items</h2>
             <div class="flex flex-col items-center justify-center py-12">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

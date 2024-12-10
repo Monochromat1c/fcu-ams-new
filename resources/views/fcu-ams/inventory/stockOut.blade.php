@@ -13,20 +13,9 @@
             <form method="POST" action="{{ route('inventory.stock.out.store') }}">
                 @csrf
                 <div class="">
-                    @if(session('success'))
-                        <div class="successMessage bg-lime-800 border border-lime-800 text-white px-4 py-3 rounded relative mt-2 mb-2">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-                    @if($errors->any())
-                        <div class="errorMessage bg-red-900 border border-red-900 text-white px-4 py-3 rounded relative mt-2 mb-2">
-                            <ul>
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
+                    <div class="mb-3">
+                        @include('layouts.messageWithoutTimerForError')
+                    </div>
                     <h3 class="text-lg font-semibold mb-3">Item Details</h3>
                     <div class="mb-4">
                         <label for="item_id" class="block text-gray-700 font-bold mb-2">Item:</label>
