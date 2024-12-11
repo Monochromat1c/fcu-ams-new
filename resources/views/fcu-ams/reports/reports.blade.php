@@ -544,7 +544,7 @@
                             </button>
                             <h2 class="text-2xl mb-2"> {{ $assetsDateRangeDisplay }}</h2>
                             <button
-                                class="bg-blue-500 hover:bg-blue-700 hover:scale-105 hover:shadow-md transition-all ease-in text-white font-bold py-2 px-6 rounded"
+                                class="bg-blue-500 hover:bg-blue-700 hover:scale-105 invisible hover:shadow-md transition-all ease-in text-white font-bold py-2 px-6 rounded"
                                 onclick="printAssetsTable()">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                     stroke-width="1.5" stroke="currentColor" class="size-6">

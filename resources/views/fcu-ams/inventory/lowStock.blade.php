@@ -4,7 +4,14 @@
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-100 col-span-5">
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
-            <div></div>
+            <a href="" onclick="window.history.back(); return false;"
+                class="mr-4 hover:bg-gray-100 my-auto p-2 rounded-full transition">
+                <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+            </a>
             <h1 class="my-auto text-3xl">Inventory</h1>
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="flex gap-3 focus:outline-none" style="min-width:100px;">
@@ -47,51 +54,71 @@
             <div class="bg-white p-5 shadow-md rounded-md">
                 <div class="flex justify-between mb-3">
                     <h2 class="text-2xl font-bold my-auto">Low Stock</h2>
-                    <button type="button"
-                        class="ml-auto rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2"
-                        onclick="history.back()">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
-                        </svg>
-                        Back to Inventory List
-                    </button>
                 </div>
-                <div class="overflow-x-auto overflow-y-auto">
-                    <table class="table-auto w-full">
-                        <thead>
+                <div class="overflow-x-auto overflow-y-auto rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200 border-2 border-gray-200 shadow-md rounded-lg overflow-hidden">
+                        <thead class="bg-gradient-to-r from-orange-400 to-orange-500 text-white">
                             <tr>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unique Tag</th>
-                                <th class="px-4 py-2 text-center bg-slate-200 border border-slate-400">Stock Image</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Item</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Brand</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Quantity</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Supplier</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unit</th>
-                                <th class="px-4 py-2 text-left bg-slate-200 border border-slate-400">Unit Price</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Unique
+                                    Tag</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-center text-xs font-semibold uppercase tracking-wider">Stock
+                                    Image</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Item</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Brand
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Quantity
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Supplier
+                                </th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Unit</th>
+                                <th scope="col"
+                                    class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider">Unit
+                                    Price</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($lowStock as $inventory)
-                                <tr class="hover:bg-slate-100">
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unique_tag }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">
+                                <tr class="hover:bg-gray-50 transition duration-200 ease-in-out">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $inventory->unique_tag }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-center">
                                         @if($inventory->stock_image)
                                             <img src="{{ asset($inventory->stock_image) }}" alt="Inventory Image"
-                                                class="mx-auto rounded-full" style="width:2.7rem;height:2.7rem;">
+                                                class="w-10 h-10 rounded-full object-cover mx-auto shadow-md">
                                         @else
                                             <img src="{{ asset('profile/defaultIcon.png') }}"
-                                                alt="Default Image" class="w-14 h-14 rounded-full mx-auto">
+                                                alt="Default Image"
+                                                class="w-10 h-10 rounded-full object-cover mx-auto opacity-50">
                                         @endif
                                     </td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->items_specs }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->brand->brand }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->quantity }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->supplier->supplier }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit->unit }}</td>
-                                    <td class="border border-slate-300 px-4 py-2">{{ $inventory->unit_price }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $inventory->items_specs }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $inventory->brand->brand }}
+                                    </td>
+                                    <td
+                                        class="px-6 py-4 whitespace-nowrap text-sm 
+                    {{ $inventory->quantity < 10 ? 'text-red-600 font-bold' : 'text-gray-900' }}">
+                                        {{ $inventory->quantity }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $inventory->supplier->supplier }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $inventory->unit->unit }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ number_format($inventory->unit_price, 2) }}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
