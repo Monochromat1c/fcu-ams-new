@@ -231,6 +231,8 @@ class AssetController extends Controller
             'purchase_date' => 'required|date',
             'asset_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'assigned_to' => 'nullable|string|max:255',
+            'issued_date' => 'nullable|date',
+            'notes' => 'nullable|string|max:1000'
         ]);
 
         $asset = new Asset();
@@ -249,6 +251,8 @@ class AssetController extends Controller
         $asset->status_id = Status::where('status', 'Available')->first()->id;
         $asset->purchase_date = $validatedData['purchase_date'];
         $asset->assigned_to = $validatedData['assigned_to'];
+        $asset->issued_date = $validatedData['issued_date'];
+        $asset->notes = $validatedData['notes'];
 
         if ($request->hasFile('asset_image')) {
             $imageName = time().'.'.$request->asset_image->extension();
@@ -272,7 +276,7 @@ class AssetController extends Controller
         $conditions = DB::table('conditions')->get();
         $brands = DB::table('brands')->get();
         $statuses = DB::table('statuses')->get();
-
+        
         return view('fcu-ams/asset/updateAsset', compact('asset', 'suppliers', 'sites', 'locations', 'categories',
         'departments', 'conditions', 'statuses', 'brands'));
     }
@@ -300,6 +304,8 @@ class AssetController extends Controller
             'purchase_date' => 'required|date',
             'asset_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'assigned_to' => 'nullable|string|max:255',
+            'issued_date' => 'nullable|date',
+            'notes' => 'nullable|string|max:1000'
         ]);
 
         $asset = Asset::findOrFail($id);
@@ -320,6 +326,8 @@ class AssetController extends Controller
         $asset->condition_id = $validatedData['condition_id'];
         $asset->purchase_date = $validatedData['purchase_date'];
         $asset->assigned_to = $validatedData['assigned_to'];
+        $asset->issued_date = $validatedData['issued_date'];
+        $asset->notes = $validatedData['notes'];
 
         if ($request->input('condition_id') == Condition::where('condition', 'Maintenance')->first()->id) {
             if ($request->input('maintenance_start_date') !== '') {
@@ -394,6 +402,8 @@ class AssetController extends Controller
             'condition_id' => 'Condition',
             'status_id' => 'Status',
             'assigned_to' => 'Assigned To',
+            'issued_date' => 'Date Issued',
+            'notes' => 'Notes',
         ];
 
         foreach ($fields as $field => $header) {

@@ -128,12 +128,16 @@
                         <div>
                             <label for="assigned_to" class="block text-sm font-medium text-gray-700">Assigned To</label>
                             <div class="mt-1">
-                                <input type="text" name="assigned_to" id="assigned_to"
-                                    class="shadow-sm  p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-                                    value="{{ old('assigned_to', $asset->assigned_to) }}">
+                                <button type="button" id="show-assignment-modal"
+                                    class="w-full text-left p-2 border border-gray-300 rounded-md shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white hover:bg-gray-50">
+                                    {{ $asset->assigned_to ? $asset->assigned_to : 'Click to assign' }}
+                                </button>
+                                <input type="hidden" name="assigned_to" id="assigned_to" value="{{ old('assigned_to', $asset->assigned_to) }}">
+                                <input type="hidden" name="issued_date" id="issued_date" value="{{ old('issued_date', $asset->issued_date) }}">
+                                <input type="hidden" name="notes" id="notes" value="{{ old('notes', $asset->notes) }}">
                             </div>
                         </div>
-                        
+
                         <!-- Supplier -->
                         <div>
                             <label for="supplier_id" class="block text-sm font-medium text-gray-700">Supplier</label>
@@ -240,7 +244,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        
+
                         <!-- Maintenance Modal -->
                         <div class="modal-container">
                             <div id="maintenance-modal" tabindex="-1" aria-hidden="true"
@@ -277,6 +281,85 @@
                                             <div class="flex flex-end">
                                                 <button type="button" id="save-maintenance-btn"
                                                     class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Assignment Modal -->
+                        <div class="modal-container">
+                            <div id="assignment-modal" tabindex="-1" aria-hidden="true"
+                                class="modalBg fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
+                                <div class="flex min-h-screen items-center justify-center p-4">
+                                    <div class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+                                        <!-- Header -->
+                                        <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                                            <div class="flex items-center justify-between">
+                                                <h2 class="text-xl font-semibold text-gray-800">Asset Assignment</h2>
+                                                <button type="button"
+                                                    class="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none"
+                                                    onclick="document.getElementById('assignment-modal').classList.toggle('hidden')">
+                                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Body -->
+                                        <div class="px-6 py-4">
+                                            <div class="space-y-4">
+                                                <!-- Assigned To Field -->
+                                                <div>
+                                                    <label for="modal_assigned_to"
+                                                        class="block text-sm font-medium text-gray-700">Assigned To</label>
+                                                    <div class="mt-1">
+                                                        <input type="text" id="modal_assigned_to"
+                                                            class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                                            value="{{ old('assigned_to') ?? $asset->assigned_to }}"
+                                                            placeholder="Enter assignee name">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Date Issued Field -->
+                                                <div>
+                                                    <label for="modal_issued_date"
+                                                        class="block text-sm font-medium text-gray-700">Date Issued</label>
+                                                    <div class="mt-1">
+                                                        <input type="date" id="modal_issued_date"
+                                                            class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                                            value="{{ old('issued_date') ?? $asset->issued_date }}">
+                                                    </div>
+                                                </div>
+
+                                                <!-- Notes Field -->
+                                                <div>
+                                                    <label for="modal_notes"
+                                                        class="block text-sm font-medium text-gray-700">Notes</label>
+                                                    <div class="mt-1">
+                                                        <textarea id="modal_notes"
+                                                            class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                                            rows="3"
+                                                            placeholder="Add any additional notes here">{{ old('notes') ?? $asset->notes }}</textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Footer -->
+                                        <div class="bg-gray-50 px-6 py-4">
+                                            <div class="flex items-center justify-end space-x-3">
+                                                <button type="button"
+                                                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                    onclick="document.getElementById('assignment-modal').classList.toggle('hidden')">
+                                                    Cancel
+                                                </button>
+                                                <button type="button" id="save-assignment-btn"
+                                                    class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                                    Save Changes
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -336,6 +419,29 @@
     // Handle save maintenance button click
     document.getElementById('save-maintenance-btn').addEventListener('click', function() {
         document.getElementById('maintenance-modal').classList.add('hidden');
+    });
+
+    // Show assignment modal when button is clicked
+    document.getElementById('show-assignment-modal').addEventListener('click', function() {
+        document.getElementById('assignment-modal').classList.remove('hidden');
+    });
+
+    // Handle save assignment button click
+    document.getElementById('save-assignment-btn').addEventListener('click', function() {
+        const assignedTo = document.getElementById('modal_assigned_to').value;
+        const issuedDate = document.getElementById('modal_issued_date').value;
+        const notes = document.getElementById('modal_notes').value;
+
+        // Update hidden inputs
+        document.getElementById('assigned_to').value = assignedTo;
+        document.getElementById('issued_date').value = issuedDate;
+        document.getElementById('notes').value = notes;
+
+        // Update button text
+        document.getElementById('show-assignment-modal').textContent = assignedTo || 'Click to assign';
+
+        // Hide modal
+        document.getElementById('assignment-modal').classList.add('hidden');
     });
 </script>
 

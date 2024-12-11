@@ -53,7 +53,7 @@
                             @endif
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         <!-- Asset Basic Info -->
                         <div class="space-y-4">
                             <div class="flex items-center gap-2">
@@ -92,8 +92,12 @@
                                     <p class="text-sm font-medium text-gray-900">{{ $asset->brand->brand }}</p>
                                 </div>
                                 <div class="space-y-1">
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Supplier</label>
+                                    <p class="text-sm font-medium text-gray-900">{{ $asset->supplier->supplier }}</p>
+                                </div>
+                                <div class="space-y-1">
                                     <label class="text-xs font-medium text-gray-500 uppercase">Purchase Date</label>
-                                    <p class="text-sm font-medium text-gray-900">{{ $asset->purchase_date }}</p>
+                                    <p class="text-sm font-medium text-gray-900">{{ date('F j, Y', strtotime($asset->purchase_date)) }}</p>
                                 </div>
                             </div>
                         </div>
@@ -102,7 +106,7 @@
                         <div class="space-y-4">
                             <div class="flex items-center gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-blue-600">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm-9-3.75h.008v.008H12V8.25z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
                                 </svg>
                                 <h3 class="text-lg font-semibold text-gray-800">Location Details</h3>
@@ -120,13 +124,29 @@
                                     <label class="text-xs font-medium text-gray-500 uppercase">Department</label>
                                     <p class="text-sm font-medium text-gray-900">{{ $asset->department->department }}</p>
                                 </div>
+                            </div>
+                        </div>
+
+                        <!-- Assignment Details -->
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-blue-600">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+                                </svg>
+                                <h3 class="text-lg font-semibold text-gray-800">Assignment Details</h3>
+                            </div>
+                            <div class="grid gap-4">
                                 <div class="space-y-1">
                                     <label class="text-xs font-medium text-gray-500 uppercase">Assigned To</label>
                                     <p class="text-sm font-medium text-gray-900">{{ $asset->assigned_to ?? 'Not Assigned' }}</p>
                                 </div>
                                 <div class="space-y-1">
-                                    <label class="text-xs font-medium text-gray-500 uppercase">Supplier</label>
-                                    <p class="text-sm font-medium text-gray-900">{{ $asset->supplier->supplier }}</p>
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Date Issued</label>
+                                    <p class="text-sm font-medium text-gray-900">{{ $asset->issued_date ? date('F j, Y', strtotime($asset->issued_date)) : 'Not Set' }}</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Notes</label>
+                                    <p class="text-sm font-medium text-gray-900">{{ $asset->notes ?? 'No notes available' }}</p>
                                 </div>
                             </div>
                         </div>
