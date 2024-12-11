@@ -6,10 +6,6 @@
         background-color: white;
     }
 
-    .fcu-icon {
-        filter: grayscale(100%);
-    }
-
     .no-print {
         display: none;
     }
