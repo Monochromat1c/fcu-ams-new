@@ -14,6 +14,7 @@ class CheckUserRole
             'asset.list',
             'profile.index',
             'profile.update',
+            'profile.updatePersonalInformation',
             'asset.view',
             'logout'
         ];
