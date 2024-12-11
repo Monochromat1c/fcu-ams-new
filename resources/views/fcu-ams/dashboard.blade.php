@@ -15,8 +15,7 @@
     @include('layouts.sidebar')
     <div class="bg-slate-100 content min-h-screen col-span-5">
     <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
-            <a href="{{ route('profile.index') }}" class="flex gap-3 invisible" style="min-width:100px;">
-                <!-- <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset=""> -->
+            <div class="flex gap-3 invisible" style="min-width:100px;">
                 <div>
                      @if(auth()->user()->profile_picture)
                         <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
@@ -29,23 +28,44 @@
                 <p class="my-auto">
                     {{ (auth()->user() ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'N/A') }}
                 </p>
-            </a>
+            </div>
             <h1 class="my-auto text-3xl">Dashboard</h1>
-            <a href="{{ route('profile.index') }}" class="flex gap-3" style="min-width:100px;">
-                <!-- <img src="{{ asset('profile/profile.png') }}" class="w-10 h-10 rounded-full" alt="" srcset=""> -->
-                <div>
-                     @if(auth()->user()->profile_picture)
-                        <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
-                            class="w-14 h-14  object-cover bg-no-repeat rounded-full mx-auto">
-                    @else
-                        <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
-                            class="w-14 h-14  object-cover bg-no-repeat rounded-full mx-auto">
-                    @endif
+            <div class="relative" x-data="{ open: false }">
+                <button @click="open = !open" class="flex gap-3 focus:outline-none" style="min-width:100px;">
+                    <div>
+                         @if(auth()->user()->profile_picture)
+                            <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
+                                class="w-14 h-14 object-cover bg-no-repeat rounded-full mx-auto">
+                        @else
+                            <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
+                                class="w-14 h-14 object-cover bg-no-repeat rounded-full mx-auto">
+                        @endif
+                    </div>
+                    <p class="my-auto">
+                        {{ (auth()->user() ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'N/A') }}
+                    </p>
+                </button>
+                <div x-show="open" 
+                    @click.away="open = false"
+                    class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-100 z-50">
+                    <a href="{{ route('profile.index') }}"
+                        class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                        </svg>
+                        Profile
+                    </a>
+                    <button onclick="document.getElementById('logout-modal').classList.toggle('hidden')"
+                        class="flex items-center px-4 py-2 text-gray-700 hover:bg-gray-100 w-full text-left">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
+                                clip-rule="evenodd" />
+                        </svg>
+                        Logout
+                    </button>
                 </div>
-                <p class="my-auto">
-                    {{ (auth()->user() ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'N/A') }}
-                </p>
-            </a>
+            </div>
         </nav>
         <div class="m-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <a href="{{ route('asset.list') }}" class="dashboard-card">

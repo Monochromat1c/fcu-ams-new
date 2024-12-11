@@ -9,20 +9,7 @@
             <h1 class="my-auto text-3xl font-semibold text-center text-gray-800">Profile</h1>
         </nav>
         <div class="m-3">
-            @if(session('success'))
-                <div class="successMessage bg-green-500 text-white px-6 py-4 rounded-lg shadow-md relative mt-2 mb-2 transition-all duration-300">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if($errors->any())
-                <div class="errorMessage bg-red-500 text-white px-6 py-4 rounded-lg shadow-md relative mt-2 mb-2 transition-all duration-300">
-                    <ul>
-                        @foreach($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
+            @include('layouts.messageWithoutTimerForError')
         </div>
         <div class="content-area mx-3">
             <div class="bg-white rounded-xl shadow-lg p-8 mb-6 transition-all duration-300 hover:shadow-xl">

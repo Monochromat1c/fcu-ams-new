@@ -21,7 +21,7 @@ class DefaultUserSeeder extends Seeder
         $viewerRole = Role::where('role', 'Viewer')->first();
 
         User::create([
-            'profile_picture' => 'profile/light.jpg',
+            'profile_picture' => 'profile/1728809102.jpg',
             'first_name' => 'Wealyn',
             'last_name' => 'Yap',
             'address' => 'Roxas City',
