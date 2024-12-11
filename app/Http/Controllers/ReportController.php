@@ -34,8 +34,15 @@ class ReportController extends Controller
         $startDate = Carbon::parse($startDate)->startOfDay();
         $endDate = Carbon::parse($endDate)->endOfDay();
 
+        // Assets date filter
+        $assetsStartDate = $request->input('assets_start_date', now()->startOfMonth()->toDateString());
+        $assetsEndDate = $request->input('assets_end_date', now()->endOfMonth()->toDateString());
+        $assetsStartDate = Carbon::parse($assetsStartDate)->startOfDay();
+        $assetsEndDate = Carbon::parse($assetsEndDate)->endOfDay();
+
         // Date range display method
         $dateRangeDisplay = $this->formatDateRange($startDate, $endDate);
+        $assetsDateRangeDisplay = $this->formatDateRange($assetsStartDate, $assetsEndDate, 'assets');
 
         $inventories = Inventory::with('supplier', 'brand', 'unit')
             ->whereBetween('created_at', [$startDate, $endDate])
@@ -74,11 +81,11 @@ class ReportController extends Controller
         );
 
         $assets = Asset::with('supplier', 'brand')
-            ->whereDate('purchase_date', '>=', now()->startOfMonth())
-            ->whereDate('purchase_date', '<=', now()->endOfMonth())
+            ->whereBetween('purchase_date', [$assetsStartDate, $assetsEndDate])
             ->orderBy('asset_tag_id', 'asc')
             ->paginate(10)
             ->appends($request->query());
+
 
         $purchaseOrders = PurchaseOrder::with('supplier', 'department')
             ->orderBy('po_date', 'desc')
@@ -98,7 +105,7 @@ class ReportController extends Controller
         );
 
         return view('fcu-ams/reports/reports', compact('lowStockInventories', 'stockOutRecords',
-        'assets', 'purchaseOrders', 'inventoriesForPrint'), [
+        'assets', 'purchaseOrders', 'inventoriesForPrint', 'assetsDateRangeDisplay'), [
             'inventories' => $inventories,
             'startDate' => $startDate->toDateString(),
             'endDate' => $endDate->toDateString(),
@@ -107,11 +114,12 @@ class ReportController extends Controller
     }
 
     // Date range formatting method
-    private function formatDateRange(Carbon $startDate, Carbon $endDate): string {
+    private function formatDateRange(Carbon $startDate, Carbon $endDate, $type = 'supplies'): string {
         // Same month scenario
         if ($startDate->month == $endDate->month && $startDate->year == $endDate->year) {
             return sprintf(
-                "Supplies Purchased in %s %d from %d to %d", 
+                "%s Purchased in %s %d from %d to %d", 
+                ucfirst($type),
                 $startDate->translatedFormat('F'), 
                 $startDate->year, 
                 $startDate->day, 
@@ -121,7 +129,8 @@ class ReportController extends Controller
 
         // Different months scenario
         return sprintf(
-            "Supplies Purchased from %s %d %d to %s %d %d",
+            "%s Purchased from %s %d %d to %s %d %d",
+            ucfirst($type),
             $startDate->translatedFormat('F'), 
             $startDate->day, 
             $startDate->year,
