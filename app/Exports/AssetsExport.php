@@ -31,6 +31,9 @@ class AssetsExport implements FromCollection, WithHeadings
                     'Purchase Date' => $asset->purchase_date,
                     'Status' => $asset->status->status,
                     'Condition' => $asset->condition->condition,
+                    'Assigned To' => $asset->assigned_to ?? 'Not Assigned',
+                    'Date Issued' => $asset->issued_date ?? 'Not Set',
+                    'Notes' => $asset->notes ?? 'No notes available',
                 ];
             });
     }
@@ -52,6 +55,9 @@ class AssetsExport implements FromCollection, WithHeadings
             'Purchase Date',
             'Status',
             'Condition',
+            'Assigned To',
+            'Date Issued',
+            'Notes',
         ];
     }
 }
