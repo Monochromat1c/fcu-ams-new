@@ -1,45 +1,53 @@
 @foreach($inventories as $inventory)
-    <div id="delete-inventory-modal{{ $inventory->id }}" style="min-height:100vh;" tabindex="-1" aria-hidden="true"
-        class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
-        <div class="relative my-auto mx-auto p-4 w-full max-w-2xl h-full md:h-auto">
-            <!-- Delete confirmation modal content -->
-            <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
-                <button type="button"
-                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                    onclick="document.getElementById('delete-inventory-modal{{ $inventory->id }}').classList.toggle('hidden')">
-                    <!-- Close button icon -->
-                </button>
-                <div class="p-6 text-center" id="modal">
-                    <h3 class="text-lg font-semibold">Delete Confirmation</h3>
-                    <p class="my-2">Are you sure you want to delete the inventory "<span
-                            class="text-red-800">{{ $inventory->unique_tag }}</span>"?</p>
-                    <div class="flex justify-between">
-                        <button type="button"
-                            class="rounded-md shadow-md px-5 py-2 bg-gray-600 hover:shadow-md hover:bg-gray-500
-                                                transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-1"
-                            onclick="document.getElementById('delete-inventory-modal{{ $inventory->id }}').classList.toggle('hidden')">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="size-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+    <div id="delete-inventory-modal{{ $inventory->id }}" 
+         class="fixed inset-0 z-50 hidden overflow-y-auto" 
+         aria-labelledby="modal-title" 
+         role="dialog" 
+         aria-modal="true">
+        <div class="flex min-h-screen items-center justify-center">
+            <!-- Background overlay -->
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+
+            <!-- Modal panel -->
+            <div class="relative transform overflow-hidden rounded-lg bg-white shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <!-- Warning icon -->
+                        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <svg class="h-6 w-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                             </svg>
-                            Cancel
-                        </button>
-                        <form
-                            action="{{ route('inventory.destroy', ['id' => $inventory->id]) }}"
-                            method="POST" id="delete-inventory-form{{ $inventory->id }}">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit"
-                                class="rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500
-                                                    transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
-                                </svg>
-                                Confirm Delete
-                            </button>
-                        </form>
+                        </div>
+
+                        <!-- Modal content -->
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                            <h3 class="text-xl font-semibold leading-6 text-gray-900" id="modal-title">
+                                Delete Inventory Item
+                            </h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    Are you sure you want to delete the inventory item <span class="font-medium text-gray-900">"{{ $inventory->unique_tag }}"</span>? This action cannot be undone.
+                                </p>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <!-- Modal actions -->
+                <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <form action="{{ route('inventory.destroy', ['id' => $inventory->id]) }}" method="POST" class="sm:ml-3">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" 
+                                class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:w-auto">
+                            Delete Item
+                        </button>
+                    </form>
+                    <button type="button" 
+                            onclick="document.getElementById('delete-inventory-modal{{ $inventory->id }}').classList.add('hidden')"
+                            class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+                        Cancel
+                    </button>
                 </div>
             </div>
         </div>

@@ -15,6 +15,7 @@ use App\Models\Department;
 use App\Models\Brand;
 use App\Models\StockOut;
 use App\Models\AssetEditHistory;
+use App\Models\InventoryEditHistory;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AssetsExport;
 use App\Exports\InventoryExport;
@@ -28,15 +29,23 @@ class InventoryController extends Controller
         $brands = $request->input('brands', []);
         $selectedBrands = $brands;
         
-        $totalItems = DB::table('inventories')->count();
-        $totalValue = DB::table('inventories')->sum(DB::raw('unit_price * quantity'));
+        $totalItems = DB::table('inventories')
+            ->whereNull('deleted_at')
+            ->count();
+            
+        $totalValue = DB::table('inventories')
+            ->whereNull('deleted_at')
+            ->where('quantity', '>', 0)
+            ->sum(DB::raw('unit_price * quantity'));
+            
         $lowStock = DB::table('inventories')
             ->where('quantity', '>=', 1)
             ->where('quantity', '<', 20)
             ->whereNull('deleted_at')
             ->count();
+            
         $outOfStock = DB::table('inventories')
-            ->where('quantity', '=', '0')
+            ->where('quantity', '=', 0)
             ->whereNull('deleted_at')
             ->count();
         
@@ -45,6 +54,7 @@ class InventoryController extends Controller
         $search = $request->input('search');
 
         $query = Inventory::whereNull('deleted_at')
+            ->where('quantity', '>', 0)
             ->with('supplier', 'unit', 'brand')
             ->leftJoin('suppliers', 'inventories.supplier_id', '=', 'suppliers.id')
             ->leftJoin('units', 'inventories.unit_id', '=', 'units.id')
@@ -110,8 +120,14 @@ class InventoryController extends Controller
 
     public function show($id)
     {
-        $inventory = Inventory::with('supplier', 'unit')->findOrFail($id);
-        return view('fcu-ams/inventory/viewInventory', compact('inventory'));
+        $inventory = Inventory::with(['supplier', 'unit', 'brand'])->findOrFail($id);
+        
+        // Get paginated edit history
+        $editHistory = $inventory->editHistory()
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('fcu-ams/inventory/viewInventory', compact('inventory', 'editHistory'));
     }
 
     public function create() {
@@ -194,6 +210,8 @@ class InventoryController extends Controller
         ]);
 
         $inventory = Inventory::findOrFail($id);
+        $oldInventory = clone $inventory;
+
         $inventory->items_specs = $validatedData['items_specs'];
         $inventory->unit_id = $validatedData['unit_id'];
         $inventory->brand_id = $validatedData['brand_id'];
@@ -202,14 +220,56 @@ class InventoryController extends Controller
         $inventory->supplier_id = $validatedData['supplier_id'];
 
         if ($request->hasFile('stock_image')) {
-            $imageName = time() . '.' . $request->stock_image->extension();
+            $imageName = time().'.'.$request->stock_image->extension();
             $request->stock_image->move(public_path('profile'), $imageName);
-            $inventory->stock_image = 'profile/' . $imageName;
+            $inventory->stock_image = 'profile/'.$imageName;
         }
+
+        $this->storeEditHistory($inventory, auth()->user(), $oldInventory);
 
         $inventory->save();
 
-        return redirect()->route('inventory.list')->with('success', 'Item updated successfully.');
+        return redirect()->back()->with('success', 'Inventory updated successfully.');
+    }
+
+    private function storeEditHistory($inventory, $user, $oldInventory)
+    {
+        $changes = [];
+        $fields = [
+            'items_specs' => 'Items & Specs',
+            'brand_id' => 'Brand',
+            'unit_id' => 'Unit',
+            'quantity' => 'Quantity',
+            'unit_price' => 'Unit Price',
+            'supplier_id' => 'Supplier',
+        ];
+
+        foreach ($fields as $field => $header) {
+            if ($inventory->$field != $oldInventory->$field) {
+                $oldValue = $oldInventory->$field;
+                $newValue = $inventory->$field;
+
+                if (in_array($field, ['supplier_id', 'brand_id', 'unit_id'])) {
+                    $relationship = str_replace('_id', '', $field);
+                    $oldValue = $oldInventory->$relationship->supplier ?? 
+                        $oldInventory->$relationship->brand ?? 
+                        $oldInventory->$relationship->unit;
+                    $newValue = $inventory->$relationship->supplier ?? 
+                        $inventory->$relationship->brand ?? 
+                        $inventory->$relationship->unit;
+                }
+
+                $changes[] = "Updated $header from '$oldValue' to '$newValue'.";
+            }
+        }
+
+        if (count($changes) > 0) {
+            $editHistory = new InventoryEditHistory();
+            $editHistory->inventory_id = $inventory->id;
+            $editHistory->user_id = $user->id;
+            $editHistory->changes = nl2br(implode("<br>", $changes));
+            $editHistory->save();
+        }
     }
 
     public function destroy($id)

@@ -43,6 +43,11 @@ class Inventory extends Model
         return $this->belongsTo(Department::class);
     }
 
+    public function editHistory()
+    {
+        return $this->hasMany(InventoryEditHistory::class);
+    }
+
     public function generateUniqueTag()
     {
         $firstLetter = substr($this->items_specs, 0, 1);
