@@ -73,7 +73,7 @@
         </div>
         <div class="mb-1 flex justify-between m-3 rounded-md">
             <div class="space-x-2 flex">
-                <!-- <div class="import-list my-auto">
+                <!-- <div class ="import-list my-auto">
                     <form action="{{ route('asset.import') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
