@@ -77,11 +77,13 @@
                     <form action="{{ route('asset.import') }}" method="POST"
                         enctype="multipart/form-data">
                         @csrf
-                        <input type="file" class="border rounded-md" name="file" accept=".xlsx, .xls, .csv" required>
-                        <button type="submit"
-                            class="border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white transition-all duration-200 ease-in rounded-md p-2">
-                            Import from Excel
-                        </button>
+                        <div class="flex space-x-2">
+                            <input type="file" class="border rounded-md py-1 px-2 text-sm" name="file" accept=".xlsx, .xls, .csv" required>
+                            <button type="submit"
+                                class="border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white transition-all duration-200 ease-in rounded-md px-3 py-1 text-sm">
+                                Import from Excel
+                            </button>
+                        </div>
                     </form>
                 </div> -->
                 @if(Auth::user()->role->role != 'Viewer')
