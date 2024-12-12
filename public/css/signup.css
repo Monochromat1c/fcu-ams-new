@@ -3,7 +3,14 @@ form {
 }
 
 .body {
-    background-image: url(/img/login/bg-2.jpg);
+    background-image: url(/img/login/bg-2.jpg) !important;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.bg-picture {
+background-image: url(/img/login/bg-2.jpg) !important;
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
