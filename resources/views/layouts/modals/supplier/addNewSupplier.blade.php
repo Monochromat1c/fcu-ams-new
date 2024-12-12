@@ -1,31 +1,46 @@
-<div id="add-supplier-modal" style="min-height:100vh;" tabindex="-1" aria-hidden="true"
-    class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
-    <div class="relative my-auto mx-auto p-4 w-full max-w-2xl h-full md:h-auto">
-        <!-- Modal content -->
-        <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
-            <button type="button"
-                class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                onclick="document.getElementById('add-supplier-modal').classList.toggle('hidden')">
-                <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                        clip-rule="evenodd"></path>
+<div id="add-supplier-modal"
+    class="modalBg fixed inset-0 z-50 flex items-center justify-center bg-black/50 hidden overflow-y-auto p-4">
+    <div class="relative w-full max-w-md mx-auto">
+        <div class="bg-white rounded-xl shadow-2xl border border-gray-200 relative">
+            <!-- Close Button -->
+            <button onclick="document.getElementById('add-supplier-modal').classList.toggle('hidden')"
+                class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-300 ease-in-out">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
-                <span class="sr-only">Close modal</span>
             </button>
-            <div class="p-6 text-center">
-                <h2 class="mb-4 text-lg font-bold text-black">Add New Supplier</h2>
-                <form method="POST" action="{{ route('supplier.add') }}">
+
+            <!-- Modal Content -->
+            <div class="p-8 space-y-6">
+                <div class="text-center">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-2">Add New Supplier</h2>
+                </div>
+
+                <form method="POST" action="{{ route('supplier.add') }}" class="space-y-4">
                     @csrf
-                    <div class="mb-4">
-                        <input type="text" id="supplier" name="supplier"
-                            class="w-full bg-gray-100 p-2 border rounded-md" required>
+                    <div>
+                        <label for="supplier" class="block text-sm font-medium text-gray-700 mb-2">Supplier Name</label>
+                        <input type="text" id="supplier" name="supplier" required
+                            class="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-300"
+                            placeholder="Enter supplier name">
                     </div>
-                    <div class="flex justify-end space-x-2">
+
+                    <div class="flex justify-end space-x-3">
+                        <button type="button"
+                            onclick="document.getElementById('add-supplier-modal').classList.toggle('hidden')" class="px-5 py-2 text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition duration-300 ease-in-out 
+ border border-gray-300 shadow-sm hover:shadow-md 
+ flex items-center gap-2 
+ transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Cancel
+                        </button>
                         <button type="submit"
-                            class="rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
+                            class="flex items-center gap-2 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-300 transform hover:scale-105">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                                 stroke="currentColor" class="size-6">
                                 <path stroke-linecap="round" stroke-linejoin="round"
