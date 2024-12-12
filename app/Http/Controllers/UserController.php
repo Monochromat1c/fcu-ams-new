@@ -80,9 +80,12 @@ class UserController extends Controller
         $user->username = $request->input('username');
 
         if ($request->hasFile('profile_picture')) {
-            if ($user->profile_picture) {
+            if ($user->profile_picture && 
+                file_exists(public_path($user->profile_picture)) && 
+                !in_array(basename($user->profile_picture), ['mele.png', 'liling.jpg', '1728809102.jpg', 'defaultProfile.png'])) {
                 unlink(public_path($user->profile_picture));
             }
+            
             $imageName = time().'.'.$request->profile_picture->extension();
             $request->profile_picture->move(public_path('profile'), $imageName);
             $user->profile_picture = 'profile/'.$imageName;

@@ -60,7 +60,9 @@ class ProfileController extends Controller
         $nameParts = explode(' ', $request->input('full_name'));
 
         if ($request->hasFile('profile_picture')) {
-            if ($user->profile_picture && file_exists(public_path($user->profile_picture)) && basename($user->profile_picture) != 'mele.png') {
+            if ($user->profile_picture && 
+                file_exists(public_path($user->profile_picture)) && 
+                !in_array(basename($user->profile_picture), ['mele.png', 'liling.jpg', '1728809102.jpg'])) {
                 unlink(public_path($user->profile_picture));
             }
 
