@@ -87,7 +87,16 @@ class ReportController extends Controller
             ->appends($request->query());
 
 
+        // Purchase Order date filter
+        $poStartDate = $request->input('po_start_date', now()->startOfMonth()->toDateString());
+        $poEndDate = $request->input('po_end_date', now()->endOfMonth()->toDateString());
+        $poStartDate = Carbon::parse($poStartDate)->startOfDay();
+        $poEndDate = Carbon::parse($poEndDate)->endOfDay();
+
+        // Purchase Order date range display
+        $poDateRangeDisplay = $this->formatDateRange($poStartDate, $poEndDate, 'purchase order');
         $purchaseOrders = PurchaseOrder::with('supplier', 'department')
+            ->whereBetween('po_date', [$poStartDate, $poEndDate])
             ->orderBy('po_date', 'desc')
             ->orderBy('created_at', 'desc')
             ->get()
@@ -96,40 +105,47 @@ class ReportController extends Controller
                 return $records->first();
             });
 
+
         $purchaseOrders = new LengthAwarePaginator(
             $purchaseOrders->forPage($request->page, 10),
             $purchaseOrders->count(),
-            5,
+            10,
             $request->page,
             ['path' => $request->url(), 'query' => $request->query()]
         );
 
         return view('fcu-ams/reports/reports', compact('lowStockInventories', 'stockOutRecords',
-        'assets', 'purchaseOrders', 'inventoriesForPrint', 'assetsDateRangeDisplay'), [
+        'assets', 'purchaseOrders', 'inventoriesForPrint', 'assetsDateRangeDisplay', 'poDateRangeDisplay'), [
             'inventories' => $inventories,
             'startDate' => $startDate->toDateString(),
             'endDate' => $endDate->toDateString(),
-            'dateRangeDisplay' => $dateRangeDisplay
+            'dateRangeDisplay' => $dateRangeDisplay,
+            'purchaseOrders' => $purchaseOrders,
+            'poStartDate' => $poStartDate->toDateString(),
+            'poEndDate' => $poEndDate->toDateString(),
+            'poDateRangeDisplay' => $poDateRangeDisplay
         ]);
     }
 
-    // Date range formatting method
     private function formatDateRange(Carbon $startDate, Carbon $endDate, $type = 'supplies'): string {
         // Same month scenario
         if ($startDate->month == $endDate->month && $startDate->year == $endDate->year) {
             return sprintf(
-                "%s Purchased in %s %d from %d to %d", 
+                "%s from %s %d %d to %s %d %d",
                 ucfirst($type),
-                $startDate->translatedFormat('F'), 
-                $startDate->year, 
-                $startDate->day, 
-                $endDate->day
+                $startDate->translatedFormat('F'),
+                $startDate->day,
+                $startDate->year,
+                $endDate->translatedFormat('F'),
+                $endDate->day,
+                $endDate->year
             );
         }
 
+
         // Different months scenario
         return sprintf(
-            "%s Purchased from %s %d %d to %s %d %d",
+            "%s from %s %d %d to %s %d %d",
             ucfirst($type),
             $startDate->translatedFormat('F'), 
             $startDate->day, 
