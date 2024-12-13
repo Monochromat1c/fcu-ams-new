@@ -178,7 +178,8 @@ class InventoryController extends Controller
             $inventory->save();
         }
 
-        $request->session()->put('input', $request->all());
+        $input = $request->except('stock_image');
+        $request->session()->put('input', $input);
 
         return redirect()->route('inventory.stock.in')->with('success', 'Item added to inventory.');
     }

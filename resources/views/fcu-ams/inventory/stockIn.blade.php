@@ -1,180 +1,242 @@
 @extends('layouts.layout')
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/stockin.css') }}">
-<style>
-    /* .modal-container{
-        min-width: 100dvw;
-        min-height: 100dvh;
-    } */
-</style>
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-200 col-span-5">
-        <nav class="m-3 mt-6">
-            <h1 class="text-center text-4xl">Stock In</h1>
-        </nav>
-        <div class="stockin-form bg-white m-3 shadow-md rounded-md p-5">
-            <form method="POST" enctype="multipart/form-data"
-                action="{{ route('inventory.stock.in.store') }}">
-                @csrf
-                <div class="">
-                    @include('layouts.messageWithoutTimerForError')
-                    <h3 class="text-lg font-semibold mb-3">Item Details</h3>
-                    <div class="mb-4">
-                        <label for="stock_image" class="block text-gray-700 font-bold mb-2">Item Image:</label>
-                        <input type="file" id="stock_image" name="stock_image" class="w-full border rounded-md bg-gray-100">
-                    </div>
-                    <div class="mb-4">
-                        <label for="brand_id" class="block text-gray-700 font-bold mb-2">Brand:</label>
-                        <select id="brand_id" name="brand_id" class="w-full p-2 border rounded-md bg-gray-100" required>
-                            <option value="">Select a brand</option>
-                            @foreach($brands as $brand)
-                                <option value="{{ $brand->id }}"
-                                    {{ old('brand_id') == $brand->id ? 'selected' : '' }}>
-                                    {{ $brand->brand }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="mb-4">
-                        <label for="items_specs" class="block text-gray-700 font-bold mb-2">Item/Specs:</label>
-                        <input type="text" id="items_specs" name="items_specs" class="w-full p-2 border rounded-md bg-gray-100"
-                            value="{{ old('items_specs') ?? '' }}" required>
-                    </div>
-                    <div class="mb-4">
-                        <label for="unit_id" class="block text-gray-700 font-bold mb-2">Unit:</label>
-                        <select id="unit_id" name="unit_id" class="w-full p-2 border rounded-md bg-gray-100" required>
-                            <option value="">Select a unit</option>
-                            @foreach($units as $unit)
-                                <option value="{{ $unit->id }}"
-                                    {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
-                                    {{ $unit->unit }}</option>
-                            @endforeach
-                            <option value="add_new_unit">
-                                ADD NEW UNIT
-                            </option>
-                        </select>
+        <!-- Header -->
+        <div class="bg-white m-3 shadow-md rounded-md 2xl:max-w-7xl 2xl:mx-auto">
+            <div class="px-4 sm:px-6 lg:px-8 py-6">
+                <div class="flex justify-between">
+                    <h1 class="text-2xl font-semibold text-gray-900 mx-auto">Stock In</h1>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="m-3 2xl:max-w-7xl 2xl:mx-auto mb-6">
+            <div class="mb-3">
+                @include('layouts.messageWithoutTimerForError')
+            </div>
+
+            <!-- Form -->
+            <div class="bg-white shadow rounded-lg">
+                <form method="POST" enctype="multipart/form-data" action="{{ route('inventory.stock.in.store') }}" class="space-y-6 p-6">
+                    @csrf
+
+                    <!-- Item Image -->
+                    <div class="space-y-1">
+                        <label for="stock_image" class="block text-sm font-medium text-gray-700">Item Image</label>
+                        <div class="mt-1 flex items-center">
+                            <div class="flex-shrink-0 h-32 w-32 border rounded-lg overflow-hidden bg-gray-100">
+                                <img id="image_preview" class="h-full w-full object-cover hidden">
+                                <div id="image_placeholder" class="h-32 w-32 flex items-center justify-center text-gray-400">
+                                    <svg class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ml-2">
+                                <div class="relative">
+                                    <input type="file" id="stock_image" name="stock_image" class="hidden" accept="image/*">
+                                    <label for="stock_image"
+                                        class="cursor-pointer bg-white py-2 px-3 border-2 border-slate-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Choose Image
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Modal for adding new unit -->
-                    <div id="add-unit-modal" tabindex="-1" aria-hidden="true" class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
-                        <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
-                            <!-- Modal content -->
-                            <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
-                                <button type="button"
-                                    class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                                    onclick="document.getElementById('add-unit-modal').classList.toggle('hidden')">
-                                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                            clip-rule="evenodd"></path>
-                                    </svg>
-                                    <span class="sr-only">Close modal</span>
-                                </button>
-                                <div class="p-6 text-center">
-                                    <h2 class="mb-4 text-lg font-bold text-black">Add New Unit</h2>
-                                    <input type="text" id="new_unit" name="new_unit"
-                                        class="w-full p-2 border rounded-md mb-2 bg-gray-100">
-                                    <div class="flex flex-end">
-                                        <button type="button" id="add-unit-btn"
-                                            class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                                            Unit</button>
-                                    </div>
-                                </div>
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                        <!-- Brand -->
+                        <div>
+                            <label for="brand_id" class="block text-sm font-medium text-gray-700">Brand</label>
+                            <div class="mt-1 flex space-x-2">
+                                <select id="brand_id" name="brand_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="">Select a brand</option>
+                                    @foreach($brands as $brand)
+                                        <option value="{{ $brand->id }}" {{ old('brand_id') == $brand->id ? 'selected' : '' }}>
+                                            {{ $brand->brand }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Item/Specs -->
+                        <div>
+                            <label for="items_specs" class="block text-sm font-medium text-gray-700">Item/Specs</label>
+                            <div class="mt-1">
+                                <input type="text" id="items_specs" name="items_specs" required
+                                    class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md"
+                                    value="{{ old('items_specs') ?? '' }}">
+                            </div>
+                        </div>
+
+                        <!-- Unit -->
+                        <div>
+                            <label for="unit_id" class="block text-sm font-medium text-gray-700">Unit</label>
+                            <div class="mt-1 flex space-x-2">
+                                <select id="unit_id" name="unit_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="">Select a unit</option>
+                                    @foreach($units as $unit)
+                                        <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
+                                            {{ $unit->unit }}</option>
+                                    @endforeach
+                                    <option value="add_new_unit">ADD NEW UNIT</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div>
+                            <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+                            <div class="mt-1">
+                                <input type="number" id="quantity" name="quantity" required min="0"
+                                    class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md"
+                                    value="{{ old('quantity') ?? '' }}">
+                            </div>
+                        </div>
+
+                        <!-- Unit Price -->
+                        <div>
+                            <label for="unit_price" class="block text-sm font-medium text-gray-700">Unit Price</label>
+                            <div class="mt-1">
+                                <input type="number" id="unit_price" name="unit_price" required min="0"
+                                    class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md"
+                                    value="{{ old('unit_price') ?? '' }}">
+                            </div>
+                        </div>
+
+                        <!-- Supplier -->
+                        <div>
+                            <label for="supplier_id" class="block text-sm font-medium text-gray-700">Supplier</label>
+                            <div class="mt-1 flex space-x-2">
+                                <select id="supplier_id" name="supplier_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="">Select a supplier</option>
+                                    @foreach($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
+                                            {{ $supplier->supplier }}</option>
+                                    @endforeach
+                                    <option value="add_new">ADD NEW SUPPLIER</option>
+                                </select>
                             </div>
                         </div>
                     </div>
-                    <div class="mb-4">
-                        <label for="quantity" class="block text-gray-700 font-bold mb-2">Quantity:</label>
-                        <input type="number" id="quantity" name="quantity" class="w-full p-2 border rounded-md bg-gray-100"
-                            value="{{ old('quantity') ?? '' }}"
-                            min="0" required>
+
+                    <!-- Form Actions -->
+                    <div class="flex justify-end space-x-3 pt-6 border-t">
+                        <button type="submit"
+                            class="inline-flex justify-center items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            </svg>
+                            Add Item
+                        </button>
                     </div>
-                    <div class="mb-4">
-                        <label for="unit_price" class="block text-gray-700 font-bold mb-2">Unit Price:</label>
-                        <input type="number" id="unit_price" name="unit_price" class="w-full p-2 border rounded-md bg-gray-100"
-                            value="{{ old('unit_price') ?? '' }}" min="0"
-                            required>
-                    </div>
-                    <div class="mb-2">
-                        <label for="supplier_id" class="block text-gray-700 font-bold mb-2">Supplier:</label>
-                        <select id="supplier_id" name="supplier_id" class="w-full p-2 border rounded-md bg-gray-100" required>
-                            <option value="">Select a supplier</option>
-                            @foreach($suppliers as $supplier)
-                                <option value="{{ $supplier->id }}"
-                                    {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
-                                    {{ $supplier->supplier }}</option>
-                            @endforeach
-                            <option value="add_new">
-                                ADD NEW SUPPLIER
-                            </option>
-                        </select>
-                    </div>
-                    <div class="modal-container ">
-                        <!-- Modal for adding new supplier -->
-                        <!-- <div id="defaultModal" tabindex="-1" aria-hidden="true"
-                            class="fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden"> -->
-                        <div id="add-supplier-modal" tabindex="-1" aria-hidden="true"
-                            class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal
-                            md:h-full hidden">
-                            <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
-                                <!-- Modal content -->
-                                <div
-                                    class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
-                                    <button type="button"
-                                        class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                                        onclick="document.getElementById('add-supplier-modal').classList.toggle('hidden')">
-                                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                            xmlns="http://www.w3.org/2000/svg">
-                                            <path fill-rule="evenodd"
-                                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                clip-rule="evenodd"></path>
-                                        </svg>
-                                        <span class="sr-only">Close modal</span>
-                                    </button>
-                                    <div class="p-6 text-center">
-                                        <h2 class="mb-4 text-lg font-bold text-black">Add New Supplier</h2>
-                                        <input type="text" id="new_supplier" name="new_supplier"
-                                            class="w-full p-2 border rounded-md mb-2 bg-gray-100">
-                                        <div class="flex flex-end">
-                                            <button type="button" id="add-supplier-btn"
-                                                class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                                                Supplier</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="hidden" id="add-supplier-form">
-                        <label for="new_supplier" class="block text-gray-700 font-bold mb-2">New Supplier:</label>
-                        <input type="text" id="new_supplier" name="new_supplier"
-                            class="w-full p-2 border rounded-md mb-2 bg-gray-100">
-                        <button type="button" id="add-supplier-btn"
-                            class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Add
-                            Supplier</button>
-                    </div>
-                </div>
-                <div class="space-x-2 flex">
-                    <button type="submit"
-                        class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Unit Modal -->
+<div id="add-unit-modal" tabindex="-1" aria-hidden="true" 
+    class="modalBg fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+            <!-- Header -->
+            <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-medium text-gray-900">Add New Unit</h3>
+                    <button type="button" class="text-gray-400 hover:text-gray-500"
+                        onclick="document.getElementById('add-unit-modal').classList.toggle('hidden')">
+                        <span class="sr-only">Close</span>
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
-                        Add Item
                     </button>
                 </div>
-            </form>
+            </div>
+            <!-- Content -->
+            <div class="p-6">
+                <input type="text" id="new_unit" name="new_unit"
+                    class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
+            </div>
+            <!-- Footer -->
+            <div class="bg-gray-50 px-6 py-4">
+                <div class="flex items-center justify-end space-x-3">
+                    <button type="button" id="add-unit-btn"
+                        class="inline-flex justify-center rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                        Add Unit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add Supplier Modal -->
+<div id="add-supplier-modal" tabindex="-1" aria-hidden="true"
+    class="modalBg fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+            <!-- Header -->
+            <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-medium text-gray-900">Add New Supplier</h3>
+                    <button type="button" class="text-gray-400 hover:text-gray-500"
+                        onclick="document.getElementById('add-supplier-modal').classList.toggle('hidden')">
+                        <span class="sr-only">Close</span>
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <!-- Content -->
+            <div class="p-6">
+                <input type="text" id="new_supplier" name="new_supplier"
+                    class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
+            </div>
+            <!-- Footer -->
+            <div class="bg-gray-50 px-6 py-4">
+                <div class="flex items-center justify-end space-x-3">
+                    <button type="button" id="add-supplier-btn"
+                        class="inline-flex justify-center rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                        Add Supplier
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
+    // Image preview functionality
+    document.getElementById('stock_image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            const preview = document.getElementById('image_preview');
+            const placeholder = document.getElementById('image_placeholder');
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            };
+            
+            reader.readAsDataURL(file);
+        }
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         const supplierSelect = document.getElementById('supplier_id');
         const addSupplierModal = document.getElementById('add-supplier-modal');
@@ -183,8 +245,6 @@
         supplierSelect.addEventListener('change', function () {
             if (supplierSelect.value === 'add_new') {
                 addSupplierModal.classList.remove('hidden');
-            } else {
-                addSupplierModal.classList.add('hidden');
             }
         });
 
@@ -194,26 +254,23 @@
                 const formData = new FormData();
                 formData.append('supplier', newSupplier);
                 fetch('{{ route('supplier.add') }}', {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.reload) {
-                            window.location.reload();
-                        }
-                    })
-                    .catch(error => console.error(error));
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.reload) {
+                        window.location.reload();
+                    }
+                })
+                .catch(error => console.error(error));
             }
         });
     });
-</script>
-<script src="{{ asset('js/chart.js') }}"></script>
-  
-<script>
+
     document.addEventListener('DOMContentLoaded', function () {
         const unitSelect = document.getElementById('unit_id');
         const addUnitModal = document.getElementById('add-unit-modal');
@@ -222,8 +279,6 @@
         unitSelect.addEventListener('change', function () {
             if (unitSelect.value === 'add_new_unit') {
                 addUnitModal.classList.remove('hidden');
-            } else {
-                addUnitModal.classList.add('hidden');
             }
         });
 
@@ -233,19 +288,19 @@
                 const formData = new FormData();
                 formData.append('unit', newUnit);
                 fetch('{{ route('unit.add') }}', {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.reload) {
-                            window.location.reload();
-                        }
-                    })
-                    .catch(error => console.error(error));
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.reload) {
+                        window.location.reload();
+                    }
+                })
+                .catch(error => console.error(error));
             }
         });
     });

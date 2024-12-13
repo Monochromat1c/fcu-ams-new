@@ -58,22 +58,22 @@
                                 <div>
                                     <label for="po_date" class="block text-sm font-medium text-gray-700">PO Date</label>
                                     <input type="date" id="po_date" name="po_date" 
-                                        class="mt-1 block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                                        class="mt-1 block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
                                 </div>
                                 <div>
                                     <label for="po_number" class="block text-sm font-medium text-gray-700">PO Number</label>
                                     <input type="number" id="po_number" name="po_number" 
-                                        class="mt-1 block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
+                                        class="mt-1 block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
                                 </div>
                                 <div>
                                     <label for="mr_number" class="block text-sm font-medium text-gray-700">MR Number</label>
                                     <input type="number" id="mr_number" name="mr_number" 
-                                        class="mt-1 block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
+                                        class="mt-1 block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
                                 </div>
                                 <div>
                                     <label for="department_id" class="block text-sm font-medium text-gray-700">Requesting Department</label>
                                     <select id="department_id" name="department_id" 
-                                        class="mt-1 block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                                        class="mt-1 block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
                                         <option value="">Select a department</option>
                                         @foreach($departments as $department)
                                             <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
@@ -85,7 +85,7 @@
                                 <div>
                                     <label for="supplier_id" class="block text-sm font-medium text-gray-700">Supplier</label>
                                     <select id="supplier_id" name="supplier_id" 
-                                        class="mt-1 block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                                        class="mt-1 block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
                                         <option value="">Select a supplier</option>
                                         @foreach($suppliers as $supplier)
                                             <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
@@ -97,7 +97,7 @@
                                 <div>
                                     <label for="location_id" class="block text-sm font-medium text-gray-700">Location</label>
                                     <select id="location_id" name="location_id" 
-                                        class="mt-1 block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                                        class="mt-1 block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
                                         <option value="">Select a location</option>
                                         @foreach($locations as $location)
                                             <option value="{{ $location->id }}" {{ old('location_id') == $location->id ? 'selected' : '' }}>
@@ -109,12 +109,12 @@
                                 <div>
                                     <label for="approved_by" class="block text-sm font-medium text-gray-700">Approved By</label>
                                     <input type="text" id="approved_by" name="approved_by" 
-                                        class="mt-1 block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                                        class="mt-1 block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
                                 </div>
                                 <div class="md:col-span-2">
                                     <label for="note" class="block text-sm font-medium text-gray-700">Note</label>
                                     <textarea id="note" name="note" rows="3" 
-                                        class="mt-1 block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out"></textarea>
+                                        class="mt-1 block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -145,13 +145,13 @@
                                     <tbody id="purchase-order-table-body" class="bg-white divide-y divide-gray-200">
                                         <tr>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <input type="text" name="items_specs[]" class="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                                                <input type="text" name="items_specs[]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <input type="number" name="quantity[]" class="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
+                                                <input type="number" name="quantity[]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <select name="unit_id[]" class="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                                                <select name="unit_id[]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
                                                     <option value="">Select a unit</option>
                                                     @foreach($units as $unit)
                                                         <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
@@ -161,7 +161,7 @@
                                                 </select>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap">
-                                                <input type="number" name="unit_price[]" class="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
+                                                <input type="number" name="unit_price[]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
                                             </td>
                                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                                                 <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
@@ -201,13 +201,13 @@
             const newRow = document.createElement('tr');
             newRow.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap">
-                    <input type="text" name="items_specs[]" class="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                    <input type="text" name="items_specs[]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    <input type="number" name="quantity[]" class="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
+                    <input type="number" name="quantity[]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    <select name="unit_id[]" class="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
+                    <select name="unit_id[]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
                         <option value="">Select a unit</option>
                         @foreach($units as $unit)
                             <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
@@ -217,7 +217,7 @@
                     </select>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap">
-                    <input type="number" name="unit_price[]" class="block w-full px-4 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
+                    <input type="number" name="unit_price[]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="0" required>
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                     <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
