@@ -231,22 +231,40 @@
             </div>
         </div>
         <div class="m-3">
-            <div class="chart-container">
-                <h3 class="text-lg font-semibold text-gray-800 mb-4">Recent Actions</h3>
-                <ul class="divide-y divide-gray-100">
+            <div class="bg-white rounded-md shadow-md p-5">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Actions</h3>
+                <div class="divide-y-2 divide-slate-200">
                     @foreach($recentActions as $action)
-                        <li class="recent-action-item">
+                        <div class="recent-action-item py-3">
                             <div class="flex justify-between items-center">
-                                <div class="text-gray-700">
-                                    <span class="font-medium text-gray-900">{{ $action['type'] }}:</span>
-                                    {{ $action['name'] }} was
-                                    {{ $action['action'] }}
+                                <div class="flex items-center gap-2">
+                                    @if($action['type'] === 'Asset')
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                    @elseif($action['type'] === 'Inventory')
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="size-5 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                                        </svg>
+                                    @endif
+                                    <div class="text-gray-700">
+                                        <span class="font-medium text-gray-900">{{ $action['name'] }}</span>
+                                        <span class="text-gray-500">was {{ $action['action'] }}</span>
+                                    </div>
                                 </div>
-                                <span class="text-sm text-gray-500">{{ $action['date'] }}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs font-medium px-5 py-2 rounded-full 
+                                        @if($action['type'] === 'Asset') bg-blue-100 text-blue-700
+                                        @elseif($action['type'] === 'Inventory') bg-green-100 text-green-700
+                                        @endif">
+                                        {{ $action['type'] }}
+                                    </span>
+                                    <span class="text-sm text-gray-500">{{ $action['date'] }}</span>
+                                </div>
                             </div>
-                        </li>
+                        </div>
                     @endforeach
-                </ul>
+                </div>
             </div>
         </div>
     </div>
