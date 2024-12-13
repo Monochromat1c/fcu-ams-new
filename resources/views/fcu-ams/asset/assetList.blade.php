@@ -468,7 +468,7 @@
                     </form>
                 </div>
             </div>
-            <div class="overflow-x-auto overflow-y-auto rounded-lg shadow">
+            <div class="overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-300">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead>
                         <tr>

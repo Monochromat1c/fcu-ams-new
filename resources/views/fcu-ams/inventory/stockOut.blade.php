@@ -8,10 +8,15 @@
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-200 col-span-5">
-        <nav class="m-3 mt-6">
-            <h1 class="text-center text-4xl">Stock Out</h1>
-        </nav>
-        <div class="stockout-form bg-white m-3 shadow-md rounded-md p-5">
+        <!-- Header -->
+        <div class="bg-white m-3 shadow-md rounded-md 2xl:max-w-7xl 2xl:mx-auto">
+            <div class="px-4 sm:px-6 lg:px-8 py-6">
+                <div class="flex justify-between">
+                    <h1 class="text-2xl font-semibold text-gray-900 mx-auto">Stock Out</h1>
+                </div>
+            </div>
+        </div>
+        <div class="stockout-form bg-white m-3 shadow-md rounded-md p-5 2xl:max-w-7xl 2xl:mx-auto">
             <form method="POST" action="{{ route('inventory.stock.out.store') }}">
                 @csrf
                 <div class="">
@@ -21,12 +26,12 @@
                     <h3 class="text-lg font-semibold mb-3">Item Details</h3>
                     <div class="mb-4">
                         <label for="item_id" class="block text-gray-700 font-bold mb-2">Item:</label>
-                        <button type="button" class="ml-auto rounded-md border text-left px-3 py-2 bg-gray-100 text-black w-full"
+                        <button type="button" class="ml-auto rounded-md border-2 border-slate-300 text-left px-3 py-2 bg-slate-50 text-black w-full"
                             onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
                             Select Items
                         </button>
                         <div class="overflow-y-auto max-h-64 hidden mt-3" id="selected-items-container">
-                            <div class="max-w-4xl mx-auto overflow-x-auto overflow-y-auto rounded-lg">
+                            <div class="max-w-4xl mx-auto overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-300">
                                 <table class="min-w-full divide-y divide-gray-200 border">
                                     <thead>
                                         <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
@@ -63,7 +68,7 @@
                                         <div class="flex items-center space-x-4">
                                             <div class="relative">
                                                 <input type="text" id="modal-search" placeholder="Search items..." 
-                                                    class="pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 w-64">
+                                                    class="pl-10 pr-4 py-2 rounded-lg border-2 border-slate-300 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 w-64">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                                 </svg>
@@ -115,7 +120,7 @@
                                                                         <input type="number"
                                                                             id="quantity_{{ $inventory->id }}"
                                                                             name="quantity[]"
-                                                                            class="w-24 p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:text-gray-500"
+                                                                            class="w-24 p-2 border-2 border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500 disabled:bg-slate-50 disabled:text-gray-500"
                                                                             placeholder="Qty"
                                                                             min="1"
                                                                             max="{{ $inventory->quantity }}"
@@ -147,7 +152,7 @@
                         </div>
                     <div class="mb-4">
                         <label for="department_id" class="block text-gray-700 font-bold mb-2">Department:</label>
-                        <select id="department_id" name="department_id" class="w-full p-2 border rounded-md bg-gray-100" required>
+                        <select id="department_id" name="department_id" class="w-full p-2 border-2 border-slate-300 rounded-md bg-slate-50" required>
                             <option value="">Select a department</option>
                             @foreach($departments as $department)
                                 <option value="{{ $department->id }}">{{ $department->department }}</option>
@@ -157,11 +162,11 @@
                     <div class="mb-4">
                         <label for="stock_out_date" class="block text-gray-700 font-bold mb-2">Stock Out Date:</label>
                         <input type="date" id="stock_out_date" name="stock_out_date"
-                            class="w-full p-2 border rounded-md bg-gray-100" required>
+                            class="w-full p-2 border-2 border-slate-300 rounded-md bg-slate-50" required>
                     </div>
                     <div class="mb-4">
                         <label for="receiver" class="block text-gray-700 font-bold mb-2">Received by:</label>
-                        <input type="input" id="receiver" name="receiver" class="w-full p-2 border rounded-md bg-gray-100"
+                        <input type="input" id="receiver" name="receiver" class="w-full p-2 border-2 border-slate-300 rounded-md bg-slate-50"
                             required>
                     </div>
                 </div>
