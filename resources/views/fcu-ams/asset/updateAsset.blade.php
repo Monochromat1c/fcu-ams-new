@@ -2,7 +2,7 @@
 @section('content')
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
-    <div class="content min-h-screen bg-gray-100 col-span-5">
+    <div class="content min-h-screen bg-slate-200 col-span-5">
         <!-- Header -->
         <div class="bg-white m-3 shadow-md rounded-md 2xl:max-w-7xl 2xl:mx-auto">
             <div class="px-4 sm:px-6 lg:px-8 py-6">
@@ -36,7 +36,9 @@
 
             <!-- Form -->
             <div class="bg-white shadow rounded-lg">
-                <form method="POST" enctype="multipart/form-data" action="{{ route('asset.update', ['id' => $asset->id]) }}" class="space-y-6 p-6">
+                <form method="POST" enctype="multipart/form-data"
+                    action="{{ route('asset.update', ['id' => $asset->id]) }}"
+                    class="space-y-6 p-6">
                     @csrf
                     <input type="hidden" name="id" value="{{ $asset->id }}">
 
@@ -46,19 +48,23 @@
                         <div class="mt-1 flex items-center">
                             <div class="flex-shrink-0 h-32 w-32 border rounded-lg overflow-hidden bg-gray-100">
                                 @if($asset->asset_image)
-                                    <img src="{{ asset($asset->asset_image) }}" alt="Asset image" class="h-32 w-32 object-cover">
+                                    <img src="{{ asset($asset->asset_image) }}" alt="Asset image"
+                                        class="h-32 w-32 object-cover">
                                 @else
                                     <div class="h-32 w-32 flex items-center justify-center text-gray-400">
                                         <svg class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                         </svg>
                                     </div>
                                 @endif
                             </div>
                             <div class="ml-2">
                                 <div class="relative">
-                                    <input type="file" id="asset_image" name="asset_image" class="hidden" accept="image/*">
-                                    <label for="asset_image" class="cursor-pointer bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <input type="file" id="asset_image" name="asset_image" class="hidden"
+                                        accept="image/*">
+                                    <label for="asset_image"
+                                        class="cursor-pointer bg-white py-2 px-3 border border-2 bg-slate-50 border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         Change Image
                                     </label>
                                 </div>
@@ -69,10 +75,12 @@
                     <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
                         <!-- Asset Tag ID -->
                         <div>
-                            <label for="asset_tag_id" class="block text-sm font-medium text-gray-700">Asset Tag ID</label>
+                            <label for="asset_tag_id" class="block text-sm font-medium text-gray-700">Asset Tag
+                                ID</label>
                             <div class="mt-1">
-                                <input type="text" id="asset_tag_id" name="asset_tag_id" value="{{ $asset->asset_tag_id }}" required
-                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <input type="text" id="asset_tag_id" name="asset_tag_id"
+                                    value="{{ $asset->asset_tag_id }}" required
+                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
                             </div>
                         </div>
 
@@ -81,7 +89,7 @@
                             <label for="model" class="block text-sm font-medium text-gray-700">Model</label>
                             <div class="mt-1">
                                 <input type="text" id="model" name="model" value="{{ $asset->model }}" required
-                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
                             </div>
                         </div>
 
@@ -90,16 +98,18 @@
                             <label for="specs" class="block text-sm font-medium text-gray-700">Specification</label>
                             <div class="mt-1">
                                 <input type="text" id="specs" name="specs" value="{{ $asset->specs }}"
-                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
                             </div>
                         </div>
 
                         <!-- Serial Number -->
                         <div>
-                            <label for="serial_number" class="block text-sm font-medium text-gray-700">Serial Number</label>
+                            <label for="serial_number" class="block text-sm font-medium text-gray-700">Serial
+                                Number</label>
                             <div class="mt-1">
-                                <input type="text" id="serial_number" name="serial_number" value="{{ $asset->serial_number }}" required
-                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <input type="text" id="serial_number" name="serial_number"
+                                    value="{{ $asset->serial_number }}" required
+                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
                             </div>
                         </div>
 
@@ -111,16 +121,18 @@
                                     <span class="text-gray-500 sm:text-sm">₱</span>
                                 </div>
                                 <input type="number" id="cost" name="cost" value="{{ $asset->cost }}" min="0" required
-                                    class="focus:ring-indigo-500 p-2 border  focus:border-indigo-500 block w-full pl-7 sm:text-sm border-gray-300 rounded-md">
+                                    class="focus:ring-indigo-500 p-2 border  focus:border-indigo-500 block w-full pl-7 sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
                             </div>
                         </div>
 
                         <!-- Purchase Date -->
                         <div>
-                            <label for="purchase_date" class="block text-sm font-medium text-gray-700">Purchase Date</label>
+                            <label for="purchase_date" class="block text-sm font-medium text-gray-700">Purchase
+                                Date</label>
                             <div class="mt-1">
-                                <input type="date" id="purchase_date" name="purchase_date" value="{{ $asset->purchase_date }}" required
-                                    class="shadow-sm  p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
+                                <input type="date" id="purchase_date" name="purchase_date"
+                                    value="{{ $asset->purchase_date }}" required
+                                    class="shadow-sm  p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
                             </div>
                         </div>
 
@@ -129,12 +141,15 @@
                             <label for="assigned_to" class="block text-sm font-medium text-gray-700">Assigned To</label>
                             <div class="mt-1">
                                 <button type="button" id="show-assignment-modal"
-                                    class="w-full text-left p-2 border border-gray-300 rounded-md shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500 bg-white hover:bg-gray-50">
+                                    class="w-full text-left p-2 border border-2 bg-slate-50 border-gray-300 rounded-md shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-50">
                                     {{ $asset->assigned_to ? $asset->assigned_to : 'Click to assign' }}
                                 </button>
-                                <input type="hidden" name="assigned_to" id="assigned_to" value="{{ old('assigned_to', $asset->assigned_to) }}">
-                                <input type="hidden" name="issued_date" id="issued_date" value="{{ old('issued_date', $asset->issued_date) }}">
-                                <input type="hidden" name="notes" id="notes" value="{{ old('notes', $asset->notes) }}">
+                                <input type="hidden" name="assigned_to" id="assigned_to"
+                                    value="{{ old('assigned_to', $asset->assigned_to) }}">
+                                <input type="hidden" name="issued_date" id="issued_date"
+                                    value="{{ old('issued_date', $asset->issued_date) }}">
+                                <input type="hidden" name="notes" id="notes"
+                                    value="{{ old('notes', $asset->notes) }}">
                             </div>
                         </div>
 
@@ -142,9 +157,10 @@
                         <div>
                             <label for="supplier_id" class="block text-sm font-medium text-gray-700">Supplier</label>
                             <select id="supplier_id" name="supplier_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                 @foreach($suppliers as $supplier)
-                                    <option value="{{ $supplier->id }}" {{ $supplier->id == $asset->supplier_id ? 'selected' : '' }}>
+                                    <option value="{{ $supplier->id }}"
+                                        {{ $supplier->id == $asset->supplier_id ? 'selected' : '' }}>
                                         {{ $supplier->supplier }}
                                     </option>
                                 @endforeach
@@ -155,9 +171,10 @@
                         <div>
                             <label for="site_id" class="block text-sm font-medium text-gray-700">Site</label>
                             <select id="site_id" name="site_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                 @foreach($sites as $site)
-                                    <option value="{{ $site->id }}" {{ $site->id == $asset->site_id ? 'selected' : '' }}>
+                                    <option value="{{ $site->id }}"
+                                        {{ $site->id == $asset->site_id ? 'selected' : '' }}>
                                         {{ $site->site }}
                                     </option>
                                 @endforeach
@@ -168,9 +185,10 @@
                         <div>
                             <label for="location_id" class="block text-sm font-medium text-gray-700">Location</label>
                             <select id="location_id" name="location_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                 @foreach($locations as $location)
-                                    <option value="{{ $location->id }}" {{ $location->id == $asset->location_id ? 'selected' : '' }}>
+                                    <option value="{{ $location->id }}"
+                                        {{ $location->id == $asset->location_id ? 'selected' : '' }}>
                                         {{ $location->location }}
                                     </option>
                                 @endforeach
@@ -181,9 +199,10 @@
                         <div>
                             <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
                             <select id="category_id" name="category_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                 @foreach($categories as $category)
-                                    <option value="{{ $category->id }}" {{ $category->id == $asset->category_id ? 'selected' : '' }}>
+                                    <option value="{{ $category->id }}"
+                                        {{ $category->id == $asset->category_id ? 'selected' : '' }}>
                                         {{ $category->category }}
                                     </option>
                                 @endforeach
@@ -192,11 +211,13 @@
 
                         <!-- Department -->
                         <div>
-                            <label for="department_id" class="block text-sm font-medium text-gray-700">Department</label>
+                            <label for="department_id"
+                                class="block text-sm font-medium text-gray-700">Department</label>
                             <select id="department_id" name="department_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                 @foreach($departments as $department)
-                                    <option value="{{ $department->id }}" {{ $department->id == $asset->department_id ? 'selected' : '' }}>
+                                    <option value="{{ $department->id }}"
+                                        {{ $department->id == $asset->department_id ? 'selected' : '' }}>
                                         {{ $department->department }}
                                     </option>
                                 @endforeach
@@ -210,9 +231,10 @@
                         <div>
                             <label for="brand_id" class="block text-sm font-medium text-gray-700">Brand</label>
                             <select id="brand_id" name="brand_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                 @foreach($brands as $brand)
-                                    <option value="{{ $brand->id }}" {{ $brand->id == $asset->brand_id ? 'selected' : '' }}>
+                                    <option value="{{ $brand->id }}"
+                                        {{ $brand->id == $asset->brand_id ? 'selected' : '' }}>
                                         {{ $brand->brand }}
                                     </option>
                                 @endforeach
@@ -223,9 +245,10 @@
                         <div>
                             <label for="status_id" class="block text-sm font-medium text-gray-700">Status</label>
                             <select id="status_id" name="status_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                 @foreach($statuses as $status)
-                                    <option value="{{ $status->id }}" {{ $status->id == $asset->status_id ? 'selected' : '' }}>
+                                    <option value="{{ $status->id }}"
+                                        {{ $status->id == $asset->status_id ? 'selected' : '' }}>
                                         {{ $status->status }}
                                     </option>
                                 @endforeach
@@ -236,9 +259,10 @@
                         <div>
                             <label for="condition_id" class="block text-sm font-medium text-gray-700">Condition</label>
                             <select id="condition_id" name="condition_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                 @foreach($conditions as $condition)
-                                    <option value="{{ $condition->id }}" {{ $condition->id == $asset->condition_id ? 'selected' : '' }}>
+                                    <option value="{{ $condition->id }}"
+                                        {{ $condition->id == $asset->condition_id ? 'selected' : '' }}>
                                         {{ $condition->condition }}
                                     </option>
                                 @endforeach
@@ -250,12 +274,13 @@
                             <div id="maintenance-modal" tabindex="-1" aria-hidden="true"
                                 class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
                                 <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
-                                    <div class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
+                                    <div
+                                        class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
                                         <button type="button"
                                             class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
                                             onclick="document.getElementById('maintenance-modal').classList.toggle('hidden')">
-                                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
-                                                xmlns="http://www.w3.org/2000/svg">
+                                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor"
+                                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                                 <path fill-rule="evenodd"
                                                     d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
                                                     clip-rule="evenodd"></path>
@@ -266,13 +291,15 @@
                                             <h2 class="mb-4 text-lg font-bold text-black">Maintenance Date</h2>
                                             <div class="mb-4">
                                                 <label for="maintenance_start_date"
-                                                    class="block text-left text-gray-700 font-bold mb-2">Start Date:</label>
-                                                <input type="date" id="maintenance_start_date" name="maintenance_start_date"
-                                                    class="w-full p-2 border rounded-md"
+                                                    class="block text-left text-gray-700 font-bold mb-2">Start
+                                                    Date:</label>
+                                                <input type="date" id="maintenance_start_date"
+                                                    name="maintenance_start_date" class="w-full p-2 border rounded-md"
                                                     value="{{ old('maintenance_start_date') ?? $asset->maintenance_start_date }}">
                                             </div>
                                             <div class="mb-4">
-                                                <label for="maintenance_end_date" class="block text-left text-gray-700 font-bold mb-2">End
+                                                <label for="maintenance_end_date"
+                                                    class="block text-left text-gray-700 font-bold mb-2">End
                                                     Date:</label>
                                                 <input type="date" id="maintenance_end_date" name="maintenance_end_date"
                                                     class="w-full p-2 border rounded-md"
@@ -293,7 +320,8 @@
                             <div id="assignment-modal" tabindex="-1" aria-hidden="true"
                                 class="modalBg fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
                                 <div class="flex min-h-screen items-center justify-center p-4">
-                                    <div class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+                                    <div
+                                        class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
                                         <!-- Header -->
                                         <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
                                             <div class="flex items-center justify-between">
@@ -301,8 +329,10 @@
                                                 <button type="button"
                                                     class="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none"
                                                     onclick="document.getElementById('assignment-modal').classList.toggle('hidden')">
-                                                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    <svg class="h-5 w-5" fill="none" stroke="currentColor"
+                                                        viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                                     </svg>
                                                 </button>
                                             </div>
@@ -314,10 +344,11 @@
                                                 <!-- Assigned To Field -->
                                                 <div>
                                                     <label for="modal_assigned_to"
-                                                        class="block text-sm font-medium text-gray-700">Assigned To</label>
+                                                        class="block text-sm font-medium text-gray-700">Assigned
+                                                        To</label>
                                                     <div class="mt-1">
                                                         <input type="text" id="modal_assigned_to"
-                                                            class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                                            class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-2 bg-slate-50 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                                             value="{{ old('assigned_to') ?? $asset->assigned_to }}"
                                                             placeholder="Enter assignee name">
                                                     </div>
@@ -326,10 +357,11 @@
                                                 <!-- Date Issued Field -->
                                                 <div>
                                                     <label for="modal_issued_date"
-                                                        class="block text-sm font-medium text-gray-700">Date Issued</label>
+                                                        class="block text-sm font-medium text-gray-700">Date
+                                                        Issued</label>
                                                     <div class="mt-1">
                                                         <input type="date" id="modal_issued_date"
-                                                            class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                                            class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-2 bg-slate-50 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                                             value="{{ old('issued_date') ?? $asset->issued_date }}">
                                                     </div>
                                                 </div>
@@ -340,7 +372,7 @@
                                                         class="block text-sm font-medium text-gray-700">Notes</label>
                                                     <div class="mt-1">
                                                         <textarea id="modal_notes"
-                                                            class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                                            class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-2 bg-slate-50 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
                                                             rows="3"
                                                             placeholder="Add any additional notes here">{{ old('notes') ?? $asset->notes }}</textarea>
                                                     </div>
@@ -352,7 +384,7 @@
                                         <div class="bg-gray-50 px-6 py-4">
                                             <div class="flex items-center justify-end space-x-3">
                                                 <button type="button"
-                                                    class="rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                    class="rounded-md border border-2 bg-slate-50 border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                                     onclick="document.getElementById('assignment-modal').classList.toggle('hidden')">
                                                     Cancel
                                                 </button>
@@ -372,11 +404,11 @@
                     <!-- Form Actions -->
                     <div class="flex justify-end space-x-3 pt-6 border-t">
                         <a href="" onclick="window.history.back(); return false;"
-                           class="inline-flex justify-center py-2 px-4 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            class="inline-flex justify-center py-2 px-4 border border-2 bg-slate-50 border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Cancel
                         </a>
                         <button type="submit"
-                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
                             Update Asset
                         </button>
                     </div>
@@ -388,11 +420,11 @@
 
 <script>
     // Preview image before upload
-    document.getElementById('asset_image').addEventListener('change', function(e) {
+    document.getElementById('asset_image').addEventListener('change', function (e) {
         const file = e.target.files[0];
         if (file) {
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 const preview = document.querySelector('.h-32.w-32 img, .h-32.w-32 div');
                 if (preview.tagName === 'IMG') {
                     preview.src = e.target.result;
@@ -408,7 +440,7 @@
     });
 
     // Show maintenance modal when maintenance condition is selected
-    document.getElementById('condition_id').addEventListener('change', function(e) {
+    document.getElementById('condition_id').addEventListener('change', function (e) {
         const selectedOption = e.target.options[e.target.selectedIndex];
         const conditionText = selectedOption.textContent.trim();
         if (conditionText === 'Maintenance') {
@@ -417,17 +449,17 @@
     });
 
     // Handle save maintenance button click
-    document.getElementById('save-maintenance-btn').addEventListener('click', function() {
+    document.getElementById('save-maintenance-btn').addEventListener('click', function () {
         document.getElementById('maintenance-modal').classList.add('hidden');
     });
 
     // Show assignment modal when button is clicked
-    document.getElementById('show-assignment-modal').addEventListener('click', function() {
+    document.getElementById('show-assignment-modal').addEventListener('click', function () {
         document.getElementById('assignment-modal').classList.remove('hidden');
     });
 
     // Handle save assignment button click
-    document.getElementById('save-assignment-btn').addEventListener('click', function() {
+    document.getElementById('save-assignment-btn').addEventListener('click', function () {
         const assignedTo = document.getElementById('modal_assigned_to').value;
         const issuedDate = document.getElementById('modal_issued_date').value;
         const notes = document.getElementById('modal_notes').value;

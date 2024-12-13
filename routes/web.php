@@ -20,6 +20,7 @@ use App\Http\Controllers\UnitController;
 use App\Http\Controllers\SiteController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\LocationController;
+use App\Http\Controllers\BrandController;
 use App\Http\Controllers\PurchaseOrderController;
 
 Route::controller(LoginController::class)->group(function () {
@@ -118,6 +119,13 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/category/add', 'add')->name('category.add');
         Route::post('/category/{id}', 'update')->name('category.update');
         Route::delete('/category/{id}', 'destroy')->name('category.destroy');
+    });
+
+    Route::controller(BrandController::class)->group(function (){
+        Route::get('/brand/index', 'index')->name('brand.index');
+        Route::post('/brand/add', 'add')->name('brand.add');
+        Route::post('/brand/{id}', 'update')->name('brand.update');
+        Route::delete('/brand/{id}', 'destroy')->name('brand.destroy');
     });
 
     Route::controller(ConditionController::class)->group(function (){

@@ -13,7 +13,7 @@
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
-    <div class="bg-slate-100 content min-h-screen col-span-5">
+    <div class="bg-slate-200 content min-h-screen col-span-5">
     <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
     <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="invisible flex gap-3 focus:outline-none" style="min-width:100px;">

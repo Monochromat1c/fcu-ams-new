@@ -34,11 +34,8 @@
                             <!-- Profile Picture Section -->
                             <div class="md:col-span-2 flex flex-col items-center mb-6">
                                 <div class="relative mb-4">
-                                    <input type="file" 
-                                        name="profile_picture" 
-                                        id="profilePicInput{{ $user->id }}"
-                                        class="hidden" 
-                                        accept="image/*"
+                                    <input type="file" name="profile_picture" id="profilePicInput{{ $user->id }}"
+                                        class="hidden" accept="image/*"
                                         onchange="previewProfilePic(this, {{ $user->id }})">
 
                                     <img id="profilePicPreview{{ $user->id }}"
@@ -46,7 +43,7 @@
                                         alt="User Profile"
                                         onclick="document.getElementById('profilePicInput{{ $user->id }}').click()"
                                         class="w-40 h-40 object-cover rounded-full border-4 border-white shadow-lg ring-4 ring-blue-200/50 transform transition-all hover:scale-105 cursor-pointer">
-                                    
+
                                     <div id="imageOverlay{{ $user->id }}"
                                         class="absolute inset-0 bg-black bg-opacity-50 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300 cursor-pointer"
                                         onclick="document.getElementById('profilePicInput{{ $user->id }}').click()">
@@ -113,9 +110,9 @@
 
                             <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
                                 <label class="block text-xs font-semibold text-gray-500 mb-2">Email</label>
-                                <input type="email" name="email" value="{{ $user->email }}" class="w ```html
-                                    class=" w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500
-                                    transition-colors" required>
+                                <input type="email" name="email" value="{{ $user->email }}"
+                                    class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
+                                    required>
                             </div>
 
                             <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
