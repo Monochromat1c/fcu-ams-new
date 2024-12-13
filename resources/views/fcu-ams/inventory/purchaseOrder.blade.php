@@ -2,6 +2,8 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/stockin.css') }}">
 
+<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-200 col-span-5">

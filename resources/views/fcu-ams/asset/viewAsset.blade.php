@@ -1,7 +1,7 @@
 @extends('layouts.layout')
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/viewAsset.css') }}">
-<link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+<link rel="stylesheet" href="{{ asset('css/asset.css') }}">
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
