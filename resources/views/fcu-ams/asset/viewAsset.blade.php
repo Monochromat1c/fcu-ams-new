@@ -84,7 +84,7 @@
         </nav>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
                 <div class="p-3">
-                    <div class="flex justify-between items-start mb-6">
+                    <div class="flex justify-between items-center mb-6">
                         <h2 class="text-2xl font-bold text-gray-800">Asset Details</h2>
                         <!-- Asset Image -->
                         <div class="space-y-1 inline-block border-2 border-gray-300 shadow-md rounded-lg bg-slate-50">

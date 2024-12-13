@@ -1,105 +1,173 @@
 @extends('layouts.layout')
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/stockin.css') }}">
-
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-200 col-span-5">
-        <nav class="m-3 mt-6">
-            <h1 class="text-center text-4xl">Edit the Item</h1>
-        </nav>
-        <div class="m-3">
-            @include('layouts.messageWithoutTimerForError')
+        <!-- Header -->
+        <div class="bg-white m-3 shadow-md rounded-md 2xl:max-w-7xl 2xl:mx-auto">
+            <div class="px-4 sm:px-6 lg:px-8 py-6">
+                <div class="flex justify-between">
+                    <h1 class="text-2xl font-semibold text-gray-900 mx-auto">Edit Item</h1>
+                </div>
+            </div>
         </div>
-        <div class="stockin-form bg-white m-3 shadow-md rounded-md p-5">
-            <form method="POST" enctype="multipart/form-data"
-                action="{{ route('inventory.stock.in.update', ['id' => $inventory->id]) }}">
-                @csrf
-                <input type="hidden" name="id" value="{{ $inventory->id }}">
-                <h3 class="text-lg font-semibold mb-3">Item Details</h3>
-                <div class="mb-4">
-                    <label for="stock_image" class="block text-gray-700 font-bold mb-2">Item Image:</label>
-                    <input type="file" id="stock_image" name="stock_image" class="w-full border rounded-md">
-                </div>
-                <div class="mb-4">
-                    <label for="brand_id" class="block text-gray-700 font-bold mb-2">Brand:</label>
-                    <select id="brand_id" name="brand_id" class="w-full p-2 border rounded-md" required>
-                        @foreach($brands as $brand)
-                            <option value="{{ $brand->id }}"
-                                {{ $brand->id == $inventory->brand_id ? 'selected' : '' }}>
-                                {{ $brand->brand }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="items_specs" class="block text-gray-700 font-bold mb-2">Item/Specs:</label>
-                    <input type="text" id="items_specs" name="items_specs" class="w-full p-2 border rounded-md"
-                        value="{{ $inventory->items_specs }}" required>
-                </div>
-                <div class="mb-4">
-                    <label for="unit_id" class="block text-gray-700 font-bold mb-2">Unit:</label>
-                    <select id="unit_id" name="unit_id" class="w-full p-2 border rounded-md" required>
-                        @foreach($units as $unit)
-                            <option value="{{ $unit->id }}"
-                                {{ $unit->id == $inventory->unit_id ? 'selected' : '' }}>
-                                {{ $unit->unit }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="mb-4">
-                    <label for="quantity" class="block text-gray-700 font-bold mb-2">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity" class="w-full p-2 border rounded-md"
-                        value="{{ $inventory->quantity }}" min="0" required>
-                </div>
-                <div class="mb-4">
-                    <label for="unit_price" class="block text-gray-700 font-bold mb-2">Unit Price:</label>
-                    <input type="number" id="unit_price" name="unit_price" class="w-full p-2 border rounded-md"
-                        value="{{ $inventory->unit_price }}" min="0" required>
-                </div>
-                <div class="mb-2">
-                    <label for="supplier_id" class="block text-gray-700 font-bold mb-2">Supplier:</label>
-                    <select id="supplier_id" name="supplier_id" class="w-full p-2 border rounded-md" required>
-                        @foreach($suppliers as $supplier)
-                            <option value="{{ $supplier->id }}"
-                                {{ $supplier->id == $inventory->supplier_id ? 'selected' : '' }}>
-                                {{ $supplier->supplier }}
-                            </option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="flex justify-end space-x-2">
-                    <button type="button" class="ml-auto rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex gap-2 my-auto"
-                        onclick="history.back()">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
-                        </svg>
-                        Back
-                    </button>
-                    <button type="submit" class="rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500
-                        transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex gap-2 my-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="size-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
-                        </svg>
-                        Update Item
-                    </button>
-                </div>
-            </form>
+
+        <!-- Main content -->
+        <div class="m-3 2xl:max-w-7xl 2xl:mx-auto mb-6">
+            <div class="mb-3">
+                @include('layouts.messageWithoutTimerForError')
+            </div>
+
+            <!-- Form -->
+            <div class="bg-white shadow rounded-lg">
+                <form method="POST" enctype="multipart/form-data" action="{{ route('inventory.stock.in.update', ['id' => $inventory->id]) }}" class="space-y-6 p-6">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $inventory->id }}">
+
+                    <!-- Item Image -->
+                    <div class="space-y-1">
+                        <label for="stock_image" class="block text-sm font-medium text-gray-700">Item Image</label>
+                        <div class="mt-1 flex items-center">
+                            <div class="flex-shrink-0 h-32 w-32 border rounded-lg overflow-hidden bg-gray-100">
+                                <img id="image_preview" src="{{ asset($inventory->stock_image) }}" class="h-full w-full object-cover {{ $inventory->stock_image ? '' : 'hidden' }}">
+                                <div id="image_placeholder" class="h-32 w-32 flex items-center justify-center text-gray-400 {{ $inventory->stock_image ? 'hidden' : '' }}">
+                                    <svg class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="ml-2">
+                                <div class="relative">
+                                    <input type="file" id="stock_image" name="stock_image" class="hidden" accept="image/*">
+                                    <label for="stock_image"
+                                        class="cursor-pointer bg-white py-2 px-3 border-2 border-slate-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        Choose Image
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                        <!-- Brand -->
+                        <div>
+                            <label for="brand_id" class="block text-sm font-medium text-gray-700">Brand</label>
+                            <div class="mt-1">
+                                <select id="brand_id" name="brand_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    @foreach($brands as $brand)
+                                        <option value="{{ $brand->id }}" {{ $brand->id == $inventory->brand_id ? 'selected' : '' }}>
+                                            {{ $brand->brand }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Item/Specs -->
+                        <div>
+                            <label for="items_specs" class="block text-sm font-medium text-gray-700">Item/Specs</label>
+                            <div class="mt-1">
+                                <input type="text" id="items_specs" name="items_specs" required
+                                    class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md"
+                                    value="{{ $inventory->items_specs }}">
+                            </div>
+                        </div>
+
+                        <!-- Unit -->
+                        <div>
+                            <label for="unit_id" class="block text-sm font-medium text-gray-700">Unit</label>
+                            <div class="mt-1">
+                                <select id="unit_id" name="unit_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    @foreach($units as $unit)
+                                        <option value="{{ $unit->id }}" {{ $unit->id == $inventory->unit_id ? 'selected' : '' }}>
+                                            {{ $unit->unit }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Quantity -->
+                        <div>
+                            <label for="quantity" class="block text-sm font-medium text-gray-700">Quantity</label>
+                            <div class="mt-1">
+                                <input type="number" id="quantity" name="quantity" required min="0"
+                                    class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md"
+                                    value="{{ $inventory->quantity }}">
+                            </div>
+                        </div>
+
+                        <!-- Unit Price -->
+                        <div>
+                            <label for="unit_price" class="block text-sm font-medium text-gray-700">Unit Price</label>
+                            <div class="mt-1">
+                                <input type="number" id="unit_price" name="unit_price" required min="0"
+                                    class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md"
+                                    value="{{ $inventory->unit_price }}">
+                            </div>
+                        </div>
+
+                        <!-- Supplier -->
+                        <div>
+                            <label for="supplier_id" class="block text-sm font-medium text-gray-700">Supplier</label>
+                            <div class="mt-1">
+                                <select id="supplier_id" name="supplier_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    @foreach($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}" {{ $supplier->id == $inventory->supplier_id ? 'selected' : '' }}>
+                                            {{ $supplier->supplier }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="flex justify-end space-x-3 pt-6 border-t">
+                        <button type="button" onclick="history.back()"
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                            </svg>
+                            Back
+                        </button>
+                        <button type="submit"
+                            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+                            </svg>
+                            Update Item
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
-<script src="{{ asset('js/chart.js') }}"></script>
-  
 <script>
+    // Image preview functionality
+    document.getElementById('stock_image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            const preview = document.getElementById('image_preview');
+            const placeholder = document.getElementById('image_placeholder');
+            
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            };
+            
+            reader.readAsDataURL(file);
+        }
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         // Get the current URL
         var currentUrl = window.location.href;
@@ -122,7 +190,6 @@
             });
         });
     });
-
 </script>
 
 @endsection
