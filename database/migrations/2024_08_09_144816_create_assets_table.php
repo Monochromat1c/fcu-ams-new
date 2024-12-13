@@ -47,6 +47,9 @@ return new class extends Migration
             $table->foreign('condition_id')->references('id')->on('conditions');
             $table->date('maintenance_start_date')->nullable();
             $table->date('maintenance_end_date')->nullable();
+            $table->string('assigned_to')->nullable();
+            $table->date('issued_date')->nullable();
+            $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

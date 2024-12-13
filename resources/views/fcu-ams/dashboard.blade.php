@@ -249,7 +249,8 @@
                                     @endif
                                     <div class="text-gray-700">
                                         <span class="font-medium text-gray-900">{{ $action['name'] }}</span>
-                                        <span class="text-gray-500">was {{ $action['action'] }}</span>
+                                        <span class="text-gray-500">was {{ $action['action'] }} by {{ $action['user'] }}</span>
+                                        
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-2">
@@ -267,6 +268,8 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
     </div>
 </div>
 
