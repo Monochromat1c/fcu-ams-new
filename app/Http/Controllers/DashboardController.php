@@ -176,102 +176,98 @@ class DashboardController extends Controller
     }
 
     private function getRecentActions($limit = 10)
-{
-    // Recent actions for assets
-    $assets = Asset::select('id', 'asset_tag_id as name', 'created_at', 
-                DB::raw("'Asset' as type"), DB::raw("'added' as action"))
-        ->unionAll(
-            Asset::select('id', 'asset_tag_id as name', 'updated_at as created_at', 
-                DB::raw("'Asset' as type"), DB::raw("'updated' as action"))
-                ->whereRaw('updated_at > created_at')
+    {
+        // Recent actions for assets
+        $assets = Asset::select(
+            'assets.id', 
+            'assets.asset_tag_id as name', 
+            'assets.created_at', 
+            DB::raw("'Asset' as type"), 
+            DB::raw("'added' as action"),
+            DB::raw("NULL as user_id"),
+            DB::raw("'System' as user_name")
         )
         ->unionAll(
             Asset::withTrashed()
                 ->whereNotNull('deleted_at')
-                ->select('id', 'asset_tag_id as name', 'deleted_at as created_at', 
-                    DB::raw("'Asset' as type"), DB::raw("'removed' as action"))
+                ->select(
+                    'assets.id', 
+                    'assets.asset_tag_id as name', 
+                    'assets.deleted_at as created_at', 
+                    DB::raw("'Asset' as type"), 
+                    DB::raw("'removed' as action"),
+                    DB::raw("NULL as user_id"),
+                    DB::raw("'System' as user_name")
+                )
         );
 
-    // Recent actions for inventory
-    $inventory = Inventory::select('id', 'items_specs as name', 'created_at', 
-                    DB::raw("'Inventory' as type"), DB::raw("'added' as action"))
-        ->unionAll(
-            Inventory::select('id', 'items_specs as name', 'updated_at as created_at', 
-                DB::raw("'Inventory' as type"), DB::raw("'updated' as action"))
-                ->whereRaw('updated_at > created_at')
+        // Recent actions for inventory
+        $inventory = Inventory::select(
+            'inventories.id', 
+            'inventories.items_specs as name', 
+            'inventories.created_at', 
+            DB::raw("'Inventory' as type"), 
+            DB::raw("'added' as action"),
+            DB::raw("NULL as user_id"),
+            DB::raw("'System' as user_name")
         )
         ->unionAll(
             Inventory::withTrashed()
                 ->whereNotNull('deleted_at')
-                ->select('id', 'items_specs as name', 'deleted_at as created_at', 
-                    DB::raw("'Inventory' as type"), DB::raw("'removed' as action"))
+                ->select(
+                    'inventories.id', 
+                    'inventories.items_specs as name', 
+                    'inventories.deleted_at as created_at', 
+                    DB::raw("'Inventory' as type"), 
+                    DB::raw("'removed' as action"),
+                    DB::raw("NULL as user_id"),
+                    DB::raw("'System' as user_name")
+                )
         );
 
-    // Combine both actions
-    $recentActions = $assets->union($inventory)
-        ->orderBy('created_at', 'desc')
-        ->limit($limit)
-        ->get();
+        // Get edit history for assets
+        $assetEditHistory = AssetEditHistory::select(
+            'asset_edit_histories.asset_id as id', 
+            DB::raw("(SELECT asset_tag_id FROM assets WHERE id = asset_edit_histories.asset_id) as name"),
+            'asset_edit_histories.created_at', 
+            DB::raw("'Asset' as type"), 
+            DB::raw("'edited' as action"),
+            'asset_edit_histories.user_id',
+            DB::raw("CONCAT(users.first_name, ' ', users.last_name) as user_name")
+        )
+        ->join('users', 'asset_edit_histories.user_id', '=', 'users.id');
 
-    // Get edit history for assets
-    $assetEditHistory = AssetEditHistory::select('created_at', 'user_id', 'changes', 'asset_id')
-        ->with('user')
-        ->orderBy('created_at', 'desc')
-        ->limit($limit);
+        // Get edit history for inventories
+        $inventoryEditHistory = InventoryEditHistory::select(
+            'inventory_edit_histories.inventory_id as id', 
+            DB::raw("(SELECT items_specs FROM inventories WHERE id = inventory_edit_histories.inventory_id) as name"),
+            'inventory_edit_histories.created_at', 
+            DB::raw("'Inventory' as type"), 
+            DB::raw("'edited' as action"),
+            'inventory_edit_histories.user_id',
+            DB::raw("CONCAT(users.first_name, ' ', users.last_name) as user_name")
+        )
+        ->join('users', 'inventory_edit_histories.user_id', '=', 'users.id');
 
-    // Get edit history for inventories
-    $inventoryEditHistory = InventoryEditHistory::select('created_at', 'user_id', 'changes', 'inventory_id')
-        ->with('user')
-        ->orderBy('created_at', 'desc')
-        ->limit($limit);
+        // Combine and sort actions
+        $recentActions = $assets->union($inventory)
+            ->union($assetEditHistory)
+            ->union($inventoryEditHistory)
+            ->orderBy('created_at', 'desc')
+            ->limit($limit)
+            ->get()
+            ->map(function ($action) {
+                return [
+                    'type' => $action->type,
+                    'name' => $action->name,
+                    'action' => $action->action,
+                    'date' => $action->created_at->diffForHumans(),
+                    'user' => $action->user_name,
+                ];
+            });
 
-    // Combine edit histories
-    $editHistories = $assetEditHistory->union($inventoryEditHistory)
-        ->orderBy('created_at', 'desc')
-        ->get();
-
-    // Combine recent actions and edit histories
-    $combinedActions = collect();
-
-    foreach ($recentActions as $action) {
-        $combinedActions->push([
-            'type' => $action->type,
-            'name' => $action->name,
-            'action' => $action->action,
-            'date' => $action->created_at->diffForHumans(),
-            'user' => 'System', // Default to 'System' for actions without user info
-        ]);
+        return $recentActions;
     }
-
-    foreach ($editHistories as $history) {
-        $combinedActions->push([
-            'type' => $history instanceof AssetEditHistory ? 'Asset' : 'Inventory',
-            'name' => $history->asset_id 
-                ? optional(Asset::find($history->asset_id))->asset_tag_id 
-                : optional(Inventory::find($history->inventory_id))->items_specs,
-            'action' => 'edited',
-            'date' => $history->created_at->diffForHumans(),
-            'user' => $history->user ? $history->user->first_name . ' ' . $history->user->last_name : 'System',
-        ]);
-    }
-
-    // Group by name and action to combine similar edits
-    $finalActions = $combinedActions->groupBy(function ($item) {
-        return $item['name'] . '|' . $item['action'];
-    })->map(function ($group) {
-        $first = $group->first();
-        return [
-            'type' => $first['type'],
-            'name' => $first['name'],
-            'action' => $first['action'],
-            'date' => $first['date'],
-            'user' => $first['user'],
-            'changes' => $group->pluck(' name')->implode(', '), // Combine changes
-        ];
-    })->values();
-
-    return $finalActions->take($limit);
-}
 
     private function getDepreciationTrends()
     {
