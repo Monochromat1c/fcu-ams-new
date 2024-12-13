@@ -72,6 +72,24 @@ class ReportController extends Controller
                 return $records->first();
             });
 
+            // Stock Out date filter
+            $stockOutStartDate = $request->input('stock_out_start_date', now()->startOfMonth()->toDateString());
+            $stockOutEndDate = $request->input('stock_out_end_date', now()->endOfMonth()->toDateString());
+            $stockOutStartDate = Carbon::parse($stockOutStartDate)->startOfDay();
+            $stockOutEndDate = Carbon::parse($stockOutEndDate)->endOfDay();
+           
+            // Stock Out date range display
+            $stockOutDateRangeDisplay = $this->formatDateRange($stockOutStartDate, $stockOutEndDate, 'stock out');
+            $stockOutRecords = StockOut::with('inventory', 'department')
+                ->whereBetween('stock_out_date', [$stockOutStartDate, $stockOutEndDate])
+                ->orderBy('stock_out_date', 'desc')
+                ->orderBy('created_at', 'desc')
+                ->get()
+                ->groupBy('stock_out_id')
+                ->map(function ($records) {
+                    return $records->first();
+                });
+ 
         $stockOutRecords = new LengthAwarePaginator(
             $stockOutRecords->forPage($request->page, 10),
             $stockOutRecords->count(),
@@ -115,7 +133,7 @@ class ReportController extends Controller
         );
 
         return view('fcu-ams/reports/reports', compact('lowStockInventories', 'stockOutRecords',
-        'assets', 'purchaseOrders', 'inventoriesForPrint', 'assetsDateRangeDisplay', 'poDateRangeDisplay'), [
+        'assets', 'purchaseOrders', 'inventoriesForPrint', 'assetsDateRangeDisplay', 'poDateRangeDisplay', 'stockOutDateRangeDisplay'), [
             'inventories' => $inventories,
             'startDate' => $startDate->toDateString(),
             'endDate' => $endDate->toDateString(),
@@ -123,7 +141,10 @@ class ReportController extends Controller
             'purchaseOrders' => $purchaseOrders,
             'poStartDate' => $poStartDate->toDateString(),
             'poEndDate' => $poEndDate->toDateString(),
-            'poDateRangeDisplay' => $poDateRangeDisplay
+            'poDateRangeDisplay' => $poDateRangeDisplay,
+            'stockOutStartDate' => $stockOutStartDate->toDateString(),
+            'stockOutEndDate' => $stockOutEndDate->toDateString(),
+            'stockOutDateRangeDisplay' => $stockOutDateRangeDisplay
         ]);
     }
 
