@@ -197,6 +197,22 @@ class ReportController extends Controller
         return $printService->printMonthlySupplierReport($inventories, $startDate, $endDate);
     }
 
+    public function printAssetsReport(Request $request, ReportPrintService $printService)
+    {
+        $startDate = $request->input('assets_start_date', now()->startOfMonth()->toDateString());
+        $endDate = $request->input('assets_end_date', now()->endOfMonth()->toDateString());
+        
+        $startDate = Carbon::parse($startDate)->startOfDay();
+        $endDate = Carbon::parse($endDate)->endOfDay();
+
+        $assets = Asset::with('supplier', 'brand')
+            ->whereBetween('purchase_date', [$startDate, $endDate])
+            ->orderBy('asset_tag_id', 'asc')
+            ->get();
+        
+        return $printService->printMonthlyAssetsReport($assets, $startDate, $endDate);
+    }
+
     private function getMonthlyInventories($month, $year)
     {
         $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();

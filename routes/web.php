@@ -95,6 +95,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/stock/out/{id}/details', 'stockOutDetails')->name('stock.out.details');
         Route::get('/purchase-order-details/{id}', 'purchaseOrderDetails')->name('purchase-order-details');
         Route::get('/reports/print', 'printReport')->name('reports.print');
+        Route::get('/reports/print-assets', 'printAssetsReport')->name('reports.print-assets');
     });
 
     Route::controller(ProfileController::class)->group(function () {

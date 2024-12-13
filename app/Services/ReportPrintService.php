@@ -26,4 +26,22 @@ class ReportPrintService
         $fileName = "supplier_report_" . $startDate->format('Y-m-d') . "_to_" . $endDate->format('Y-m-d') . ".pdf";
         return $pdf->download($fileName);
     }
+
+    public function printMonthlyAssetsReport($assets, $startDate, $endDate)
+    {
+        $startDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
+
+        $totalValue = $assets->sum('cost');
+
+        $pdf = PDF::loadView('reports.monthly-assets-pdf', [
+            'assets' => $assets,
+            'startDate' => $startDate->format('F j, Y'),
+            'endDate' => $endDate->format('F j, Y'),
+            'totalValue' => $totalValue
+        ]);
+
+        $fileName = "assets_report_" . $startDate->format('Y-m-d') . "_to_" . $endDate->format('Y-m-d') . ".pdf";
+        return $pdf->download($fileName);
+    }
 }
