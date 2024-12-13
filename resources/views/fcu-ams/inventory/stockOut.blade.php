@@ -85,7 +85,7 @@
                                     </div>
                                     <!-- Modal body -->
                                     <div class="p-6">
-                                        <div class="max-w-5xl mx-auto overflow-x-auto overflow-y-auto rounded-lg shadow">
+                                        <div class="max-w-5xl mx-auto overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-300">
                                             <div class="max-h-[60vh] overflow-y-auto">
                                                 <table class="min-w-full divide-y divide-gray-200">
                                                     <thead>
