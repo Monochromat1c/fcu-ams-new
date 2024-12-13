@@ -18,7 +18,7 @@
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
-    <div class="content min-h-screen bg-slate-100 col-span-5">
+    <div class="content min-h-screen bg-slate-200 col-span-5">
         <!-- Header Section -->
         <nav class="bg-white flex justify-between items-center py-4 px-6 m-3 shadow-lg rounded-lg">
             <div class="flex items-center space-x-2">

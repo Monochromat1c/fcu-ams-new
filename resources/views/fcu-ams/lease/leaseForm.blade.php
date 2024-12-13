@@ -3,7 +3,7 @@
 @section('content')
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
-    <div class="content min-h-screen bg-slate-100 col-span-5">
+    <div class="content min-h-screen bg-slate-200 col-span-5">
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="invisible flex gap-3 focus:outline-none" style="min-width:100px;">

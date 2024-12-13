@@ -5,7 +5,7 @@
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
-    <div class="content min-h-screen bg-slate-100 col-span-5">
+    <div class="content min-h-screen bg-slate-200 col-span-5">
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
             <a href=""
             onclick="window.history.back(); return false;"

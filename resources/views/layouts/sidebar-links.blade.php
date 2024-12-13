@@ -2,7 +2,7 @@
 @if(Auth::user()->role->role == 'Viewer')
 <a href="{{ route('asset.list') }}"
     class="block px-4 flex gap-1 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('asset/list') ? 'bg-slate-100' : '' }}">
+            {{ Request::is('asset/list') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd"
             d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z"
@@ -18,7 +18,7 @@
 @if(Auth::user()->role->role == 'Manager')
 <a href="{{ route('dashboard') }}"
     class="flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100
-    {{ Request::is('dashboard') ? 'bg-slate-100' : '' }}">
+    {{ Request::is('dashboard') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path
             d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
@@ -42,20 +42,20 @@
     <div x-show="open" class="pl-9">
         <a href="{{ route('asset.list') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('asset/list') ? 'bg-slate-100' : '' }}">Asset
+            {{ Request::is('asset/list') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Asset
             List</a>
         <a href="{{ route('asset.add') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('asset/add') ? 'bg-slate-100' : '' }}">Add
+            {{ Request::is('asset/add') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Add
             Asset</a>
         <!-- <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100">Dispose</a> -->
         <a href="{{ route('lease.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('lease') ? 'bg-slate-100' : '' }}">Lease</a>
+            {{ Request::is('lease') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Lease</a>
         <!-- <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100">Lease Return</a> -->
         <a href="{{ route('maintenance') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('maintenance') ? 'bg-slate-100' : '' }}">Maintenance</a>
+            {{ Request::is('maintenance') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Maintenance</a>
     </div>
 </div>
 <div class="relative" x-data="{ open: false }">
@@ -74,24 +74,24 @@
     <div x-show="open" class="pl-9">
         <a href="{{ route('inventory.list') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('inventory/list') ? 'bg-slate-100' : '' }}">Inventory
+            {{ Request::is('inventory/list') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Inventory
             List</a>
         <a href="{{ route('purchase.order.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('purchase/order/index') ? 'bg-slate-100' : '' }}">Purchase
+            {{ Request::is('purchase/order/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Purchase
             Order</a>
         <a href="{{ route('inventory.stock.in') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('inventory/stock/in') ? 'bg-slate-100' : '' }}">Stock
+            {{ Request::is('inventory/stock/in') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Stock
             In</a>
         <a href="{{ route('inventory.stock.out') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('inventory/stock/out') ? 'bg-slate-100' : '' }}">Stock
+            {{ Request::is('inventory/stock/out') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Stock
             Out</a>
     </div>
 </div>
 <a href="{{ route('alerts.index') }}"
-    class="border-top flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100 {{ Request::is('alerts') ? 'bg-slate-100' : '' }}">
+    class="border-top flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100 {{ Request::is('alerts') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
     </svg>
@@ -107,7 +107,7 @@
 </a>
 <a href="{{ route('reports.index') }}"
     class="border-top flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100
-    {{ Request::is('reports') ? 'bg-slate-100' : '' }}">
+    {{ Request::is('reports') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd"
             d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z"
@@ -151,30 +151,30 @@
     <div x-show="open" class="pl-9">
         <a href="{{ route('category.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('category/index') ? 'bg-slate-100' : '' }}">Categories</a>
+            {{ Request::is('category/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Categories</a>
         <a href="{{ route('condition.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('condition/index') ? 'bg-slate-100' : '' }}">Conditions</a>
+            {{ Request::is('condition/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Conditions</a>
         <a href="{{ route('department.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('department/index') ? 'bg-slate-100' : '' }}">Departments</a>
+            {{ Request::is('department/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Departments</a>
         <a href="{{ route('location.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('location/index') ? 'bg-slate-100' : '' }}">Locations</a>
+            {{ Request::is('location/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Locations</a>
         <a href="{{ route('site.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('site/index') ? 'bg-slate-100' : '' }}">Sites</a>
+            {{ Request::is('site/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Sites</a>
         <a href="{{ route('status.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('status/index') ? 'bg-slate-100' : '' }}">Statuses</a>
+            {{ Request::is('status/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Statuses</a>
         <a href="{{ route('supplier.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('supplier/index') ? 'bg-slate-100' : '' }}">Suppliers</a>
+            {{ Request::is('supplier/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Suppliers</a>
     </div>
 </div>
 <!-- <a href="{{ route('user.index') }}"
     class="flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100
-    {{ Request::is('user/index') ? 'bg-slate-100' : '' }}">
+    {{ Request::is('user/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path
             d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
@@ -197,7 +197,7 @@
     </div>
 </div> -->
 <!-- <a href="{{ route('profile.index') }}"
-    class="border-top border-bottom flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100 {{ Request::is('user/profile') ? 'bg-slate-100' : '' }}">
+    class="border-top border-bottom flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100 {{ Request::is('user/profile') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
     </svg>
@@ -211,7 +211,7 @@
 @if(Auth::user()->role->role == 'Administrator')
 <a href="{{ route('dashboard') }}"
     class="flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100
-    {{ Request::is('dashboard') ? 'bg-slate-100' : '' }}">
+    {{ Request::is('dashboard') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path
             d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
@@ -235,21 +235,21 @@
     <div x-show="open" class="pl-9">
         <a href="{{ route('asset.list') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('asset/list') ? 'bg-slate-100' : '' }}">Asset
+            {{ Request::is('asset/list') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Asset
             List</a>
         <a href="{{ route('asset.add') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('asset/add') ? 'bg-slate-100' : '' }}">Add
+            {{ Request::is('asset/add') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Add
             Asset</a>
         <!-- <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100">Dispose</a> -->
         <a href="{{ route('lease.index') }}"
         class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-        {{ Request::is('lease') ? 'bg-slate-100' : '' }}"
+        {{ Request::is('lease') ? 'bg-slate-200 hover:bg-slate-200' : '' }}"
         onclick="window.location.reload()">Lease</a>
         <!-- <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100">Lease Return</a> -->
         <a href="{{ route('maintenance') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('maintenance') ? 'bg-slate-100' : '' }}">Maintenance</a>
+            {{ Request::is('maintenance') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Maintenance</a>
     </div>
 </div>
 <div class="relative" x-data="{ open: false }">
@@ -268,24 +268,24 @@
     <div x-show="open" class="pl-9">
         <a href="{{ route('inventory.list') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('inventory/list') ? 'bg-slate-100' : '' }}">Inventory
+            {{ Request::is('inventory/list') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Inventory
             List</a>
         <a href="{{ route('purchase.order.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('purchase/order/index') ? 'bg-slate-100' : '' }}">Purchase
+            {{ Request::is('purchase/order/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Purchase
             Order</a>
         <a href="{{ route('inventory.stock.in') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('inventory/stock/in') ? 'bg-slate-100' : '' }}">Stock
+            {{ Request::is('inventory/stock/in') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Stock
             In</a>
         <a href="{{ route('inventory.stock.out') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('inventory/stock/out') ? 'bg-slate-100' : '' }}">Stock
+            {{ Request::is('inventory/stock/out') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Stock
             Out</a>
     </div>
 </div>
 <a href="{{ route('alerts.index') }}"
-    class="border-top flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100 {{ Request::is('alerts') ? 'bg-slate-100' : '' }}">
+    class="border-top flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100 {{ Request::is('alerts') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path d="M10 2a6 6 0 00-6 6v3.586l-.707.707A1 1 0 004 14h12a1 1 0 00.707-1.707L16 11.586V8a6 6 0 00-6-6zM10 18a3 3 0 01-3-3h6a3 3 0 01-3 3z" />
     </svg>
@@ -301,7 +301,7 @@
 </a>
 <a href="{{ route('reports.index') }}"
     class="border-top flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100
-    {{ Request::is('reports') ? 'bg-slate-100' : '' }}">
+    {{ Request::is('reports') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd"
             d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm2 10a1 1 0 10-2 0v3a1 1 0 102 0v-3zm2-3a1 1 0 011 1v5a1 1 0 11-2 0v-5a1 1 0 011-1zm4-1a1 1 0 10-2 0v7a1 1 0 102 0V8z"
@@ -345,30 +345,30 @@
     <div x-show="open" class="pl-9">
         <a href="{{ route('category.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('category/index') ? 'bg-slate-100' : '' }}">Categories</a>
+            {{ Request::is('category/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Categories</a>
         <a href="{{ route('condition.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('condition/index') ? 'bg-slate-100' : '' }}">Conditions</a>
+            {{ Request::is('condition/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Conditions</a>
         <a href="{{ route('department.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('department/index') ? 'bg-slate-100' : '' }}">Departments</a>
+            {{ Request::is('department/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Departments</a>
         <a href="{{ route('location.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('location/index') ? 'bg-slate-100' : '' }}">Locations</a>
+            {{ Request::is('location/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Locations</a>
         <a href="{{ route('site.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('site/index') ? 'bg-slate-100' : '' }}">Sites</a>
+            {{ Request::is('site/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Sites</a>
         <a href="{{ route('status.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('status/index') ? 'bg-slate-100' : '' }}">Statuses</a>
+            {{ Request::is('status/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Statuses</a>
         <a href="{{ route('supplier.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('supplier/index') ? 'bg-slate-100' : '' }}">Suppliers</a>
+            {{ Request::is('supplier/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Suppliers</a>
     </div>
 </div>
 <a href="{{ route('user.index') }}"
     class="flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100
-    {{ Request::is('user/index') ? 'bg-slate-100' : '' }}">
+    {{ Request::is('user/index') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path
             d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z" />
@@ -391,7 +391,7 @@
     </div>
 </div> -->
 <!-- <a href="{{ route('profile.index') }}"
-    class="border-top border-bottom flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100 {{ Request::is('user/profile') ? 'bg-slate-100' : '' }}">
+    class="border-top border-bottom flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100 {{ Request::is('user/profile') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
         <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
     </svg>

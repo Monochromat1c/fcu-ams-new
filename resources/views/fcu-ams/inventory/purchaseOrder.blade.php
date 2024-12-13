@@ -4,7 +4,7 @@
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
-    <div class="content min-h-screen bg-slate-100 col-span-5">
+    <div class="content min-h-screen bg-slate-200 col-span-5">
     <div class="bg-white m-3 shadow-md rounded-md 2xl:max-w-7xl 2xl:mx-auto">
             <div class="px-4 sm:px-6 lg:px-8 py-6">
                 <div class="flex justify-between">

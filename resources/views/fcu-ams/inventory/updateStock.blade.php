@@ -4,7 +4,7 @@
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
-    <div class="content min-h-screen bg-slate-100 col-span-5">
+    <div class="content min-h-screen bg-slate-200 col-span-5">
         <nav class="m-3 mt-6">
             <h1 class="text-center text-4xl">Edit the Item</h1>
         </nav>

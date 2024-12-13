@@ -5,7 +5,7 @@
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
-    <div class="content min-h-screen bg-slate-100 col-span-5">
+    <div class="content min-h-screen bg-slate-200 col-span-5">
         <!-- Enhanced Navigation Bar -->
         <nav class="bg-white flex justify-between items-center py-4 px-6 m-4 shadow-md rounded-lg border border-gray-100">
             <a href="{{ route('lease.index') }}" class="flex items-center text-gray-600 hover:text-gray-900">

@@ -4,7 +4,7 @@
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
-    <div class="content min-h-screen bg-slate-100 col-span-5">
+    <div class="content min-h-screen bg-slate-200 col-span-5">
     <nav class="bg-white flex justify-center py-4 px-6 m-3 shadow-lg rounded-lg">
             <h1 class="my-auto text-3xl font-semibold text-center text-gray-800">Profile</h1>
         </nav>
