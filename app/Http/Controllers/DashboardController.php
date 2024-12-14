@@ -178,52 +178,56 @@ class DashboardController extends Controller
     private function getRecentActions($limit = 10)
     {
         // Recent actions for assets
-        $assets = Asset::select(
+        $assets = Asset::withTrashed()
+            ->select(
+                'assets.id', 
+                'assets.asset_tag_id as name', 
+                'assets.deleted_at as created_at', 
+                DB::raw("'Asset' as type"), 
+                DB::raw("'removed' as action"),
+                'deletedByUser.id as user_id',
+                DB::raw("COALESCE(CONCAT(deletedByUser.first_name, ' ', deletedByUser.last_name), 'System') as user_name")
+            )
+            ->leftJoin('users as deletedByUser', 'assets.deleted_by', '=', 'deletedByUser.id')
+            ->whereNotNull('deleted_at');
+
+        // Recent actions for inventory
+        $inventory = Inventory::withTrashed()
+            ->select(
+                'inventories.id', 
+                'inventories.items_specs as name', 
+                'inventories.deleted_at as created_at', 
+                DB::raw("'Inventory' as type"), 
+                DB::raw("'removed' as action"),
+                'deletedByUser.id as user_id',
+                DB::raw("COALESCE(CONCAT(deletedByUser.first_name, ' ', deletedByUser.last_name), 'System') as user_name")
+            )
+            ->leftJoin('users as deletedByUser', 'inventories.deleted_by', '=', 'deletedByUser.id')
+            ->whereNotNull('deleted_at');
+
+        // Recent actions for asset additions
+        $assetAdditions = Asset::select(
             'assets.id', 
             'assets.asset_tag_id as name', 
             'assets.created_at', 
             DB::raw("'Asset' as type"), 
             DB::raw("'added' as action"),
-            DB::raw("NULL as user_id"),
-            DB::raw("'System' as user_name")
+            'createdByUser.id as user_id',
+            DB::raw("COALESCE(CONCAT(createdByUser.first_name, ' ', createdByUser.last_name), 'System') as user_name")
         )
-        ->unionAll(
-            Asset::withTrashed()
-                ->whereNotNull('deleted_at')
-                ->select(
-                    'assets.id', 
-                    'assets.asset_tag_id as name', 
-                    'assets.deleted_at as created_at', 
-                    DB::raw("'Asset' as type"), 
-                    DB::raw("'removed' as action"),
-                    DB::raw("NULL as user_id"),
-                    DB::raw("'System' as user_name")
-                )
-        );
+        ->leftJoin('users as createdByUser', 'assets.created_by', '=', 'createdByUser.id');
 
-        // Recent actions for inventory
-        $inventory = Inventory::select(
+        // Recent actions for inventory additions
+        $inventoryAdditions = Inventory::select(
             'inventories.id', 
             'inventories.items_specs as name', 
             'inventories.created_at', 
             DB::raw("'Inventory' as type"), 
             DB::raw("'added' as action"),
-            DB::raw("NULL as user_id"),
-            DB::raw("'System' as user_name")
+            'createdByUser.id as user_id',
+            DB::raw("COALESCE(CONCAT(createdByUser.first_name, ' ', createdByUser.last_name), 'System') as user_name")
         )
-        ->unionAll(
-            Inventory::withTrashed()
-                ->whereNotNull('deleted_at')
-                ->select(
-                    'inventories.id', 
-                    'inventories.items_specs as name', 
-                    'inventories.deleted_at as created_at', 
-                    DB::raw("'Inventory' as type"), 
-                    DB::raw("'removed' as action"),
-                    DB::raw("NULL as user_id"),
-                    DB::raw("'System' as user_name")
-                )
-        );
+        ->leftJoin('users as createdByUser', 'inventories.created_by', '=', 'createdByUser.id');
 
         // Get edit history for assets
         $assetEditHistory = AssetEditHistory::select(
@@ -232,10 +236,10 @@ class DashboardController extends Controller
             'asset_edit_histories.created_at', 
             DB::raw("'Asset' as type"), 
             DB::raw("'edited' as action"),
-            'asset_edit_histories.user_id',
-            DB::raw("CONCAT(users.first_name, ' ', users.last_name) as user_name")
+            'editUser.id as user_id',
+            DB::raw("CONCAT(editUser.first_name, ' ', editUser.last_name) as user_name")
         )
-        ->join('users', 'asset_edit_histories.user_id', '=', 'users.id');
+        ->join('users as editUser', 'asset_edit_histories.user_id', '=', 'editUser.id');
 
         // Get edit history for inventories
         $inventoryEditHistory = InventoryEditHistory::select(
@@ -244,13 +248,16 @@ class DashboardController extends Controller
             'inventory_edit_histories.created_at', 
             DB::raw("'Inventory' as type"), 
             DB::raw("'edited' as action"),
-            'inventory_edit_histories.user_id',
-            DB::raw("CONCAT(users.first_name, ' ', users.last_name) as user_name")
+            'editUser.id as user_id',
+            DB::raw("CONCAT(editUser.first_name, ' ', editUser.last_name) as user_name")
         )
-        ->join('users', 'inventory_edit_histories.user_id', '=', 'users.id');
+        ->join('users as editUser', 'inventory_edit_histories.user_id', '=', 'editUser.id');
 
         // Combine and sort actions
-        $recentActions = $assets->union($inventory)
+        $recentActions = $assets
+            ->union($inventory)
+            ->union($assetAdditions)
+            ->union($inventoryAdditions)
             ->union($assetEditHistory)
             ->union($inventoryEditHistory)
             ->orderBy('created_at', 'desc')

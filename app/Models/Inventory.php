@@ -21,6 +21,8 @@ class Inventory extends Model
         'deleted_at',
         'department_id',
         'stock_out_date',
+        'created_by',
+        'deleted_by',
     ];
 
     public function supplier()
@@ -63,6 +65,16 @@ class Inventory extends Model
 
         static::creating(function ($supply) {
             $supply->unique_tag = $supply->generateUniqueTag();
+        });
+
+        // Add the new methods for tracking created_by and deleted_by
+        static::creating(function ($inventory) {
+            $inventory->created_by = auth()->id(); 
+        });
+
+        static::deleting(function ($inventory) {
+            $inventory->deleted_by = auth()->id(); 
+            $inventory->save();
         });
     }
 }

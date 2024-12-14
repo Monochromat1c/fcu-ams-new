@@ -232,7 +232,8 @@ class AssetController extends Controller
             'asset_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'assigned_to' => 'nullable|string|max:255',
             'issued_date' => 'nullable|date',
-            'notes' => 'nullable|string|max:1000'
+            'notes' => 'nullable|string|max:1000',
+            'created_by' => 'nullable|integer|exists:users,id'
         ]);
 
         $asset = new Asset();
@@ -253,6 +254,7 @@ class AssetController extends Controller
         $asset->assigned_to = $validatedData['assigned_to'];
         $asset->issued_date = $validatedData['issued_date'];
         $asset->notes = $validatedData['notes'];
+        $asset->created_by = auth()->user()->id;
 
         if ($request->hasFile('asset_image')) {
             $imageName = time().'.'.$request->asset_image->extension();
@@ -360,18 +362,13 @@ class AssetController extends Controller
     {
         $asset = Asset::findOrFail($id);
 
-        $asset = Asset::find($id);
-        if ($asset) {
-            try {
-                $asset->delete();
-                return redirect()->back()->with('success', 'Asset deleted successfully!');
-            } catch (\Illuminate\Database\QueryException $e) {
-                return redirect()->back()->withErrors(['error' => 'Cannot delete asset because it is
-                associated with other data.']);
-            }
-        } else {
-            return redirect()->back()->withErrors(['error' => 'Asset not found']);
-        }
+        // Explicitly set deleted_by before deleting
+        $asset->deleted_by = auth()->user()->id;
+        $asset->save();
+
+        $asset->delete();
+
+        return redirect()->back()->with('success', 'Asset deleted successfully!');
     }
 
     public function maintenance()

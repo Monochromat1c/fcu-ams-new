@@ -30,7 +30,10 @@ class Asset extends Model
         'condition_id',
         'assigned_to',
         'issued_date',
-        'notes'
+        'notes',
+        'created_by',
+        'deleted_by',
+        'status_id'
     ];
 
     public function supplier()
@@ -97,4 +100,29 @@ class Asset extends Model
         $this->save();
     }
 
+    // Optional: Method to restore a soft-deleted asset
+    public function restore()
+    {
+        $this->deleted_at = null;
+        $this->deleted_by = null;
+        $this->save();
+    }
+
+    // In Asset model
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($asset) {
+            if (empty($asset->created_by) && auth()->check()) {
+                $asset->created_by = auth()->id();
+            }
+        });
+
+        static::deleting(function ($asset) {
+            if (empty($asset->deleted_by) && auth()->check()) {
+                $asset->deleted_by = auth()->id();
+            }
+        });
+    }
 }
