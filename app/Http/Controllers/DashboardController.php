@@ -177,8 +177,20 @@ class DashboardController extends Controller
 
     private function getRecentActions($limit = 10)
     {
-        // Recent actions for assets
-        $assets = Asset::withTrashed()
+        // Recent actions for asset additions
+        $assetAdditions = Asset::withTrashed()->select(
+            'assets.id', 
+            'assets.asset_tag_id as name', 
+            'assets.created_at', 
+            DB::raw("'Asset' as type"), 
+            DB::raw("'added' as action"),
+            'createdByUser.id as user_id',
+            DB::raw("COALESCE(CONCAT(createdByUser.first_name, ' ', createdByUser.last_name), 'System') as user_name")
+        )
+        ->leftJoin('users as createdByUser', 'assets.created_by', '=', 'createdByUser.id');
+
+        // Recent actions for asset deletions
+        $assetDeletions = Asset::withTrashed()
             ->select(
                 'assets.id', 
                 'assets.asset_tag_id as name', 
@@ -191,8 +203,20 @@ class DashboardController extends Controller
             ->leftJoin('users as deletedByUser', 'assets.deleted_by', '=', 'deletedByUser.id')
             ->whereNotNull('deleted_at');
 
-        // Recent actions for inventory
-        $inventory = Inventory::withTrashed()
+        // Recent actions for inventory additions
+        $inventoryAdditions = Inventory::withTrashed()->select(
+            'inventories.id', 
+            'inventories.items_specs as name', 
+            'inventories.created_at', 
+            DB::raw("'Inventory' as type"), 
+            DB::raw("'added' as action"),
+            'createdByUser.id as user_id',
+            DB::raw("COALESCE(CONCAT(createdByUser.first_name, ' ', createdByUser.last_name), 'System') as user_name")
+        )
+        ->leftJoin('users as createdByUser', 'inventories.created_by', '=', 'createdByUser.id');
+
+        // Recent actions for inventory deletions
+        $inventoryDeletions = Inventory::withTrashed()
             ->select(
                 'inventories.id', 
                 'inventories.items_specs as name', 
@@ -204,30 +228,6 @@ class DashboardController extends Controller
             )
             ->leftJoin('users as deletedByUser', 'inventories.deleted_by', '=', 'deletedByUser.id')
             ->whereNotNull('deleted_at');
-
-        // Recent actions for asset additions
-        $assetAdditions = Asset::select(
-            'assets.id', 
-            'assets.asset_tag_id as name', 
-            'assets.created_at', 
-            DB::raw("'Asset' as type"), 
-            DB::raw("'added' as action"),
-            'createdByUser.id as user_id',
-            DB::raw("COALESCE(CONCAT(createdByUser.first_name, ' ', createdByUser.last_name), 'System') as user_name")
-        )
-        ->leftJoin('users as createdByUser', 'assets.created_by', '=', 'createdByUser.id');
-
-        // Recent actions for inventory additions
-        $inventoryAdditions = Inventory::select(
-            'inventories.id', 
-            'inventories.items_specs as name', 
-            'inventories.created_at', 
-            DB::raw("'Inventory' as type"), 
-            DB::raw("'added' as action"),
-            'createdByUser.id as user_id',
-            DB::raw("COALESCE(CONCAT(createdByUser.first_name, ' ', createdByUser.last_name), 'System') as user_name")
-        )
-        ->leftJoin('users as createdByUser', 'inventories.created_by', '=', 'createdByUser.id');
 
         // Get edit history for assets
         $assetEditHistory = AssetEditHistory::select(
@@ -254,10 +254,10 @@ class DashboardController extends Controller
         ->join('users as editUser', 'inventory_edit_histories.user_id', '=', 'editUser.id');
 
         // Combine and sort actions
-        $recentActions = $assets
-            ->union($inventory)
-            ->union($assetAdditions)
+        $recentActions = $assetAdditions
+            ->union($assetDeletions)
             ->union($inventoryAdditions)
+            ->union($inventoryDeletions)
             ->union($assetEditHistory)
             ->union($inventoryEditHistory)
             ->orderBy('created_at', 'desc')
