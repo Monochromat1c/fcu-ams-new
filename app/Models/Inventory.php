@@ -63,18 +63,20 @@ class Inventory extends Model
     {
         parent::boot();
 
-        static::creating(function ($supply) {
-            $supply->unique_tag = $supply->generateUniqueTag();
+        static::creating(function ($inventory) {
+            $inventory->unique_tag = $inventory->generateUniqueTag();
         });
 
-        // Add the new methods for tracking created_by and deleted_by
         static::creating(function ($inventory) {
-            $inventory->created_by = auth()->id(); 
+            if (empty($inventory->created_by) && auth()->check()) {
+                $inventory->created_by = auth()->id();
+            }
         });
 
         static::deleting(function ($inventory) {
-            $inventory->deleted_by = auth()->id(); 
-            $inventory->save();
+            if (empty($inventory->deleted_by) && auth()->check()) {
+                $inventory->deleted_by = auth()->id();
+            }
         });
     }
 }

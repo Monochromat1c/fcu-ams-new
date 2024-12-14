@@ -175,7 +175,7 @@ class DashboardController extends Controller
         ));
     }
 
-    private function getRecentActions($limit = 10)
+    private function getRecentActions($limit = 6)
     {
         // Recent actions for asset additions
         $assetAdditions = Asset::withTrashed()->select(

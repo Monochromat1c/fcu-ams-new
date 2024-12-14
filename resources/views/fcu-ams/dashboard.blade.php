@@ -144,7 +144,7 @@
                 </div>
             </div>
         </nav>
-        <div class="m-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="m-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             <a href="{{ route('asset.list') }}" class="dashboard-card">
                 <div class="p-6">
                     <div class="flex align-items-center mb-3">
@@ -198,19 +198,17 @@
                     <p class="text-3xl font-bold text-gray-900">₱{{ number_format($totalInventoryValue, 2) }}</p>
                 </div>
             </div>
-        </div>
-        <div class="m-3 grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="chart-container">
+            <div class="chart-container col-span-2">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Asset Value Distribution</h3>
                 <canvas id="assetValueDistributionChart"></canvas>
                 <div id="assetValueLegend" class="mt-4"></div>
             </div>
-            <div class="chart-container">
+            <div class="chart-container col-span-2">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Inventory Value Distribution</h3>
                 <canvas id="inventoryValueDistributionChart"></canvas>
                 <div id="inventoryValueLegend" class="mt-4"></div>
             </div>
-            <div class="chart-container col-span-2">
+            <div class="chart-container col-span-4">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-semibold text-gray-800">Monthly Asset Acquisition</h3>
                     <form method="GET" action="{{ route('dashboard') }}" class="flex items-center">
@@ -227,11 +225,9 @@
                         </select>
                     </form>
                 </div>
-                <canvas id="assetAcquisitionChart" class="mb-2"></canvas>
+                <canvas id="assetAcquisitionChart" class=""></canvas>
             </div>
-        </div>
-        <div class="m-3">
-            <div class="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+            <div class="col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
                 <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
                     <h3 class="text-xl font-bold text-gray-800 tracking-tight">Recent Actions</h3>
                     <span class="text-sm text-gray-500">Recent activities</span>
@@ -294,6 +290,14 @@
                             </div>
                         </div>
                     @endforeach
+                </div>
+            </div>
+            <div class="col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                    <h3 class="text-xl font-bold text-gray-800 tracking-tight">Recent Requests</h3>
+                </div>
+                <div class="divide-y divide-gray-100">
+                    
                 </div>
             </div>
         </div>

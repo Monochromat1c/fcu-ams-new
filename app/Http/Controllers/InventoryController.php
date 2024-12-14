@@ -147,6 +147,7 @@ class InventoryController extends Controller
             'unit_price' => 'required|numeric',
             'supplier_id' => 'required|integer|exists:suppliers,id',
             'stock_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'created_by' => 'nullable|integer|exists:users,id'
         ]);
 
         $existingInventory = Inventory::where('items_specs', $validatedData['items_specs'])
@@ -168,6 +169,7 @@ class InventoryController extends Controller
             $inventory->quantity = $validatedData['quantity'];
             $inventory->unit_price = $validatedData['unit_price'];
             $inventory->supplier_id = $validatedData['supplier_id'];
+            $inventory->created_by = auth()->user()->id;
 
             if ($request->hasFile('stock_image')) {
                 $imageName = time().'.'.$request->stock_image->extension();
@@ -277,18 +279,13 @@ class InventoryController extends Controller
     {
         $inventory = Inventory::findOrFail($id);
 
-        $inventory = Inventory::find($id);
-        if ($inventory) {
-            try {
-                $inventory->delete();
-                return redirect()->back()->with('success', 'Inventory deleted successfully!');
-            } catch (\Illuminate\Database\QueryException $e) {
-                return redirect()->back()->withErrors(['error' => 'Cannot delete inventory because it is
-                associated with other data.']);
-            }
-        } else {
-            return redirect()->back()->withErrors(['error' => 'Inventory not found']);
-        }
+        // Explicitly set deleted_by before deleting
+        $inventory->deleted_by = auth()->user()->id;
+        $inventory->save();
+
+        $inventory->delete();
+
+        return redirect()->back()->with('success', 'Asset deleted successfully!');
     }
 
     public function createStockOut()
