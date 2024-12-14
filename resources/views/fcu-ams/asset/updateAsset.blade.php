@@ -9,7 +9,7 @@
         <div class="bg-white m-3 shadow-md rounded-md 2xl:max-w-7xl 2xl:mx-auto">
             <div class="px-4 sm:px-6 lg:px-8 py-6">
                 <div class="flex justify-between">
-                    <a href="" onclick="window.history.back(); return false;"
+                    <a href="{{ route('asset.list') }}"
                         class="mr-4 hover:bg-gray-100 my-auto p-2 rounded-full transition">
                         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
@@ -18,7 +18,7 @@
                         </svg>
                     </a>
                     <h1 class="text-2xl font-semibold text-gray-900">Update Asset</h1>
-                    <a href="" onclick="window.history.back(); return false;"
+                    <a href="{{ route('asset.list') }}"
                         class="mr-4 invisible hover:bg-gray-100 my-auto p-2 rounded-full transition">
                         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
@@ -405,7 +405,7 @@
 
                     <!-- Form Actions -->
                     <div class="flex justify-end space-x-3 pt-6 border-t">
-                        <a href="" onclick="window.history.back(); return false;"
+                        <a href="{{ route('asset.list') }}"
                             class="inline-flex justify-center py-2 px-4 border border-2 bg-slate-50 border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                             Cancel
                         </a>

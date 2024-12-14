@@ -91,7 +91,7 @@
                             <div class="w-16 h-16 rounded-lg overflow-hidden bg-gray-100">
                                 @if($inventory->stock_image)
                                     <img src="{{ asset($inventory->stock_image) }}" alt="Inventory Image" 
-                                        class="w-full h-full object-contain">
+                                        class="w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 

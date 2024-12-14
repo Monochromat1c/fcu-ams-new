@@ -230,7 +230,6 @@
             <div class="col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
                 <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
                     <h3 class="text-xl font-bold text-gray-800 tracking-tight">Recent Actions</h3>
-                    <span class="text-sm text-gray-500">Recent activities</span>
                 </div>
                 <div class="divide-y divide-gray-100">
                     @foreach($recentActions as $action)
