@@ -11,6 +11,7 @@ use App\Models\Supplier;
 use App\Models\Category;
 use App\Models\AssetEditHistory;
 use App\Models\InventoryEditHistory;
+use App\Models\SupplyRequest;
 use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
@@ -21,6 +22,12 @@ class DashboardController extends Controller
         $totalAssetValue = Asset::sum('cost');
         $totalInventoryStocks = Inventory::count();
         $totalInventoryValue = Inventory::sum(DB::raw('unit_price * quantity'));
+
+        // Get recent supply requests
+        $recentRequests = SupplyRequest::with(['inventory.brand', 'department'])
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
 
         $mostAcquiredCategory = Asset::select('category_id', DB::raw('COUNT(*) as count'))
             ->groupBy('category_id')
@@ -171,7 +178,10 @@ class DashboardController extends Controller
             'depreciationTrends',
             'assetValueDistribution',
             'inventoryValueDistribution',
-            'assetAcquisition', 'availableYears', 'selectedYear',
+            'assetAcquisition', 
+            'availableYears', 
+            'selectedYear',
+            'recentRequests'
         ));
     }
 

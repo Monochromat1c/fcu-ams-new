@@ -239,7 +239,7 @@
                                     @if($action['type'] === 'Asset')
                                         @if($action['action'] === 'added')
                                             <svg xmlns="http://www.w3.org/2000/svg" class="size-6 size text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0Z" />
                                             </svg>
                                         @elseif($action['action'] === 'removed')
                                             <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -253,7 +253,7 @@
                                     @elseif($action['type'] === 'Inventory')
                                         @if($action['action'] === 'added')
                                             <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2m0 0h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
                                             </svg>
                                         @elseif($action['action'] === 'removed')
                                             <svg xmlns="http://www.w3.org/2000/svg" class="size-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -296,12 +296,40 @@
                     <h3 class="text-xl font-bold text-gray-800 tracking-tight">Recent Requests</h3>
                 </div>
                 <div class="divide-y divide-gray-100">
-                    
+                    @forelse($recentRequests as $request)
+                        <div class="px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
+                            <div class="flex justify-between items-center">
+                                <div class="flex-1">
+                                    <p class="text-sm font-medium text-gray-900">
+                                        {{ $request->requester }}
+                                    </p>
+                                    <p class="text-sm text-gray-500">
+                                        Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
+                                        <a href="{{ route('inventory.supply-request.details', ['request_id' => $request->request_id]) }}" 
+                                           class="text-blue-600 hover:text-blue-800 text-xs ml-1">(View Items)</a>
+                                    </p>
+                                    <p class="text-xs text-gray-400">
+                                        {{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <span class="px-3 py-1 text-xs font-medium rounded-full
+                                        {{ $request->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                           ($request->status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                           'bg-red-100 text-red-800') }}">
+                                        {{ ucfirst($request->status) }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    @empty
+                        <div class="px-6 py-4">
+                            <p class="text-sm text-gray-500 text-center">No recent requests</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </div>
-    </div>
-</div>
     </div>
 </div>
 

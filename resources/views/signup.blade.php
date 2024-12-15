@@ -32,7 +32,7 @@
                     @include('layouts.messageWithoutTimerForError')
 
                     <!-- Profile Picture Upload -->
-                    <div class="mb-4">
+                    <!-- <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-2">Profile Picture</label>
                         <div class="flex items-center justify-center w-full">
                             <label
@@ -50,29 +50,29 @@
                                 <input type="file" class="hidden" name="profile_picture" id="profile_picture" />
                             </label>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- Name Inputs -->
                     <div class="grid md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700">First Name</label>
                             <input type="text" name="first_name" required
-                                class="mt-1 block px-4 py-2 border-2 border-gray-200 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
+                                class="mt-1 block px-4 py-2 border-2 w-full rounded-md border-slate-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 bg-slate-50">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Middle Name</label>
                             <input type="text" name="middle_name"
-                                class="mt-1 block px-4 py-2 border-2 border-gray-200 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
+                                class="mt-1 block px-4 py-2 border-2 w-full rounded-md border-slate-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 bg-slate-50">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Last Name</label>
                             <input type="text" name="last_name" required
-                                class="mt-1 block px-4 py-2 border-2 border-gray-200 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
+                                class="mt-1 block px-4 py-2 border-2 w-full rounded-md border-slate-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 bg-slate-50">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700">Contact Number</label>
                             <input type="text" name="contact_number" required
-                                class="mt-1 block px-4 py-2 border-2 border-gray-200 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
+                                class="mt-1 block px-4 py-2 border-2 w-full rounded-md border-slate-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 bg-slate-50">
                         </div>
                     </div>
 
@@ -80,31 +80,39 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700">Address</label>
                         <input type="text" name="address" required
-                            class="mt-1 block px-4 py-2 border-2 border-gray-200 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
+                            class="mt-1 block px-4 py-2 border-2 w-full rounded-md border-slate-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 bg-slate-50">
                     </div>
 
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Department</label>
+                        <select name="department_id" required class="mt-1 block px-4 py-2 border-2 w-full rounded-md border-slate-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 bg-slate-50">
+                            <option value="">Select Department</option>
+                            @foreach(App\Models\Department::orderBy('department', 'asc')->get() as $department)
+                                <option value="{{ $department->id }}">{{ $department->department }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
                     <!-- Account Credentials -->
-                    <div class="grid md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Email</label>
-                            <input type="email" name="email" required
-                                class="mt-1 block px-4 py-2 border-2 border-gray-200 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Username</label>
-                            <input type="text" name="username" required
-                                class="mt-1 block px-4 py-2 border-2 border-gray-200 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Password</label>
-                            <input type="password" name="password" required
-                                class="mt-1 block px-4 py-2 border-2 border-gray-200 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
-                            <input type="password" name="password_confirmation" required
-                                class="mt-1 block px-4 py-2 border-2 border-gray-200 w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200">
-                        </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Email</label>
+                        <input type="email" name="email" required
+                            class="mt-1 block px-4 py-2 border-2 w-full rounded-md border-slate-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 bg-slate-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" name="username" required
+                            class="mt-1 block px-4 py-2 border-2 w-full rounded-md border-slate-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 bg-slate-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" name="password" required
+                            class="mt-1 block px-4 py-2 border-2 w-full rounded-md border-slate-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 bg-slate-50">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                        <input type="password" name="password_confirmation" required
+                            class="mt-1 block px-4 py-2 border-2 w-full rounded-md border-slate-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 bg-slate-50">
                     </div>
 
                     <!-- Submit Button -->

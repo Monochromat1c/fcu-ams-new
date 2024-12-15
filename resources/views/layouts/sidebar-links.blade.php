@@ -10,6 +10,14 @@
     </svg>
     Asset List
 </a>
+<a href="{{ route('inventory.supply.request') }}"
+    class="block px-4 flex gap-1 py-2 text-gray-700  hover:bg-slate-100
+            {{ Request::is('inventory/supply-request') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+    </svg>
+    Request Supplies
+</a>
 @endif
 
 

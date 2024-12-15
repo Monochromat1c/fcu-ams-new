@@ -30,9 +30,9 @@
                     <form class="login-form" action="{{ route('user.update', $user->id) }}"
                         method="POST" enctype="multipart/form-data">
                         @csrf
-                        <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-6">
                             <!-- Profile Picture Section -->
-                            <div class="md:col-span-2 flex flex-col items-center mb-6">
+                            <div class="flex flex-col items-center mb-6">
                                 <div class="relative mb-4">
                                     <input type="file" name="profile_picture" id="profilePicInput{{ $user->id }}"
                                         class="hidden" accept="image/*"
@@ -59,88 +59,114 @@
                                 <p class="text-gray-500 text-sm">Click image to change profile picture</p>
                             </div>
 
-                            <!-- Input Fields -->
-                            <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
-                                <label class="block text-xs font-semibold text-gray-500 mb-2">First Name</label>
-                                <input type="text" name="first_name" value="{{ $user->first_name }}"
-                                    class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
-                                    required>
+                            <!-- Personal Information Section -->
+                            <div class="space-y-6">
+                                <h3 class="text-lg font-semibold text-gray-700 border-b border-gray-200 pb-2">Personal Information</h3>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
+                                        <label class="block text-xs font-semibold text-gray-500 mb-2">First Name</label>
+                                        <input type="text" name="first_name" value="{{ $user->first_name }}"
+                                            class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
+                                            required>
+                                    </div>
+
+                                    <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
+                                        <label class="block text-xs font-semibold text-gray-500 mb-2">Middle Name</label>
+                                        <input type="text" name="middle_name" value="{{ $user->middle_name }}"
+                                            class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors">
+                                    </div>
+
+                                    
+                                    <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
+                                        <label class="block text-xs font-semibold text-gray-500 mb-2">Last Name</label>
+                                        <input type="text" name="last_name" value="{{ $user->last_name }}"
+                                            class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
+                                            required>
+                                    </div>
+
+                                    <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
+                                        <label class="block text-xs font-semibold text-gray-500 mb-2">Contact Number</label>
+                                        <input type="text" name="contact_number" value="{{ $user->contact_number }}"
+                                            class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
+                                            required>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
+                                    <label class="block text-xs font-semibold text-gray-500 mb-2">Address</label>
+                                    <input type="text" name="address" value="{{ $user->address }}"
+                                        class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
+                                        required>
+                                </div>
                             </div>
 
-                            <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
-                                <label class="block text-xs font-semibold text-gray-500 mb-2">Middle Name</label>
-                                <input type="text" name="middle_name" value="{{ $user->middle_name }}"
-                                    class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors">
+                            <!-- Organization Section -->
+                            <div class="space-y-6">
+                                <h3 class="text-lg font-semibold text-gray-700 border-b border-gray-200 pb-2">Organization Information</h3>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
+                                        <label class="block text-xs font-semibold text-gray-500 mb-2">Department</label>
+                                        <select name="department_id" required class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors">
+                                            <option value="">Select Department</option>
+                                            @foreach(App\Models\Department::orderBy('department', 'asc')->get() as $department)
+                                                <option value="{{ $department->id }}" {{ $user->department_id == $department->id ? 'selected' : '' }}>
+                                                    {{ $department->department }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
+                                        <label class="block text-xs font-semibold text-gray-500 mb-2">Role</label>
+                                        <select name="role_id" required class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors">
+                                            @foreach($roles as $role)
+                                                <option value="{{ $role->id }}" {{ $user->role_id == $role->id ? 'selected' : '' }}>
+                                                    {{ $role->role }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
-                                <label class="block text-xs font-semibold text-gray-500 mb-2">Last Name</label>
-                                <input type="text" name="last_name" value="{{ $user->last_name }}"
-                                    class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
-                                    required>
+                            <!-- Account Section -->
+                            <div class="space-y-6">
+                                <h3 class="text-lg font-semibold text-gray-700 border-b border-gray-200 pb-2">Account Information</h3>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
+                                        <label class="block text-xs font-semibold text-gray-500 mb-2">Email</label>
+                                        <input type="email" name="email" value="{{ $user->email }}"
+                                            class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
+                                            required>
+                                    </div>
+
+                                    <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
+                                        <label class="block text-xs font-semibold text-gray-500 mb-2">Username</label>
+                                        <input type="text" name="username" value="{{ $user->username }}"
+                                            class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
+                                            required>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
-                                <label class="block text-xs font-semibold text-gray-500 mb-2">Contact Number</label>
-                                <input type="text" name="contact_number" value="{{ $user->contact_number }}"
-                                    class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
-                                    required>
+                            <!-- Update Button -->
+                            <div class="flex justify-end space-x-2 mt-6">
+                                <button type="submit"
+                                    class="rounded-md shadow-md px-5 py-2 bg-blue-600 hover:shadow-md hover:bg-blue-500
+                                transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
+                                    </svg>
+                                    Update User
+                                </button>
                             </div>
-
-                            <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
-                                <label class="block text-xs font-semibold text-gray-500 mb-2">Address</label>
-                                <input type="text" name="address" value="{{ $user->address }}"
-                                    class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
-                                    required>
-                            </div>
-
-                            <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
-                                <label class="block text-xs font-semibold text-gray-500 mb-2">Role</label>
-                                <select name="role_id"
-                                    class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
-                                    required>
-                                    @foreach($roles as $role)
-                                        <option value="{{ $role->id }}"
-                                            {{ $user->role_id == $role->id ? 'selected' : '' }}>
-                                            {{ $role->role }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
-                                <label class="block text-xs font-semibold text-gray-500 mb-2">Email</label>
-                                <input type="email" name="email" value="{{ $user->email }}"
-                                    class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
-                                    required>
-                            </div>
-
-                            <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
-                                <label class="block text-xs font-semibold text-gray-500 mb-2">Username</label>
-                                <input type="text" name="username" value="{{ $user->username }}"
-                                    class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
-                                    required>
-                            </div>
-                        </div>
-
-                        <!-- Update Button -->
-                        <div class="flex justify-end space-x-2 mt-6">
-                            <button type="submit"
-                                class="rounded-md shadow-md px-5 py-2 bg-blue-600 hover:shadow-md hover:bg-blue-500
-                            transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex my-auto gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M16.5 3.75V16.5L12 14.25 7.5 16.5V3.75m9 0H18A2.25 2.25 0 0 1 20.25 6v12A2.25 2.25 0 0 1 18 20.25H6A2.25 2.25 0 0 1 3.75 18V6A2.25 2.25 0 0 1 6 3.75h1.5m9 0h-9" />
-                                </svg>
-                                Update User
-                            </button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 @endforeach
 

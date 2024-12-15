@@ -16,7 +16,9 @@ class CheckUserRole
             'profile.update',
             'profile.updatePersonalInformation',
             'asset.view',
-            'logout'
+            'logout',
+            'inventory.supply.request',
+            'inventory.supply.request.store',
         ];
 
         $deniedRoutesForManager = [
