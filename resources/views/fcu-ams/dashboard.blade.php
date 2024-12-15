@@ -1,14 +1,5 @@
 @extends('layouts.layout')
 @section('content')
-<script>
-    function preventBack() {
-        window.history.forward()
-    };
-    setTimeout("preventBack()", 0);
-    windows.onunload = function () {
-        null;
-    }
-</script>
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
 <div class="grid grid-cols-6">
@@ -314,9 +305,9 @@
                                 </div>
                                 <div>
                                     <span class="px-3 py-1 text-xs font-medium rounded-full
-                                        {{ $request->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                           ($request->status === 'approved' ? 'bg-green-100 text-green-800' : 
-                                           'bg-red-100 text-red-800') }}">
+                                        {{ $request->status === 'pending' ? 'bg-yellow-100 px-5 py-[.50rem] text-yellow-800' : 
+                                           ($request->status === 'approved' ? 'bg-green-100 px-5 py-[.50rem] text-green-800' : 
+                                           'bg-red-100 px-5 py-[.50rem] text-red-800') }}">
                                         {{ ucfirst($request->status) }}
                                     </span>
                                 </div>
