@@ -103,6 +103,10 @@
                                 <span class="font-medium">Date Requested:</span> 
                                 {{ \Carbon\Carbon::parse($request->request_date)->format('F d, Y') }}
                             </p>
+                            <p class="text-gray-600">
+                                <span class="font-medium">Notes:</span> 
+                                {{ $request->notes }}
+                            </p>
                         </div>
                     </div>
                     <div class="flex flex-col items-end">
@@ -145,11 +149,6 @@
                                         <span class="text-sm text-gray-500">Quantity: </span>
                                         <span class="text-sm font-medium text-gray-900">{{ $item->quantity }}</span>
                                     </div>
-                                    @if($item->notes)
-                                        <p class="mt-2 text-sm text-gray-500">
-                                            <span class="font-medium">Note:</span> {{ $item->notes }}
-                                        </p>
-                                    @endif
                                 </div>
                                 <div class="ml-4">
                                     <span class="text-sm font-medium text-gray-500">Stock Available:</span>

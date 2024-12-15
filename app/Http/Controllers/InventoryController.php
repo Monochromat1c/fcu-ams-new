@@ -344,8 +344,12 @@ class InventoryController extends Controller
     public function showSupplyRequest()
     {
         $user = auth()->user();
-        $inventories = Inventory::with(['brand', 'unit'])
+        $inventories = Inventory::whereNull('deleted_at')
             ->where('quantity', '>', 0)
+            ->with(['brand', 'unit'])
+            ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+            ->orderBy('brands.brand', 'asc')
+            ->select('inventories.*')
             ->get();
         $departments = Department::all();
         $userDepartment = $user->department;
@@ -379,6 +383,7 @@ class InventoryController extends Controller
                 'department_id' => $request->department_id,
                 'inventory_id' => $inventory_id,
                 'requester' => $request->requester,
+                'notes' => $request->notes,
                 'quantity' => $quantity,
                 'request_date' => now(),
             ]);
