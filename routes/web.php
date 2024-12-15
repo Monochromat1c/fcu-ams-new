@@ -76,9 +76,9 @@ Route::middleware(['auth.user'])->group(function () {
         Route::delete('/inventory/{id}', 'destroy')->name('inventory.destroy');
         Route::get('/inventory/supply-request', 'showSupplyRequest')->name('inventory.supply.request');
         Route::post('/inventory/supply-request', 'storeSupplyRequest')->name('inventory.supply.request.store');
-        Route::get('/inventory/supply-request/{request_id}', 'showSupplyRequestDetails')->name('inventory.supply-request.details');
-        Route::post('/inventory/supply-request/{request_id}/approve', 'approveSupplyRequest')->name('inventory.supply-request.approve');
-        Route::post('/inventory/supply-request/{request_id}/reject', 'rejectSupplyRequest')->name('inventory.supply-request.reject');
+        Route::get('/inventory/supply-request/{request_group_id}', 'showSupplyRequestDetails')->name('inventory.supply-request.details');
+        Route::post('/inventory/supply-request/{request_group_id}/approve', 'approveSupplyRequest')->name('inventory.supply-request.approve');
+        Route::post('/inventory/supply-request/{request_group_id}/reject', 'rejectSupplyRequest')->name('inventory.supply-request.reject');
     });
 
     // Route::controller(UserController::class)->group(function () {

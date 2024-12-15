@@ -25,6 +25,9 @@ class DashboardController extends Controller
 
         // Get recent supply requests
         $recentRequests = SupplyRequest::with(['inventory.brand', 'department'])
+            ->select('request_group_id', 'requester', 'status', 'request_date', 'department_id', 
+                     DB::raw('COUNT(*) as items_count'))
+            ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'department_id')
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();

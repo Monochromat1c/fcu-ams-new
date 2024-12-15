@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('supply_requests', function (Blueprint $table) {
             $table->id();
             $table->uuid('request_id')->unique(); // Unique ID for each item
+            $table->uuid('request_group_id'); // Group ID to track items requested together
             $table->foreignId('department_id')->constrained('departments');
             $table->foreignId('inventory_id')->constrained('inventories');
             $table->string('requester');

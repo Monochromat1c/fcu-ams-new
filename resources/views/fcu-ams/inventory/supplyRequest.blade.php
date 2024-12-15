@@ -110,21 +110,24 @@
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                                                 ₱{{ number_format($inventory->unit_price, 2) }}</td>
                                                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                                <div class="flex items-center gap-3 justify-center">
-                                                                    <input type="checkbox"
-                                                                        id="item_id_{{ $inventory->id }}" 
-                                                                        name="item_id[]"
-                                                                        value="{{ $inventory->id }}"
-                                                                        class="w-4 h-4 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                                                                        onchange="document.getElementById('quantity_{{ $inventory->id }}').disabled = !this.checked">
-                                                                    <input type="number"
+                                                                <div class="flex items-center gap-4">
+                                                                    <label class="inline-flex items-center">
+                                                                        <input type="checkbox"
+                                                                            id="item_{{ $inventory->id }}" 
+                                                                            class="form-checkbox item-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
+                                                                            data-id="{{ $inventory->id }}"
+                                                                            data-brand="{{ $inventory->brand->brand }}"
+                                                                            data-specs="{{ $inventory->items_specs }}"
+                                                                            data-price="{{ $inventory->unit_price }}"
+                                                                            onchange="handleItemSelection(this)">
+                                                                    </label>
+                                                                    <input type="number" 
                                                                         id="quantity_{{ $inventory->id }}"
-                                                                        name="quantity[]"
-                                                                        class="w-24 p-2 border-2 border-slate-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
+                                                                        class="quantity-input hidden w-24 px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                                                                         min="1"
                                                                         max="{{ $inventory->quantity }}"
-                                                                        disabled
-                                                                        required>
+                                                                        placeholder="Qty"
+                                                                        onchange="updateSelectedItems()">
                                                                 </div>
                                                             </td>
                                                         </tr>
@@ -196,6 +199,60 @@
 </div>
 
 <script>
+    function handleItemSelection(checkbox) {
+        const id = checkbox.dataset.id;
+        const quantityInput = document.getElementById(`quantity_${id}`);
+        
+        if (checkbox.checked) {
+            quantityInput.classList.remove('hidden');
+            quantityInput.value = 1;
+            updateSelectedItems();
+        } else {
+            quantityInput.classList.add('hidden');
+            quantityInput.value = '';
+            updateSelectedItems();
+        }
+    }
+
+    function updateSelectedItems() {
+        const selectedItemsContainer = document.getElementById('selected-items');
+        const checkboxes = document.querySelectorAll('.item-checkbox:checked');
+        let overallPrice = 0;
+        selectedItemsContainer.innerHTML = '';
+
+        checkboxes.forEach(checkbox => {
+            const id = checkbox.dataset.id;
+            const quantityInput = document.getElementById(`quantity_${id}`);
+            const quantity = parseInt(quantityInput.value) || 0;
+            const price = parseFloat(checkbox.dataset.price);
+            const total = quantity * price;
+            overallPrice += total;
+
+            // Add to selected items table
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    ${checkbox.dataset.brand} ${checkbox.dataset.specs}
+                    <input type="hidden" name="items[${id}][id]" value="${id}">
+                    <input type="hidden" name="items[${id}][quantity]" value="${quantity}">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${quantity}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱${price.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱${total.toFixed(2)}</td>
+            `;
+            selectedItemsContainer.appendChild(row);
+        });
+
+        // Update overall price
+        document.getElementById('overall-price').textContent = `₱${overallPrice.toFixed(2)}`;
+        
+        // Show/hide the selected items container
+        const container = document.getElementById('selected-items-container');
+        container.classList.toggle('hidden', checkboxes.length === 0);
+    }
+</script>
+
+<script>
     document.addEventListener('DOMContentLoaded', function () {
         // Set default request date to today
         var today = new Date();
@@ -205,109 +262,16 @@
         today = yyyy + '-' + mm + '-' + dd;
         document.getElementById('request_date').value = today;
 
-        var selectedItemsTable = document.getElementById('selected-items');
-        var modal = document.getElementById('defaultModal');
-        var overallPriceCell = document.getElementById('overall-price');
+        // Search functionality for modal
+        const modalSearchInput = document.getElementById('modal-search');
+        modalSearchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#defaultModal tbody tr');
 
-        modal.addEventListener('change', function (event) {
-            if (event.target.type === 'checkbox') {
-                var checkbox = event.target;
-                var quantityInput = checkbox.nextElementSibling;
-                var row = checkbox.closest('tr');
-                var label = row.cells[0].textContent.trim();
-                var id = checkbox.value;
-                var quantity = quantityInput.value || '1';
-                var price = row.cells[3].textContent.trim().replace('₱', '').replace(',', '');
-
-                if (checkbox.checked) {
-                    var newRow = document.createElement('tr');
-                    var itemCell = document.createElement('td');
-                    var quantityCell = document.createElement('td');
-                    var priceCell = document.createElement('td');
-                    var totalPriceCell = document.createElement('td');
-
-                    itemCell.textContent = label;
-                    itemCell.className = 'px-6 py-4';
-
-                    quantityCell.textContent = quantity;
-                    quantityCell.className = 'px-6 py-4';
-
-                    priceCell.textContent = '₱' + parseFloat(price).toFixed(2);
-                    priceCell.className = 'px-6 py-4';
-
-                    var total = parseFloat(price) * parseInt(quantity);
-                    totalPriceCell.textContent = '₱' + total.toFixed(2);
-                    totalPriceCell.className = 'px-6 py-4';
-
-                    newRow.appendChild(itemCell);
-                    newRow.appendChild(quantityCell);
-                    newRow.appendChild(priceCell);
-                    newRow.appendChild(totalPriceCell);
-
-                    selectedItemsTable.appendChild(newRow);
-                    document.getElementById('selected-items-container').classList.remove('hidden');
-
-                    updateOverallPrice();
-                } else {
-                    var rows = selectedItemsTable.rows;
-                    for (var i = 0; i < rows.length; i++) {
-                        if (rows[i].cells[0].textContent.trim() === label) {
-                            rows[i].remove();
-                            break;
-                        }
-                    }
-                    if (selectedItemsTable.rows.length === 0) {
-                        document.getElementById('selected-items-container').classList.add('hidden');
-                    }
-
-                    updateOverallPrice();
-                }
-            }
-        });
-
-        modal.addEventListener('input', function (event) {
-            if (event.target.type === 'number') {
-                var quantityInput = event.target;
-                var checkbox = quantityInput.previousElementSibling;
-                var row = checkbox.closest('tr');
-                var label = row.cells[0].textContent.trim();
-                var price = row.cells[3].textContent.trim().replace('₱', '').replace(',', '');
-                var quantity = quantityInput.value || '0';
-
-                var rows = selectedItemsTable.rows;
-                for (var i = 0; i < rows.length; i++) {
-                    if (rows[i].cells[0].textContent.trim() === label) {
-                        rows[i].cells[1].textContent = quantity;
-                        var total = parseFloat(price) * parseInt(quantity);
-                        rows[i].cells[3].textContent = '₱' + total.toFixed(2);
-                        break;
-                    }
-                }
-
-                updateOverallPrice();
-            }
-        });
-
-        function updateOverallPrice() {
-            var rows = selectedItemsTable.rows;
-            var overallPrice = 0;
-            for (var i = 0; i < rows.length; i++) {
-                var totalPrice = rows[i].cells[3].textContent.trim().replace('₱', '').replace(',', '');
-                overallPrice += parseFloat(totalPrice);
-            }
-            overallPriceCell.textContent = '₱' + overallPrice.toFixed(2);
-        }
-    });
-
-    // Search functionality for modal
-    const modalSearchInput = document.getElementById('modal-search');
-    modalSearchInput.addEventListener('input', function() {
-        const searchTerm = this.value.toLowerCase();
-        const rows = document.querySelectorAll('#defaultModal tbody tr');
-
-        rows.forEach(row => {
-            const text = row.textContent.toLowerCase();
-            row.style.display = text.includes(searchTerm) ? '' : 'none';
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
         });
     });
 </script>

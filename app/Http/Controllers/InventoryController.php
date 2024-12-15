@@ -368,86 +368,105 @@ class InventoryController extends Controller
     {
         $request->validate([
             'department_id' => 'required|exists:departments,id',
-            'requester' => 'required|string|max:255',
-            'item_id' => 'required|array|min:1',
-            'item_id.*' => 'required|exists:inventories,id',
-            'quantity' => 'required|array|min:1',
-            'quantity.*' => 'required|integer|min:1'
+            'items' => 'required|array',
+            'items.*.id' => 'required|exists:inventories,id',
+            'items.*.quantity' => 'required|integer|min:1'
         ]);
 
-        $items = array_combine($request->item_id, $request->quantity);
-        
-        foreach ($items as $inventory_id => $quantity) {
-            SupplyRequest::create([
-                'request_id' => (string) Str::uuid(),
-                'department_id' => $request->department_id,
-                'inventory_id' => $inventory_id,
-                'requester' => $request->requester,
-                'notes' => $request->notes,
-                'quantity' => $quantity,
-                'request_date' => now(),
-            ]);
-        }
-
-        return redirect()->route('inventory.supply.request')->with('success', 'Supply request submitted successfully');
-    }
-
-    public function showSupplyRequestDetails($request_id)
-    {
-        $request = SupplyRequest::with(['department', 'inventory.brand'])
-            ->where('request_id', $request_id)
-            ->first();
-
-        if (!$request) {
-            return redirect()->route('dashboard')->with('error', 'Supply request not found.');
-        }
-
-        $items = SupplyRequest::with(['inventory.brand'])
-            ->where('request_id', $request_id)
-            ->get();
-
-        return view('fcu-ams.inventory.supply-request-details', compact('request', 'items'));
-    }
-
-    public function approveSupplyRequest($request_id)
-    {
         try {
             DB::beginTransaction();
             
-            $items = SupplyRequest::where('request_id', $request_id)->get();
+            $requestGroupId = (string) Str::uuid();
             
-            // Check if all items have sufficient stock
-            foreach ($items as $item) {
-                if ($item->inventory->quantity < $item->quantity) {
-                    throw new \Exception("Insufficient stock for {$item->inventory->brand->brand} {$item->inventory->items_specs}");
-                }
+            foreach ($request->items as $item) {
+                $supplyRequest = new SupplyRequest();
+                $supplyRequest->request_id = (string) Str::uuid();
+                $supplyRequest->request_group_id = $requestGroupId;
+                $supplyRequest->department_id = $request->department_id;
+                $supplyRequest->notes = $request->notes;
+                $supplyRequest->inventory_id = $item['id'];
+                $supplyRequest->requester = auth()->user()->first_name . ' ' . auth()->user()->last_name;
+                $supplyRequest->quantity = $item['quantity'];
+                $supplyRequest->request_date = now();
+                $supplyRequest->save();
             }
-            
-            // Update inventory quantities and request status
-            foreach ($items as $item) {
-                $inventory = $item->inventory;
-                $inventory->quantity -= $item->quantity;
-                $inventory->save();
-            }
-            
-            SupplyRequest::where('request_id', $request_id)->update(['status' => 'approved']);
             
             DB::commit();
-            return response()->json(['success' => true]);
+            return redirect()->back()->with('success', 'Supply request submitted successfully.');
         } catch (\Exception $e) {
             DB::rollback();
-            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+            return redirect()->back()->with('error', 'Failed to submit supply request. Please try again.');
         }
     }
 
-    public function rejectSupplyRequest($request_id)
+    public function showSupplyRequestDetails($request_group_id)
     {
-        try {
-            SupplyRequest::where('request_id', $request_id)->update(['status' => 'rejected']);
-            return response()->json(['success' => true]);
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => $e->getMessage()]);
+        $requests = SupplyRequest::with(['inventory.brand', 'department'])
+            ->where('request_group_id', $request_group_id)
+            ->get();
+
+        if ($requests->isEmpty()) {
+            abort(404);
         }
+
+        $totalItems = $requests->count();
+        $totalValue = $requests->sum(function ($request) {
+            return $request->quantity * $request->inventory->unit_price;
+        });
+
+        return view('fcu-ams.inventory.supplyRequestDetails', [
+            'requests' => $requests,
+            'totalItems' => $totalItems,
+            'totalValue' => $totalValue
+        ]);
+    }
+
+    public function approveSupplyRequest($request_group_id)
+    {
+        $requests = SupplyRequest::where('request_group_id', $request_group_id)->get();
+        
+        if ($requests->isEmpty()) {
+            return redirect()->back()->with('error', 'Supply request not found.');
+        }
+
+        DB::beginTransaction();
+        try {
+            foreach ($requests as $request) {
+                $inventory = $request->inventory;
+                
+                if ($inventory->quantity < $request->quantity) {
+                    throw new \Exception("Insufficient stock for {$inventory->items_specs}");
+                }
+                
+                $inventory->quantity -= $request->quantity;
+                $inventory->save();
+                
+                $request->status = 'approved';
+                $request->save();
+            }
+            
+            DB::commit();
+            return redirect()->back()->with('success', 'Supply request approved successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+    }
+
+    public function rejectSupplyRequest($request_group_id)
+    {
+        $requests = SupplyRequest::where('request_group_id', $request_group_id)->get();
+        
+        if ($requests->isEmpty()) {
+            return redirect()->back()->with('error', 'Supply request not found.');
+        }
+
+        foreach ($requests as $request) {
+            $request->status = 'rejected';
+            $request->save();
+        }
+
+        return redirect()->back()->with('success', 'Supply request rejected successfully.');
     }
 
     public function export() { 

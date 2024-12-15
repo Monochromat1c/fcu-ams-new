@@ -293,10 +293,13 @@
                                 <div class="flex-1">
                                     <p class="text-sm font-medium text-gray-900">
                                         {{ $request->requester }}
+                                        <span class="text-xs text-gray-500">
+                                            ({{ $request->department->department }})
+                                        </span>
                                     </p>
                                     <p class="text-sm text-gray-500">
                                         Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
-                                        <a href="{{ route('inventory.supply-request.details', ['request_id' => $request->request_id]) }}" 
+                                        <a href="{{ route('inventory.supply-request.details', ['request_group_id' => $request->request_group_id]) }}" 
                                            class="text-blue-600 hover:text-blue-800 text-xs ml-1">(View Items)</a>
                                     </p>
                                     <p class="text-xs text-gray-400">
@@ -315,7 +318,7 @@
                         </div>
                     @empty
                         <div class="px-6 py-4">
-                            <p class="text-sm text-gray-500 text-center">No recent requests</p>
+                            <p class="text-sm text-gray-500">No recent requests</p>
                         </div>
                     @endforelse
                 </div>
