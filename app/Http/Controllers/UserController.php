@@ -27,6 +27,7 @@ class UserController extends Controller
             'address' => 'required|string',
             'contact_number' => 'required|string',
             'role_id' => 'required|exists:roles,id',
+            'department_id' => 'required|exists:departments,id',
             'email' => 'required|email|unique:users',
             'username' => 'required|string|unique:users',
             'password' => 'required|string|confirmed',
@@ -40,6 +41,7 @@ class UserController extends Controller
         $user->address = $request->input('address');
         $user->contact_number = $request->input('contact_number');
         $user->role_id = $request->input('role_id');
+        $user->department_id = $request->input('department_id');
         $user->email = $request->input('email');
         $user->username = $request->input('username');
         $user->password = Hash::make($request->input('password'));
@@ -65,6 +67,7 @@ class UserController extends Controller
             'address' => 'required|string',
             'contact_number' => 'required|string',
             'role_id' => 'required|exists:roles,id',
+            'department_id' => 'required|exists:departments,id',
             'email' => 'required|email|unique:users,email,'.$id,
             'username' => 'required|string|unique:users,username,'.$id,
         ]);
@@ -76,6 +79,7 @@ class UserController extends Controller
         $user->address = $request->input('address');
         $user->contact_number = $request->input('contact_number');
         $user->role_id = $request->input('role_id');
+        $user->department_id = $request->input('department_id');
         $user->email = $request->input('email');
         $user->username = $request->input('username');
 
@@ -125,6 +129,7 @@ class UserController extends Controller
             'username' => 'required|string|unique:users',
             'password' => 'required|string|confirmed',
             'password_confirmation' => 'required|string',
+            'department_id' => 'required|exists:departments,id',
         ]);
 
         $user = new User();
@@ -136,6 +141,7 @@ class UserController extends Controller
         $user->email = $request->input('email');
         $user->username = $request->input('username');
         $user->password = Hash::make($request->input('password'));
+        $user->department_id = $request->input('department_id');
 
         $viewerRole = Role::where('role', 'Viewer')->first();
         if ($viewerRole) {

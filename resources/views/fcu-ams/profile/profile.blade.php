@@ -81,6 +81,10 @@
                             <h1 class="text-xl font-bold text-gray-800 mb-4">Account Information</h1>
                             <div class="space-y-4">
                                 <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Department</label>
+                                    <p class="text-gray-800 py-2 segoe font-bold">{{ $user->department->department }}</p>
+                                </div>
+                                <div class="bg-gray-50 p-4 rounded-xl border border-gray-200">
                                     <label class="block text-sm font-medium text-gray-700 mb-1">Username</label>
                                     <p class="text-gray-800 py-2 segoe font-bold">{{ $user->username }}</p>
                                 </div>

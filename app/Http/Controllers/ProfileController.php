@@ -12,6 +12,7 @@ use App\Models\Category;
 use App\Models\Condition;
 use App\Models\Inventory;
 use App\Models\Department;
+use App\Models\User;
 use App\Models\AssetEditHistory;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\AssetsExport;

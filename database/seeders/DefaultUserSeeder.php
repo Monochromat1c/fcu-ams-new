@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Department;
 
 class DefaultUserSeeder extends Seeder
 {
@@ -19,6 +20,7 @@ class DefaultUserSeeder extends Seeder
         $adminRole = Role::where('role', 'Administrator')->first();
         $managerRole = Role::where('role', 'Manager')->first();
         $viewerRole = Role::where('role', 'Viewer')->first();
+        $ccsDepartment = Department::where('department', 'CCS Department')->first();
 
         User::create([
             'profile_picture' => 'profile/1728809102.jpg',
@@ -29,6 +31,7 @@ class DefaultUserSeeder extends Seeder
             'role_id' => $managerRole->id,
             'username' => 'wyap',
             'password' => Hash::make('wyap@'),
+            'department_id' => $ccsDepartment->id,
             'email' => 'wyap@gmail.com',
         ]);
 
@@ -41,6 +44,7 @@ class DefaultUserSeeder extends Seeder
             'role_id' => $adminRole->id,
             'username' => 'admin',
             'password' => Hash::make('admin123'),
+            'department_id' => $ccsDepartment->id,
             'email' => 'mele@gmail.com',
         ]);
 
@@ -53,6 +57,7 @@ class DefaultUserSeeder extends Seeder
             'role_id' => $viewerRole->id,
             'username' => 'liling',
             'password' => Hash::make('liling@'),
+            'department_id' => $ccsDepartment->id,
             'email' => 'liling@gmail.com',
         ]);
     }

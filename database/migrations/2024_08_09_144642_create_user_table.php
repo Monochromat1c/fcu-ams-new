@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('contact_number');
             $table->unsignedBigInteger('role_id');
             $table->foreign('role_id')->references('id')->on('roles');
+            $table->unsignedBigInteger('department_id');
+            $table->foreign('department_id')->references('id')->on('departments');
             $table->string('email');
             $table->string('username');
             $table->string('password');
