@@ -24,9 +24,9 @@ class AlertController extends Controller
         // Get current user's ID from username
         $user = User::where('username', Auth::user()->username)->first();
         
-        // Mark only the displayed alerts as viewed for current user
+        // Mark all overdue assets as viewed for current user
         if ($user) {
-            foreach ($pastDueAssets as $asset) {
+            foreach ($totalPastDueAssets as $asset) {
                 ViewedAlert::firstOrCreate([
                     'user_id' => $user->id,
                     'asset_id' => $asset->id
