@@ -18,6 +18,7 @@ class AlertController extends Controller
         ->whereDate('maintenance_end_date', '<', now())
         ->get(); 
 
+        $pastDueCount = $totalPastDueAssets->count();
         $pastDueAssets = $totalPastDueAssets->take(5);
 
         // Get current user's ID from username
@@ -33,7 +34,7 @@ class AlertController extends Controller
             }
         }
 
-        return view('fcu-ams.alert.alerts', compact('pastDueAssets', 'totalPastDueAssets'));
+        return view('fcu-ams.alert.alerts', compact('pastDueAssets', 'pastDueCount'));
     }
 
     public function show(Asset $asset)

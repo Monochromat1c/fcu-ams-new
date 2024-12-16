@@ -180,10 +180,10 @@
                                 </div>
                             @endforeach
                         </div>
-                        @if($totalPastDueAssets->count() > 5)
+                        @if($pastDueCount > 1)
                             <div class="text-center mt-4">
                                 <a href="{{ route('alerts.maintenance') }}" class="text-red-600 hover:underline">
-                                    View All {{ $totalPastDueAssets->count() }} Overdue Assets
+                                    View All {{ $pastDueCount }} Overdue Assets
                                 </a>
                             </div>
                         @endif

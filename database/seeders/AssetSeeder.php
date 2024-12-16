@@ -85,8 +85,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 1,
                 'department_id' => $ccsDepartment->id,
                 'purchase_date' => '2023-01-24',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             // Additional Desktop PCs (FCCPC)
@@ -103,8 +105,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 1,
                 'department_id' => $ccsDepartment->id,
                 'purchase_date' => Carbon::now(),
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             Asset::create([
@@ -120,8 +124,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 1,
                 'department_id' => $casDepartment->id,
                 'purchase_date' => '2024-01-18',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             // Additional Desktop PCs with different configurations
@@ -138,8 +144,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 1,
                 'department_id' => $ccsDepartment->id,
                 'purchase_date' => Carbon::now(),
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             Asset::create([
@@ -155,8 +163,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 1,
                 'department_id' => $casDepartment->id,
                 'purchase_date' => '2024-06-05',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             // Monitors (FCCMO)
@@ -173,8 +183,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 2,
                 'department_id' => $ccsDepartment->id,
                 'purchase_date' => Carbon::now(),
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             // Additional Monitors (FCCMO)
@@ -191,8 +203,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 2,
                 'department_id' => $ccsDepartment->id,
                 'purchase_date' => '2024-02-01',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             Asset::create([
@@ -208,8 +222,10 @@ class AssetSeeder extends Seeder
                 'category_id' => 2,
                 'department_id' => $casDepartment->id,
                 'purchase_date' => '2024-02-05',
-                'condition_id' => 1,
-                'status_id' => 1,
+                'condition_id' => 2,
+                'status_id' => 2,
+                'maintenance_start_date' => $maintenanceStartDate,
+                'maintenance_end_date' => $maintenanceEndDate,
             ]);
 
             // Additional High-End Monitors
