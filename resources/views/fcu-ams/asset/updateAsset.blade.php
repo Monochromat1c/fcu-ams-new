@@ -274,43 +274,63 @@
                         <!-- Maintenance Modal -->
                         <div class="modal-container">
                             <div id="maintenance-modal" tabindex="-1" aria-hidden="true"
-                                class="modalBg flex fixed top-0 left-0 right-0 z-50 p-4 w-full md:inset-0 h-modal md:h-full hidden">
-                                <div class="relative mx-auto my-auto p-4 w-full max-w-2xl h-full md:h-auto">
-                                    <div
-                                        class="relative bg-white rounded-lg shadow-lg dark:bg-white border border-slate-400">
-                                        <button type="button"
-                                            class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-800 dark:hover:text-white"
-                                            onclick="document.getElementById('maintenance-modal').classList.toggle('hidden')">
-                                            <svg aria-hidden="true" class="w-5 h-5" fill="currentColor"
-                                                viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                                                <path fill-rule="evenodd"
-                                                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                                                    clip-rule="evenodd"></path>
-                                            </svg>
-                                            <span class="sr-only">Close modal</span>
-                                        </button>
-                                        <div class="p-6 text-center">
-                                            <h2 class="mb-4 text-lg font-bold text-black">Maintenance Date</h2>
-                                            <div class="mb-4">
-                                                <label for="maintenance_start_date"
-                                                    class="block text-left text-gray-700 font-bold mb-2">Start
-                                                    Date:</label>
-                                                <input type="date" id="maintenance_start_date"
-                                                    name="maintenance_start_date" class="w-full p-2 border rounded-md"
-                                                    value="{{ old('maintenance_start_date') ?? $asset->maintenance_start_date }}">
+                                class="modalBg fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
+                                <div class="flex min-h-screen items-center justify-center p-4">
+                                    <div class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+                                        <!-- Header -->
+                                        <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                                            <div class="flex items-center justify-between">
+                                                <h3 class="text-lg font-medium text-gray-900">Set Maintenance Period</h3>
+                                                <button type="button" class="text-gray-400 hover:text-gray-500" onclick="document.getElementById('maintenance-modal').classList.toggle('hidden')">
+                                                    <span class="sr-only">Close</span>
+                                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
                                             </div>
-                                            <div class="mb-4">
-                                                <label for="maintenance_end_date"
-                                                    class="block text-left text-gray-700 font-bold mb-2">End
-                                                    Date:</label>
-                                                <input type="date" id="maintenance_end_date" name="maintenance_end_date"
-                                                    class="w-full p-2 border rounded-md"
-                                                    value="{{ old('maintenance_end_date') ?? $asset->maintenance_end_date }}">
+                                        </div>
+
+                                        <!-- Modal Body -->
+                                        <div class="px-6 py-4">
+                                            <div class="space-y-4">
+                                                <!-- Start Date -->
+                                                <div>
+                                                    <label for="maintenance_start_date" class="block text-sm font-medium text-gray-700">
+                                                        Maintenance Start Date
+                                                    </label>
+                                                    <div class="mt-1">
+                                                        <input type="date" id="maintenance_start_date" name="maintenance_start_date"
+                                                            value="{{ $asset->maintenance_start_date }}"
+                                                            class="block w-full rounded-md border-2 px-5 py-2 bg-slate-50 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                                    </div>
+                                                </div>
+
+                                                <!-- End Date -->
+                                                <div>
+                                                    <label for="maintenance_end_date" class="block text-sm font-medium text-gray-700">
+                                                        Maintenance End Date
+                                                    </label>
+                                                    <div class="mt-1">
+                                                        <input type="date" id="maintenance_end_date" name="maintenance_end_date"
+                                                            value="{{ $asset->maintenance_end_date }}"
+                                                            class="block w-full rounded-md border-2 px-5 py-2 bg-slate-50 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="flex flex-end">
-                                                <button type="button" id="save-maintenance-btn"
-                                                    class="ml-auto rounded-md shadow-md px-5 py-2 bg-green-600 hover:shadow-md hover:bg-green-500 transition-all duration-200 hover:scale-105 ease-in hover:shadow-inner text-white">Save</button>
-                                            </div>
+                                        </div>
+
+                                        <!-- Footer -->
+                                        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+                                            <button type="button"
+                                                class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                onclick="document.getElementById('maintenance-modal').classList.toggle('hidden')">
+                                                Cancel
+                                            </button>
+                                            <button type="button"
+                                                class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                onclick="document.getElementById('maintenance-modal').classList.toggle('hidden')">
+                                                Set Maintenance Period
+                                            </button>
                                         </div>
                                     </div>
                                 </div>

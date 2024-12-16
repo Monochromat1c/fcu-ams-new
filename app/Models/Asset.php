@@ -81,6 +81,11 @@ class Asset extends Model
         return $this->hasMany(AssetEditHistory::class);
     }
 
+    public function viewedAlerts()
+    {
+        return $this->hasMany(ViewedAlert::class);
+    }
+
     public function updateStatusToLeased()
     {
         $leasedStatus = Status::where('status', 'Leased')->first();
