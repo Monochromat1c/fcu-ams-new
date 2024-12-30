@@ -246,7 +246,7 @@
                 </div>
             </div>
 
-            <!-- Additional Alert Placeholders -->
+            <!-- Additional Alert Placeholders
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <div class="bg-blue-500 text-white p-4 flex items-center">
                     <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -260,7 +260,7 @@
                 <div class="p-4 text-center text-gray-500">
                     No additional alerts at the moment.
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
