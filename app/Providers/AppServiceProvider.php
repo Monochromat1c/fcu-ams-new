@@ -42,5 +42,36 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         });
+
+        view()->composer('*', function ($view) {
+            $user = auth()->user();
+            if ($user) {
+                $pastDueCount = \App\Models\Asset::whereHas('condition', function ($query) {
+                    $query->where('condition', 'Maintenance');
+                })
+                ->whereDate('maintenance_end_date', '<', now())
+                ->count();
+
+                $pendingRequestsCount = \App\Models\SupplyRequest::where('status', 'pending')
+                    ->distinct('request_group_id')
+                    ->count('request_group_id');
+
+                // Only show pending requests that haven't been viewed
+                if ($user) {
+                    if ($user->last_checked_alerts) {
+                        $pendingRequestsCount = \App\Models\SupplyRequest::where('status', 'pending')
+                            ->where('created_at', '>', $user->last_checked_alerts)
+                            ->distinct('request_group_id')
+                            ->count('request_group_id');
+                    }
+                }
+
+                $totalAlerts = $pastDueCount + $pendingRequestsCount;
+
+                $view->with('totalAlerts', $totalAlerts);
+                $view->with('pendingRequestsCount', $pendingRequestsCount);
+                $view->with('pastDueCount', $pastDueCount);
+            }
+        });
     }
 }

@@ -23,6 +23,7 @@
                         @if($requests->first()->status === 'pending' && Auth::user()->role->role !== 'Viewer')
                             <form action="{{ route('inventory.supply-request.approve', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST" class="inline">
                                 @csrf
+                                <input type="hidden" name="return_url" value="{{ url()->previous() }}">
                                 <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 text-white text-sm font-medium rounded-md shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -32,6 +33,7 @@
                             </form>
                             <form action="{{ route('inventory.supply-request.reject', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST" class="inline">
                                 @csrf
+                                <input type="hidden" name="return_url" value="{{ url()->previous() }}">
                                 <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-600 hover:bg-red-700 focus:ring-4 focus:ring-red-300 text-white text-sm font-medium rounded-md shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">
                                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>

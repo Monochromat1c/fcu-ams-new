@@ -138,7 +138,9 @@
                 </div>
             </div>
         </nav>
-
+        <div class="m-3">
+            @include('layouts.messageWithoutTimerForError')
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 p-4">
             <!-- Assets Past Maintenance Alert -->
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -191,29 +193,66 @@
                 </div>
             </div>
 
-            <!-- Placeholder for Future Alerts -->
+            <!-- Pending Supply Requests -->
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <div class="bg-yellow-500 text-white p-4 flex items-center">
                     <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9">
+                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
                         </path>
                     </svg>
-                    <h2 class="text-xl font-bold">Upcoming Alerts</h2>
+                    <h2 class="text-xl font-bold">Pending Supply Requests</h2>
                 </div>
-                <div class="p-4 text-center text-gray-500">
-                    No additional alerts at the moment.
+                <div class="p-4">
+                    @if($pendingRequests->isEmpty())
+                        <p class="text-center text-gray-500">No pending supply requests.</p>
+                    @else
+                        <div class="space-y-3">
+                            @foreach($pendingRequests as $request)
+                                <div class="border-l-4 border-yellow-500 bg-yellow-50 p-3 rounded">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="font-semibold">{{ $request->requester }}</p>
+                                            <p class="text-sm text-gray-600">
+                                                {{ $request->department->department }} - 
+                                                {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
+                                            </p>
+                                            <p class="text-xs text-gray-500">
+                                                Requested {{ \Carbon\Carbon::parse($request->request_date)->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                        <a href="{{ route('inventory.supply-request.details', ['request_group_id' => $request->request_group_id]) }}"
+                                            class="text-yellow-600 hover:text-yellow-800">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                                                xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                                </path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        @if($totalPendingRequests > 5)
+                            <div class="text-center mt-4">
+                                <a href="{{ route('inventory.my-requests') }}" class="text-yellow-600 hover:underline">
+                                    View All {{ $totalPendingRequests }} Pending Requests
+                                </a>
+                            </div>
+                        @endif
+                    @endif
                 </div>
             </div>
 
-            <!-- Additional Alert Placeholders
+            <!-- Additional Alert Placeholders -->
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
                 <div class="bg-blue-500 text-white p-4 flex items-center">
                     <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3 .138z">
+                            d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z">
                         </path>
                     </svg>
                     <h2 class="text-xl font-bold">Additional Alerts</h2>
@@ -221,7 +260,7 @@
                 <div class="p-4 text-center text-gray-500">
                     No additional alerts at the moment.
                 </div>
-            </div> -->
+            </div>
         </div>
     </div>
 </div>

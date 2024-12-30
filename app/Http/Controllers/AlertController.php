@@ -21,6 +21,20 @@ class AlertController extends Controller
         $pastDueCount = $totalPastDueAssets->count();
         $pastDueAssets = $totalPastDueAssets->take(5);
 
+        // Get pending supply requests
+        $pendingRequests = \App\Models\SupplyRequest::select('request_group_id', 'requester', 'status', 'request_date', 'department_id', 
+                     \DB::raw('COUNT(*) as items_count'))
+            ->where('status', 'pending')
+            ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'department_id')
+            ->with('department')
+            ->orderBy('request_date', 'desc')
+            ->take(5)
+            ->get();
+
+        $totalPendingRequests = \App\Models\SupplyRequest::where('status', 'pending')
+            ->distinct('request_group_id')
+            ->count('request_group_id');
+
         // Get current user's ID from username
         $user = User::where('username', Auth::user()->username)->first();
         
@@ -32,9 +46,13 @@ class AlertController extends Controller
                     'asset_id' => $asset->id
                 ]);
             }
+
+            // Update last checked alerts timestamp
+            $user->last_checked_alerts = now();
+            $user->save();
         }
 
-        return view('fcu-ams.alert.alerts', compact('pastDueAssets', 'pastDueCount'));
+        return view('fcu-ams.alert.alerts', compact('pastDueAssets', 'pastDueCount', 'pendingRequests', 'totalPendingRequests'));
     }
 
     public function show(Asset $asset)

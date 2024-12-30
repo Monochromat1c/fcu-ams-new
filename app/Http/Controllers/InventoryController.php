@@ -415,6 +415,9 @@ class InventoryController extends Controller
 
         $totalItems = $requests->count();
 
+        // Store the URL that brought us to this page
+        session(['supply_request_return_url' => url()->previous()]);
+
         return view('fcu-ams.inventory.supplyRequestDetails', [
             'requests' => $requests,
             'totalItems' => $totalItems
@@ -437,7 +440,7 @@ class InventoryController extends Controller
             }
             
             DB::commit();
-            return redirect()->back()->with('success', 'Supply request approved successfully.');
+            return redirect(request('return_url'))->with('success', 'Supply request approved successfully.');
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->with('error', 'Failed to approve supply request.');
@@ -460,7 +463,7 @@ class InventoryController extends Controller
             }
             
             DB::commit();
-            return redirect()->back()->with('success', 'Supply request rejected successfully.');
+            return redirect(request('return_url'))->with('success', 'Supply request rejected successfully.');
         } catch (\Exception $e) {
             DB::rollback();
             return redirect()->back()->with('error', 'Failed to reject supply request.');
