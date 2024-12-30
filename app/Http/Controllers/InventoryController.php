@@ -470,4 +470,19 @@ class InventoryController extends Controller
     public function export() { 
         return Excel::download(new InventoryExport, 'inventories.csv');
     }
+
+    public function myRequests()
+    {
+        $user = auth()->user();
+        
+        $requests = SupplyRequest::select('request_group_id', 'requester', 'status', 'request_date', 'department_id', 
+                     DB::raw('COUNT(*) as items_count'))
+            ->where('requester', $user->first_name . ' ' . $user->last_name)
+            ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'department_id')
+            ->with('department')
+            ->orderBy('request_date', 'desc')
+            ->get();
+            
+        return view('fcu-ams.inventory.myRequests', compact('requests'));
+    }
 }

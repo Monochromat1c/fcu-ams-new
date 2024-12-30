@@ -85,7 +85,7 @@
                 <div class="flex justify-between mb-3">
                     <h2 class="text-2xl font-bold my-auto">Out of Stock</h2>
                 </div>
-                <div class="overflow-x-auto overflow-y-auto rounded-lg">
+                <div class="overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-200">
                     <table class="min-w-full divide-y divide-gray-200 border-2 border-gray-200 shadow-md rounded-lg overflow-hidden">
                         <thead class="bg-gradient-to-r from-red-400 to-red-500 text-white">
                             <tr>

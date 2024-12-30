@@ -10,14 +10,36 @@
     </svg>
     Asset List
 </a>
-<a href="{{ route('inventory.supply.request') }}"
+<a href="{{ route('inventory.list') }}"
     class="block px-4 flex gap-1 py-2 text-gray-700  hover:bg-slate-100
-            {{ Request::is('inventory/supply-request') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
+            {{ Request::is('inventory/list') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-        <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
+        <path
+            d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" />
     </svg>
-    Request Supplies
+    Inventory List
 </a>
+<div class="relative" x-data="{ open: false }">
+    <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700  hover:bg-slate-100">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5 3a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2V5a2 2 0 00-2-2H5zm0 2h10v7h-2l-1 2H8l-1-2H5V5z" clip-rule="evenodd" />
+        </svg>
+        Request
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-auto" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd"
+                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                clip-rule="evenodd" />
+        </svg>
+    </button>
+    <div x-show="open" class="pl-9">
+        <a href="{{ route('inventory.supply.request') }}"
+            class="block px-4 py-2 text-gray-700  hover:bg-slate-100
+            {{ Request::is('inventory/supply-request') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">Request Supplies</a>
+        <a href="{{ route('inventory.my.requests') }}"
+            class="block px-4 py-2 text-gray-700  hover:bg-slate-100
+            {{ Request::is('inventory/my-requests') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">My Requests</a>
+    </div>
+</div>
 @endif
 
 

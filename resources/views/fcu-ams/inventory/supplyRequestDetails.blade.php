@@ -10,7 +10,7 @@
         <div class="bg-white m-3 shadow-md rounded-md 2xl:max-w-7xl 2xl:mx-auto">
             <div class="px-4 sm:px-6 lg:px-8 py-6">
                 <div class="flex justify-between">
-                    <a href="{{ route('dashboard') }}"
+                    <a href="{{ url()->previous() }}"
                     class="mr-4 hover:bg-gray-100 my-auto p-2 rounded-full transition">
                         <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
@@ -20,7 +20,7 @@
                     </a>
                     <h1 class="text-2xl font-semibold text-gray-900 my-auto mx-auto">Supply Request Details</h1>
                     <div class="flex items-center space-x-3">
-                        @if($requests->first()->status === 'pending')
+                        @if($requests->first()->status === 'pending' && Auth::user()->role->role !== 'Viewer')
                             <form action="{{ route('inventory.supply-request.approve', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST" class="inline">
                                 @csrf
                                 <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-600 hover:bg-green-700 focus:ring-4 focus:ring-green-300 text-white text-sm font-medium rounded-md shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">

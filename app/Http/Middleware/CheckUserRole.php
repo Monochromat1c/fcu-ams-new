@@ -12,6 +12,7 @@ class CheckUserRole
     {
         $allowedRoutesForViewer = [
             'asset.list',
+            'inventory.list',
             'profile.index',
             'profile.update',
             'profile.updatePersonalInformation',
@@ -19,6 +20,10 @@ class CheckUserRole
             'logout',
             'inventory.supply.request',
             'inventory.supply.request.store',
+            'inventory.low.stock',
+            'inventory.out.of.stock',
+            'inventory.my.requests',
+            'inventory.supply-request.details',
         ];
 
         $deniedRoutesForManager = [
