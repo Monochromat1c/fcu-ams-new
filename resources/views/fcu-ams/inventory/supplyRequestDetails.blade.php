@@ -89,10 +89,6 @@
                             <span class="font-medium">Total Items:</span>
                             <span class="ml-2">{{ $totalItems }}</span>
                         </div>
-                        <div>
-                            <span class="font-medium">Total Value:</span>
-                            <span class="ml-2">₱{{ number_format($totalValue, 2) }}</span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -106,39 +102,20 @@
                             <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
                                 <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Item</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Quantity</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit Price</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Total</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($requests as $request)
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{ $request->inventory->brand->brand }}
-                                        {{ $request->inventory->items_specs }}
+                                        {{ $request->item_name }}
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {{ $request->quantity }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        ₱{{ number_format($request->inventory->unit_price, 2) }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        ₱{{ number_format($request->quantity * $request->inventory->unit_price, 2) }}
-                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
-                        <tfoot>
-                            <tr class="bg-gray-50">
-                                <td colspan="3" class="px-6 py-4 text-sm font-medium text-gray-900 text-right">
-                                    Total:
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    ₱{{ number_format($totalValue, 2) }}
-                                </td>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
             </div>

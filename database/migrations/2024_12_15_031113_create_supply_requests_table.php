@@ -14,6 +14,7 @@ return new class extends Migration
             $table->uuid('request_group_id'); // Group ID to track items requested together
             $table->foreignId('department_id')->constrained('departments');
             $table->foreignId('inventory_id')->constrained('inventories');
+            $table->string('item_name'); // Store the actual requested item name
             $table->string('requester');
             $table->integer('quantity');
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');

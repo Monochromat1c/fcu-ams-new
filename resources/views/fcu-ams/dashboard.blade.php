@@ -15,6 +15,7 @@
                         @else
                             <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
                                 class="w-14 h-14 object-cover bg-no-repeat rounded-full mx-auto">
+                                
                         @endif
                     </div>
                      

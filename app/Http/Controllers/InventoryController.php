@@ -352,6 +352,7 @@ class InventoryController extends Controller
             ->select('inventories.*')
             ->get();
         $departments = Department::all();
+        $units = Unit::all();
         $userDepartment = $user->department;
         
         // Debug information
@@ -361,15 +362,16 @@ class InventoryController extends Controller
             'department' => $userDepartment
         ]);
         
-        return view('fcu-ams.inventory.supplyRequest', compact('inventories', 'departments', 'user', 'userDepartment'));
+        return view('fcu-ams.inventory.supplyRequest', compact('inventories', 'departments', 'user', 'userDepartment', 'units'));
     }
 
     public function storeSupplyRequest(Request $request)
     {
         $request->validate([
             'department_id' => 'required|exists:departments,id',
+            'request_date' => 'required|date',
             'items' => 'required|array',
-            'items.*.id' => 'required|exists:inventories,id',
+            'items.*.name' => 'required|string',
             'items.*.quantity' => 'required|integer|min:1'
         ]);
 
@@ -384,10 +386,11 @@ class InventoryController extends Controller
                 $supplyRequest->request_group_id = $requestGroupId;
                 $supplyRequest->department_id = $request->department_id;
                 $supplyRequest->notes = $request->notes;
-                $supplyRequest->inventory_id = $item['id'];
+                $supplyRequest->inventory_id = Inventory::first()->id; // Required for foreign key
                 $supplyRequest->requester = auth()->user()->first_name . ' ' . auth()->user()->last_name;
                 $supplyRequest->quantity = $item['quantity'];
-                $supplyRequest->request_date = now();
+                $supplyRequest->request_date = $request->request_date;
+                $supplyRequest->item_name = $item['name']; // Store the actual requested item name
                 $supplyRequest->save();
             }
             
@@ -395,13 +398,14 @@ class InventoryController extends Controller
             return redirect()->back()->with('success', 'Supply request submitted successfully.');
         } catch (\Exception $e) {
             DB::rollback();
+            \Log::error('Supply request error: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to submit supply request. Please try again.');
         }
     }
 
     public function showSupplyRequestDetails($request_group_id)
     {
-        $requests = SupplyRequest::with(['inventory.brand', 'department'])
+        $requests = SupplyRequest::with(['department'])
             ->where('request_group_id', $request_group_id)
             ->get();
 
@@ -410,14 +414,10 @@ class InventoryController extends Controller
         }
 
         $totalItems = $requests->count();
-        $totalValue = $requests->sum(function ($request) {
-            return $request->quantity * $request->inventory->unit_price;
-        });
 
         return view('fcu-ams.inventory.supplyRequestDetails', [
             'requests' => $requests,
-            'totalItems' => $totalItems,
-            'totalValue' => $totalValue
+            'totalItems' => $totalItems
         ]);
     }
 
@@ -432,15 +432,6 @@ class InventoryController extends Controller
         DB::beginTransaction();
         try {
             foreach ($requests as $request) {
-                $inventory = $request->inventory;
-                
-                if ($inventory->quantity < $request->quantity) {
-                    throw new \Exception("Insufficient stock for {$inventory->items_specs}");
-                }
-                
-                $inventory->quantity -= $request->quantity;
-                $inventory->save();
-                
                 $request->status = 'approved';
                 $request->save();
             }
@@ -449,7 +440,7 @@ class InventoryController extends Controller
             return redirect()->back()->with('success', 'Supply request approved successfully.');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to approve supply request.');
         }
     }
 
@@ -461,12 +452,19 @@ class InventoryController extends Controller
             return redirect()->back()->with('error', 'Supply request not found.');
         }
 
-        foreach ($requests as $request) {
-            $request->status = 'rejected';
-            $request->save();
+        DB::beginTransaction();
+        try {
+            foreach ($requests as $request) {
+                $request->status = 'rejected';
+                $request->save();
+            }
+            
+            DB::commit();
+            return redirect()->back()->with('success', 'Supply request rejected successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Failed to reject supply request.');
         }
-
-        return redirect()->back()->with('success', 'Supply request rejected successfully.');
     }
 
     public function export() { 

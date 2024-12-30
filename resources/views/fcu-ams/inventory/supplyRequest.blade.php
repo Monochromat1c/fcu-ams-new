@@ -1,4 +1,5 @@
 @extends('layouts.layout')
+
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/stockin.css') }}">
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
@@ -26,7 +27,7 @@
                         <label for="item_id" class="block text-gray-700 font-bold mb-2">Items:</label>
                         <button type="button" class="ml-auto rounded-md border-2 border-slate-300 text-left px-3 py-2 bg-slate-50 text-black w-full"
                             onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
-                            Select Items to Request
+                            Add Items to Request
                         </button>
                         <div class="overflow-y-auto max-h-64 hidden mt-3" id="selected-items-container">
                             <div class="max-w-4xl mx-auto overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-300">
@@ -35,20 +36,10 @@
                                         <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Item</th>
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Quantity</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Price</th>
-                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200" id="selected-items">
                                     </tbody>
-                                    <tfoot>
-                                        <tr class="font-bold bg-gray-50">
-                                            <td class="px-6 py-3 invisible" colspan="">Overall Price:</td>
-                                            <td class="px-6 py-3 invisible" colspan="">Overall Price:</td>
-                                            <td class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider" colspan="">Overall Price:</td>
-                                            <td class="px-6 py-3 text-sm font-semibold text-gray-900" id="overall-price">₱0.00</td>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -63,75 +54,54 @@
                                 <!-- Modal header -->
                                 <div class="flex items-center justify-between p-4 border-b rounded-t">
                                     <h3 class="text-xl font-semibold text-gray-900">
-                                        Select Items to Request
+                                        Add Items to Request
                                     </h3>
-                                    <div class="flex items-center space-x-4">
-                                        <div class="relative">
-                                            <input type="text" id="modal-search" placeholder="Search items..." 
-                                                class="pl-10 pr-4 py-2 rounded-lg border-2 border-slate-300 focus:ring-2 focus:ring-blue-400 focus:border-blue-400 w-64">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400 absolute left-3 top-2.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                            </svg>
-                                        </div>
-                                        <button type="button"
-                                            class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center"
-                                            onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
-                                            <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                                            </svg>
-                                            <span class="sr-only">Close modal</span>
-                                        </button>
-                                    </div>
+                                    <button type="button"
+                                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center"
+                                        onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
+                                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                                        </svg>
+                                        <span class="sr-only">Close modal</span>
+                                    </button>
                                 </div>
                                 <!-- Modal body -->
                                 <div class="p-6">
+                                    <div class="sm:flex sm:items-center sm:justify-between mb-6">
+                                        <h3 class="text-lg font-medium text-gray-900">Request Items</h3>
+                                        <button type="button" class="add-row-button mt-3 sm:mt-0 inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                            </svg>
+                                            Add Item
+                                        </button>
+                                    </div>
                                     <div class="max-w-5xl mx-auto overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-300">
                                         <div class="max-h-[60vh] overflow-y-auto">
-                                            <table class="min-w-full divide-y divide-gray-200">
+                                            <table class="min-w-full divide-y divide-gray-200" id="request-items-table">
                                                 <thead>
                                                     <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
-                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Item</th>
+                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Item Name</th>
                                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Quantity</th>
-                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit</th>
-                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit Price</th>
                                                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="bg-white divide-y divide-gray-200">
-                                                    @foreach($inventories as $inventory)
-                                                        <tr class="hover:bg-gray-50 transition-colors duration-200">
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                                {{ $inventory->brand->brand }}
-                                                                {{ $inventory->items_specs }}</td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                                {{ $inventory->quantity }}</td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                                {{ $inventory->unit->unit }}</td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                                ₱{{ number_format($inventory->unit_price, 2) }}</td>
-                                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                                                <div class="flex items-center gap-4">
-                                                                    <label class="inline-flex items-center">
-                                                                        <input type="checkbox"
-                                                                            id="item_{{ $inventory->id }}" 
-                                                                            class="form-checkbox item-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
-                                                                            data-id="{{ $inventory->id }}"
-                                                                            data-brand="{{ $inventory->brand->brand }}"
-                                                                            data-specs="{{ $inventory->items_specs }}"
-                                                                            data-price="{{ $inventory->unit_price }}"
-                                                                            onchange="handleItemSelection(this)">
-                                                                    </label>
-                                                                    <input type="number" 
-                                                                        id="quantity_{{ $inventory->id }}"
-                                                                        class="quantity-input hidden w-24 px-3 py-1.5 text-sm border border-gray-300 rounded-md focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                                                                        min="1"
-                                                                        max="{{ $inventory->quantity }}"
-                                                                        placeholder="Qty"
-                                                                        onchange="updateSelectedItems()">
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
+                                                <tbody id="request-items-table-body" class="bg-white divide-y divide-gray-200">
+                                                    <tr>
+                                                        <td class="px-6 py-4 whitespace-nowrap">
+                                                            <input type="text" name="items[0][name]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" placeholder="Item Name" required>
+                                                        </td>
+                                                        <td class="px-6 py-4 whitespace-nowrap">
+                                                            <input type="number" name="items[0][quantity]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="1" placeholder="Quantity" required>
+                                                        </td>
+                                                        <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                                            <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                                    <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                                </svg>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -146,7 +116,7 @@
                                     </button>
                                     <button type="button"
                                         class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5"
-                                        onclick="document.getElementById('defaultModal').classList.toggle('hidden')">
+                                        onclick="updateSelectedItems()">
                                         Done
                                     </button>
                                 </div>
@@ -199,60 +169,33 @@
 </div>
 
 <script>
-    function handleItemSelection(checkbox) {
-        const id = checkbox.dataset.id;
-        const quantityInput = document.getElementById(`quantity_${id}`);
-        
-        if (checkbox.checked) {
-            quantityInput.classList.remove('hidden');
-            quantityInput.value = 1;
-            updateSelectedItems();
-        } else {
-            quantityInput.classList.add('hidden');
-            quantityInput.value = '';
-            updateSelectedItems();
-        }
-    }
-
     function updateSelectedItems() {
         const selectedItemsContainer = document.getElementById('selected-items');
-        const checkboxes = document.querySelectorAll('.item-checkbox:checked');
-        let overallPrice = 0;
+        const rows = document.querySelectorAll('#request-items-table-body tr');
         selectedItemsContainer.innerHTML = '';
 
-        checkboxes.forEach(checkbox => {
-            const id = checkbox.dataset.id;
-            const quantityInput = document.getElementById(`quantity_${id}`);
-            const quantity = parseInt(quantityInput.value) || 0;
-            const price = parseFloat(checkbox.dataset.price);
-            const total = quantity * price;
-            overallPrice += total;
+        rows.forEach((row, index) => {
+            const name = row.querySelector(`input[name="items[${index}][name]"]`).value;
+            const quantity = row.querySelector(`input[name="items[${index}][quantity]"]`).value;
 
-            // Add to selected items table
-            const row = document.createElement('tr');
-            row.innerHTML = `
+            const selectedRow = document.createElement('tr');
+            selectedRow.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${checkbox.dataset.brand} ${checkbox.dataset.specs}
-                    <input type="hidden" name="items[${id}][id]" value="${id}">
-                    <input type="hidden" name="items[${id}][quantity]" value="${quantity}">
+                    ${name}
+                    <input type="hidden" name="items[${index}][name]" value="${name}">
                 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${quantity}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱${price.toFixed(2)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱${total.toFixed(2)}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    ${quantity}
+                    <input type="hidden" name="items[${index}][quantity]" value="${quantity}">
+                </td>
             `;
-            selectedItemsContainer.appendChild(row);
+            selectedItemsContainer.appendChild(selectedRow);
         });
 
-        // Update overall price
-        document.getElementById('overall-price').textContent = `₱${overallPrice.toFixed(2)}`;
-        
-        // Show/hide the selected items container
-        const container = document.getElementById('selected-items-container');
-        container.classList.toggle('hidden', checkboxes.length === 0);
+        document.getElementById('selected-items-container').classList.remove('hidden');
+        document.getElementById('defaultModal').classList.add('hidden');
     }
-</script>
 
-<script>
     document.addEventListener('DOMContentLoaded', function () {
         // Set default request date to today
         var today = new Date();
@@ -262,15 +205,44 @@
         today = yyyy + '-' + mm + '-' + dd;
         document.getElementById('request_date').value = today;
 
-        // Search functionality for modal
-        const modalSearchInput = document.getElementById('modal-search');
-        modalSearchInput.addEventListener('input', function() {
-            const searchTerm = this.value.toLowerCase();
-            const rows = document.querySelectorAll('#defaultModal tbody tr');
+        const addRowButton = document.querySelector('.add-row-button');
+        const deleteRowButtons = document.querySelectorAll('.delete-row-button');
+        const requestItemsTableBody = document.querySelector('#request-items-table-body');
+        let rowCounter = 1;
 
-            rows.forEach(row => {
-                const text = row.textContent.toLowerCase();
-                row.style.display = text.includes(searchTerm) ? '' : 'none';
+        function createNewRow() {
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="text" name="items[${rowCounter}][name]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" placeholder="Item Name" required>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap">
+                    <input type="number" name="items[${rowCounter}][quantity]" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="1" placeholder="Quantity" required>
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                    <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                    </button>
+                </td>
+            `;
+            requestItemsTableBody.appendChild(newRow);
+
+            const newDeleteRowButton = newRow.querySelector('.delete-row-button');
+            newDeleteRowButton.addEventListener('click', function() {
+                newRow.remove();
+            });
+
+            rowCounter++;
+        }
+
+        addRowButton.addEventListener('click', createNewRow);
+
+        deleteRowButtons.forEach(function(deleteRowButton) {
+            deleteRowButton.addEventListener('click', function() {
+                const row = deleteRowButton.closest('tr');
+                row.remove();
             });
         });
     });
