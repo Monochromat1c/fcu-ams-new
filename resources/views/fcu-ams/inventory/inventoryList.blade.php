@@ -313,38 +313,43 @@
                     </button>
 
                     <!-- Filter Modal -->
-                    <div id="filterModal" class="fixed inset-0 flex items-center justify-center z-50 hidden bg-black bg-opacity-50">
-                        <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 md:w-1/2 max-h-[80vh] overflow-y-auto">
-                            <h2 class="text-2xl font-bold mb-4">Filter Inventory</h2>
-                            <form id="filterForm" action="{{ route('inventory.list') }}" method="GET" class="space-y-4">
+                    <div id="filterModal" class="fixed inset-0 flex items-center justify-center z-50 hidden backdrop-blur-sm">
+                        <div class="fixed inset-0 bg-gray-500 bg-opacity-50 transition-opacity duration-300"></div>
+                        <div class="bg-white rounded-xl shadow-2xl p-8 w-11/12 md:w-2/3 lg:w-1/2 max-h-[85vh] overflow-y-auto relative z-50 transform transition-all duration-300">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold text-gray-800">Filter Inventory</h2>
+                                <button type="button" onclick="document.getElementById('filterModal').classList.add('hidden')" 
+                                    class="text-gray-400 hover:text-gray-500 transition-colors duration-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <form id="filterForm" action="{{ route('inventory.list') }}" method="GET" class="space-y-6">
                                 <!-- Brands Filter -->
-                                <div class="border-b border-gray-300 pb-4 mb-4">
-                                    <h3 class="segoe font-semibold mb-2">Brands</h3>
-                                    <div class="grid grid-cols-3 gap-2">
+                                <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Brands</h3>
+                                    <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                                         @foreach($brands as $brand)
-                                            <label class="inline-flex items-center">
+                                            <label class="inline-flex items-center hover:bg-gray-100 p-2 rounded-lg transition-colors duration-200">
                                                 <input type="checkbox" name="brands[]" value="{{ $brand->id }}"
-                                                    class="form-checkbox"
+                                                    class="form-checkbox h-5 w-5 text-blue-600 rounded border-gray-300 focus:ring-blue-500"
                                                     {{ isset($selectedBrands) && in_array($brand->id, $selectedBrands) ? 'checked' : '' }}>
-                                                <span class="ml-2">{{ $brand->brand }}</span>
+                                                <span class="ml-3 text-gray-700">{{ $brand->brand }}</span>
                                             </label>
                                         @endforeach
                                     </div>
                                 </div>
 
-                                <div class="flex justify-end gap-2">
-                                    <button type="button" onclick="document.getElementById('filterModal').classList.add('hidden')"
-                                        class="flex gap-1 items-center px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-all duration-200">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
+                                <!-- Modal Actions -->
+                                <div class="flex justify-end gap-4 pt-6 border-t border-gray-200">
+                                    <button type="button" 
+                                        onclick="document.getElementById('filterModal').classList.add('hidden')"
+                                        class="px-6 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-all duration-200">
                                         Cancel
                                     </button>
                                     <button type="submit"
-                                        class="flex gap-1 items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-all duration-200">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
-                                        </svg>
+                                        class="px-6 py-2.5 bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
                                         Apply Filters
                                     </button>
                                 </div>
