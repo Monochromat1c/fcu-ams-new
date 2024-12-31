@@ -19,6 +19,10 @@ class DepartmentController extends Controller
         $department->department = $validatedData['department'];
         $department->save();
 
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
         return redirect()->back()->with('success', 'Department added successfully!');
     }
 
@@ -57,5 +61,10 @@ class DepartmentController extends Controller
         } else {
             return redirect()->back()->withErrors(['error' => 'Department not found']);
         }
+    }
+
+    public function list()
+    {
+        return response()->json(Department::orderBy('department', 'asc')->get());
     }
 }

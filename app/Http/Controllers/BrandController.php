@@ -30,6 +30,10 @@ class BrandController extends Controller
         $brand->brand = $validatedData['brand'];
         $brand->save();
 
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
         return redirect()->back()->with('success', 'Brand added successfully!');
     }
 
@@ -68,5 +72,10 @@ class BrandController extends Controller
         } else {
             return redirect()->back()->withErrors(['error' => 'Brand not found']);
         }
+    }
+
+    public function list()
+    {
+        return response()->json(Brand::orderBy('brand', 'asc')->get());
     }
 }

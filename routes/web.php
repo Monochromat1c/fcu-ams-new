@@ -132,6 +132,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(CategoryController::class)->group(function (){
         Route::get('/category/index', 'index')->name('category.index');
+        Route::get('/category/list', 'list')->name('category.list');
         Route::post('/category/add', 'add')->name('category.add');
         Route::post('/category/{id}', 'update')->name('category.update');
         Route::delete('/category/{id}', 'destroy')->name('category.destroy');
@@ -139,6 +140,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(BrandController::class)->group(function (){
         Route::get('/brand/index', 'index')->name('brand.index');
+        Route::get('/brand/list', 'list')->name('brand.list');
         Route::post('/brand/add', 'add')->name('brand.add');
         Route::post('/brand/{id}', 'update')->name('brand.update');
         Route::delete('/brand/{id}', 'destroy')->name('brand.destroy');
@@ -153,6 +155,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(DepartmentController::class)->group(function (){
         Route::get('/department/index', 'index')->name('department.index');
+        Route::get('/department/list', 'list')->name('department.list');
         Route::post('/department/add', 'add')->name('department.add');
         Route::post('/department/{id}', 'update')->name('department.update');
         Route::delete('/department/{id}', 'destroy')->name('department.destroy');
@@ -163,6 +166,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(LocationController::class)->group(function (){
         Route::get('/location/index', 'index')->name('location.index');
+        Route::get('/location/list', 'list')->name('location.list');
         Route::post('/location/add', 'add')->name('location.add');
         Route::post('/location/{id}', 'update')->name('location.update');
         Route::delete('/location/{id}', 'destroy')->name('location.destroy');
@@ -173,6 +177,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(SiteController::class)->group(function (){
         Route::get('/site/index', 'index')->name('site.index');
+        Route::get('/site/list', 'list')->name('site.list');
         Route::post('/site/add', 'add')->name('site.add');
         Route::post('/site/{id}', 'update')->name('site.update');
         Route::delete('/site/{id}', 'destroy')->name('site.destroy');
@@ -190,6 +195,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(SupplierController::class)->group(function (){
         Route::get('/supplier/index', 'index')->name('supplier.index');
+        Route::get('/supplier/list', 'list')->name('supplier.list');
         Route::post('/supplier/add', 'add')->name('supplier.add');
         Route::post('/supplier/{id}', 'update')->name('supplier.update');
         Route::delete('/supplier/{id}', 'destroy')->name('supplier.destroy');

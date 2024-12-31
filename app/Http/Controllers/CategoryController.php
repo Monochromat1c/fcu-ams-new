@@ -19,6 +19,10 @@ class CategoryController extends Controller
         $category->category = $validatedData['category'];
         $category->save();
 
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
         return redirect()->back()->with('success', 'Category added successfully!');
     }
 
@@ -57,5 +61,10 @@ class CategoryController extends Controller
         } else {
             return redirect()->back()->withErrors(['error' => 'Category not found']);
         }
+    }
+
+    public function list()
+    {
+        return response()->json(Category::orderBy('category', 'asc')->get());
     }
 }

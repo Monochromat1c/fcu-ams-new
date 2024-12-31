@@ -30,6 +30,10 @@ class SupplierController extends Controller
         $supplier->supplier = $validatedData['supplier'];
         $supplier->save();
 
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
         return redirect()->back()->with('success', 'Supplier added successfully!');
     }
 
@@ -68,5 +72,10 @@ class SupplierController extends Controller
         } else {
             return redirect()->back()->withErrors(['error' => 'Supplier not found']);
         }
+    }
+
+    public function list()
+    {
+        return response()->json(Supplier::orderBy('supplier', 'asc')->get());
     }
 }

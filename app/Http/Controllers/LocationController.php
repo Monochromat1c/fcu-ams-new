@@ -19,6 +19,10 @@ class LocationController extends Controller
         $location->location = $validatedData['location'];
         $location->save();
 
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
         return redirect()->back()->with('success', 'Location added successfully!');
     }
 
@@ -57,5 +61,10 @@ class LocationController extends Controller
         } else {
             return redirect()->back()->withErrors(['error' => 'Location not found']);
         }
+    }
+
+    public function list()
+    {
+        return response()->json(Location::orderBy('location', 'asc')->get());
     }
 }

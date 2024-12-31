@@ -137,7 +137,7 @@
                             <label for="supplier_id" class="block text-sm font-medium text-gray-700">Supplier</label>
                             <div class="mt-1 flex space-x-2">
                                 <select id="supplier_id" name="supplier_id" required
-                                    class="block w-full  pl-3 pr-10 py-2 text-base border-2 border-slate-300  bg-slate-50  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                     <option value="">Select a supplier</option>
                                     @foreach($suppliers as $supplier)
                                         <option value="{{ $supplier->id }}"
@@ -147,13 +147,10 @@
                                     @endforeach
                                 </select>
                                 <button type="button"
-                                    onclick="document.getElementById('add-supplier-modal').classList.toggle('hidden')"
-                                    class="inline-flex items-center border-2  p-2 border-transparent rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                            clip-rule="evenodd" />
+                                    onclick="document.getElementById('add-supplier-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
                             </div>
@@ -164,20 +161,17 @@
                             <label for="site_id" class="block text-sm font-medium text-gray-700">Site</label>
                             <div class="mt-1 flex space-x-2">
                                 <select id="site_id" name="site_id" required
-                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300  bg-slate-50  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                     <option value="">Select a site</option>
                                     @foreach($sites as $site)
                                         <option value="{{ $site->id }}">{{ $site->site }}</option>
                                     @endforeach
                                 </select>
                                 <button type="button"
-                                    onclick="document.getElementById('add-site-modal').classList.toggle('hidden')"
-                                    class="inline-flex items-center border-2  p-2 border-transparent rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                            clip-rule="evenodd" />
+                                    onclick="document.getElementById('add-site-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
                             </div>
@@ -188,20 +182,17 @@
                             <label for="location_id" class="block text-sm font-medium text-gray-700">Location</label>
                             <div class="mt-1 flex space-x-2">
                                 <select id="location_id" name="location_id" required
-                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300  bg-slate-50  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                     <option value="">Select a location</option>
                                     @foreach($locations as $location)
                                         <option value="{{ $location->id }}">{{ $location->location }}</option>
                                     @endforeach
                                 </select>
                                 <button type="button"
-                                    onclick="document.getElementById('add-location-modal').classList.toggle('hidden')"
-                                    class="inline-flex items-center border-2  p-2 border-transparent rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                            clip-rule="evenodd" />
+                                    onclick="document.getElementById('add-location-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
                             </div>
@@ -212,20 +203,17 @@
                             <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
                             <div class="mt-1 flex space-x-2">
                                 <select id="category_id" name="category_id" required
-                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300  bg-slate-50  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                     <option value="">Select a category</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->id }}">{{ $category->category }}</option>
                                     @endforeach
                                 </select>
                                 <button type="button"
-                                    onclick="document.getElementById('add-category-modal').classList.toggle('hidden')"
-                                    class="inline-flex items-center border-2  p-2 border-transparent rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                            clip-rule="evenodd" />
+                                    onclick="document.getElementById('add-category-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
                             </div>
@@ -233,30 +221,23 @@
 
                         <!-- Department -->
                         <div>
-                            <label for="department_id"
-                                class="block text-sm font-medium text-gray-700">Department</label>
+                            <label for="department_id" class="block text-sm font-medium text-gray-700">Department</label>
                             <div class="mt-1 flex space-x-2">
                                 <select id="department_id" name="department_id" required
-                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300  bg-slate-50  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                     <option value="">Select a department</option>
                                     @foreach($departments as $department)
                                         <option value="{{ $department->id }}">{{ $department->department }}</option>
                                     @endforeach
                                 </select>
                                 <button type="button"
-                                    onclick="document.getElementById('add-department-modal').classList.toggle('hidden')"
-                                    class="inline-flex items-center border-2  p-2 border-transparent rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                            clip-rule="evenodd" />
+                                    onclick="document.getElementById('add-department-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
                             </div>
-                            @error('department_id')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
                         </div>
 
                         <!-- Brand -->
@@ -264,20 +245,17 @@
                             <label for="brand_id" class="block text-sm font-medium text-gray-700">Brand</label>
                             <div class="mt-1 flex space-x-2">
                                 <select id="brand_id" name="brand_id" required
-                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300  bg-slate-50  focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                     <option value="">Select a brand</option>
                                     @foreach($brands as $brand)
                                         <option value="{{ $brand->id }}">{{ $brand->brand }}</option>
                                     @endforeach
                                 </select>
                                 <button type="button"
-                                    onclick="document.getElementById('add-brand-modal').classList.toggle('hidden')"
-                                    class="inline-flex items-center border-2  p-2 border-transparent rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor">
-                                        <path fill-rule="evenodd"
-                                            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-                                            clip-rule="evenodd" />
+                                    onclick="document.getElementById('add-brand-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
                                     </svg>
                                 </button>
                             </div>
@@ -292,105 +270,134 @@
                         </button>
                     </div>
                 </form>
-                <!-- Assignment Modal -->
-                <div class="modal-container">
-                    <div id="assignment-modal" tabindex="-1" aria-hidden="true"
-                        class="modalBg fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
-                        <div class="flex min-h-screen items-center justify-center p-4">
-                            <div
-                                class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
-                                <!-- Header -->
-                                <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                                    <div class="flex items-center justify-between">
-                                        <h2 class="text-xl font-semibold text-gray-800">Asset Assignment</h2>
-                                        <button type="button"
-                                            class="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none"
-                                            onclick="document.getElementById('assignment-modal').classList.toggle('hidden')">
-                                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M6 18L18 6M6 6l12 12" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-                                <!-- Body -->
-                                <div class="px-6 py-4">
-                                    <div class="space-y-4">
-                                        <!-- Assigned To Field -->
-                                        <div>
-                                            <label for="modal_assigned_to"
-                                                class="block text-sm font-medium text-gray-700">Assigned To</label>
-                                            <div class="mt-1">
-                                                <input type="text" id="modal_assigned_to"
-                                                    class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                                                    value="{{ old('assigned_to') }}"
-                                                    placeholder="Enter assignee name">
-                                            </div>
-                                        </div>
+<!-- Modals -->
+<x-add-item-modal 
+    title="Add New Supplier"
+    id="add-supplier-modal"
+    route="{{ route('supplier.add') }}"
+    field="supplier"
+/>
 
-                                        <!-- Date Issued Field -->
-                                        <div>
-                                            <label for="modal_issued_date"
-                                                class="block text-sm font-medium text-gray-700">Date Issued</label>
-                                            <div class="mt-1">
-                                                <input type="date" id="modal_issued_date"
-                                                    class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                                                    value="{{ old('issued_date') }}">
-                                            </div>
-                                        </div>
+<x-add-item-modal 
+    title="Add New Site"
+    id="add-site-modal"
+    route="{{ route('site.add') }}"
+    field="site"
+/>
 
-                                        <!-- Notes Field -->
-                                        <div>
-                                            <label for="modal_notes"
-                                                class="block text-sm font-medium text-gray-700">Notes</label>
-                                            <div class="mt-1">
-                                                <textarea id="modal_notes"
-                                                    class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                                                    rows="3"
-                                                    placeholder="Add any additional notes here">{{ old('notes') }}</textarea>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+<x-add-item-modal 
+    title="Add New Location"
+    id="add-location-modal"
+    route="{{ route('location.add') }}"
+    field="location"
+/>
 
-                                <!-- Footer -->
-                                <div class="bg-gray-50 px-6 py-4">
-                                    <div class="flex items-center justify-end space-x-3">
-                                        <button type="button"
-                                            class="rounded-md border-2 border-slate-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-                                            onclick="document.getElementById('assignment-modal').classList.toggle('hidden')">
-                                            Cancel
-                                        </button>
-                                        <button type="button" id="save-assignment-btn"
-                                            class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                            Save Changes
-                                        </button>
-                                    </div>
-                                </div>
+<x-add-item-modal 
+    title="Add New Category"
+    id="add-category-modal"
+    route="{{ route('category.add') }}"
+    field="category"
+/>
+
+<x-add-item-modal 
+    title="Add New Department"
+    id="add-department-modal"
+    route="{{ route('department.add') }}"
+    field="department"
+/>
+
+<x-add-item-modal 
+    title="Add New Brand"
+    id="add-brand-modal"
+    route="{{ route('brand.add') }}"
+    field="brand"
+/>
+
+<!-- Assignment Modal -->
+<div class="modal-container">
+    <div id="assignment-modal" tabindex="-1" aria-hidden="true"
+        class="modalBg fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
+        <div class="flex min-h-screen items-center justify-center p-4">
+            <div
+                class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+                <!-- Header -->
+                <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-semibold text-gray-800">Asset Assignment</h2>
+                        <button type="button"
+                            class="rounded-md p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none"
+                            onclick="document.getElementById('assignment-modal').classList.toggle('hidden')">
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Body -->
+                <div class="px-6 py-4">
+                    <div class="space-y-4">
+                        <!-- Assigned To Field -->
+                        <div>
+                            <label for="modal_assigned_to"
+                                class="block text-sm font-medium text-gray-700">Assigned To</label>
+                            <div class="mt-1">
+                                <input type="text" id="modal_assigned_to"
+                                    class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                    value="{{ old('assigned_to') }}"
+                                    placeholder="Enter assignee name">
                             </div>
                         </div>
+
+                        <!-- Date Issued Field -->
+                        <div>
+                            <label for="modal_issued_date"
+                                class="block text-sm font-medium text-gray-700">Date Issued</label>
+                            <div class="mt-1">
+                                <input type="date" id="modal_issued_date"
+                                    class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                    value="{{ old('issued_date') }}">
+                            </div>
+                        </div>
+
+                        <!-- Notes Field -->
+                        <div>
+                            <label for="modal_notes"
+                                class="block text-sm font-medium text-gray-700">Notes</label>
+                            <div class="mt-1">
+                                <textarea id="modal_notes"
+                                    class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                    rows="3"
+                                    placeholder="Add any additional notes here">{{ old('notes') }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="bg-gray-50 px-6 py-4">
+                    <div class="flex items-center justify-end space-x-3">
+                        <button type="button"
+                            class="rounded-md border-2 border-slate-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                            onclick="document.getElementById('assignment-modal').classList.toggle('hidden')">
+                            Cancel
+                        </button>
+                        <button type="button" id="save-assignment-btn"
+                            class="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            Save Changes
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-@include('layouts.modals.supplier.addNewSupplier')
-@include('layouts.modals.supplier.deleteSupplier')
-@include('layouts.modals.site.addNewSite')
-@include('layouts.modals.site.deleteSite')
-@include('layouts.modals.location.addNewLocation')
-@include('layouts.modals.location.deleteLocation')
-@include('layouts.modals.category.addNewCategory')
-@include('layouts.modals.category.deleteCategory')
-@include('layouts.modals.department.addNewDepartment')
-@include('layouts.modals.department.deleteDepartment')
-@include('layouts.modals.department.addNewDepartment')
-@include('layouts.modals.department.deleteDepartment')
-@include('layouts.modals.brand.addNewBrand')
-@include('layouts.modals.brand.deleteBrand')
 
 <script>
     // Preview image before upload
@@ -434,6 +441,61 @@
 
         // Hide modal
         document.getElementById('assignment-modal').classList.add('hidden');
+    });
+
+    // Function to refresh select options after adding new item
+    function refreshSelectOptions(selectId, route) {
+        fetch(route)
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById(selectId);
+                select.innerHTML = '<option value="">Select an option</option>';
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item[selectId.replace('_id', '')];
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    // Add event listeners for form submissions
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if (this.getAttribute('action').includes('add') && this.closest('[id]')?.id.includes('modal')) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Refresh the corresponding select options
+                        const modalId = this.closest('[id]').id;
+                        const selectId = modalId.replace('add-', '').replace('-modal', '_id');
+                        refreshSelectOptions(selectId, `/${selectId.replace('_id', '')}/list`);
+                        
+                        // Clear the form
+                        this.reset();
+                        
+                        // Hide the modal
+                        document.getElementById(modalId).classList.add('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
     });
 </script>
 

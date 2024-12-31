@@ -19,6 +19,10 @@ class SiteController extends Controller
         $site->site = $validatedData['site'];
         $site->save();
 
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
         return redirect()->back()->with('success', 'Site added successfully!');
     }
 
@@ -57,5 +61,10 @@ class SiteController extends Controller
         } else {
             return redirect()->back()->withErrors(['error' => 'Site not found']);
         }
+    }
+
+    public function list()
+    {
+        return response()->json(Site::orderBy('site', 'asc')->get());
     }
 }
