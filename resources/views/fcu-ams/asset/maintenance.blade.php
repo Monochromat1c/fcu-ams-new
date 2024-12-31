@@ -158,7 +158,7 @@
                     <p class="text-sm text-gray-400 mt-1">All assets are currently in working condition</p>
                 </div>
             @else
-                <div class="overflow-x-auto rounded-lg border border-gray-100">
+                <div class="overflow-x-auto rounded-lg border-2 border-slate-200">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
@@ -203,14 +203,14 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-center">
-                                        <a href="{{ route('asset.edit', ['id' => $asset->id]) }}" 
+                                        <button onclick="openConditionModal({{ $asset->id }}, '{{ $asset->condition->condition }}')" 
                                            class="text-blue-600 hover:text-blue-900 inline-flex items-center justify-center w-8 h-8 rounded-full hover:bg-blue-50 transition-colors duration-200">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                 stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                                                 <path stroke-linecap="round" stroke-linejoin="round"
                                                     d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
                                             </svg>
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -254,12 +254,110 @@
     </div>
 </div>
 
-<script src="{{ asset('js/chart.js') }}"></script>
+<!-- Condition Update Modal -->
+<div id="condition-modal" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+            <form id="update-condition-form" method="POST">
+                @csrf
+                <!-- Header -->
+                <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-medium text-gray-900">Update Asset Condition</h3>
+                        <button type="button" class="text-gray-400 hover:text-gray-500" onclick="closeConditionModal()">
+                            <span class="sr-only">Close</span>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="px-6 py-4">
+                    <div class="space-y-4">
+                        <!-- Condition Dropdown -->
+                        <div>
+                            <label for="condition_id" class="block text-sm font-medium text-gray-700">Condition</label>
+                            <select id="condition_id" name="condition_id" required
+                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                @foreach($conditions as $condition)
+                                    <option value="{{ $condition->id }}">{{ $condition->condition }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Maintenance Dates (shown only when maintenance is selected) -->
+                        <div id="maintenance-dates" class="hidden">
+                            <div class="space-y-4">
+                                <div>
+                                    <label for="maintenance_start_date" class="block text-sm font-medium text-gray-700">
+                                        Maintenance Start Date
+                                    </label>
+                                    <input type="date" id="maintenance_start_date" name="maintenance_start_date"
+                                        class="mt-1 block w-full rounded-md border-2 px-3 py-2 bg-slate-50 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                </div>
+                                <div>
+                                    <label for="maintenance_end_date" class="block text-sm font-medium text-gray-700">
+                                        Maintenance End Date
+                                    </label>
+                                    <input type="date" id="maintenance_end_date" name="maintenance_end_date"
+                                        class="mt-1 block w-full rounded-md border-2 px-3 py-2 bg-slate-50 border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+                    <button type="button"
+                        class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        onclick="closeConditionModal()">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Update Condition
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
-    function confirmDelete(id) {
-        if (confirm('Are you sure you want to delete this asset?')) {
-            document.getElementById('delete-form-' + id).submit();
-        }
+    function openConditionModal(assetId, currentCondition) {
+        const modal = document.getElementById('condition-modal');
+        const form = document.getElementById('update-condition-form');
+        const conditionSelect = document.getElementById('condition_id');
+        const maintenanceDates = document.getElementById('maintenance-dates');
+
+        // Set the form action
+        form.action = `/asset/${assetId}/update-condition`;
+
+        // Show the modal
+        modal.classList.remove('hidden');
+
+        // Set current condition
+        Array.from(conditionSelect.options).forEach(option => {
+            if (option.text === currentCondition) {
+                option.selected = true;
+            }
+        });
+
+        // Show/hide maintenance dates based on selected condition
+        conditionSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            maintenanceDates.classList.toggle('hidden', selectedOption.text !== 'Maintenance');
+        });
+
+        // Trigger change event to set initial state
+        conditionSelect.dispatchEvent(new Event('change'));
+    }
+
+    function closeConditionModal() {
+        document.getElementById('condition-modal').classList.add('hidden');
     }
 </script>
 
