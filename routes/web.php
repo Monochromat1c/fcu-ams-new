@@ -117,6 +117,8 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/alerts', 'index')->name('alerts.index');
         Route::get('/assets/{asset}', 'show')->name('asset.show');
         Route::get('/alerts/maintenance', 'maintenance')->name('alerts.maintenance');
+        Route::get('/alerts/pending-requests', 'pendingRequests')->name('alerts.pending-requests');
+        Route::get('/alerts/expiring-leases', 'expiringLeases')->name('alerts.expiring-leases');
     });
 
     Route::controller(UnitController::class)->group(function () {

@@ -66,11 +66,23 @@ class AppServiceProvider extends ServiceProvider
                     }
                 }
 
-                $totalAlerts = $pastDueCount + $pendingRequestsCount;
+                // Count expiring leases that haven't been viewed
+                $expiringLeasesCount = \App\Models\Lease::where('lease_expiration', '>', now())
+                    ->where('lease_expiration', '<=', now()->addDays(7))
+                    ->when($user->last_checked_alerts, function ($query) use ($user) {
+                        return $query->where(function ($q) use ($user) {
+                            $q->where('updated_at', '>', $user->last_checked_alerts)
+                                ->orWhere('created_at', '>', $user->last_checked_alerts);
+                        });
+                    })
+                    ->count();
+
+                $totalAlerts = $pastDueCount + $pendingRequestsCount + $expiringLeasesCount;
 
                 $view->with('totalAlerts', $totalAlerts);
                 $view->with('pendingRequestsCount', $pendingRequestsCount);
                 $view->with('pastDueCount', $pastDueCount);
+                $view->with('expiringLeasesCount', $expiringLeasesCount);
             }
         });
     }

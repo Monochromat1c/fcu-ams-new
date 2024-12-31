@@ -8,7 +8,7 @@
     <div class="content min-h-screen bg-slate-200 col-span-5">
         <!-- Enhanced Navigation Bar -->
         <nav class="bg-white flex justify-between items-center py-4 px-6 m-4 shadow-md rounded-lg border border-gray-100">
-            <a href="{{ route('lease.index') }}" class="flex items-center text-gray-600 hover:text-gray-900">
+            <a href="javascript:history.back()" class="flex items-center text-gray-600 hover:text-gray-900">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
                 </svg>

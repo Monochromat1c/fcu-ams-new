@@ -237,8 +237,53 @@
                         </div>
                         @if($totalPendingRequests > 5)
                             <div class="text-center mt-4">
-                                <a href="{{ route('inventory.my-requests') }}" class="text-yellow-600 hover:underline">
+                                <a href="{{ route('alerts.pending-requests') }}" class="text-yellow-600 hover:underline">
                                     View All {{ $totalPendingRequests }} Pending Requests
+                                </a>
+                            </div>
+                        @endif
+                    @endif
+                </div>
+            </div>
+
+            <!-- Expiring Leases -->
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="bg-orange-500 text-white p-4 flex items-center">
+                    <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <h2 class="text-xl font-bold">Expiring Leases</h2>
+                </div>
+                <div class="p-4">
+                    @if($expiringLeases->isEmpty())
+                        <p class="text-center text-gray-500">No leases expiring soon.</p>
+                    @else
+                        <div class="space-y-3">
+                            @foreach($expiringLeases as $lease)
+                                <div class="border-l-4 border-orange-500 bg-orange-50 p-3 rounded">
+                                    <div class="flex justify-between items-center">
+                                        <div>
+                                            <p class="font-semibold">{{ $lease->customer }}</p>
+                                            <p class="text-sm text-gray-600">
+                                                {{ $lease->assets->count() }} {{ Str::plural('asset', $lease->assets->count()) }}
+                                            </p>
+                                            <p class="text-xs text-gray-500">
+                                                Expires {{ \Carbon\Carbon::parse($lease->lease_expiration)->diffForHumans() }}
+                                            </p>
+                                        </div>
+                                        <a href="{{ route('lease.show', $lease->id) }}" class="text-orange-600 hover:text-orange-800">
+                                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        @if($totalExpiringLeases > 5)
+                            <div class="text-center mt-4">
+                                <a href="{{ route('alerts.expiring-leases') }}" class="text-orange-600 hover:underline">
+                                    View All {{ $totalExpiringLeases }} Expiring Leases
                                 </a>
                             </div>
                         @endif

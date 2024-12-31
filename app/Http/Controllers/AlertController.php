@@ -35,6 +35,17 @@ class AlertController extends Controller
             ->distinct('request_group_id')
             ->count('request_group_id');
 
+        // Get expiring leases (within 7 days)
+        $expiringLeases = \App\Models\Lease::where('lease_expiration', '>', now())
+            ->where('lease_expiration', '<=', now()->addDays(7))
+            ->orderBy('lease_expiration', 'asc')
+            ->take(5)
+            ->get();
+
+        $totalExpiringLeases = \App\Models\Lease::where('lease_expiration', '>', now())
+            ->where('lease_expiration', '<=', now()->addDays(7))
+            ->count();
+
         // Get current user's ID from username
         $user = User::where('username', Auth::user()->username)->first();
         
@@ -52,7 +63,7 @@ class AlertController extends Controller
             $user->save();
         }
 
-        return view('fcu-ams.alert.alerts', compact('pastDueAssets', 'pastDueCount', 'pendingRequests', 'totalPendingRequests'));
+        return view('fcu-ams.alert.alerts', compact('pastDueAssets', 'pastDueCount', 'pendingRequests', 'totalPendingRequests', 'expiringLeases', 'totalExpiringLeases'));
     }
 
     public function show(Asset $asset)
@@ -79,5 +90,41 @@ class AlertController extends Controller
         }
 
         return view('fcu-ams.alert.maintenance', compact('pastDueAssets'));
+    }
+
+    public function pendingRequests()
+    {
+        $pendingRequests = \App\Models\SupplyRequest::select(
+            'request_group_id', 
+            'requester', 
+            'status', 
+            'request_date', 
+            'department_id',
+            \DB::raw('COUNT(*) as items_count')
+        )
+        ->where('status', 'pending')
+        ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'department_id')
+        ->with('department')
+        ->orderBy('request_date', 'desc')
+        ->paginate(15);
+
+        return view('fcu-ams.alert.pending-requests', compact('pendingRequests'));
+    }
+
+    public function expiringLeases()
+    {
+        $expiringLeases = \App\Models\Lease::where('lease_expiration', '>', now())
+            ->where('lease_expiration', '<=', now()->addDays(7))
+            ->with('assets')
+            ->orderBy('lease_expiration', 'asc')
+            ->paginate(15);
+
+        // Update last checked alerts timestamp
+        if ($user = Auth::user()) {
+            $user->last_checked_alerts = now();
+            $user->save();
+        }
+
+        return view('fcu-ams.alert.expiring-leases', compact('expiringLeases'));
     }
 }
