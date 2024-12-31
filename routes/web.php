@@ -22,6 +22,7 @@ use App\Http\Controllers\StatusController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\PurchaseOrderController;
+use App\Http\Controllers\RequestController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login')->middleware('auth.redirect');
@@ -119,6 +120,10 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/alerts/maintenance', 'maintenance')->name('alerts.maintenance');
         Route::get('/alerts/pending-requests', 'pendingRequests')->name('alerts.pending-requests');
         Route::get('/alerts/expiring-leases', 'expiringLeases')->name('alerts.expiring-leases');
+    });
+
+    Route::controller(RequestController::class)->group(function () {
+        Route::get('/requests', 'index')->name('requests.index');
     });
 
     Route::controller(UnitController::class)->group(function () {

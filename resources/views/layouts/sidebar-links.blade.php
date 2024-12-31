@@ -175,6 +175,14 @@
         @endif
     @endif
 </a>
+<a href="{{ route('requests.index') }}"
+    class="flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100
+    {{ Request::is('requests') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M5 3a2 2 0 012-2h8a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V3zm2 0v14h8V3H7zm3 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1zm0 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1zm0 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clip-rule="evenodd" />
+    </svg>
+    Requests
+</a>
 <a href="{{ route('reports.index') }}"
     class="border-top flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100
     {{ Request::is('reports') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
@@ -185,25 +193,6 @@
     </svg>
     Reports
 </a>
-<!-- <div class="relative" x-data="{ open: false }">
-    <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700  hover:bg-slate-100">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="h-5 w-5 mr-2" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
-        </svg>
-        Customer
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-auto" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
-        </svg>
-    </button>
-    <div x-show="open" class="pl-9">
-        <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100 pl-">Add Customer</a>
-        <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100">View Customers</a>
-    </div>
-</div> -->
 <div class="relative" x-data="{ open: false }">
     <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700  hover:bg-slate-100">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -280,28 +269,6 @@
     </svg>
     Users
 </a>
-<!-- <div class="relative" x-data="{ open: false }">
-    <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700  hover:bg-slate-100">
-        
-        Users
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-auto" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
-        </svg>
-    </button>
-    <div x-show="open" class="pl-9">
-        <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100">Add User</a>
-        <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100">View Users</a>
-    </div>
-</div> -->
-<!-- <a href="{{ route('profile.index') }}"
-    class="border-top border-bottom flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100 {{ Request::is('user/profile') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-    </svg>
-    Profile
-</a> -->
 @endif
 
 
@@ -428,6 +395,14 @@
         @endif
     @endif
 </a>
+<a href="{{ route('requests.index') }}"
+    class="flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100
+    {{ Request::is('requests') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M5 3a2 2 0 012-2h8a2 2 0 012 2v14a2 2 0 01-2 2H7a2 2 0 01-2-2V3zm2 0v14h8V3H7zm3 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1zm0 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1zm0 4a1 1 0 011-1h2a1 1 0 110 2h-2a1 1 0 01-1-1z" clip-rule="evenodd" />
+    </svg>
+    Requests
+</a>
 <a href="{{ route('reports.index') }}"
     class="border-top flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100
     {{ Request::is('reports') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
@@ -438,25 +413,6 @@
     </svg>
     Reports
 </a>
-<!-- <div class="relative" x-data="{ open: false }">
-    <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700  hover:bg-slate-100">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" class="h-5 w-5 mr-2" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="size-6">
-            <path stroke-linecap="round" stroke-linejoin="round"
-                d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
-        </svg>
-        Customer
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-auto" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
-        </svg>
-    </button>
-    <div x-show="open" class="pl-9">
-        <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100 pl-">Add Customer</a>
-        <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100">View Customers</a>
-    </div>
-</div> -->
 <div class="relative" x-data="{ open: false }">
     <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700  hover:bg-slate-100">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
@@ -535,26 +491,4 @@
     </svg>
     Users
 </a>
-<!-- <div class="relative" x-data="{ open: false }">
-    <button @click="open = !open" class="border-top flex items-center w-full px-4 py-2 text-gray-700  hover:bg-slate-100">
-        
-        Users
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 ml-auto" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd"
-                d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clip-rule="evenodd" />
-        </svg>
-    </button>
-    <div x-show="open" class="pl-9">
-        <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100">Add User</a>
-        <a href="#" class="block px-4 py-2 text-gray-700  hover:bg-slate-100">View Users</a>
-    </div>
-</div> -->
-<!-- <a href="{{ route('profile.index') }}"
-    class="border-top border-bottom flex items-center px-4 py-2 text-gray-700  hover:bg-slate-100 {{ Request::is('user/profile') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
-    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
-    </svg>
-    Profile
-</a> -->
 @endif
