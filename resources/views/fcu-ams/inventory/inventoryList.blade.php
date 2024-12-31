@@ -352,31 +352,26 @@
                         </div>
                     </div>
 
-                    <form action="{{ route('inventory.list') }}" method="GET" class="flex gap-2">
-                        <div class="flex gap-2">
+                    <div class="flex gap-2">
+                        <div class="relative flex-1">
                             <input type="text" name="search" value="{{ request('search') }}"
-                                class="rounded-md border-0 py-1.5 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                placeholder="Search inventory...">
-                            <button type="submit"
-                                class="flex gap-1 items-center bg-blue-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                class="w-full rounded-md border-0 py-2 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                placeholder="Search by Unique Tag..." id="searchInput">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                                    class="w-5 h-5 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                                 </svg>
-                                Search
-                            </button>
-                            <button type="submit" name="clear" value="true"
-                                class="flex gap-1 items-center bg-red-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                                Clear
-                            </button>
+                            </div>
                         </div>
-                    </form>
+                        <button type="button" onclick="window.location.href='{{ route('inventory.list') }}'"
+                            class="flex gap-1 items-center bg-red-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                            Clear
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-300">
@@ -530,5 +525,96 @@
     document.getElementById('searchboxForm').submit();
 });
 
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Reset filters on page load/reload
+        if (window.performance && window.performance.navigation.type === window.performance.navigation.TYPE_RELOAD) {
+            window.location.href = "{{ route('inventory.list') }}";
+            return;
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        const tableBody = document.querySelector('table tbody');
+        let typingTimer;
+        const doneTypingInterval = 300;
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(performSearch, doneTypingInterval);
+        });
+
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+
+        function performSearch() {
+            const searchQuery = searchInput.value;
+            
+            fetch('/inventory/search?search=' + encodeURIComponent(searchQuery), {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                updateTable(data.inventories);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function updateTable(inventories) {
+            tableBody.innerHTML = '';
+            
+            inventories.forEach(inventory => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition-colors duration-200';
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${inventory.unique_tag}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${inventory.items_specs}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${inventory.brand_name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${inventory.quantity}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${inventory.unit_name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱${Number(inventory.unit_price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱${Number(inventory.quantity * inventory.unit_price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex justify-center space-x-2">
+                            <a href="/inventory/view/${inventory.id}" class="text-green-600 hover:text-green-900">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                                </svg>
+                            </a>
+                            <a href="/inventory/stock/in/${inventory.id}/edit" class="text-blue-600 hover:text-blue-900">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                                </svg>
+                            </a>
+                            <button type="button" class="text-red-600 hover:text-red-900" onclick="document.getElementById('delete-inventory-modal${inventory.id}').classList.toggle('hidden')">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                </svg>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+    });
+</script>
+
+<script>
+    window.onclick = function (event) {
+        const modal = document.getElementById('filterModal');
+        if (event.target == modal) {
+            modal.classList.add('hidden');
+        }
+    }
 </script>
 @endsection

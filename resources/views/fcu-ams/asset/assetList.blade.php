@@ -445,27 +445,26 @@
                             </form>
                         </div>
                     </div>
-                    <form action="{{ route('asset.list') }}" method="GET" class="flex gap-2">
-                        <div class="flex gap-2">
+                    <div class="flex gap-2">
+                        <div class="relative flex-1">
                             <input type="text" name="search" value="{{ request('search') }}"
-                                class="rounded-md border-0 py-1.5 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                placeholder="Search assets...">
-                            <button type="submit"
-                                class="flex gap-1 items-center bg-blue-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                class="w-full rounded-md border-0 py-2 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                placeholder="Search by Asset Tag ID..." id="searchInput">
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
+                                    class="w-5 h-5 text-gray-400">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
                                 </svg>
-                                Search
-                            </button>
-                            <button type="button" onclick="window.location.href='{{ route('asset.list') }}'"
-                                class="flex gap-1 items-center bg-red-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                                </svg>
-                                Clear
-                            </button>
+                            </div>
                         </div>
-                    </form>
+                        <button type="button" onclick="window.location.href='{{ route('asset.list') }}'"
+                            class="flex gap-1 items-center bg-red-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                            </svg>
+                            Clear
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-300">
@@ -610,43 +609,114 @@
     }
 </script>
 <script>
-    function clearSearch() {
-        document.querySelector('input[name="search"]').value = '';
-        document.querySelector('form').submit();
-    }
-</script>
-<script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Check if the page was reloaded
-        if (performance.navigation.type === performance.navigation.TYPE_RELOAD) {
-            // Clear search input
-            const searchInput = document.querySelector('input[name="search"]');
-            if (searchInput) {
-                searchInput.value = '';
+        // Reset filters on page load/reload
+        if (performance.navigation.type === 1) { // Check if it's a page reload
+            window.location.href = "{{ route('asset.list') }}";
+        }
+
+        const searchInput = document.getElementById('searchInput');
+        const tableBody = document.querySelector('table tbody');
+        let typingTimer;
+        const doneTypingInterval = 300;
+
+        searchInput.addEventListener('input', function() {
+            clearTimeout(typingTimer);
+            typingTimer = setTimeout(performSearch, doneTypingInterval);
+        });
+
+        searchInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+            }
+        });
+
+        function performSearch() {
+            const searchQuery = searchInput.value;
+            
+            fetch(`{{ route('asset.search') }}?search=${encodeURIComponent(searchQuery)}`, {
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                updateTable(data.assets);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function updateTable(assets) {
+            tableBody.innerHTML = '';
+            
+            assets.forEach(asset => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 transition-colors duration-200';
+                
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${asset.asset_tag_id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱${Number(asset.cost).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${asset.supplier_name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${asset.category_name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-6 py-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClass(asset.status_name)}">
+                            ${asset.status_name}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-sm leading-5 font-semibold rounded-full">
+                            ${asset.condition_name}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                        <div class="flex justify-center space-x-2">
+                            <a href="/asset/view/${asset.id}" class="text-green-600 hover:text-blue-900">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                            </a>
+                            ${getActionButtons(asset.id)}
+                        </div>
+                    </td>
+                `;
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        function getStatusClass(status) {
+            switch(status) {
+                case 'Available':
+                    return 'bg-green-100 text-green-800';
+                case 'Leased':
+                    return 'bg-blue-100 text-blue-800';
+                default:
+                    return 'bg-red-100 text-red-800';
+            }
+        }
+
+        function getActionButtons(assetId) {
+            const userRole = '{{ Auth::user()->role->role }}';
+            if (userRole === 'Viewer') {
+                return '';
             }
             
-            // Clear all select filters
-            const selectFilters = document.querySelectorAll('select[name="category"], select[name="department"], select[name="location"], select[name="site"], select[name="supplier"], select[name="brand"]');
-            selectFilters.forEach(function(select) {
-                if (select) {
-                    select.selectedIndex = 0;
-                }
-            });
-
-            // Optional: Remove query parameters from URL
-            const cleanUrl = window.location.pathname;
-            window.history.replaceState({}, document.title, cleanUrl);
+            return `
+                <a href="/asset/edit/${assetId}" class="text-indigo-600 hover:text-indigo-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                    </svg>
+                </a>
+                <button onclick="document.getElementById('delete-asset-modal${assetId}').classList.remove('hidden')"
+                        class="text-red-600 hover:text-red-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                </button>
+            `;
         }
-    });
-</script>
-<script>
-    // Handle form submission
-    const searchInput = document.querySelector('input[name="search"]');
-    const form = searchInput.closest('form');
-    
-    form.addEventListener('submit', function(e) {
-        e.preventDefault();
-        window.location.href = `{{ route('asset.list') }}?search=${encodeURIComponent(searchInput.value)}`;
     });
 </script>
 

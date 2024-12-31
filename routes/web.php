@@ -53,7 +53,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/maintenance', 'maintenance')->name('maintenance');
         Route::get('/asset/export', 'export')->name('asset.export');
         Route::get('/asset/{id}/qrCode', 'generateQrCode')->name('asset.qrCode');
-        Route::get('/search', 'search');
+        Route::get('/search', 'search')->name('asset.search');
         Route::post('/asset/add', 'store')->name('asset.add.store');
         Route::post('/asset/{id}', 'update')->name('asset.update');
         Route::post('/asset/import', 'import')->name('asset.import');
@@ -70,6 +70,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/inventory/low-stock', 'lowStock')->name('inventory.low.stock');
         Route::get('/inventory/out-of-stock', 'outOfStock')->name('inventory.out.of.stock');
         Route::get('/inventories/export', 'export')->name('inventories.export');
+        Route::get('/inventory/search', 'search')->name('inventory.search');
         Route::post('/inventory/stock/in', 'store')->name('inventory.stock.in.store');
         Route::post('/inventory/stock/in/{id}', 'update')->name('inventory.stock.in.update');
         Route::post('/inventory/stock/out', 'storeStockOut')->name('inventory.stock.out.store');

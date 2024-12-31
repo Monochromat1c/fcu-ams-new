@@ -159,19 +159,25 @@ class AssetController extends Controller
     public function search(Request $request)
     {
         $searchQuery = $request->input('search');
-        $assets = Asset::where('asset_tag_id', 'like', '%' . $searchQuery . '%')->get();
+        
+        $assets = DB::table('assets')
+            ->leftJoin('suppliers', 'assets.supplier_id', '=', 'suppliers.id')
+            ->leftJoin('categories', 'assets.category_id', '=', 'categories.id')
+            ->leftJoin('conditions', 'assets.condition_id', '=', 'conditions.id')
+            ->leftJoin('statuses', 'assets.status_id', '=', 'statuses.id')
+            ->select(
+                'assets.*',
+                'suppliers.supplier as supplier_name',
+                'categories.category as category_name',
+                'conditions.condition as condition_name',
+                'statuses.status as status_name'
+            )
+            ->where('assets.asset_tag_id', 'like', '%' . $searchQuery . '%')
+            ->whereNull('assets.deleted_at')
+            ->get();
+
         return response()->json([
-            'assets' => $assets->map(function ($asset) {
-                return [
-                    'asset_tag_id' => $asset->asset_tag_id,
-                    'cost' => $asset->cost,
-                    'supplier_name' => $asset->supplier->supplier,
-                    'site_name' => $asset->site->site,
-                    'category_name' => $asset->category->category,
-                    'status_name' => $asset->status->status,
-                    'condition_name' => $asset->condition->condition,
-                ];
-            }),
+            'assets' => $assets
         ]);
     }
 

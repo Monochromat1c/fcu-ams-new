@@ -96,6 +96,28 @@ class InventoryController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+        $searchQuery = $request->input('search');
+        
+        $inventories = DB::table('inventories')
+            ->leftJoin('suppliers', 'inventories.supplier_id', '=', 'suppliers.id')
+            ->leftJoin('brands', 'inventories.brand_id', '=', 'brands.id')
+            ->leftJoin('units', 'inventories.unit_id', '=', 'units.id')
+            ->select(
+                'inventories.*',
+                'suppliers.supplier as supplier_name',
+                'brands.brand as brand_name',
+                'units.unit as unit_name'
+            )
+            ->where('inventories.unique_tag', 'like', '%' . $searchQuery . '%')
+            ->whereNull('inventories.deleted_at')
+            ->get();
+
+        return response()->json([
+            'inventories' => $inventories
+        ]);
+    }
 
     public function lowStock(Request $request)
     {
