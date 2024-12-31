@@ -128,7 +128,7 @@
             </div>
 
             <!-- Table -->
-            <div class="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+            <div class="overflow-x-auto rounded-lg border-2 border-slate-200 shadow-sm">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">

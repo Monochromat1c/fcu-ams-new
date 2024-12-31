@@ -71,7 +71,7 @@
             <!-- Leased Assets -->
             <div>
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Leased Assets</h2>
-                <div class="overflow-x-auto rounded-lg border border-gray-200">
+                <div class="overflow-x-auto rounded-lg border-2 border-slate-200">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
