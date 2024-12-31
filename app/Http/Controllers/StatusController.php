@@ -19,7 +19,11 @@ class StatusController extends Controller
         $status->status = $validatedData['status'];
         $status->save();
 
-        return redirect()->route('status.index')->with('success', 'Status added successfully!');
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
+        return redirect()->back()->with('success', 'Status added successfully!');
     }
 
     public function index() {
@@ -38,7 +42,7 @@ class StatusController extends Controller
         $status->status = $validatedData['status'];
         $status->save();
 
-        return redirect()->route('status.index')->with('success', 'Status updated successfully!');
+        return redirect()->back()->with('success', 'Status updated successfully!');
     }
 
     public function destroy($id)
@@ -49,13 +53,18 @@ class StatusController extends Controller
         if ($status) {
             try {
                 $status->delete();
-                return redirect()->route('status.index')->with('success', 'Status deleted successfully!');
+                return redirect()->back()->with('success', 'Status deleted successfully!');
             } catch (\Illuminate\Database\QueryException $e) {
-                return redirect()->route('status.index')->withErrors(['error' => 'Cannot delete status because it is
+                return redirect()->back()->withErrors(['error' => 'Cannot delete status because it is
                 associated with other data.']);
             }
         } else {
             return redirect()->back()->withErrors(['error' => 'Status not found']);
         }
+    }
+
+    public function list()
+    {
+        return response()->json(Status::orderBy('status', 'asc')->get());
     }
 }

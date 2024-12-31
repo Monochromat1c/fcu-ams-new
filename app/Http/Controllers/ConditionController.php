@@ -19,7 +19,11 @@ class ConditionController extends Controller
         $condition->condition = $validatedData['condition'];
         $condition->save();
 
-        return redirect()->route('condition.index')->with('success', 'Condition added successfully!');
+        if ($request->ajax()) {
+            return response()->json(['success' => true]);
+        }
+
+        return redirect()->back()->with('success', 'Condition added successfully!');
     }
 
     public function index() {
@@ -38,7 +42,7 @@ class ConditionController extends Controller
         $condition->condition = $validatedData['condition'];
         $condition->save();
 
-        return redirect()->route('condition.index')->with('success', 'Condition updated successfully!');
+        return redirect()->back()->with('success', 'Condition updated successfully!');
     }
 
     public function destroy($id)
@@ -49,13 +53,18 @@ class ConditionController extends Controller
         if ($condition) {
             try {
                 $condition->delete();
-                return redirect()->route('condition.index')->with('success', 'Condition deleted successfully!');
+                return redirect()->back()->with('success', 'Condition deleted successfully!');
             } catch (\Illuminate\Database\QueryException $e) {
-                return redirect()->route('condition.index')->withErrors(['error' => 'Cannot delete condition because it is
+                return redirect()->back()->withErrors(['error' => 'Cannot delete condition because it is
                 associated with other data.']);
             }
         } else {
             return redirect()->back()->withErrors(['error' => 'Condition not found']);
         }
+    }
+
+    public function list()
+    {
+        return response()->json(Condition::orderBy('condition', 'asc')->get());
     }
 }

@@ -62,7 +62,7 @@
                         <!-- Brand -->
                         <div>
                             <label for="brand_id" class="block text-sm font-medium text-gray-700">Brand</label>
-                            <div class="mt-1">
+                            <div class="mt-1 flex space-x-2">
                                 <select id="brand_id" name="brand_id" required
                                     class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                     @foreach($brands as $brand)
@@ -70,6 +70,13 @@
                                             {{ $brand->brand }}</option>
                                     @endforeach
                                 </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-brand-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
 
@@ -86,7 +93,7 @@
                         <!-- Unit -->
                         <div>
                             <label for="unit_id" class="block text-sm font-medium text-gray-700">Unit</label>
-                            <div class="mt-1">
+                            <div class="mt-1 flex space-x-2">
                                 <select id="unit_id" name="unit_id" required
                                     class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                     @foreach($units as $unit)
@@ -94,6 +101,13 @@
                                             {{ $unit->unit }}</option>
                                     @endforeach
                                 </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-unit-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
 
@@ -120,7 +134,7 @@
                         <!-- Supplier -->
                         <div>
                             <label for="supplier_id" class="block text-sm font-medium text-gray-700">Supplier</label>
-                            <div class="mt-1">
+                            <div class="mt-1 flex space-x-2">
                                 <select id="supplier_id" name="supplier_id" required
                                     class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
                                     @foreach($suppliers as $supplier)
@@ -128,6 +142,13 @@
                                             {{ $supplier->supplier }}</option>
                                     @endforeach
                                 </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-supplier-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -149,7 +170,39 @@
     </div>
 </div>
 
+<!-- Modals -->
+<div class="modal" id="brand-modal-wrapper">
+    <x-add-item-modal 
+        title="Add New Brand"
+        id="add-brand-modal"
+        route="{{ route('brand.add') }}"
+        field="brand"
+    />
+</div>
+
+<div class="modal" id="unit-modal-wrapper">
+    <x-add-item-modal 
+        title="Add New Unit"
+        id="add-unit-modal"
+        route="{{ route('unit.add') }}"
+        field="unit"
+    />
+</div>
+
+<div class="modal" id="supplier-modal-wrapper">
+    <x-add-item-modal 
+        title="Add New Supplier"
+        id="add-supplier-modal"
+        route="{{ route('supplier.add') }}"
+        field="supplier"
+    />
+</div>
+
+@push('scripts')
 <script>
+    // Add CSRF token to the page
+    document.head.innerHTML += `<meta name="csrf-token" content="{{ csrf_token() }}">`;
+    
     // Image preview functionality
     document.getElementById('stock_image').addEventListener('change', function(e) {
         const file = e.target.files[0];
@@ -168,28 +221,76 @@
         }
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        // Get the current URL
-        var currentUrl = window.location.href;
+    // Function to refresh select options after adding new item
+    function refreshSelectOptions(selectId, route) {
+        fetch(route)
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById(selectId);
+                const currentValue = select.value;
+                select.innerHTML = '';
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item[selectId.replace('_id', '')];
+                    if (item.id == currentValue) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error refreshing options:', error);
+            });
+    }
 
-        // Get all dropdown buttons
-        var dropdownButtons = document.querySelectorAll('.relative button');
+    // Add event listeners for modal forms
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all forms inside modals
+        const forms = document.querySelectorAll('.modal form');
+        console.log('Found forms:', forms.length);
 
-        // Loop through each dropdown button
-        dropdownButtons.forEach(function (button) {
-            // Get the dropdown links
-            var dropdownLinks = button.nextElementSibling.querySelectorAll('a');
+        forms.forEach(form => {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                console.log('Form submitted');
 
-            // Loop through each dropdown link
-            dropdownLinks.forEach(function (link) {
-                // Check if the current URL matches the link's href
-                if (currentUrl === link.href) {
-                    // Open the dropdown
-                    button.click();
+                const formData = new FormData(this);
+                const modalId = this.closest('.modal').querySelector('[id]').id;
+                const selectId = modalId.replace('add-', '').replace('-modal', '_id');
+                
+                console.log('Modal ID:', modalId);
+                console.log('Select ID:', selectId);
+
+                try {
+                    const response = await fetch(this.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    console.log('Response:', data);
+
+                    if (data.success) {
+                        // Refresh the corresponding select options
+                        await refreshSelectOptions(selectId, `/${selectId.replace('_id', '')}/list`);
+                        
+                        // Clear the form and hide the modal
+                        this.reset();
+                        document.getElementById(modalId).classList.add('hidden');
+                    }
+                } catch (error) {
+                    console.error('Error submitting form:', error);
                 }
             });
         });
     });
 </script>
+@endpush
 
 @endsection

@@ -128,6 +128,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(UnitController::class)->group(function () {
         Route::post('/unit/add', 'add')->name('unit.add');
+        Route::get('/unit/list', 'list')->name('unit.list');
     });
 
     Route::controller(CategoryController::class)->group(function (){
@@ -148,6 +149,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(ConditionController::class)->group(function (){
         Route::get('/condition/index', 'index')->name('condition.index');
+        Route::get('/condition/list', 'list')->name('condition.list');
         Route::post('/condition/add', 'add')->name('condition.add');
         Route::post('/condition/{id}', 'update')->name('condition.update');
         Route::delete('/condition/{id}', 'destroy')->name('condition.destroy');
@@ -188,6 +190,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(StatusController::class)->group(function (){
         Route::get('/status/index', 'index')->name('status.index');
+        Route::get('/status/list', 'list')->name('status.list');
         Route::post('/status/add', 'add')->name('status.add');
         Route::post('/status/{id}', 'update')->name('status.update');
         Route::delete('/status/{id}', 'destroy')->name('status.destroy');

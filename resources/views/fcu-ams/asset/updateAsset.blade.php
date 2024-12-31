@@ -158,117 +158,185 @@
                         <!-- Supplier -->
                         <div>
                             <label for="supplier_id" class="block text-sm font-medium text-gray-700">Supplier</label>
-                            <select id="supplier_id" name="supplier_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                @foreach($suppliers as $supplier)
-                                    <option value="{{ $supplier->id }}"
-                                        {{ $supplier->id == $asset->supplier_id ? 'selected' : '' }}>
-                                        {{ $supplier->supplier }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="mt-1 flex space-x-2">
+                                <select id="supplier_id" name="supplier_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    @foreach($suppliers as $supplier)
+                                        <option value="{{ $supplier->id }}"
+                                            {{ $supplier->id == $asset->supplier_id ? 'selected' : '' }}>
+                                            {{ $supplier->supplier }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-supplier-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Site -->
                         <div>
                             <label for="site_id" class="block text-sm font-medium text-gray-700">Site</label>
-                            <select id="site_id" name="site_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                @foreach($sites as $site)
-                                    <option value="{{ $site->id }}"
-                                        {{ $site->id == $asset->site_id ? 'selected' : '' }}>
-                                        {{ $site->site }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="mt-1 flex space-x-2">
+                                <select id="site_id" name="site_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    @foreach($sites as $site)
+                                        <option value="{{ $site->id }}"
+                                            {{ $site->id == $asset->site_id ? 'selected' : '' }}>
+                                            {{ $site->site }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-site-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Location -->
                         <div>
                             <label for="location_id" class="block text-sm font-medium text-gray-700">Location</label>
-                            <select id="location_id" name="location_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                @foreach($locations as $location)
-                                    <option value="{{ $location->id }}"
-                                        {{ $location->id == $asset->location_id ? 'selected' : '' }}>
-                                        {{ $location->location }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="mt-1 flex space-x-2">
+                                <select id="location_id" name="location_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    @foreach($locations as $location)
+                                        <option value="{{ $location->id }}"
+                                            {{ $location->id == $asset->location_id ? 'selected' : '' }}>
+                                            {{ $location->location }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-location-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Category -->
                         <div>
                             <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
-                            <select id="category_id" name="category_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->id }}"
-                                        {{ $category->id == $asset->category_id ? 'selected' : '' }}>
-                                        {{ $category->category }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="mt-1 flex space-x-2">
+                                <select id="category_id" name="category_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    @foreach($categories as $category)
+                                        <option value="{{ $category->id }}"
+                                            {{ $category->id == $asset->category_id ? 'selected' : '' }}>
+                                            {{ $category->category }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-category-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Department -->
                         <div>
-                            <label for="department_id"
-                                class="block text-sm font-medium text-gray-700">Department</label>
-                            <select id="department_id" name="department_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                @foreach($departments as $department)
-                                    <option value="{{ $department->id }}"
-                                        {{ $department->id == $asset->department_id ? 'selected' : '' }}>
-                                        {{ $department->department }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            @error('department_id')
-                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
-                            @enderror
+                            <label for="department_id" class="block text-sm font-medium text-gray-700">Department</label>
+                            <div class="mt-1 flex space-x-2">
+                                <select id="department_id" name="department_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    @foreach($departments as $department)
+                                        <option value="{{ $department->id }}"
+                                            {{ $department->id == $asset->department_id ? 'selected' : '' }}>
+                                            {{ $department->department }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-department-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Brand -->
                         <div>
                             <label for="brand_id" class="block text-sm font-medium text-gray-700">Brand</label>
-                            <select id="brand_id" name="brand_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                @foreach($brands as $brand)
-                                    <option value="{{ $brand->id }}"
-                                        {{ $brand->id == $asset->brand_id ? 'selected' : '' }}>
-                                        {{ $brand->brand }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="mt-1 flex space-x-2">
+                                <select id="brand_id" name="brand_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    @foreach($brands as $brand)
+                                        <option value="{{ $brand->id }}"
+                                            {{ $brand->id == $asset->brand_id ? 'selected' : '' }}>
+                                            {{ $brand->brand }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-brand-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Status -->
                         <div>
                             <label for="status_id" class="block text-sm font-medium text-gray-700">Status</label>
-                            <select id="status_id" name="status_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                @foreach($statuses as $status)
-                                    <option value="{{ $status->id }}"
-                                        {{ $status->id == $asset->status_id ? 'selected' : '' }}>
-                                        {{ $status->status }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="mt-1 flex space-x-2">
+                                <select id="status_id" name="status_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    @foreach($statuses as $status)
+                                        <option value="{{ $status->id }}"
+                                            {{ $status->id == $asset->status_id ? 'selected' : '' }}>
+                                            {{ $status->status }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-status-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Condition -->
                         <div>
                             <label for="condition_id" class="block text-sm font-medium text-gray-700">Condition</label>
-                            <select id="condition_id" name="condition_id" required
-                                class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
-                                @foreach($conditions as $condition)
-                                    <option value="{{ $condition->id }}"
-                                        {{ $condition->id == $asset->condition_id ? 'selected' : '' }}>
-                                        {{ $condition->condition }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="mt-1 flex space-x-2">
+                                <select id="condition_id" name="condition_id" required
+                                    class="block w-full pl-3 pr-10 py-2 text-base border-2 bg-slate-50 border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    @foreach($conditions as $condition)
+                                        <option value="{{ $condition->id }}"
+                                            {{ $condition->id == $asset->condition_id ? 'selected' : '' }}>
+                                            {{ $condition->condition }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-condition-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Maintenance Modal -->
@@ -440,6 +508,63 @@
     </div>
 </div>
 
+<!-- Modals -->
+<x-add-item-modal 
+    title="Add New Supplier"
+    id="add-supplier-modal"
+    route="{{ route('supplier.add') }}"
+    field="supplier"
+/>
+
+<x-add-item-modal 
+    title="Add New Site"
+    id="add-site-modal"
+    route="{{ route('site.add') }}"
+    field="site"
+/>
+
+<x-add-item-modal 
+    title="Add New Location"
+    id="add-location-modal"
+    route="{{ route('location.add') }}"
+    field="location"
+/>
+
+<x-add-item-modal 
+    title="Add New Category"
+    id="add-category-modal"
+    route="{{ route('category.add') }}"
+    field="category"
+/>
+
+<x-add-item-modal 
+    title="Add New Department"
+    id="add-department-modal"
+    route="{{ route('department.add') }}"
+    field="department"
+/>
+
+<x-add-item-modal 
+    title="Add New Brand"
+    id="add-brand-modal"
+    route="{{ route('brand.add') }}"
+    field="brand"
+/>
+
+<x-add-item-modal 
+    title="Add New Status"
+    id="add-status-modal"
+    route="{{ route('status.add') }}"
+    field="status"
+/>
+
+<x-add-item-modal 
+    title="Add New Condition"
+    id="add-condition-modal"
+    route="{{ route('condition.add') }}"
+    field="condition"
+/>
+
 <script>
     // Preview image before upload
     document.getElementById('asset_image').addEventListener('change', function (e) {
@@ -496,6 +621,65 @@
 
         // Hide modal
         document.getElementById('assignment-modal').classList.add('hidden');
+    });
+
+    // Function to refresh select options after adding new item
+    function refreshSelectOptions(selectId, route) {
+        fetch(route)
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById(selectId);
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">Select an option</option>';
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item[selectId.replace('_id', '')];
+                    if (item.id == currentValue) {
+                        option.selected = true;
+                    }
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    }
+
+    // Add event listeners for form submissions
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if (this.getAttribute('action').includes('add') && this.closest('[id]')?.id.includes('modal')) {
+                e.preventDefault();
+                const formData = new FormData(this);
+                
+                fetch(this.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Refresh the corresponding select options
+                        const modalId = this.closest('[id]').id;
+                        const selectId = modalId.replace('add-', '').replace('-modal', '_id');
+                        refreshSelectOptions(selectId, `/${selectId.replace('_id', '')}/list`);
+                        
+                        // Clear the form
+                        this.reset();
+                        
+                        // Hide the modal
+                        document.getElementById(modalId).classList.add('hidden');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+        });
     });
 </script>
 
