@@ -64,6 +64,13 @@
                                             {{ $brand->brand }}</option>
                                     @endforeach
                                 </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-brand-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
 
@@ -88,8 +95,14 @@
                                         <option value="{{ $unit->id }}" {{ old('unit_id') == $unit->id ? 'selected' : '' }}>
                                             {{ $unit->unit }}</option>
                                     @endforeach
-                                    <option value="add_new_unit">ADD NEW UNIT</option>
                                 </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-unit-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
 
@@ -124,8 +137,14 @@
                                         <option value="{{ $supplier->id }}" {{ old('supplier_id') == $supplier->id ? 'selected' : '' }}>
                                             {{ $supplier->supplier }}</option>
                                     @endforeach
-                                    <option value="add_new">ADD NEW SUPPLIER</option>
                                 </select>
+                                <button type="button"
+                                    onclick="document.getElementById('add-supplier-modal').classList.remove('hidden')"
+                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -146,79 +165,39 @@
     </div>
 </div>
 
-<!-- Add Unit Modal -->
-<div id="add-unit-modal" tabindex="-1" aria-hidden="true" 
-    class="modalBg fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
-    <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
-            <!-- Header -->
-            <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-medium text-gray-900">Add New Unit</h3>
-                    <button type="button" class="text-gray-400 hover:text-gray-500"
-                        onclick="document.getElementById('add-unit-modal').classList.toggle('hidden')">
-                        <span class="sr-only">Close</span>
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <!-- Content -->
-            <div class="p-6">
-                <input type="text" id="new_unit" name="new_unit"
-                    class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
-            </div>
-            <!-- Footer -->
-            <div class="bg-gray-50 px-6 py-4">
-                <div class="flex items-center justify-end space-x-3">
-                    <button type="button" id="add-unit-btn"
-                        class="inline-flex justify-center rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                        Add Unit
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Modals -->
+<div class="modal" id="brand-modal-wrapper">
+    <x-add-item-modal 
+        title="Add New Brand"
+        id="add-brand-modal"
+        route="{{ route('brand.add') }}"
+        field="brand"
+    />
 </div>
 
-<!-- Add Supplier Modal -->
-<div id="add-supplier-modal" tabindex="-1" aria-hidden="true"
-    class="modalBg fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
-    <div class="flex min-h-screen items-center justify-center p-4">
-        <div class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
-            <!-- Header -->
-            <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
-                <div class="flex items-center justify-between">
-                    <h3 class="text-lg font-medium text-gray-900">Add New Supplier</h3>
-                    <button type="button" class="text-gray-400 hover:text-gray-500"
-                        onclick="document.getElementById('add-supplier-modal').classList.toggle('hidden')">
-                        <span class="sr-only">Close</span>
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <!-- Content -->
-            <div class="p-6">
-                <input type="text" id="new_supplier" name="new_supplier"
-                    class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
-            </div>
-            <!-- Footer -->
-            <div class="bg-gray-50 px-6 py-4">
-                <div class="flex items-center justify-end space-x-3">
-                    <button type="button" id="add-supplier-btn"
-                        class="inline-flex justify-center rounded-md border border-transparent bg-green-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
-                        Add Supplier
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+<div class="modal" id="unit-modal-wrapper">
+    <x-add-item-modal 
+        title="Add New Unit"
+        id="add-unit-modal"
+        route="{{ route('unit.add') }}"
+        field="unit"
+    />
 </div>
 
+<div class="modal" id="supplier-modal-wrapper">
+    <x-add-item-modal 
+        title="Add New Supplier"
+        id="add-supplier-modal"
+        route="{{ route('supplier.add') }}"
+        field="supplier"
+    />
+</div>
+
+@push('scripts')
 <script>
+    // Add CSRF token to the page
+    document.head.innerHTML += `<meta name="csrf-token" content="{{ csrf_token() }}">`;
+    
     // Image preview functionality
     document.getElementById('stock_image').addEventListener('change', function(e) {
         const file = e.target.files[0];
@@ -237,73 +216,76 @@
         }
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const supplierSelect = document.getElementById('supplier_id');
-        const addSupplierModal = document.getElementById('add-supplier-modal');
-        const addSupplierBtn = document.getElementById('add-supplier-btn');
-
-        supplierSelect.addEventListener('change', function () {
-            if (supplierSelect.value === 'add_new') {
-                addSupplierModal.classList.remove('hidden');
-            }
-        });
-
-        addSupplierBtn.addEventListener('click', function () {
-            const newSupplier = document.getElementById('new_supplier').value;
-            if (newSupplier.trim() !== '') {
-                const formData = new FormData();
-                formData.append('supplier', newSupplier);
-                fetch('{{ route('supplier.add') }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+    // Function to refresh select options after adding new item
+    function refreshSelectOptions(selectId, route) {
+        fetch(route)
+            .then(response => response.json())
+            .then(data => {
+                const select = document.getElementById(selectId);
+                const currentValue = select.value;
+                select.innerHTML = '<option value="">Select an option</option>';
+                data.forEach(item => {
+                    const option = document.createElement('option');
+                    option.value = item.id;
+                    option.textContent = item[selectId.replace('_id', '')];
+                    if (item.id == currentValue) {
+                        option.selected = true;
                     }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.reload) {
-                        window.location.reload();
-                    }
-                })
-                .catch(error => console.error(error));
-            }
-        });
-    });
+                    select.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error refreshing options:', error);
+            });
+    }
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const unitSelect = document.getElementById('unit_id');
-        const addUnitModal = document.getElementById('add-unit-modal');
-        const addUnitBtn = document.getElementById('add-unit-btn');
+    // Add event listeners for modal forms
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get all forms inside modals
+        const forms = document.querySelectorAll('.modal form');
+        console.log('Found forms:', forms.length);
 
-        unitSelect.addEventListener('change', function () {
-            if (unitSelect.value === 'add_new_unit') {
-                addUnitModal.classList.remove('hidden');
-            }
-        });
+        forms.forEach(form => {
+            form.addEventListener('submit', async function(e) {
+                e.preventDefault();
+                console.log('Form submitted');
 
-        addUnitBtn.addEventListener('click', function () {
-            const newUnit = document.getElementById('new_unit').value;
-            if (newUnit.trim() !== '') {
-                const formData = new FormData();
-                formData.append('unit', newUnit);
-                fetch('{{ route('unit.add') }}', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                const formData = new FormData(this);
+                const modalId = this.closest('.modal').querySelector('[id]').id;
+                const selectId = modalId.replace('add-', '').replace('-modal', '_id');
+                
+                console.log('Modal ID:', modalId);
+                console.log('Select ID:', selectId);
+
+                try {
+                    const response = await fetch(this.action, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        },
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    console.log('Response:', data);
+
+                    if (data.success) {
+                        // Refresh the corresponding select options
+                        await refreshSelectOptions(selectId, `/${selectId.replace('_id', '')}/list`);
+                        
+                        // Clear the form and hide the modal
+                        this.reset();
+                        document.getElementById(modalId).classList.add('hidden');
                     }
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.reload) {
-                        window.location.reload();
-                    }
-                })
-                .catch(error => console.error(error));
-            }
+                } catch (error) {
+                    console.error('Error submitting form:', error);
+                }
+            });
         });
     });
 </script>
+@endpush
 
 @endsection
