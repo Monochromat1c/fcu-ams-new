@@ -349,6 +349,23 @@ class AssetController extends Controller
             if ($unavailableStatus) {
                 $asset->status_id = $unavailableStatus->id;
             }
+        } elseif ($request->input('condition_id') == Condition::where('condition', 'To Be Disposed')->first()->id) {
+            // Set status to Unavailable when condition is To Be Disposed
+            $unavailableStatus = Status::where('status', 'Unavailable')->first();
+            if ($unavailableStatus) {
+                $asset->status_id = $unavailableStatus->id;
+            }
+        } else {
+            // Clear maintenance dates if condition is not maintenance
+            $asset->maintenance_start_date = null;
+            $asset->maintenance_end_date = null;
+            // Set status back to Available if it was previously in maintenance or to be disposed
+            if ($oldAsset->condition_id == Condition::where('condition', 'Maintenance')->first()->id || $oldAsset->condition_id == Condition::where('condition', 'To Be Disposed')->first()->id) {
+                $availableStatus = Status::where('status', 'Available')->first();
+                if ($availableStatus) {
+                    $asset->status_id = $availableStatus->id;
+                }
+            }
         }
 
         if ($request->hasFile('asset_image')) {
@@ -518,6 +535,8 @@ class AssetController extends Controller
 
         // If condition is maintenance, update maintenance dates
         $maintenanceCondition = Condition::where('condition', 'Maintenance')->first();
+        $toBeDisposedCondition = Condition::where('condition', 'To Be Disposed')->first();
+        
         if ($validatedData['condition_id'] == $maintenanceCondition->id) {
             $asset->maintenance_start_date = $validatedData['maintenance_start_date'];
             $asset->maintenance_end_date = $validatedData['maintenance_end_date'];
@@ -526,12 +545,18 @@ class AssetController extends Controller
             if ($unavailableStatus) {
                 $asset->status_id = $unavailableStatus->id;
             }
+        } elseif ($validatedData['condition_id'] == $toBeDisposedCondition->id) {
+            // Set status to Unavailable when condition is To Be Disposed
+            $unavailableStatus = Status::where('status', 'Unavailable')->first();
+            if ($unavailableStatus) {
+                $asset->status_id = $unavailableStatus->id;
+            }
         } else {
             // Clear maintenance dates if condition is not maintenance
             $asset->maintenance_start_date = null;
             $asset->maintenance_end_date = null;
-            // Set status back to Available if it was previously in maintenance
-            if ($oldAsset->condition_id == $maintenanceCondition->id) {
+            // Set status back to Available if it was previously in maintenance or to be disposed
+            if ($oldAsset->condition_id == $maintenanceCondition->id || $oldAsset->condition_id == $toBeDisposedCondition->id) {
                 $availableStatus = Status::where('status', 'Available')->first();
                 if ($availableStatus) {
                     $asset->status_id = $availableStatus->id;
