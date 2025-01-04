@@ -464,27 +464,6 @@ class AssetController extends Controller
         return Excel::download(new AssetsExport, 'assets.csv');
     }
 
-    public function import(Request $request)
-    {
-        $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv|max:2048'
-        ]);
-
-        try {
-            Excel::import(new AssetsImport, $request->file('file'));
-            return redirect()->back()->with('success', 'Assets imported successfully.');
-        } catch (\Maatwebsite\Excel\Validators\ValidationException $e) {
-            $failures = $e->failures();
-            $errors = collect($failures)->map(function ($failure) {
-                return "Row {$failure->row()}: {$failure->errors()[0]}";
-            })->join('<br>');
-            
-            return redirect()->back()->withErrors(['error' => "Import failed:<br>{$errors}"]);
-        } catch (\Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'Import failed: ' . $e->getMessage()]);
-        }
-    }
-
     public function generateQrCode($id)
     {
         $asset = Asset::findOrFail($id);

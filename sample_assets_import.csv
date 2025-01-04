@@ -1,0 +1,4 @@
+asset_tag_id,brand,model,specs,serial_number,cost,supplier,site,location,category,department,purchase_date,condition,status,assigned_to,issued_date
+ASSET-001,Dell,Latitude 5420,"Intel Core i5, 16GB RAM, 512GB SSD",SN12345678,45000,PC Express,Annex Campus,Roxas City,Laptop,CCS Department,15/01/2024,New,Available,John Doe,20/01/2024
+ASSET-002,Dell,ProDesk 600,"Intel Core i7, 32GB RAM, 1TB SSD",HP98765432,55000,PC Express,Annex Campus,Roxas City,Desktop,CCS Department,16/01/2024,New,Available,Jane Smith,21/01/2024
+ASSET-003,Dell,ThinkPad X1,"Intel Core i7, 16GB RAM, 512GB SSD",LN11223344,65000,PC Express,Annex Campus,Roxas City,Laptop,CCS Department,17/01/2024,New,Available,Robert Johnson,22/01/2024
