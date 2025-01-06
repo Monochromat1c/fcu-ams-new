@@ -72,6 +72,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/inventory/low-stock', 'lowStock')->name('inventory.low.stock');
         Route::get('/inventory/out-of-stock', 'outOfStock')->name('inventory.out.of.stock');
         Route::get('/inventories/export', 'export')->name('inventories.export');
+        Route::get('/inventory/search-items', 'searchItems')->name('inventory.search.items');
         Route::get('/inventory/search', 'search')->name('inventory.search');
         Route::post('/inventory/stock/in', 'store')->name('inventory.stock.in.store');
         Route::post('/inventory/stock/in/{id}', 'update')->name('inventory.stock.in.update');

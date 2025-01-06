@@ -3,6 +3,7 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/stockin.css') }}">
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
@@ -70,8 +71,12 @@
                                         <h3 class="text-lg font-medium text-gray-900">Add New Item</h3>
                                     </div>
                                     <div class="flex gap-4 mb-6">
-                                        <div class="flex-1">
+                                        <div class="flex-1 relative">
                                             <input type="text" id="new_item_name" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" placeholder="Item Name" required>
+                                            <div id="suggestions-container" class="absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto hidden">
+                                                <ul id="suggestions-list" class="py-1">
+                                                </ul>
+                                            </div>
                                         </div>
                                         <div class="flex-1">
                                             <input type="number" id="new_item_quantity" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="1" placeholder="Quantity" required>
@@ -206,7 +211,84 @@
         itemsContainer.classList.remove('hidden');
     }
 
+    let searchTimeout = null;
+    let selectedItemUnit = '';
+
+    function searchItems(query) {
+        if (searchTimeout) {
+            clearTimeout(searchTimeout);
+        }
+
+        searchTimeout = setTimeout(() => {
+            if (!query.trim()) {
+                document.getElementById('suggestions-container').classList.add('hidden');
+                return;
+            }
+
+            console.log('Searching for:', query);
+            const url = '{{ url("/inventory/search-items") }}?query=' + encodeURIComponent(query);
+            console.log('Fetching from:', url);
+            
+            fetch(url)
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    console.log('Response headers:', response.headers);
+                    return response.text().then(text => {
+                        try {
+                            console.log('Raw response:', text);
+                            return JSON.parse(text);
+                        } catch (e) {
+                            console.error('JSON parse error:', e);
+                            throw new Error('Invalid JSON response');
+                        }
+                    });
+                })
+                .then(items => {
+                    console.log('Parsed items:', items);
+                    const suggestionsList = document.getElementById('suggestions-list');
+                    const suggestionsContainer = document.getElementById('suggestions-container');
+                    
+                    if (!items || items.length === 0) {
+                        suggestionsContainer.classList.add('hidden');
+                        return;
+                    }
+
+                    suggestionsList.innerHTML = '';
+                    items.forEach(item => {
+                        const li = document.createElement('li');
+                        li.className = 'px-4 py-2 hover:bg-blue-50 cursor-pointer';
+                        const displayName = `${item.brand} - ${item.items_specs}`;
+                        li.innerHTML = `
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <span class="font-medium">${displayName}</span>
+                                    <span class="text-gray-500">(${item.unit})</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-blue-600">₱${parseFloat(item.price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                                    <span class="text-gray-500 ml-2">${item.quantity} left</span>
+                                </div>
+                            </div>
+                        `;
+                        li.addEventListener('click', () => {
+                            document.getElementById('new_item_name').value = displayName;
+                            selectedItemUnit = item.unit;
+                            suggestionsContainer.classList.add('hidden');
+                            document.getElementById('new_item_quantity').focus();
+                        });
+                        suggestionsList.appendChild(li);
+                    });
+                    
+                    suggestionsContainer.classList.remove('hidden');
+                })
+                .catch(error => {
+                    console.error('Error fetching items:', error);
+                });
+        }, 300);
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
+        console.log('DOM Content Loaded');
         // Set default request date to today
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -310,6 +392,32 @@
         document.getElementById('submit-request-button').addEventListener('click', function(e) {
             e.preventDefault();
             submitForm();
+        });
+
+        const itemNameInput = document.getElementById('new_item_name');
+        const suggestionsContainer = document.getElementById('suggestions-container');
+
+        if (!itemNameInput) {
+            console.error('Item name input not found!');
+            return;
+        }
+
+        // Add input event listener for search
+        itemNameInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            console.log('Input event triggered:', query);
+            if (query.length >= 2) {
+                searchItems(query);
+            } else {
+                suggestionsContainer.classList.add('hidden');
+            }
+        });
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!itemNameInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                suggestionsContainer.classList.add('hidden');
+            }
         });
     });
 </script>

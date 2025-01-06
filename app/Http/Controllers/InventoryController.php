@@ -3,8 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use App\Models\SupplyRequest;
+use App\Models\StockOut;
 use App\Models\Inventory;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\InventoryExport;
 use App\Models\Asset;
 use App\Models\Supplier;
 use App\Models\Site;
@@ -14,16 +19,10 @@ use App\Models\Condition;
 use App\Models\Department;
 use App\Models\Brand;
 use App\Models\Unit;
-use App\Models\StockOut;
 use App\Models\AssetEditHistory;
 use App\Models\InventoryEditHistory;
-use App\Models\SupplyRequest;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\AssetsExport;
-use App\Exports\InventoryExport;
 use App\Imports\AssetsImport;
 use Illuminate\Validation\Rule;
-use Illuminate\Support\Str;
 
 class InventoryController extends Controller
 {
@@ -436,13 +435,33 @@ class InventoryController extends Controller
         }
 
         $totalItems = $requests->count();
+        $totalPrice = 0;
+        
+        // Add price information to each request
+        foreach ($requests as $request) {
+            $inventory = \DB::table('inventories')
+                ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+                ->where(\DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
+                ->select('inventories.unit_price')
+                ->first();
+
+            if ($inventory) {
+                $request->unit_price = $inventory->unit_price;
+                $request->subtotal = $inventory->unit_price * $request->quantity;
+                $totalPrice += $request->subtotal;
+            } else {
+                $request->unit_price = 0;
+                $request->subtotal = 0;
+            }
+        }
 
         // Store the URL that brought us to this page
         session(['supply_request_return_url' => url()->previous()]);
 
         return view('fcu-ams.inventory.supplyRequestDetails', [
             'requests' => $requests,
-            'totalItems' => $totalItems
+            'totalItems' => $totalItems,
+            'totalPrice' => $totalPrice
         ]);
     }
 
@@ -457,15 +476,52 @@ class InventoryController extends Controller
         DB::beginTransaction();
         try {
             foreach ($requests as $request) {
+                // Find the inventory item
+                $inventory = DB::table('inventories')
+                    ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+                    ->where(\DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
+                    ->select('inventories.id', 'inventories.quantity')
+                    ->first();
+
+                if (!$inventory) {
+                    DB::rollback();
+                    return redirect()->back()->with('error', "Item not found: {$request->item_name}");
+                }
+
+                if ($inventory->quantity < $request->quantity) {
+                    DB::rollback();
+                    return redirect()->back()->with('error', "Insufficient stock for {$request->item_name}. Available: {$inventory->quantity}, Requested: {$request->quantity}");
+                }
+
+                // Update inventory quantity
+                DB::table('inventories')
+                    ->where('id', $inventory->id)
+                    ->update([
+                        'quantity' => $inventory->quantity - $request->quantity,
+                        'updated_at' => now()
+                    ]);
+
+                // Update request status
                 $request->status = 'approved';
                 $request->save();
+
+                // Record the stock out transaction
+                $stockOut = new StockOut();
+                $stockOut->stock_out_id = (string) Str::uuid();
+                $stockOut->inventory_id = $inventory->id;
+                $stockOut->quantity = $request->quantity;
+                $stockOut->department_id = $request->department_id;
+                $stockOut->stock_out_date = now();
+                $stockOut->created_by = auth()->id();
+                $stockOut->save();
             }
             
             DB::commit();
-            return redirect(request('return_url'))->with('success', 'Supply request approved successfully.');
+            return redirect(request('return_url'))->with('success', 'Supply request approved successfully and inventory updated.');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Failed to approve supply request.');
+            \Log::error('Failed to approve supply request: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to approve supply request: ' . $e->getMessage());
         }
     }
 
@@ -509,5 +565,52 @@ class InventoryController extends Controller
             ->get();
             
         return view('fcu-ams.inventory.myRequests', compact('requests'));
+    }
+
+    public function searchItems(Request $request)
+    {
+        try {
+            \Log::info('Search request received', ['query' => $request->input('query')]);
+            
+            $search = $request->input('query');
+            
+            if (empty($search)) {
+                return response()->json([]);
+            }
+
+            $items = DB::table('inventories')
+                ->select(
+                    'inventories.id',
+                    'inventories.items_specs',
+                    'inventories.unit_price as price',
+                    'inventories.quantity',
+                    'brands.brand',
+                    'units.unit'
+                )
+                ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+                ->join('units', 'inventories.unit_id', '=', 'units.id')
+                ->whereNull('inventories.deleted_at')
+                ->where('inventories.quantity', '>', 0)
+                ->where(function($q) use ($search) {
+                    $q->where('inventories.items_specs', 'like', "%{$search}%")
+                        ->orWhere('brands.brand', 'like', "%{$search}%");
+                })
+                ->limit(10)
+                ->get();
+
+            \Log::info('Search results', ['count' => $items->count(), 'items' => $items]);
+
+            return response()->json($items)
+                ->header('Content-Type', 'application/json');
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in searchItems', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return response()->json(['error' => $e->getMessage()], 500)
+                ->header('Content-Type', 'application/json');
+        }
     }
 }
