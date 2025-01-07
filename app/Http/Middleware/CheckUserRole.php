@@ -18,13 +18,9 @@ class CheckUserRole
             'profile.updatePersonalInformation',
             'asset.view',
             'logout',
-            'inventory.supply.request',
-            'inventory.supply.request.store',
             'inventory.low.stock',
             'inventory.out.of.stock',
             'inventory.my.requests',
-            'inventory.supply-request.details',
-            'inventory.search.items',
         ];
 
         $deniedRoutesForManager = [

@@ -52,19 +52,19 @@ class AppServiceProvider extends ServiceProvider
                 ->whereDate('maintenance_end_date', '<', now())
                 ->count();
 
-                $pendingRequestsCount = \App\Models\SupplyRequest::where('status', 'pending')
-                    ->distinct('request_group_id')
-                    ->count('request_group_id');
+                // $pendingRequestsCount = \App\Models\SupplyRequest::where('status', 'pending')
+                //     ->distinct('request_group_id')
+                //     ->count('request_group_id');
 
-                // Only show pending requests that haven't been viewed
-                if ($user) {
-                    if ($user->last_checked_alerts) {
-                        $pendingRequestsCount = \App\Models\SupplyRequest::where('status', 'pending')
-                            ->where('created_at', '>', $user->last_checked_alerts)
-                            ->distinct('request_group_id')
-                            ->count('request_group_id');
-                    }
-                }
+                // // Only show pending requests that haven't been viewed
+                // if ($user) {
+                //     if ($user->last_checked_alerts) {
+                //         $pendingRequestsCount = \App\Models\SupplyRequest::where('status', 'pending')
+                //             ->where('created_at', '>', $user->last_checked_alerts)
+                //             ->distinct('request_group_id')
+                //             ->count('request_group_id');
+                //     }
+                // }
 
                 // Count expiring leases that haven't been viewed
                 $expiringLeasesCount = \App\Models\Lease::where('lease_expiration', '>', now())
@@ -77,10 +77,9 @@ class AppServiceProvider extends ServiceProvider
                     })
                     ->count();
 
-                $totalAlerts = $pastDueCount + $pendingRequestsCount + $expiringLeasesCount;
+                $totalAlerts = $pastDueCount + $expiringLeasesCount;
 
                 $view->with('totalAlerts', $totalAlerts);
-                $view->with('pendingRequestsCount', $pendingRequestsCount);
                 $view->with('pastDueCount', $pastDueCount);
                 $view->with('expiringLeasesCount', $expiringLeasesCount);
             }
