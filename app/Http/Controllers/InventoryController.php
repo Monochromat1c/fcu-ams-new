@@ -362,7 +362,191 @@ class InventoryController extends Controller
         return redirect()->route('inventory.stock.out')->with('success', 'Items stocked out successfully');
     }
 
-    
+    public function showSupplyRequest()
+    {
+        $user = auth()->user();
+        $inventories = Inventory::whereNull('deleted_at')
+            ->where('quantity', '>', 0)
+            ->with(['brand', 'unit'])
+            ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+            ->orderBy('brands.brand', 'asc')
+            ->select('inventories.*')
+            ->get();
+        $departments = Department::all();
+        $units = Unit::all();
+        $userDepartment = $user->department;
+        
+        // Debug information
+        \Log::info('User Department:', [
+            'user_id' => $user->id,
+            'department_id' => $user->department_id,
+            'department' => $userDepartment
+        ]);
+        
+        return view('fcu-ams.inventory.supplyRequest', compact('inventories', 'departments', 'user', 'userDepartment', 'units'));
+    }
+
+    public function storeSupplyRequest(Request $request)
+    {
+        $request->validate([
+            'department_id' => 'required|exists:departments,id',
+            'request_date' => 'required|date',
+            'items' => 'required|array',
+            'items.*.name' => 'required|string',
+            'items.*.quantity' => 'required|integer|min:1'
+        ]);
+
+        try {
+            DB::beginTransaction();
+            
+            $requestGroupId = (string) Str::uuid();
+            
+            foreach ($request->items as $item) {
+                $supplyRequest = new SupplyRequest();
+                $supplyRequest->request_id = (string) Str::uuid();
+                $supplyRequest->request_group_id = $requestGroupId;
+                $supplyRequest->department_id = $request->department_id;
+                $supplyRequest->notes = $request->notes;
+                $supplyRequest->inventory_id = Inventory::first()->id; // Required for foreign key
+                $supplyRequest->requester = auth()->user()->first_name . ' ' . auth()->user()->last_name;
+                $supplyRequest->quantity = $item['quantity'];
+                $supplyRequest->request_date = $request->request_date;
+                $supplyRequest->item_name = $item['name']; // Store the actual requested item name
+                $supplyRequest->save();
+            }
+            
+            DB::commit();
+            return redirect()->back()->with('success', 'Supply request submitted successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error('Supply request error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to submit supply request. Please try again.');
+        }
+    }
+
+    public function showSupplyRequestDetails($request_group_id)
+    {
+        $requests = SupplyRequest::with(['department'])
+            ->where('request_group_id', $request_group_id)
+            ->get();
+
+        if ($requests->isEmpty()) {
+            abort(404);
+        }
+
+        $totalItems = $requests->count();
+        $totalPrice = 0;
+        
+        // Add price information to each request
+        foreach ($requests as $request) {
+            $inventory = \DB::table('inventories')
+                ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+                ->where(\DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
+                ->select('inventories.unit_price')
+                ->first();
+
+            if ($inventory) {
+                $request->unit_price = $inventory->unit_price;
+                $request->subtotal = $inventory->unit_price * $request->quantity;
+                $totalPrice += $request->subtotal;
+            } else {
+                $request->unit_price = 0;
+                $request->subtotal = 0;
+            }
+        }
+
+        // Store the URL that brought us to this page
+        session(['supply_request_return_url' => url()->previous()]);
+
+        return view('fcu-ams.inventory.supplyRequestDetails', [
+            'requests' => $requests,
+            'totalItems' => $totalItems,
+            'totalPrice' => $totalPrice
+        ]);
+    }
+
+    public function approveSupplyRequest($request_group_id)
+    {
+        $requests = SupplyRequest::where('request_group_id', $request_group_id)->get();
+        
+        if ($requests->isEmpty()) {
+            return redirect()->back()->with('error', 'Supply request not found.');
+        }
+
+        DB::beginTransaction();
+        try {
+            foreach ($requests as $request) {
+                // Find the inventory item
+                $inventory = DB::table('inventories')
+                    ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+                    ->where(\DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
+                    ->select('inventories.id', 'inventories.quantity')
+                    ->first();
+
+                if (!$inventory) {
+                    DB::rollback();
+                    return redirect()->back()->with('error', "Item not found: {$request->item_name}");
+                }
+
+                if ($inventory->quantity < $request->quantity) {
+                    DB::rollback();
+                    return redirect()->back()->with('error', "Insufficient stock for {$request->item_name}. Available: {$inventory->quantity}, Requested: {$request->quantity}");
+                }
+
+                // Update inventory quantity
+                DB::table('inventories')
+                    ->where('id', $inventory->id)
+                    ->update([
+                        'quantity' => $inventory->quantity - $request->quantity,
+                        'updated_at' => now()
+                    ]);
+
+                // Update request status
+                $request->status = 'approved';
+                $request->save();
+
+                // Record the stock out transaction
+                $stockOut = new StockOut();
+                $stockOut->stock_out_id = (string) Str::uuid();
+                $stockOut->inventory_id = $inventory->id;
+                $stockOut->quantity = $request->quantity;
+                $stockOut->department_id = $request->department_id;
+                $stockOut->stock_out_date = now();
+                $stockOut->created_by = auth()->id();
+                $stockOut->save();
+            }
+            
+            DB::commit();
+            return redirect(request('return_url'))->with('success', 'Supply request approved successfully and inventory updated.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error('Failed to approve supply request: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to approve supply request: ' . $e->getMessage());
+        }
+    }
+
+    public function rejectSupplyRequest($request_group_id)
+    {
+        $requests = SupplyRequest::where('request_group_id', $request_group_id)->get();
+        
+        if ($requests->isEmpty()) {
+            return redirect()->back()->with('error', 'Supply request not found.');
+        }
+
+        DB::beginTransaction();
+        try {
+            foreach ($requests as $request) {
+                $request->status = 'rejected';
+                $request->save();
+            }
+            
+            DB::commit();
+            return redirect(request('return_url'))->with('success', 'Supply request rejected successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Failed to reject supply request.');
+        }
+    }
 
     public function export() { 
         return Excel::download(new InventoryExport, 'inventories.csv');
