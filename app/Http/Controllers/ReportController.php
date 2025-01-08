@@ -46,22 +46,16 @@ class ReportController extends Controller
 
         $inventories = Inventory::with('supplier', 'brand', 'unit')
             ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('quantity', '>', 0)
             ->orderBy('unique_tag', 'asc')
-            ->paginate(10)
-            ->appends($request->query());
+            ->paginate(10, ['*'], 'inventory_page')
+            ->appends(request()->except('inventory_page'));
 
         $inventoriesForPrint = Inventory::with('supplier')
             ->whereBetween('created_at', [$startDate, $endDate])
+            ->where('quantity', '>', 0)
             ->orderBy('unique_tag', 'asc')
             ->get();
-
-        $lowStockInventories = Inventory::with('supplier')
-            ->where('quantity', '>=', 1)
-            ->where('quantity', '<', 20)
-            ->whereNull('deleted_at')
-            ->orderBy('unique_tag', 'asc')
-            ->paginate(10)
-            ->appends($request->query());
 
         $stockOutRecords = StockOut::with('inventory', 'department')
             ->orderBy('stock_out_date', 'desc')
@@ -91,18 +85,18 @@ class ReportController extends Controller
                 });
  
         $stockOutRecords = new LengthAwarePaginator(
-            $stockOutRecords->forPage($request->page, 10),
+            $stockOutRecords->forPage($request->input('stock_out_page', 1), 10),
             $stockOutRecords->count(),
             10,
-            $request->page,
-            ['path' => $request->url(), 'query' => $request->query()]
+            $request->input('stock_out_page', 1),
+            ['path' => $request->url(), 'query' => array_merge($request->query(), ['stock_out_page' => $request->input('stock_out_page', 1)])]
         );
 
         $assets = Asset::with('supplier', 'brand')
             ->whereBetween('purchase_date', [$assetsStartDate, $assetsEndDate])
             ->orderBy('asset_tag_id', 'asc')
-            ->paginate(10)
-            ->appends($request->query());
+            ->paginate(10, ['*'], 'assets_page')
+            ->appends(request()->except('assets_page'));
 
 
         // Purchase Order date filter
@@ -125,14 +119,14 @@ class ReportController extends Controller
 
 
         $purchaseOrders = new LengthAwarePaginator(
-            $purchaseOrders->forPage($request->page, 10),
+            $purchaseOrders->forPage($request->input('po_page', 1), 10),
             $purchaseOrders->count(),
             10,
-            $request->page,
-            ['path' => $request->url(), 'query' => $request->query()]
+            $request->input('po_page', 1),
+            ['path' => $request->url(), 'query' => array_merge($request->query(), ['po_page' => $request->input('po_page', 1)])]
         );
 
-        return view('fcu-ams/reports/reports', compact('lowStockInventories', 'stockOutRecords',
+        return view('fcu-ams/reports/reports', compact('stockOutRecords',
         'assets', 'purchaseOrders', 'inventoriesForPrint', 'assetsDateRangeDisplay', 'poDateRangeDisplay', 'stockOutDateRangeDisplay'), [
             'inventories' => $inventories,
             'startDate' => $startDate->toDateString(),
