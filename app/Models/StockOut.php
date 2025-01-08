@@ -10,11 +10,13 @@ class StockOut extends Model
     use HasFactory;
 
     protected $fillable = [
+        'stock_out_id',
         'inventory_id',
         'quantity',
         'department_id',
         'stock_out_date',
         'receiver',
+        'created_by'
     ];
 
     public function inventory()
@@ -25,5 +27,10 @@ class StockOut extends Model
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

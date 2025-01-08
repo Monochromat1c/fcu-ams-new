@@ -45,7 +45,6 @@
                     <div class="flex gap-4">
                         <form action="{{ route('inventory.supply-request.approve', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST">
                             @csrf
-                            <input type="hidden" name="return_url" value="{{ url()->previous() }}">
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-white border-2 border-green-500 hover:bg-green-500 text-green-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
@@ -53,6 +52,7 @@
                                 Approve
                             </button>
                         </form>
+                        <!-- approve button -->
                         <form action="{{ route('inventory.supply-request.reject', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST">
                             @csrf
                             <input type="hidden" name="return_url" value="{{ url()->previous() }}">

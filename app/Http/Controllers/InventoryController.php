@@ -467,20 +467,23 @@ class InventoryController extends Controller
 
     public function approveSupplyRequest($request_group_id)
     {
-        $requests = SupplyRequest::where('request_group_id', $request_group_id)->get();
-        
-        if ($requests->isEmpty()) {
-            return redirect()->back()->with('error', 'Supply request not found.');
-        }
-
-        DB::beginTransaction();
         try {
+            DB::beginTransaction();
+
+            // Get all requests in this group
+            $requests = SupplyRequest::where('request_group_id', $request_group_id)
+                ->where('status', 'pending')
+                ->get();
+            
+            if ($requests->isEmpty()) {
+                return redirect()->back()->with('error', 'No pending supply requests found.');
+            }
+
             foreach ($requests as $request) {
                 // Find the inventory item
-                $inventory = DB::table('inventories')
-                    ->join('brands', 'inventories.brand_id', '=', 'brands.id')
-                    ->where(\DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
-                    ->select('inventories.id', 'inventories.quantity')
+                $inventory = Inventory::join('brands', 'inventories.brand_id', '=', 'brands.id')
+                    ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
+                    ->select('inventories.*')
                     ->first();
 
                 if (!$inventory) {
@@ -494,34 +497,21 @@ class InventoryController extends Controller
                 }
 
                 // Update inventory quantity
-                DB::table('inventories')
-                    ->where('id', $inventory->id)
-                    ->update([
-                        'quantity' => $inventory->quantity - $request->quantity,
-                        'updated_at' => now()
-                    ]);
+                $inventory->quantity -= $request->quantity;
+                $inventory->save();
 
                 // Update request status
                 $request->status = 'approved';
                 $request->save();
-
-                // Record the stock out transaction
-                $stockOut = new StockOut();
-                $stockOut->stock_out_id = (string) Str::uuid();
-                $stockOut->inventory_id = $inventory->id;
-                $stockOut->quantity = $request->quantity;
-                $stockOut->department_id = $request->department_id;
-                $stockOut->stock_out_date = now();
-                $stockOut->created_by = auth()->id();
-                $stockOut->save();
             }
             
             DB::commit();
-            return redirect(request('return_url'))->with('success', 'Supply request approved successfully and inventory updated.');
+            return redirect()->back()->with('success', 'Supply request approved successfully.');
+            
         } catch (\Exception $e) {
             DB::rollback();
             \Log::error('Failed to approve supply request: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to approve supply request: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to approve supply request. Please try again.');
         }
     }
 
