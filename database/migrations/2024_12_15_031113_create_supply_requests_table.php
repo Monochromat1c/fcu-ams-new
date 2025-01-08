@@ -21,6 +21,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->date('request_date');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -125,6 +125,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(RequestController::class)->group(function () {
         Route::get('/requests', 'index')->name('requests.index');
+        Route::delete('/requests/{request_group_id}', 'destroy')->name('requests.destroy');
     });
 
     Route::controller(UnitController::class)->group(function () {
