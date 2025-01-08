@@ -476,7 +476,7 @@ class InventoryController extends Controller
                 ->get();
             
             if ($requests->isEmpty()) {
-                return redirect()->back()->with('error', 'No pending supply requests found.');
+                return redirect()->back()->withErrors(['No pending supply requests found.']);
             }
 
             foreach ($requests as $request) {
@@ -488,12 +488,12 @@ class InventoryController extends Controller
 
                 if (!$inventory) {
                     DB::rollback();
-                    return redirect()->back()->with('error', "Item not found: {$request->item_name}");
+                    return redirect()->back()->withErrors(["Item not found: {$request->item_name}"]);
                 }
 
                 if ($inventory->quantity < $request->quantity) {
                     DB::rollback();
-                    return redirect()->back()->with('error', "Insufficient stock for {$request->item_name}. Available: {$inventory->quantity}, Requested: {$request->quantity}");
+                    return redirect()->back()->withErrors(["Insufficient stock for {$request->item_name}. Available: {$inventory->quantity}, Requested: {$request->quantity}"]);
                 }
 
                 // Update inventory quantity
@@ -506,12 +506,14 @@ class InventoryController extends Controller
             }
             
             DB::commit();
-            return redirect()->back()->with('success', 'Supply request approved successfully.');
+            $returnUrl = session('supply_request_return_url');
+            session()->forget('supply_request_return_url'); // Clear the session after use
+            return redirect($returnUrl ?? url()->previous())->with('success', 'Supply request approved successfully.');
             
         } catch (\Exception $e) {
             DB::rollback();
             \Log::error('Failed to approve supply request: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to approve supply request. Please try again.');
+            return redirect()->back()->withErrors(['Failed to approve supply request. Please try again.']);
         }
     }
 
@@ -520,7 +522,7 @@ class InventoryController extends Controller
         $requests = SupplyRequest::where('request_group_id', $request_group_id)->get();
         
         if ($requests->isEmpty()) {
-            return redirect()->back()->with('error', 'Supply request not found.');
+            return redirect()->back()->withErrors(['Supply request not found.']);
         }
 
         DB::beginTransaction();
@@ -531,10 +533,12 @@ class InventoryController extends Controller
             }
             
             DB::commit();
-            return redirect(request('return_url'))->with('success', 'Supply request rejected successfully.');
+            $returnUrl = session('supply_request_return_url');
+            session()->forget('supply_request_return_url'); // Clear the session after use
+            return redirect($returnUrl ?? url()->previous())->with('success', 'Supply request rejected successfully.');
         } catch (\Exception $e) {
             DB::rollback();
-            return redirect()->back()->with('error', 'Failed to reject supply request.');
+            return redirect()->back()->withErrors(['Failed to reject supply request.']);
         }
     }
 

@@ -55,7 +55,6 @@
                         <!-- approve button -->
                         <form action="{{ route('inventory.supply-request.reject', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST">
                             @csrf
-                            <input type="hidden" name="return_url" value="{{ url()->previous() }}">
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-white border-2 border-red-500 hover:bg-red-500 text-red-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -68,7 +67,6 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Request Information</h3>
                     <div class="space-y-3">
                         <div>
                             <span class="font-medium">Requester:</span>

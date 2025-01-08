@@ -184,7 +184,7 @@
             </div>
         </div>
 
-        <div class="m-3 rounded-md 2xl:max-w-7xl 2xl:mx-auto">
+        <div class="m-3 rounded-md">
             @include('layouts.messageWithoutTimerForError')
         </div>
 
