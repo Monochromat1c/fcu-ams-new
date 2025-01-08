@@ -595,32 +595,37 @@
         }
     });
 
-    // Handle save maintenance button click
-    document.getElementById('save-maintenance-btn').addEventListener('click', function () {
-        document.getElementById('maintenance-modal').classList.add('hidden');
-    });
-
     // Show assignment modal when button is clicked
-    document.getElementById('show-assignment-modal').addEventListener('click', function () {
-        document.getElementById('assignment-modal').classList.remove('hidden');
-    });
+    document.addEventListener('DOMContentLoaded', function() {
+        const showAssignmentButton = document.getElementById('show-assignment-modal');
+        const assignmentModal = document.getElementById('assignment-modal');
+        const saveAssignmentButton = document.getElementById('save-assignment-btn');
 
-    // Handle save assignment button click
-    document.getElementById('save-assignment-btn').addEventListener('click', function () {
-        const assignedTo = document.getElementById('modal_assigned_to').value;
-        const issuedDate = document.getElementById('modal_issued_date').value;
-        const notes = document.getElementById('modal_notes').value;
+        if (showAssignmentButton && assignmentModal) {
+            showAssignmentButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                assignmentModal.classList.remove('hidden');
+            });
+        }
 
-        // Update hidden inputs
-        document.getElementById('assigned_to').value = assignedTo;
-        document.getElementById('issued_date').value = issuedDate;
-        document.getElementById('notes').value = notes;
+        if (saveAssignmentButton) {
+            saveAssignmentButton.addEventListener('click', function() {
+                const assignedTo = document.getElementById('modal_assigned_to').value;
+                const issuedDate = document.getElementById('modal_issued_date').value;
+                const notes = document.getElementById('modal_notes').value;
 
-        // Update button text
-        document.getElementById('show-assignment-modal').textContent = assignedTo || 'Click to assign';
+                // Update hidden inputs
+                document.getElementById('assigned_to').value = assignedTo;
+                document.getElementById('issued_date').value = issuedDate;
+                document.getElementById('notes').value = notes;
 
-        // Hide modal
-        document.getElementById('assignment-modal').classList.add('hidden');
+                // Update button text
+                document.getElementById('show-assignment-modal').textContent = assignedTo || 'Click to assign';
+
+                // Hide modal
+                assignmentModal.classList.add('hidden');
+            });
+        }
     });
 
     // Function to refresh select options after adding new item

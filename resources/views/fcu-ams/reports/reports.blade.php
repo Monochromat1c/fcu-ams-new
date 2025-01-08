@@ -395,7 +395,7 @@
         </div>
 
                 <!-- Assets Section -->
-                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="bg-white rounded-lg shadow-md p-6 ">
                     <div class="flex justify-between items-center mb-6">
                         <div>
                             <h2 class="text-xl font-semibold text-gray-800">Assets Report</h2>
