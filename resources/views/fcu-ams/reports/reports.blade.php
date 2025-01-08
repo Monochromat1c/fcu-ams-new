@@ -472,6 +472,72 @@
                         </div>
             @endif
                 </div>
+
+                <!-- Assigned Assets Section -->
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-semibold text-gray-800">Assets by Assignee</h2>
+                    </div>
+
+                    <!-- Search Form -->
+                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="assignee" class="block text-sm font-medium text-gray-700 mb-2">Search by Assignee Name</label>
+                                <input type="text" name="assignee" id="assignee"
+                                    value="{{ $assigneeQuery }}"
+                                    placeholder="Enter assignee name..."
+                                    class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
+                            </div>
+                            <div class="flex items-end">
+                                <button type="submit"
+                                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                    Search Assets
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    @if(isset($assignedAssets))
+                        @if($assignedAssets->isEmpty())
+                            <p class="text-center text-gray-500 py-4">No assets found assigned to "{{ $assigneeQuery }}".</p>
+                        @else
+                            <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Asset Tag ID</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Brand</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Model</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Location</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Condition</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200">
+                                        @foreach($assignedAssets as $asset)
+                                            <tr class="hover:bg-gray-50">
+                                                <td class="px-6 py-4">{{ $asset->asset_tag_id }}</td>
+                                                <td class="px-6 py-4">{{ $asset->brand->brand }}</td>
+                                                <td class="px-6 py-4">{{ $asset->model }}</td>
+                                                <td class="px-6 py-4">{{ $asset->department->department }}</td>
+                                                <td class="px-6 py-4">{{ $asset->location->location }}</td>
+                                                <td class="px-6 py-4">{{ $asset->status->status }}</td>
+                                                <td class="px-6 py-4">{{ $asset->condition->condition }}</td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="mt-4 pagination-container flex w-full">
+                                {{ $assignedAssets->links() }}
+                            </div>
+                        @endif
+                    @else
+                        <p class="text-center text-gray-500 py-4">Enter an assignee name to search for their assigned assets.</p>
+                    @endif
+                </div>
             </div>
         </div>
     </div>

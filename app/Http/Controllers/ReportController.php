@@ -40,6 +40,17 @@ class ReportController extends Controller
         $assetsStartDate = Carbon::parse($assetsStartDate)->startOfDay();
         $assetsEndDate = Carbon::parse($assetsEndDate)->endOfDay();
 
+        // Assigned assets query
+        $assigneeQuery = $request->input('assignee');
+        $assignedAssets = null;
+        if ($assigneeQuery) {
+            $assignedAssets = Asset::with(['supplier', 'brand', 'site', 'location', 'category', 'department', 'condition', 'status'])
+                ->where('assigned_to', 'like', '%' . $assigneeQuery . '%')
+                ->orderBy('asset_tag_id', 'asc')
+                ->paginate(10, ['*'], 'assigned_page')
+                ->appends(request()->except('assigned_page'));
+        }
+
         // Date range display method
         $dateRangeDisplay = $this->formatDateRange($startDate, $endDate);
         $assetsDateRangeDisplay = $this->formatDateRange($assetsStartDate, $assetsEndDate, 'assets');
@@ -126,20 +137,24 @@ class ReportController extends Controller
             ['path' => $request->url(), 'query' => array_merge($request->query(), ['po_page' => $request->input('po_page', 1)])]
         );
 
-        return view('fcu-ams/reports/reports', compact('stockOutRecords',
-        'assets', 'purchaseOrders', 'inventoriesForPrint', 'assetsDateRangeDisplay', 'poDateRangeDisplay', 'stockOutDateRangeDisplay'), [
-            'inventories' => $inventories,
-            'startDate' => $startDate->toDateString(),
-            'endDate' => $endDate->toDateString(),
-            'dateRangeDisplay' => $dateRangeDisplay,
-            'purchaseOrders' => $purchaseOrders,
-            'poStartDate' => $poStartDate->toDateString(),
-            'poEndDate' => $poEndDate->toDateString(),
-            'poDateRangeDisplay' => $poDateRangeDisplay,
-            'stockOutStartDate' => $stockOutStartDate->toDateString(),
-            'stockOutEndDate' => $stockOutEndDate->toDateString(),
-            'stockOutDateRangeDisplay' => $stockOutDateRangeDisplay
-        ]);
+        return view('fcu-ams/reports/reports', array_merge(
+            compact('stockOutRecords', 'assets', 'purchaseOrders', 'inventoriesForPrint',
+                'assetsDateRangeDisplay', 'poDateRangeDisplay', 'stockOutDateRangeDisplay',
+                'assignedAssets', 'assigneeQuery'),
+            [
+                'inventories' => $inventories,
+                'startDate' => $startDate->toDateString(),
+                'endDate' => $endDate->toDateString(),
+                'dateRangeDisplay' => $dateRangeDisplay,
+                'purchaseOrders' => $purchaseOrders,
+                'poStartDate' => $poStartDate->toDateString(),
+                'poEndDate' => $poEndDate->toDateString(),
+                'poDateRangeDisplay' => $poDateRangeDisplay,
+                'stockOutStartDate' => $stockOutStartDate->toDateString(),
+                'stockOutEndDate' => $stockOutEndDate->toDateString(),
+                'stockOutDateRangeDisplay' => $stockOutDateRangeDisplay
+            ]
+        ));
     }
 
     private function formatDateRange(Carbon $startDate, Carbon $endDate, $type = 'supplies'): string {
