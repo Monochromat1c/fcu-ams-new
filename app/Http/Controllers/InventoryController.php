@@ -479,6 +479,7 @@ class InventoryController extends Controller
                 return redirect()->back()->withErrors(['No pending supply requests found.']);
             }
 
+            $errors = [];
             foreach ($requests as $request) {
                 // Find the inventory item
                 $inventory = Inventory::join('brands', 'inventories.brand_id', '=', 'brands.id')
@@ -487,14 +488,27 @@ class InventoryController extends Controller
                     ->first();
 
                 if (!$inventory) {
-                    DB::rollback();
-                    return redirect()->back()->withErrors(["Item not found: {$request->item_name}"]);
+                    $errors[] = "Item not found: {$request->item_name}";
+                    continue;
                 }
 
                 if ($inventory->quantity < $request->quantity) {
-                    DB::rollback();
-                    return redirect()->back()->withErrors(["Insufficient stock for {$request->item_name}. Available: {$inventory->quantity}, Requested: {$request->quantity}"]);
+                    $errors[] = "Insufficient stock for {$request->item_name}. Available: {$inventory->quantity}, Requested: {$request->quantity}";
+                    continue;
                 }
+            }
+
+            if (!empty($errors)) {
+                DB::rollback();
+                return redirect()->back()->withErrors($errors);
+            }
+
+            // If no errors, proceed with the updates
+            foreach ($requests as $request) {
+                $inventory = Inventory::join('brands', 'inventories.brand_id', '=', 'brands.id')
+                    ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
+                    ->select('inventories.*')
+                    ->first();
 
                 // Update inventory quantity
                 $inventory->quantity -= $request->quantity;
