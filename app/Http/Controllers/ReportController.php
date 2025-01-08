@@ -259,6 +259,25 @@ class ReportController extends Controller
         return $printService->printMonthlyAssetsReport($assets, $startDate, $endDate);
     }
 
+    public function printAssignedAssets(Request $request, ReportPrintService $printService)
+    {
+        $assignee = $request->input('assignee');
+        if (!$assignee) {
+            return redirect()->back()->with('error', 'No assignee specified for printing.');
+        }
+
+        $assets = Asset::with(['supplier', 'brand', 'site', 'location', 'category', 'department', 'condition', 'status'])
+            ->where('assigned_to', 'like', '%' . $assignee . '%')
+            ->orderBy('asset_tag_id', 'asc')
+            ->get();
+
+        if ($assets->isEmpty()) {
+            return redirect()->back()->with('error', 'No assets found for the specified assignee.');
+        }
+
+        return $printService->printAssignedAssetsReport($assets, $assignee);
+    }
+
     private function getMonthlyInventories($month, $year)
     {
         $startDate = Carbon::createFromDate($year, $month, 1)->startOfMonth();

@@ -44,4 +44,20 @@ class ReportPrintService
         $fileName = "assets_report_" . $startDate->format('Y-m-d') . "_to_" . $endDate->format('Y-m-d') . ".pdf";
         return $pdf->download($fileName);
     }
+
+    public function printAssignedAssetsReport($assets, $assignee)
+    {
+        $totalValue = $assets->sum('cost');
+        $currentDate = Carbon::now()->format('F j, Y');
+
+        $pdf = PDF::loadView('reports.assigned-assets-pdf', [
+            'assets' => $assets,
+            'assignee' => $assignee,
+            'currentDate' => $currentDate,
+            'totalValue' => $totalValue
+        ]);
+
+        $fileName = "assigned_assets_" . str_replace(' ', '_', strtolower($assignee)) . "_" . Carbon::now()->format('Y-m-d') . ".pdf";
+        return $pdf->download($fileName);
+    }
 }
