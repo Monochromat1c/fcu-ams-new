@@ -16,13 +16,13 @@
                 </div>
             </div>
         </div>
+        <div class="mb-3 2xl:max-w-7xl 2xl:mx-auto">
+            @include('layouts.messageWithoutTimerForError')
+        </div>
         <div class="request-form bg-white m-3 shadow-md rounded-md p-5 2xl:max-w-7xl 2xl:mx-auto">
             <form id="supply-request-form" method="POST" action="{{ route('inventory.supply.request.store') }}" onsubmit="return validateForm()">
                 @csrf
                 <div class="">
-                    <div class="mb-3">
-                        @include('layouts.messageWithoutTimerForError')
-                    </div>
                     <h3 class="text-lg font-semibold mb-3">Request Details</h3>
                     <div class="mb-4">
                         <label for="item_id" class="block text-gray-700 font-bold mb-2">Items:</label>
