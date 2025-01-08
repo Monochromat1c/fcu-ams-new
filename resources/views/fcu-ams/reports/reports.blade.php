@@ -3,14 +3,58 @@
 <link rel="stylesheet" href="{{ asset('css/asset.css') }}">
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
+<style>
+    .pagination-container nav > div:first-child {
+        display: none !important;
+    }
+    .pagination-container nav > div:last-child {
+        margin: 0 !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+    .pagination-container nav > div:last-child > div:first-child {
+        margin-right: 1rem !important;
+    }
+    .pagination-container nav > div:last-child > div:last-child {
+        margin-left: auto !important;
+    }
+    .pagination-container .pagination-previous,
+    .pagination-container .pagination-next {
+        display: invisible !important;
+    }
+
+    /* Add spacing between pagination elements */
+    .pagination-container nav > div:last-child > div > span,
+    .pagination-container nav > div:last-child > div > a {
+        margin: 0 0.5rem !important;
+    }
+
+    .pagination-container nav > div:last-child > div > span:first-child,
+    .pagination-container nav > div:last-child > div > a:first-child {
+        margin-left: 0 !important;
+    }
+
+    .pagination-container nav > div:last-child > div > span:last-child,
+    .pagination-container nav > div:last-child > div > a:last-child {
+        margin-right: 0 !important;
+    }
+</style>
+
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-200 col-span-5">
         <!-- Header -->
-        <nav class="bg-white flex justify-between items-center py-3 px-4 m-3 shadow-md rounded-md">
-            <div class="flex items-center">
-                <h1 class="text-3xl font-semibold text-gray-800">Reports Dashboard</h1>
+        <nav class="bg-white flex justify-between items-center py-3 px-4 m-3 shadow-md rounded-md relative">
+            <!-- Left spacer -->
+            <div class="w-14"></div>
+            
+            <!-- Centered title -->
+            <div class="absolute left-1/2 transform -translate-x-1/2">
+                <h1 class="text-3xl font-semibold text-gray-800">Reports</h1>
             </div>
+            
+            <!-- Profile section (right-aligned) -->
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="flex gap-3 focus:outline-none">
                     <div>
@@ -150,7 +194,7 @@
                     </div>
                     
                     <!-- Filter Form -->
-                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4">
+                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
                                 <label for="po_start_date" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
@@ -176,7 +220,7 @@
                     @if($purchaseOrders->isEmpty())
                         <p class="text-center text-gray-500 py-4">No purchase order records available.</p>
                     @else
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -199,9 +243,9 @@
                     </tbody>
                 </table>
             </div>
-                        <div class="mt-4">
+                        <div class="mt-4 pagination-container flex w-full">
                             {{ $purchaseOrders->appends(['po_page' => request('po_page')])->links() }}
-            </div>
+                        </div>
             @endif
                                         </div>
 
@@ -213,7 +257,7 @@
                     </div>
 
                     <!-- Filter Form -->
-                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4">
+                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
                                 <label for="stock_out_start_date" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
@@ -239,7 +283,7 @@
                     @if($stockOutRecords->isEmpty())
                         <p class="text-center text-gray-500 py-4">No stock out records available.</p>
                     @else
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -262,7 +306,7 @@
                         </tbody>
                     </table>
                 </div>
-                        <div class="mt-4">
+                        <div class="mt-4 pagination-container flex w-full">
                             {{ $stockOutRecords->appends(['stock_out_page' => request('stock_out_page')])->links() }}
                         </div>
                     @endif
@@ -292,7 +336,7 @@
                         </div>
 
                     <!-- Filter Form -->
-                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4">
+                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
                                 <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
@@ -318,7 +362,7 @@
                     @if($inventories->isEmpty())
                         <p class="text-center text-gray-500 py-4">No inventory records available.</p>
                     @else
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
                         <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -344,9 +388,9 @@
                             </tbody>
                         </table>
                     </div>
-                        <div class="mt-4">
+                        <div class="mt-4 pagination-container flex w-full">
                             {{ $inventories->appends(['inventory_page' => request('inventory_page')])->links() }}
-                </div>
+                        </div>
             @endif
         </div>
 
@@ -371,7 +415,7 @@
                         </div>
 
                     <!-- Filter Form -->
-                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4">
+                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
                                 <label for="assets_start_date" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
@@ -397,7 +441,7 @@
                     @if($assets->isEmpty())
                         <p class="text-center text-gray-500 py-4">No assets records available.</p>
                     @else
-                        <div class="overflow-x-auto">
+                        <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
@@ -423,9 +467,9 @@
                         </tbody>
                     </table>
                 </div>
-                        <div class="mt-4">
+                        <div class="mt-4 pagination-container flex w-full">
                             {{ $assets->appends(['assets_page' => request('assets_page')])->links() }}
-                </div>
+                        </div>
             @endif
                 </div>
             </div>
