@@ -185,8 +185,7 @@
             </div>
 
             <!-- Chart Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Inventory by Supplier Chart -->
+            <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Inventory Distribution by Supplier</h2>
                     <div class="w-full h-[300px] flex items-center justify-center">
@@ -194,7 +193,6 @@
                     </div>
                 </div>
 
-                <!-- Assets by Department Chart -->
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Asset Distribution by Department</h2>
                     <div class="w-full h-[300px] flex items-center justify-center">
@@ -202,55 +200,51 @@
                     </div>
                 </div>
 
-                <!-- Stock Out Trends Chart
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <h2 class="text-xl font-semibold text-gray-800 mb-4">Stock-Out Trends (Last 6 Months)</h2>
                     <div class="w-full h-[300px] flex items-center justify-center">
                         <canvas id="trendChart"></canvas>
                     </div>
-                </div> -->
-            </div>
+                </div>
+            </div> -->
 
             <!-- Assigned Assets Section -->
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-semibold text-gray-800">Assets by Assignee</h2>
-                    @if(isset($assignedAssets) && !$assignedAssets->isEmpty())
-                        <form method="GET" action="{{ route('reports.print-assigned') }}"
-                            target="_blank" class="ml-2">
-                            <input type="hidden" name="assignee" value="{{ $assigneeQuery }}">
-                            <button type="submit"
-                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
-                                    viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                                </svg>
-                                Print Report
-                            </button>
+                    <h2 class="text-xl font-semibold text-gray-800">Assigned Assets</h2>
+                    <div class="flex items-center gap-4">
+                        <!-- Search Form -->
+                        <form method="GET" action="{{ route('reports.index') }}" class="flex items-center">
+                            <div class="relative">
+                                <input type="text" name="assignee" id="assignee" value="{{ $assigneeQuery }}"
+                                    placeholder="Search by assignee name..."
+                                    class="w-64 rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
+                                <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </button>
+                            </div>
                         </form>
-                    @endif
+                        @if(isset($assignedAssets) && !$assignedAssets->isEmpty())
+                            <form method="GET" action="{{ route('reports.print-assigned') }}" target="_blank">
+                                <input type="hidden" name="assignee" value="{{ $assigneeQuery }}">
+                                <button type="submit"
+                                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                    </svg>
+                                    Print Report
+                                </button>
+                            </form>
+                        @endif
+                    </div>
                 </div>
 
-                <!-- Search Form -->
-                <form method="GET" action="{{ route('reports.index') }}"
-                    class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="assignee" class="block text-sm font-medium text-gray-700 mb-2">Search by
-                                Assignee Name</label>
-                            <input type="text" name="assignee" id="assignee" value="{{ $assigneeQuery }}"
-                                placeholder="Enter assignee name..."
-                                class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
-                        </div>
-                        <div class="flex items-end">
-                            <button type="submit"
-                                class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                Search Assets
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                <!-- Divider -->
+                <div class="border-b-2 border-slate-200 mb-6"></div>
 
                 @if(isset($assignedAssets))
                     @if($assignedAssets->isEmpty())
@@ -514,7 +508,7 @@
         </div>
 
                 <!-- Assets Section -->
-                <div class="bg-white rounded-lg shadow-md p-6 ">
+                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <div class="flex justify-between items-center mb-6">
                         <div>
                             <h2 class="text-xl font-semibold text-gray-800">Assets Report</h2>
