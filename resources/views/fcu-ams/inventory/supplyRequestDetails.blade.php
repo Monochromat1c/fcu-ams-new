@@ -11,7 +11,7 @@
             <div class="px-4 sm:px-6 lg:px-8 py-6">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center justify-between w-full">
-                        <a href="javascript:void(0);" onclick="history.back();"
+                        <a href="{{ route('requests.index') }}"
                         class="mr-4 hover:bg-gray-100 my-auto p-2 rounded-full transition">
                             <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg">
