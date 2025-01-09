@@ -83,6 +83,13 @@
                                         <div class="flex-1 relative">
                                             <input type="text" id="new_item_name" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" placeholder="Item Name" required>
                                             <div id="suggestions-container" class="absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto hidden">
+                                                <!-- Add loading spinner -->
+                                                <div id="suggestions-loading" class="hidden">
+                                                    <div class="flex items-center justify-center p-4">
+                                                        <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                                                        <span class="ml-2 text-gray-600">Searching...</span>
+                                                    </div>
+                                                </div>
                                                 <ul id="suggestions-list" class="py-1">
                                                 </ul>
                                             </div>
@@ -296,12 +303,21 @@
             clearTimeout(searchTimeout);
         }
 
-        searchTimeout = setTimeout(() => {
-            if (!query.trim()) {
-                document.getElementById('suggestions-container').classList.add('hidden');
-                return;
-            }
+        const suggestionsContainer = document.getElementById('suggestions-container');
+        const loadingSpinner = document.getElementById('suggestions-loading');
+        const suggestionsList = document.getElementById('suggestions-list');
 
+        if (!query.trim()) {
+            suggestionsContainer.classList.add('hidden');
+            return;
+        }
+
+        // Show loading spinner and container
+        suggestionsContainer.classList.remove('hidden');
+        loadingSpinner.classList.remove('hidden');
+        suggestionsList.classList.add('hidden');
+
+        searchTimeout = setTimeout(() => {
             console.log('Searching for:', query);
             const url = '{{ url("/inventory/search-items") }}?query=' + encodeURIComponent(query);
             console.log('Fetching from:', url);
@@ -322,11 +338,13 @@
                 })
                 .then(items => {
                     console.log('Parsed items:', items);
-                    const suggestionsList = document.getElementById('suggestions-list');
-                    const suggestionsContainer = document.getElementById('suggestions-container');
+                    
+                    // Hide loading spinner and show suggestions list
+                    loadingSpinner.classList.add('hidden');
+                    suggestionsList.classList.remove('hidden');
                     
                     if (!items || items.length === 0) {
-                        suggestionsContainer.classList.add('hidden');
+                        suggestionsList.innerHTML = '<li class="px-4 py-2 text-gray-500">No items found</li>';
                         return;
                     }
 
@@ -359,11 +377,12 @@
                         });
                         suggestionsList.appendChild(li);
                     });
-                    
-                    suggestionsContainer.classList.remove('hidden');
                 })
                 .catch(error => {
                     console.error('Error fetching items:', error);
+                    loadingSpinner.classList.add('hidden');
+                    suggestionsList.classList.remove('hidden');
+                    suggestionsList.innerHTML = '<li class="px-4 py-2 text-red-500">Error loading suggestions</li>';
                 });
         }, 300);
     }
@@ -498,11 +517,7 @@
         itemNameInput.addEventListener('input', function() {
             const query = this.value.trim();
             console.log('Input event triggered:', query);
-            if (query.length >= 2) {
-                searchItems(query);
-            } else {
-                suggestionsContainer.classList.add('hidden');
-            }
+            searchItems(query);
         });
 
         // Close suggestions when clicking outside
