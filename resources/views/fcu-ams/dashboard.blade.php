@@ -286,6 +286,7 @@
             <div class="col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
                 <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
                     <h3 class="text-xl font-bold text-gray-800 tracking-tight">Recent Requests</h3>
+                    <a href="{{ route('requests.index') }}" class="text-blue-600 hover:text-blue-800 text-sm">View All Requests</a>
                 </div>
                 <div class="divide-y divide-gray-100">
                     @forelse($recentRequests as $request)
@@ -300,8 +301,6 @@
                                     </p>
                                     <p class="text-sm text-gray-500">
                                         Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
-                                        <a href="{{ route('inventory.supply-request.details', ['request_group_id' => $request->request_group_id]) }}" 
-                                           class="text-blue-600 hover:text-blue-800 text-xs ml-1">(View Items)</a>
                                     </p>
                                     <p class="text-xs text-gray-400">
                                         {{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}

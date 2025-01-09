@@ -36,11 +36,20 @@
                                     <thead>
                                         <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Item</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit Price</th>
                                             <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Quantity</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Total Price</th>
                                         </tr>
                                     </thead>
                                     <tbody class="bg-white divide-y divide-gray-200" id="selected-items">
                                     </tbody>
+                                    <tfoot>
+                                        <tr class="bg-gray-50">
+                                            <td colspan="4" class="px-6 py-4 text-right font-semibold text-gray-900">Overall Total:</td>
+                                            <td id="main-overall-total" class="px-6 py-4 text-left font-semibold text-gray-900">₱0.00</td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -93,12 +102,22 @@
                                                 <thead class="sticky top-0 bg-gradient-to-r from-blue-400 to-blue-500 text-white">
                                                     <tr>
                                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Item Name</th>
+                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit</th>
+                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit Price</th>
                                                         <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Quantity</th>
+                                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Total Price</th>
                                                         <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id="added-items-table-body" class="bg-white divide-y divide-gray-200">
                                                 </tbody>
+                                                <tfoot>
+                                                    <tr class="bg-gray-50">
+                                                        <td colspan="4" class="px-6 py-4 text-right font-semibold text-gray-900">Overall Total:</td>
+                                                        <td id="modal-overall-total" class="px-6 py-4 text-left font-semibold text-gray-900">₱0.00</td>
+                                                        <td></td>
+                                                    </tr>
+                                                </tfoot>
                                             </table>
                                         </div>
                                     </div>
@@ -179,6 +198,47 @@
         }
     }
 
+    function formatPrice(price) {
+        if (!price || isNaN(price)) return 'N/A';
+        return new Intl.NumberFormat('en-PH', {
+            style: 'currency',
+            currency: 'PHP'
+        }).format(price);
+    }
+
+    function calculateTotalPrice(quantity, unitPrice) {
+        if (!unitPrice || isNaN(unitPrice)) return 'N/A';
+        return quantity * unitPrice;
+    }
+
+    function calculateOverallTotal(tableBody) {
+        let total = 0;
+        const rows = tableBody.querySelectorAll('tr');
+        
+        rows.forEach(row => {
+            const unitPrice = row.getAttribute('data-unit-price');
+            const quantity = row.getAttribute('data-quantity');
+            
+            if (unitPrice && unitPrice !== 'N/A' && !isNaN(unitPrice)) {
+                total += parseFloat(unitPrice) * parseFloat(quantity);
+            }
+        });
+        
+        return total;
+    }
+
+    function updateOverallTotals() {
+        // Update modal total
+        const modalTableBody = document.getElementById('added-items-table-body');
+        const modalTotal = calculateOverallTotal(modalTableBody);
+        document.getElementById('modal-overall-total').textContent = formatPrice(modalTotal);
+
+        // Update main view total
+        const mainTableBody = document.getElementById('selected-items');
+        const mainTotal = calculateOverallTotal(mainTableBody);
+        document.getElementById('main-overall-total').textContent = formatPrice(mainTotal);
+    }
+
     function updateSelectedItems() {
         const selectedItemsContainer = document.getElementById('selected-items');
         const rows = document.querySelectorAll('#added-items-table-body tr');
@@ -193,26 +253,43 @@
         rows.forEach((row, index) => {
             const name = row.getAttribute('data-name');
             const quantity = row.getAttribute('data-quantity');
+            const unit = row.getAttribute('data-unit');
+            const unitPrice = row.getAttribute('data-unit-price');
+            const totalPrice = unitPrice !== 'N/A' ? calculateTotalPrice(quantity, unitPrice) : 'N/A';
 
             const selectedRow = document.createElement('tr');
+            selectedRow.setAttribute('data-name', name);
+            selectedRow.setAttribute('data-quantity', quantity);
+            selectedRow.setAttribute('data-unit', unit);
+            selectedRow.setAttribute('data-unit-price', unitPrice);
             selectedRow.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     ${name}
                     <input type="hidden" name="items[${index}][name]" value="${name}">
                 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    ${unit}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    ${unitPrice !== 'N/A' ? formatPrice(unitPrice) : 'N/A'}
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     ${quantity}
                     <input type="hidden" name="items[${index}][quantity]" value="${quantity}">
+                </td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                    ${totalPrice !== 'N/A' ? formatPrice(totalPrice) : 'N/A'}
                 </td>
             `;
             selectedItemsContainer.appendChild(selectedRow);
         });
 
         itemsContainer.classList.remove('hidden');
+        updateOverallTotals();
     }
 
     let searchTimeout = null;
-    let selectedItemUnit = '';
+    let selectedItemData = null;
 
     function searchItems(query) {
         if (searchTimeout) {
@@ -265,14 +342,18 @@
                                     <span class="text-gray-500">(${item.unit})</span>
                                 </div>
                                 <div class="text-right">
-                                    <span class="text-blue-600">₱${parseFloat(item.price).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>
+                                    <span class="text-blue-600">${formatPrice(item.price)}</span>
                                     <span class="text-gray-500 ml-2">${item.quantity} left</span>
                                 </div>
                             </div>
                         `;
                         li.addEventListener('click', () => {
                             document.getElementById('new_item_name').value = displayName;
-                            selectedItemUnit = item.unit;
+                            selectedItemData = {
+                                name: displayName,
+                                unit: item.unit,
+                                price: item.price
+                            };
                             suggestionsContainer.classList.add('hidden');
                             document.getElementById('new_item_quantity').focus();
                         });
@@ -346,12 +427,20 @@
                 return;
             }
 
+            const totalPrice = selectedItemData ? calculateTotalPrice(itemQuantity, selectedItemData.price) : 'N/A';
+
             const newRow = document.createElement('tr');
             newRow.setAttribute('data-name', itemName);
             newRow.setAttribute('data-quantity', itemQuantity);
+            newRow.setAttribute('data-unit', selectedItemData ? selectedItemData.unit : 'N/A');
+            newRow.setAttribute('data-unit-price', selectedItemData ? selectedItemData.price : 'N/A');
+            
             newRow.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemName}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${selectedItemData ? selectedItemData.unit : 'N/A'}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${selectedItemData ? formatPrice(selectedItemData.price) : 'N/A'}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemQuantity}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${selectedItemData ? formatPrice(totalPrice) : 'N/A'}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                     <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -366,14 +455,17 @@
             deleteButton.addEventListener('click', function() {
                 newRow.remove();
                 updateSelectedItems();
+                updateOverallTotals();
             });
 
             addedItemsTableBody.appendChild(newRow);
             updateSelectedItems();
+            updateOverallTotals();
 
-            // Clear input fields
+            // Clear input fields and selected item data
             document.getElementById('new_item_name').value = '';
             document.getElementById('new_item_quantity').value = '';
+            selectedItemData = null;
             document.getElementById('new_item_name').focus();
             
             rowCounter++;
