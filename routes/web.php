@@ -86,11 +86,6 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/inventory/my-requests', 'myRequests')->name('inventory.my.requests');
     });
 
-    Route::controller(RequestController::class)->group(function () {
-        Route::get('/requests', 'index')->name('requests.index');
-        Route::delete('/requests/{request_group_id}', 'destroy')->name('requests.destroy');
-    });
-
     // Route::controller(UserController::class)->group(function () {
     //     Route::post('/users', 'store')->name('users.store');
     // });
@@ -126,6 +121,11 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/alerts/maintenance', 'maintenance')->name('alerts.maintenance');
         Route::get('/alerts/pending-requests', 'pendingRequests')->name('alerts.pending-requests');
         Route::get('/alerts/expiring-leases', 'expiringLeases')->name('alerts.expiring-leases');
+    });
+
+    Route::controller(RequestController::class)->group(function () {
+        Route::get('/requests', 'index')->name('requests.index');
+        Route::delete('/requests/{request_group_id}', 'destroy')->name('requests.destroy');
     });
 
     Route::controller(UnitController::class)->group(function () {
