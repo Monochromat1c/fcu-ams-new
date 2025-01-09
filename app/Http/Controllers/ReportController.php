@@ -34,6 +34,44 @@ class ReportController extends Controller
         $startDate = Carbon::parse($startDate)->startOfDay();
         $endDate = Carbon::parse($endDate)->endOfDay();
 
+        // Get chart data
+        $inventoryBySupplier = Inventory::select('suppliers.supplier', DB::raw('COUNT(*) as count'))
+            ->join('suppliers', 'inventories.supplier_id', '=', 'suppliers.id')
+            ->where('inventories.quantity', '>', 0)
+            ->groupBy('suppliers.supplier')
+            ->orderByDesc('count')
+            ->limit(5)
+            ->get();
+
+        $chartLabels = $inventoryBySupplier->pluck('supplier');
+        $chartData = $inventoryBySupplier->pluck('count');
+
+        // Get asset distribution by department data
+        $assetsByDepartment = Asset::select('departments.department', DB::raw('COUNT(*) as count'))
+            ->join('departments', 'assets.department_id', '=', 'departments.id')
+            ->groupBy('departments.department')
+            ->orderByDesc('count')
+            ->limit(5)
+            ->get();
+
+        $departmentChartLabels = $assetsByDepartment->pluck('department');
+        $departmentChartData = $assetsByDepartment->pluck('count');
+
+        // Get stock-out trends data for the last 6 months
+        $stockOutTrends = StockOut::select(
+            DB::raw('DATE_FORMAT(stock_out_date, "%Y-%m") as month'),
+            DB::raw('COUNT(DISTINCT stock_out_id) as count')
+        )
+            ->where('stock_out_date', '>=', now()->subMonths(6))
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
+
+        $trendLabels = $stockOutTrends->pluck('month')->map(function($month) {
+            return Carbon::createFromFormat('Y-m', $month)->format('F Y');
+        });
+        $trendData = $stockOutTrends->pluck('count');
+
         // Assets date filter
         $assetsStartDate = $request->input('assets_start_date', now()->startOfMonth()->toDateString());
         $assetsEndDate = $request->input('assets_end_date', now()->endOfMonth()->toDateString());
@@ -140,7 +178,8 @@ class ReportController extends Controller
         return view('fcu-ams/reports/reports', array_merge(
             compact('stockOutRecords', 'assets', 'purchaseOrders', 'inventoriesForPrint',
                 'assetsDateRangeDisplay', 'poDateRangeDisplay', 'stockOutDateRangeDisplay',
-                'assignedAssets', 'assigneeQuery'),
+                'assignedAssets', 'assigneeQuery', 'chartLabels', 'chartData',
+                'departmentChartLabels', 'departmentChartData', 'trendLabels', 'trendData'),
             [
                 'inventories' => $inventories,
                 'startDate' => $startDate->toDateString(),
