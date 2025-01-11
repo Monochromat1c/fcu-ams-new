@@ -109,7 +109,10 @@ class InventoryController extends Controller
                 'brands.brand as brand_name',
                 'units.unit as unit_name'
             )
-            ->where('inventories.unique_tag', 'like', '%' . $searchQuery . '%')
+            ->where(function($query) use ($searchQuery) {
+                $query->where('inventories.unique_tag', 'like', '%' . $searchQuery . '%')
+                      ->orWhere('inventories.items_specs', 'like', '%' . $searchQuery . '%');
+            })
             ->whereNull('inventories.deleted_at')
             ->get();
 
