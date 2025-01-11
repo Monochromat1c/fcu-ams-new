@@ -84,6 +84,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/inventory/supply-request/{request_group_id}/approve', 'approveSupplyRequest')->name('inventory.supply-request.approve');
         Route::post('/inventory/supply-request/{request_group_id}/reject', 'rejectSupplyRequest')->name('inventory.supply-request.reject');
         Route::get('/inventory/my-requests', 'myRequests')->name('inventory.my.requests');
+        Route::get('/request/notifications', 'notifications')->name('request.notifications');
     });
 
     Route::controller(RequestController::class)->group(function () {

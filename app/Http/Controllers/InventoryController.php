@@ -578,6 +578,20 @@ class InventoryController extends Controller
         return view('fcu-ams.inventory.myRequests', compact('requests'));
     }
 
+    public function notifications()
+    {
+        $user = auth()->user();
+        $notifications = SupplyRequest::with('inventory')
+            ->select('request_group_id', 'requester', 'status', 'request_date', 'notes')
+            ->selectRaw('COUNT(*) as items_count')
+            ->where('requester', $user->first_name . ' ' . $user->last_name)
+            ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'notes')
+            ->orderBy('request_date', 'desc')
+            ->get();
+
+        return view('fcu-ams.request.notifications', compact('notifications'));
+    }
+
     public function searchItems(Request $request)
     {
         try {
