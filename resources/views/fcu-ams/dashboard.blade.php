@@ -15,7 +15,6 @@
                         @else
                             <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
                                 class="w-14 h-14 object-cover bg-no-repeat rounded-full mx-auto">
-                                
                         @endif
                     </div>
                      
@@ -290,32 +289,34 @@
                 </div>
                 <div class="divide-y divide-gray-100">
                     @forelse($recentRequests as $request)
-                        <div class="px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
-                            <div class="flex justify-between items-center">
-                                <div class="flex-1">
-                                    <p class="text-sm font-medium text-gray-900">
-                                        {{ $request->requester }}
-                                        <span class="text-xs text-gray-500">
-                                            ({{ $request->department->department }})
+                        <a href="{{ route('inventory.supply-request.details', $request->request_group_id) }}" class="block">
+                            <div class="px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-gray-900">
+                                            {{ $request->requester }}
+                                            <span class="text-xs text-gray-500">
+                                                ({{ $request->department->department }})
+                                            </span>
+                                        </p>
+                                        <p class="text-sm text-gray-500">
+                                            Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
+                                        </p>
+                                        <p class="text-xs text-gray-400">
+                                            {{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <span class="px-3 py-1 text-xs font-medium rounded-full
+                                            {{ $request->status === 'pending' ? 'bg-yellow-100 px-5 py-[.50rem] text-yellow-800' : 
+                                               ($request->status === 'approved' ? 'bg-green-100 px-5 py-[.50rem] text-green-800' : 
+                                               'bg-red-100 px-5 py-[.50rem] text-red-800') }}">
+                                            {{ ucfirst($request->status) }}
                                         </span>
-                                    </p>
-                                    <p class="text-sm text-gray-500">
-                                        Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
-                                    </p>
-                                    <p class="text-xs text-gray-400">
-                                        {{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}
-                                    </p>
-                                </div>
-                                <div>
-                                    <span class="px-3 py-1 text-xs font-medium rounded-full
-                                        {{ $request->status === 'pending' ? 'bg-yellow-100 px-5 py-[.50rem] text-yellow-800' : 
-                                           ($request->status === 'approved' ? 'bg-green-100 px-5 py-[.50rem] text-green-800' : 
-                                           'bg-red-100 px-5 py-[.50rem] text-red-800') }}">
-                                        {{ ucfirst($request->status) }}
-                                    </span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     @empty
                         <div class="px-6 py-4">
                             <p class="text-sm text-gray-500">No recent requests</p>
