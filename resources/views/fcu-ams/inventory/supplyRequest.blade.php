@@ -20,7 +20,7 @@
             @include('layouts.messageWithoutTimerForError')
         </div>
         <div class="request-form bg-white m-3 shadow-md rounded-md p-5 2xl:max-w-7xl 2xl:mx-auto">
-            <form id="supply-request-form" method="POST" action="{{ route('inventory.supply.request.store') }}" onsubmit="return validateForm()">
+            <form id="supply-request-form" method="POST" action="{{ route('inventory.supply.request.store') }}">
                 @csrf
                 <div class="">
                     <h3 class="text-lg font-semibold mb-3">Request Details</h3>
@@ -186,23 +186,49 @@
             </form>
         </div>
     </div>
+    <!-- Validation Modal -->
+    <div id="validationModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
+        class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+        <div class="relative my-auto mx-auto p-4 w-full max-w-md h-full md:h-auto">
+            <div class="relative bg-white rounded-lg shadow-xl dark:bg-white border-0">
+                <div class="flex items-center justify-between p-4 border-b rounded-t">
+                    <h3 class="text-xl font-semibold text-gray-900">
+                        Validation Error
+                    </h3>
+                    <button type="button" class="close-validation-modal text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <p class="text-gray-700">Please enter both item name and a valid quantity.</p>
+                </div>
+                <div class="flex items-center justify-end p-4 border-t border-gray-200">
+                    <button type="button" class="close-validation-modal text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-    function validateForm() {
-        const items = document.querySelectorAll('#selected-items input[name^="items"]');
-        if (items.length === 0) {
-            alert('Please add at least one item to the request');
-            return false;
-        }
-        return true;
+    function showValidationModal() {
+        const modal = document.getElementById('validationModal');
+        modal.classList.remove('hidden');
     }
+    
+    document.querySelectorAll('.close-validation-modal').forEach(button => {
+        button.addEventListener('click', function() {
+            document.getElementById('validationModal').classList.add('hidden');
+        });
+    });
 
     function submitForm() {
-        if (validateForm()) {
-            const form = document.getElementById('supply-request-form');
-            form.submit();
-        }
+        const form = document.getElementById('supply-request-form');
+        form.submit();
     }
 
     function formatPrice(price) {
@@ -442,7 +468,7 @@
             const itemQuantity = document.getElementById('new_item_quantity').value;
 
             if (!itemName || !itemQuantity || itemQuantity < 1) {
-                alert('Please enter both item name and a valid quantity');
+                showValidationModal();
                 return;
             }
 
