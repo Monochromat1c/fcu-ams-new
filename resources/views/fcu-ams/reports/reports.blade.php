@@ -111,7 +111,7 @@
                         <button onclick="document.getElementById('logout-modal').classList.toggle('hidden')"
                             class="flex items-center px-4 py-3.5 text-red-600 hover:bg-red-50 w-full text-left transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
                             </svg>
                             <span class="font-medium">Logout</span>
                         </button>
@@ -187,21 +187,21 @@
             <!-- Chart Section -->
             <!-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Inventory Distribution by Supplier</h2>
+                    <h2 class="text-2xl segoe font-bold text-gray-700 mb-4">Inventory Distribution by Supplier</h2>
                     <div class="w-full h-[300px] flex items-center justify-center">
                         <canvas id="inventoryChart"></canvas>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-md p-6">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Asset Distribution by Department</h2>
+                    <h2 class="text-2xl segoe font-bold text-gray-700 mb-4">Asset Distribution by Department</h2>
                     <div class="w-full h-[300px] flex items-center justify-center">
                         <canvas id="departmentChart"></canvas>
                     </div>
                 </div>
 
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <h2 class="text-xl font-semibold text-gray-800 mb-4">Stock-Out Trends (Last 6 Months)</h2>
+                    <h2 class="text-2xl segoe font-bold text-gray-700 mb-4">Stock-Out Trends (Last 6 Months)</h2>
                     <div class="w-full h-[300px] flex items-center justify-center">
                         <canvas id="trendChart"></canvas>
                     </div>
@@ -211,7 +211,7 @@
             <!-- Assigned Assets Section -->
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h2 class="text-xl font-semibold text-gray-800">Assigned Assets</h2>
+                    <h2 class="text-2xl segoe font-bold text-gray-700">Assigned Assets</h2>
                     <div class="flex items-center gap-4">
                         <!-- Search Form -->
                         <form method="GET" action="{{ route('reports.index') }}" class="flex items-center">
@@ -219,8 +219,8 @@
                                 <input type="text" name="assignee" id="assignee" value="{{ $assigneeQuery }}"
                                     placeholder="Search by assignee name..."
                                     class="w-64 rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
-                                <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-blue-500 hover:bg-blue-600 transition-colors duration-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                                     </svg>
                                 </button>
@@ -302,7 +302,7 @@
                 <!-- Purchase Orders Section -->
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-xl font-semibold text-gray-800">Purchase Orders</h2>
+                        <h2 class="text-2xl segoe font-bold text-gray-700">Purchase Orders</h2>
                         <span class="text-sm text-gray-500">{{ $poDateRangeDisplay }}</span>
                     </div>
                     
@@ -365,7 +365,7 @@
                 <!-- Stock Out Records Section -->
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-xl font-semibold text-gray-800">Stock Out Records</h2>
+                        <h2 class="text-2xl segoe font-bold text-gray-700">Stock Out Records</h2>
                         <span class="text-sm text-gray-500">{{ $stockOutDateRangeDisplay }}</span>
                     </div>
 
@@ -432,7 +432,7 @@
                 <div class="bg-white rounded-lg shadow-md p-6">
                     <div class="flex justify-between items-center mb-6">
                         <div>
-                            <h2 class="text-xl font-semibold text-gray-800">Inventory Report</h2>
+                            <h2 class="text-2xl segoe font-bold text-gray-700">Inventory Report</h2>
                             <p class="text-sm text-gray-500 mt-1">{{ $dateRangeDisplay }}</p>
                         </div>
                         <form method="GET" action="{{ route('reports.print') }}" target="_blank" class="ml-2">
@@ -511,7 +511,7 @@
                 <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                     <div class="flex justify-between items-center mb-6">
                         <div>
-                            <h2 class="text-xl font-semibold text-gray-800">Assets Report</h2>
+                            <h2 class="text-2xl segoe font-bold text-gray-700">Assets Report</h2>
                             <p class="text-sm text-gray-500 mt-1">{{ $assetsDateRangeDisplay }}</p>
                         </div>
                             <form method="GET" action="{{ route('reports.print-assets') }}" target="_blank" class="ml-2">

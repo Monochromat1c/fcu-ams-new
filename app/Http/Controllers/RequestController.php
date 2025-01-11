@@ -28,7 +28,7 @@ class RequestController extends Controller
         ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'department_id')
         ->with('department')
         ->orderBy('created_at', 'desc')
-        ->paginate(15);
+        ->paginate(10);
 
         return view('fcu-ams.request.index', compact('requests', 'allDepartments', 'selectedDepartments'));
     }
