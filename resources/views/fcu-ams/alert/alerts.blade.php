@@ -148,7 +148,8 @@
                     <svg class="w-8 h-8 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0zm-6 9l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z">
+                        </path>
                     </svg>
                     <h2 class="text-xl font-bold">Expiring Leases</h2>
                 </div>
@@ -220,7 +221,7 @@
                                                 {{ $asset->model }}</p>
                                             <p class="text-sm text-gray-600">
                                                 Maintenance Due:
-                                                {{ \Carbon\Carbon::parse($asset->maintenance_end_date)->diffForHumans() }}
+                                                {{ \Carbon\Carbon::parse($asset->maintenance_end_date)->toFormattedDateString() }}
                                             </p>
                                         </div>
                                         <a href="{{ route('asset.show', $asset->id) }}"
@@ -273,7 +274,7 @@
                                                 {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
                                             </p>
                                             <p class="text-xs text-gray-500">
-                                                Requested {{ \Carbon\Carbon::parse($request->request_date)->diffForHumans() }}
+                                                Requested on {{ \Carbon\Carbon::parse($request->request_date)->toFormattedDateString() }}
                                             </p>
                                         </div>
                                         <a href="{{ route('inventory.supply-request.details', ['request_group_id' => $request->request_group_id]) }}"
