@@ -257,6 +257,8 @@
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Assigned To</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                             Asset Tag ID</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                                             Brand</th>
@@ -275,6 +277,7 @@
                                 <tbody class="bg-white divide-y divide-gray-200">
                                     @foreach($assignedAssets as $asset)
                                         <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4">{{ $asset->assigned_to ?? 'N/A' }}</td>
                                             <td class="px-6 py-4">{{ $asset->asset_tag_id }}</td>
                                             <td class="px-6 py-4">{{ $asset->brand->brand }}</td>
                                             <td class="px-6 py-4">{{ $asset->model }}</td>
@@ -485,6 +488,7 @@
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unit</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unit Price</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supplier</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Purchase Date</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -496,6 +500,7 @@
                                             <td class="px-6 py-4">{{ $inventory->unit->unit }}</td>
                                             <td class="px-6 py-4">{{ $inventory->unit_price }}</td>
                                             <td class="px-6 py-4">{{ $inventory->supplier->supplier }}</td>
+                                            <td class="px-6 py-4">{{ date('F j, Y', strtotime($inventory->supplier->created_at)) }}</td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -558,23 +563,27 @@
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Assigned To</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Asset Tag ID</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Brand</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Model</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Serial Number</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Cost</th>
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supplier</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Purchase Date</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($assets as $asset)
                                         <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4">{{ $asset->assigned_to ?? 'N/A' }}</td>
                                             <td class="px-6 py-4">{{ $asset->asset_tag_id }}</td>
                                             <td class="px-6 py-4">{{ $asset->brand->brand }}</td>
                                             <td class="px-6 py-4">{{ $asset->model }}</td>
                                             <td class="px-6 py-4">{{ $asset->serial_number }}</td>
                                             <td class="px-6 py-4">{{ $asset->cost }}</td>
                                             <td class="px-6 py-4">{{ $asset->supplier->supplier }}</td>
+                                            <td class="px-6 py-4">{{ date('F j, Y', strtotime($asset->created_at)) }}</td>
                                 </tr>
                             @endforeach
                         </tbody>
