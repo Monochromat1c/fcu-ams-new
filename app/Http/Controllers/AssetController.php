@@ -159,8 +159,7 @@ class AssetController extends Controller
     public function search(Request $request)
     {
         $searchQuery = $request->input('search');
-        
-        $assets = DB::table('assets')
+        $query = DB::table('assets')
             ->leftJoin('suppliers', 'assets.supplier_id', '=', 'suppliers.id')
             ->leftJoin('categories', 'assets.category_id', '=', 'categories.id')
             ->leftJoin('conditions', 'assets.condition_id', '=', 'conditions.id')
@@ -173,8 +172,48 @@ class AssetController extends Controller
                 'statuses.status as status_name'
             )
             ->where('assets.asset_tag_id', 'like', '%' . $searchQuery . '%')
-            ->whereNull('assets.deleted_at')
-            ->get();
+            ->whereNull('assets.deleted_at');
+
+        // Apply filters if they exist
+        if ($request->has('conditions')) {
+            $conditions = $request->input('conditions');
+            if (is_array($conditions)) {
+                $query->whereIn('assets.condition_id', $conditions);
+            }
+        }
+        if ($request->has('categories')) {
+            $categories = $request->input('categories');
+            if (is_array($categories)) {
+                $query->whereIn('assets.category_id', $categories);
+            }
+        }
+        if ($request->has('statuses')) {
+            $statuses = $request->input('statuses');
+            if (is_array($statuses)) {
+                $query->whereIn('assets.status_id', $statuses);
+            }
+        }
+        if ($request->has('departments')) {
+            $departments = $request->input('departments');
+            if (is_array($departments)) {
+                $query->whereIn('assets.department_id', $departments);
+            }
+        }
+        if ($request->has('brands')) {
+            $brands = $request->input('brands');
+            if (is_array($brands)) {
+                $query->whereIn('assets.brand_id', $brands);
+            }
+        }
+
+        $assets = $query->get();
+
+        // Log the query for debugging
+        \Log::info('Search Query:', [
+            'sql' => $query->toSql(),
+            'bindings' => $query->getBindings(),
+            'results_count' => $assets->count()
+        ]);
 
         return response()->json([
             'assets' => $assets

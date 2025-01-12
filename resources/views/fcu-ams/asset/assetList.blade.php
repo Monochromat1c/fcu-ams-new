@@ -634,7 +634,24 @@
         function performSearch() {
             const searchQuery = searchInput.value;
             
-            fetch(`{{ route('asset.search') }}?search=${encodeURIComponent(searchQuery)}`, {
+            // Get all active filters
+            const conditions = Array.from(document.querySelectorAll('input[name="conditions[]"]:checked')).map(el => el.value);
+            const categories = Array.from(document.querySelectorAll('input[name="categories[]"]:checked')).map(el => el.value);
+            const statuses = Array.from(document.querySelectorAll('input[name="statuses[]"]:checked')).map(el => el.value);
+            const departments = Array.from(document.querySelectorAll('input[name="departments[]"]:checked')).map(el => el.value);
+            const brands = Array.from(document.querySelectorAll('input[name="brands[]"]:checked')).map(el => el.value);
+
+            // Create FormData to properly handle array parameters
+            const params = new URLSearchParams();
+            params.append('search', searchQuery);
+            
+            conditions.forEach(value => params.append('conditions[]', value));
+            categories.forEach(value => params.append('categories[]', value));
+            statuses.forEach(value => params.append('statuses[]', value));
+            departments.forEach(value => params.append('departments[]', value));
+            brands.forEach(value => params.append('brands[]', value));
+            
+            fetch(`{{ route('asset.search') }}?${params.toString()}`, {
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Accept': 'application/json'
@@ -642,9 +659,12 @@
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Search results:', data); // Debug log
                 updateTable(data.assets);
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
 
         function updateTable(assets) {
