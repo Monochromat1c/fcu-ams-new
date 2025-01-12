@@ -615,7 +615,7 @@ class InventoryController extends Controller
                 ->join('brands', 'inventories.brand_id', '=', 'brands.id')
                 ->join('units', 'inventories.unit_id', '=', 'units.id')
                 ->whereNull('inventories.deleted_at')
-                ->where('inventories.quantity', '>', 0)
+                ->where('inventories.quantity', '>=', 0)
                 ->where(function($q) use ($search) {
                     $q->where('inventories.items_specs', 'like', "%{$search}%")
                         ->orWhere('brands.brand', 'like', "%{$search}%");

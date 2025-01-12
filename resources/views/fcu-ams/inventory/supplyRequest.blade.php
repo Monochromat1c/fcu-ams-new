@@ -295,6 +295,7 @@
             selectedRow.setAttribute('data-quantity', quantity);
             selectedRow.setAttribute('data-unit', unit);
             selectedRow.setAttribute('data-unit-price', unitPrice);
+            
             selectedRow.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                     ${name}
@@ -387,7 +388,7 @@
                                 </div>
                                 <div class="text-right">
                                     <span class="text-blue-600">${formatPrice(item.price)}</span>
-                                    <span class="text-gray-500 ml-2">${item.quantity} left</span>
+                                    <span class="text-gray-500 ml-2">${item.quantity} left${item.quantity == 0 ? ' <span class="text-red-500 font-medium">(Pre-Order)</span>' : ''}</span>
                                 </div>
                             </div>
                         `;
