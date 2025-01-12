@@ -156,10 +156,10 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {{ $request->quantity }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-left">
                                     ₱{{ number_format($request->unit_price, 2) }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-left">
                                     ₱{{ number_format($request->subtotal, 2) }}
                                 </td>
                             </tr>
@@ -168,7 +168,7 @@
                                 <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
                                     Total:
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 text-right">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 text-left">
                                     ₱{{ number_format($totalPrice, 2) }}
                                 </td>
                             </tr>
