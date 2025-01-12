@@ -566,6 +566,41 @@ class InventoryController extends Controller
         }
     }
 
+    public function printSupplyRequest($request_group_id)
+    {
+        $user = auth()->user();
+        if ($user->role === 'Viewer') {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $requests = SupplyRequest::with(['department'])
+            ->where('request_group_id', $request_group_id)
+            ->get();
+
+        if ($requests->isEmpty()) {
+            abort(404);
+        }
+
+        $totalItems = $requests->count();
+        $totalPrice = 0;
+        
+        foreach ($requests as $request) {
+            $inventory = \DB::table('inventories')
+                ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+                ->where(\DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
+                ->select('inventories.unit_price')
+                ->first();
+
+            if ($inventory) {
+                $request->unit_price = $inventory->unit_price;
+                $request->total_price = $inventory->unit_price * $request->quantity;
+                $totalPrice += $request->total_price;
+            }
+        }
+
+        return view('fcu-ams.inventory.printSupplyRequest', compact('requests', 'totalItems', 'totalPrice'));
+    }
+
     public function export() { 
         return Excel::download(new InventoryExport, 'inventories.csv');
     }
