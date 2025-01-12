@@ -403,17 +403,19 @@ class InventoryController extends Controller
             DB::beginTransaction();
             
             $requestGroupId = (string) Str::uuid();
+            $hasPreOrder = false;
             
             foreach ($request->items as $item) {
                 // Find the correct inventory by matching the item name
                 $inventory = DB::table('inventories')
                     ->join('brands', 'inventories.brand_id', '=', 'brands.id')
                     ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $item['name'])
-                    ->select('inventories.id')
+                    ->select('inventories.id', 'inventories.quantity')
                     ->first();
 
-                if (!$inventory) {
-                    throw new \Exception("Inventory not found for item: " . $item['name']);
+                // If inventory not found or quantity is 0, mark as pre-order
+                if (!$inventory || $inventory->quantity == 0) {
+                    $hasPreOrder = true;
                 }
 
                 $supplyRequest = new SupplyRequest();
@@ -421,16 +423,20 @@ class InventoryController extends Controller
                 $supplyRequest->request_group_id = $requestGroupId;
                 $supplyRequest->department_id = $request->department_id;
                 $supplyRequest->notes = $request->notes;
-                $supplyRequest->inventory_id = $inventory->id;
+                $supplyRequest->inventory_id = $inventory ? $inventory->id : null;
                 $supplyRequest->requester = auth()->user()->first_name . ' ' . auth()->user()->last_name;
                 $supplyRequest->quantity = $item['quantity'];
                 $supplyRequest->request_date = $request->request_date;
                 $supplyRequest->item_name = $item['name'];
+                $supplyRequest->status = (!$inventory || $inventory->quantity == 0) ? 'pending' : 'pending';
                 $supplyRequest->save();
             }
             
             DB::commit();
-            return redirect()->back()->with('success', 'Supply request submitted successfully.');
+            $message = $hasPreOrder ? 
+                'Supply request submitted successfully. Some items will be treated as pre-orders.' : 
+                'Supply request submitted successfully.';
+            return redirect()->back()->with('success', $message);
         } catch (\Exception $e) {
             DB::rollback();
             \Log::error('Supply request error: ' . $e->getMessage());
@@ -451,7 +457,6 @@ class InventoryController extends Controller
         $totalItems = $requests->count();
         $totalPrice = 0;
         
-        // Add price information to each request
         foreach ($requests as $request) {
             $inventory = \DB::table('inventories')
                 ->join('brands', 'inventories.brand_id', '=', 'brands.id')
@@ -461,11 +466,8 @@ class InventoryController extends Controller
 
             if ($inventory) {
                 $request->unit_price = $inventory->unit_price;
-                $request->subtotal = $inventory->unit_price * $request->quantity;
-                $totalPrice += $request->subtotal;
-            } else {
-                $request->unit_price = 0;
-                $request->subtotal = 0;
+                $request->total_price = $inventory->unit_price * $request->quantity;
+                $totalPrice += $request->total_price;
             }
         }
 

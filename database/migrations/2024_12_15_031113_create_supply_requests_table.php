@@ -13,7 +13,7 @@ return new class extends Migration
             $table->uuid('request_id');
             $table->uuid('request_group_id');
             $table->unsignedBigInteger('department_id');
-            $table->unsignedBigInteger('inventory_id');
+            $table->unsignedBigInteger('inventory_id')->nullable();
             $table->string('requester');
             $table->integer('quantity');
             $table->date('request_date');
@@ -23,7 +23,7 @@ return new class extends Migration
             $table->boolean('is_approved')->default(false);
             $table->timestamps();
             $table->foreign('department_id')->references('id')->on('departments');
-            $table->foreign('inventory_id')->references('id')->on('inventories');
+            $table->foreign('inventory_id')->references('id')->on('inventories')->onDelete('set null');
             $table->softDeletes();
         });
     }
