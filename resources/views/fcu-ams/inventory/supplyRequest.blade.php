@@ -95,7 +95,7 @@
                                             </div>
                                         </div>
                                         <div class="flex-1">
-                                            <input type="number" id="new_item_quantity" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" min="1" placeholder="Quantity" required>
+                                            <input type="number" id="new_item_quantity" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" placeholder="Quantity" min="1" required>
                                         </div>
                                         <button type="button" id="add-item-button" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
                                             Add Item
@@ -186,7 +186,7 @@
             </form>
         </div>
     </div>
-    <!-- Validation Modal -->
+    <!-- Empty Field Validation Modal -->
     <div id="validationModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
         class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
         <div class="relative my-auto mx-auto p-4 w-full max-w-md h-full md:h-auto">
@@ -212,9 +212,46 @@
             </div>
         </div>
     </div>
+    <!-- Quantity Validation Modal -->
+    <div id="quantityValidationModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
+        class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+        <div class="relative my-auto mx-auto p-4 w-full max-w-md h-full md:h-auto">
+            <div class="relative bg-white rounded-lg shadow-xl dark:bg-white border-0">
+                <div class="flex items-center justify-between p-4 border-b rounded-t">
+                    <h3 class="text-xl font-semibold text-red-600">
+                        Quantity Validation Error
+                    </h3>
+                    <button type="button" onclick="closeQuantityValidationModal()"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <p class="text-gray-700">The requested quantity exceeds the available stock. Maximum available quantity is <span id="maxQuantitySpan" class="font-semibold"></span>.</p>
+                </div>
+                <div class="flex items-center justify-end p-4 border-t border-gray-200">
+                    <button type="button" onclick="closeQuantityValidationModal()"
+                        class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                        OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
+    function showQuantityValidationModal(maxQuantity) {
+        document.getElementById('maxQuantitySpan').textContent = maxQuantity;
+        document.getElementById('quantityValidationModal').classList.remove('hidden');
+    }
+    
+    function closeQuantityValidationModal() {
+        document.getElementById('quantityValidationModal').classList.add('hidden');
+    }
+
     function showValidationModal() {
         const modal = document.getElementById('validationModal');
         modal.classList.remove('hidden');
@@ -325,6 +362,14 @@
     let searchTimeout = null;
     let selectedItemData = null;
 
+    function updateQuantityField(selectedItem) {
+        const quantityInput = document.getElementById('new_item_quantity');
+        if (selectedItem) {
+            quantityInput.max = selectedItem.quantity;
+            quantityInput.value = Math.min(quantityInput.value || 1, selectedItem.quantity);
+        }
+    }
+
     function searchItems(query) {
         if (searchTimeout) {
             clearTimeout(searchTimeout);
@@ -397,8 +442,10 @@
                             selectedItemData = {
                                 name: displayName,
                                 unit: item.unit,
-                                price: item.price
+                                price: item.price,
+                                quantity: item.quantity
                             };
+                            updateQuantityField(selectedItemData);
                             suggestionsContainer.classList.add('hidden');
                             document.getElementById('new_item_quantity').focus();
                         });
@@ -470,6 +517,11 @@
 
             if (!itemName || !itemQuantity || itemQuantity < 1) {
                 showValidationModal();
+                return;
+            }
+
+            if (selectedItemData && selectedItemData.quantity > 0 && itemQuantity > selectedItemData.quantity) {
+                showQuantityValidationModal(selectedItemData.quantity);
                 return;
             }
 
