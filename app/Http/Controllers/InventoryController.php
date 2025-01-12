@@ -405,16 +405,27 @@ class InventoryController extends Controller
             $requestGroupId = (string) Str::uuid();
             
             foreach ($request->items as $item) {
+                // Find the correct inventory by matching the item name
+                $inventory = DB::table('inventories')
+                    ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+                    ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $item['name'])
+                    ->select('inventories.id')
+                    ->first();
+
+                if (!$inventory) {
+                    throw new \Exception("Inventory not found for item: " . $item['name']);
+                }
+
                 $supplyRequest = new SupplyRequest();
                 $supplyRequest->request_id = (string) Str::uuid();
                 $supplyRequest->request_group_id = $requestGroupId;
                 $supplyRequest->department_id = $request->department_id;
                 $supplyRequest->notes = $request->notes;
-                $supplyRequest->inventory_id = Inventory::first()->id; // Required for foreign key
+                $supplyRequest->inventory_id = $inventory->id;
                 $supplyRequest->requester = auth()->user()->first_name . ' ' . auth()->user()->last_name;
                 $supplyRequest->quantity = $item['quantity'];
                 $supplyRequest->request_date = $request->request_date;
-                $supplyRequest->item_name = $item['name']; // Store the actual requested item name
+                $supplyRequest->item_name = $item['name'];
                 $supplyRequest->save();
             }
             
@@ -468,69 +479,65 @@ class InventoryController extends Controller
         ]);
     }
 
-    public function approveSupplyRequest($request_group_id)
+    public function approveSupplyRequest(Request $request, $request_group_id)
     {
         try {
             DB::beginTransaction();
 
-            // Get all requests in this group
             $requests = SupplyRequest::where('request_group_id', $request_group_id)
-                ->where('status', 'pending')
+                ->with(['inventory' => function($query) {
+                    $query->withoutTrashed();
+                }])
                 ->get();
-            
-            if ($requests->isEmpty()) {
-                return redirect()->back()->withErrors(['No pending supply requests found.']);
-            }
 
-            $errors = [];
-            foreach ($requests as $request) {
-                // Find the inventory item
-                $inventory = Inventory::join('brands', 'inventories.brand_id', '=', 'brands.id')
-                    ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
-                    ->select('inventories.*')
-                    ->first();
+            $hasPreOrder = false;
+            $allProcessed = true;
 
+            foreach ($requests as $supplyRequest) {
+                $inventory = Inventory::find($supplyRequest->inventory_id);
+                
                 if (!$inventory) {
-                    $errors[] = "Item not found: {$request->item_name}";
                     continue;
                 }
 
-                if ($inventory->quantity < $request->quantity) {
-                    $errors[] = "Insufficient stock for {$request->item_name}. Available: {$inventory->quantity}, Requested: {$request->quantity}";
-                    continue;
+                // Check if there's enough stock
+                if ($inventory->quantity >= $supplyRequest->quantity) {
+                    $inventory->quantity -= $supplyRequest->quantity;
+                    $inventory->save();
+                    
+                    $supplyRequest->is_approved = true;
+                    $supplyRequest->save();
+                } else {
+                    $allProcessed = false;
+                    if ($inventory->quantity == 0) {
+                        $hasPreOrder = true;
+                    }
                 }
             }
 
-            if (!empty($errors)) {
-                DB::rollback();
-                return redirect()->back()->withErrors($errors);
+            // Check if all items in this request group are processed
+            $unprocessedCount = SupplyRequest::where('request_group_id', $request_group_id)
+                ->where('is_approved', false)
+                ->count();
+
+            if ($unprocessedCount == 0) {
+                // All items are processed, mark the entire request as approved
+                SupplyRequest::where('request_group_id', $request_group_id)
+                    ->update(['status' => 'approved']);
+                $message = 'All items have been approved successfully.';
+            } else {
+                $message = $hasPreOrder 
+                    ? 'Available items have been processed. Some items are pending as pre-orders.' 
+                    : 'Some items remain pending due to insufficient stock.';
             }
 
-            // If no errors, proceed with the updates
-            foreach ($requests as $request) {
-                $inventory = Inventory::join('brands', 'inventories.brand_id', '=', 'brands.id')
-                    ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
-                    ->select('inventories.*')
-                    ->first();
-
-                // Update inventory quantity
-                $inventory->quantity -= $request->quantity;
-                $inventory->save();
-
-                // Update request status
-                $request->status = 'approved';
-                $request->save();
-            }
-            
             DB::commit();
-            $returnUrl = session('supply_request_return_url');
-            session()->forget('supply_request_return_url'); // Clear the session after use
-            return redirect($returnUrl ?? url()->previous())->with('success', 'Supply request approved successfully.');
-            
+            return redirect()->back()->with('success', $message);
+
         } catch (\Exception $e) {
             DB::rollback();
-            \Log::error('Failed to approve supply request: ' . $e->getMessage());
-            return redirect()->back()->withErrors(['Failed to approve supply request. Please try again.']);
+            \Log::error('Supply request approval error: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while processing the request.');
         }
     }
 

@@ -10,17 +10,20 @@ return new class extends Migration
     {
         Schema::create('supply_requests', function (Blueprint $table) {
             $table->id();
-            $table->uuid('request_id')->unique(); // Unique ID for each item
-            $table->uuid('request_group_id'); // Group ID to track items requested together
-            $table->foreignId('department_id')->constrained('departments');
-            $table->foreignId('inventory_id')->constrained('inventories');
-            $table->string('item_name'); // Store the actual requested item name
+            $table->uuid('request_id');
+            $table->uuid('request_group_id');
+            $table->unsignedBigInteger('department_id');
+            $table->unsignedBigInteger('inventory_id');
             $table->string('requester');
             $table->integer('quantity');
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->text('notes')->nullable();
             $table->date('request_date');
+            $table->string('item_name');
+            $table->text('notes')->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            $table->boolean('is_approved')->default(false);
             $table->timestamps();
+            $table->foreign('department_id')->references('id')->on('departments');
+            $table->foreign('inventory_id')->references('id')->on('inventories');
             $table->softDeletes();
         });
     }

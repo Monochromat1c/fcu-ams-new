@@ -12,13 +12,21 @@ class SupplyRequest extends Model
 
     protected $fillable = [
         'request_id',
+        'request_group_id',
         'department_id',
         'inventory_id',
         'requester',
         'quantity',
-        'status',
+        'request_date',
+        'item_name',
         'notes',
-        'request_date'
+        'status',
+        'is_approved'
+    ];
+
+    protected $casts = [
+        'request_date' => 'date',
+        'is_approved' => 'boolean'
     ];
 
     public function inventory()
