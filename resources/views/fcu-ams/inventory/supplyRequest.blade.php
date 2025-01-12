@@ -136,7 +136,7 @@
                                         Cancel
                                     </button>
                                     <button type="button"
-                                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center done-button">
+                                        class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center done-button">
                                         Done
                                     </button>
                                 </div>
@@ -199,6 +199,7 @@
                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                         </svg>
+                        <span class="sr-only">Close modal</span>
                     </button>
                 </div>
                 <div class="p-6">
@@ -221,7 +222,7 @@
                     <h3 class="text-xl font-semibold text-red-600">
                         Quantity Validation Error
                     </h3>
-                    <button type="button" onclick="closeQuantityValidationModal()"
+                    <button type="button"
                         class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center">
                         <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
                             <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
@@ -232,9 +233,42 @@
                     <p class="text-gray-700">The requested quantity exceeds the available stock. Maximum available quantity is <span id="maxQuantitySpan" class="font-semibold"></span>.</p>
                 </div>
                 <div class="flex items-center justify-end p-4 border-t border-gray-200">
-                    <button type="button" onclick="closeQuantityValidationModal()"
+                    <button type="button"
                         class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">
                         OK
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Insufficient Stock Warning Modal -->
+    <div id="insufficientStockModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
+        class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+        <div class="relative my-auto mx-auto p-4 w-full max-w-md h-full md:h-auto">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 border-b rounded-t">
+                    <h3 class="text-xl font-semibold text-yellow-600">
+                        ⚠️ Insufficient Stock Warning
+                    </h3>
+                    <button type="button" onclick="closeInsufficientStockModal()"
+                        class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-6">
+                    <p id="insufficientStockMessage" class="text-gray-700"></p>
+                    <p class="mt-4 text-sm text-gray-600">Your request will be forwarded to the admin for approval.</p>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex items-center justify-end p-4 border-t border-gray-200">
+                    <button type="button" onclick="closeInsufficientStockModal()"
+                        class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                        Continue
                     </button>
                 </div>
             </div>
@@ -359,14 +393,24 @@
         updateOverallTotals();
     }
 
+    function showInsufficientStockModal(itemName, currentStock, requestedQuantity, unit) {
+        const message = `Insufficient stock for ${itemName}. Current stock: ${currentStock}. Your request: ${requestedQuantity}.`;
+        document.getElementById('insufficientStockMessage').textContent = message;
+        document.getElementById('insufficientStockModal').classList.remove('hidden');
+    }
+
+    function closeInsufficientStockModal() {
+        document.getElementById('insufficientStockModal').classList.add('hidden');
+    }
+
     let searchTimeout = null;
     let selectedItemData = null;
 
     function updateQuantityField(selectedItem) {
         const quantityInput = document.getElementById('new_item_quantity');
         if (selectedItem) {
-            quantityInput.max = selectedItem.quantity;
-            quantityInput.value = Math.min(quantityInput.value || 1, selectedItem.quantity);
+            quantityInput.removeAttribute('max');
+            quantityInput.value = 1;
         }
     }
 
@@ -520,9 +564,8 @@
                 return;
             }
 
-            if (selectedItemData && selectedItemData.quantity > 0 && itemQuantity > selectedItemData.quantity) {
-                showQuantityValidationModal(selectedItemData.quantity);
-                return;
+            if (selectedItemData && selectedItemData.quantity < itemQuantity) {
+                showInsufficientStockModal(itemName, selectedItemData.quantity, itemQuantity, selectedItemData.unit);
             }
 
             const totalPrice = selectedItemData ? calculateTotalPrice(itemQuantity, selectedItemData.price) : 'N/A';

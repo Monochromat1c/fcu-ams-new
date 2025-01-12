@@ -403,15 +403,22 @@ class InventoryController extends Controller
             DB::beginTransaction();
             
             $requestGroupId = (string) Str::uuid();
+            $hasInsufficientStock = false;
             $hasPreOrder = false;
             
             foreach ($request->items as $item) {
                 // Find the correct inventory by matching the item name
                 $inventory = DB::table('inventories')
                     ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+                    ->join('units', 'inventories.unit_id', '=', 'units.id')
                     ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $item['name'])
-                    ->select('inventories.id', 'inventories.quantity')
+                    ->select('inventories.id', 'inventories.quantity', 'brands.brand', 'units.unit')
                     ->first();
+
+                // Check for insufficient stock
+                if ($inventory && $inventory->quantity < $item['quantity']) {
+                    $hasInsufficientStock = true;
+                }
 
                 // If inventory not found or quantity is 0, mark as pre-order
                 if (!$inventory || $inventory->quantity == 0) {
@@ -428,14 +435,31 @@ class InventoryController extends Controller
                 $supplyRequest->quantity = $item['quantity'];
                 $supplyRequest->request_date = $request->request_date;
                 $supplyRequest->item_name = $item['name'];
-                $supplyRequest->status = (!$inventory || $inventory->quantity == 0) ? 'pending' : 'pending';
+                $supplyRequest->status = 'pending';
+                
+                // Add stock information in notes if insufficient
+                if ($inventory && $inventory->quantity < $item['quantity']) {
+                    $itemName = $inventory->brand . ' - ' . $item['name'];
+                    $supplyRequest->notes = ($supplyRequest->notes ? $supplyRequest->notes . "\n" : "") . 
+                        "Insufficient stock for {$itemName}. Current stock: {$inventory->quantity} {$inventory->unit}. Request: {$item['quantity']} {$inventory->unit}.";
+                }
+                
                 $supplyRequest->save();
             }
             
             DB::commit();
-            $message = $hasPreOrder ? 
-                'Supply request submitted successfully. Some items will be treated as pre-orders.' : 
-                'Supply request submitted successfully.';
+
+            $message = '';
+            if ($hasInsufficientStock) {
+                $message = 'Supply request has been forwarded to admin for approval due to insufficient stock. ';
+            }
+            if ($hasPreOrder) {
+                $message .= 'Some items will be treated as pre-orders.';
+            }
+            if (!$message) {
+                $message = 'Supply request submitted successfully.';
+            }
+
             return redirect()->back()->with('success', $message);
         } catch (\Exception $e) {
             DB::rollback();
@@ -460,7 +484,7 @@ class InventoryController extends Controller
         foreach ($requests as $request) {
             $inventory = \DB::table('inventories')
                 ->join('brands', 'inventories.brand_id', '=', 'brands.id')
-                ->where(\DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
+                ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
                 ->select('inventories.unit_price')
                 ->first();
 
@@ -492,8 +516,8 @@ class InventoryController extends Controller
                 }])
                 ->get();
 
-            $hasPreOrder = false;
-            $allProcessed = true;
+            $hasPartialApproval = false;
+            $allFullyProcessed = true;
 
             foreach ($requests as $supplyRequest) {
                 $inventory = Inventory::find($supplyRequest->inventory_id);
@@ -502,35 +526,52 @@ class InventoryController extends Controller
                     continue;
                 }
 
-                // Check if there's enough stock
+                // Check if there's enough stock for full approval
                 if ($inventory->quantity >= $supplyRequest->quantity) {
+                    // Full approval
                     $inventory->quantity -= $supplyRequest->quantity;
                     $inventory->save();
                     
                     $supplyRequest->is_approved = true;
+                    $supplyRequest->status = 'approved';
                     $supplyRequest->save();
+                } else if ($inventory->quantity > 0) {
+                    // Partial approval
+                    $availableQuantity = $inventory->quantity;
+                    $requestedQuantity = $supplyRequest->quantity;
+                    
+                    // Update inventory
+                    $inventory->quantity = 0; // All available stock will be used
+                    $inventory->save();
+                    
+                    // Update supply request
+                    $supplyRequest->is_approved = false; // Not fully approved
+                    $supplyRequest->status = 'pending';
+                    $supplyRequest->notes = ($supplyRequest->notes ? $supplyRequest->notes . "\n" : "") . 
+                        "Partially processed: Released {$availableQuantity} out of {$requestedQuantity} requested quantity.";
+                    $supplyRequest->save();
+                    
+                    $hasPartialApproval = true;
+                    $allFullyProcessed = false;
                 } else {
-                    $allProcessed = false;
-                    if ($inventory->quantity == 0) {
-                        $hasPreOrder = true;
-                    }
+                    // No stock available
+                    $allFullyProcessed = false;
+                    $supplyRequest->is_approved = false;
+                    $supplyRequest->status = 'pending';
+                    $supplyRequest->save();
                 }
             }
 
-            // Check if all items in this request group are processed
-            $unprocessedCount = SupplyRequest::where('request_group_id', $request_group_id)
-                ->where('is_approved', false)
-                ->count();
-
-            if ($unprocessedCount == 0) {
-                // All items are processed, mark the entire request as approved
+            $message = '';
+            if ($allFullyProcessed) {
+                $message = 'All items have been approved and processed successfully.';
+                // Update all requests in the group to approved
                 SupplyRequest::where('request_group_id', $request_group_id)
                     ->update(['status' => 'approved']);
-                $message = 'All items have been approved successfully.';
+            } else if ($hasPartialApproval) {
+                $message = 'Some items were partially approved due to limited stock. Check item status for details.';
             } else {
-                $message = $hasPreOrder 
-                    ? 'Available items have been processed. Some items are pending as pre-orders.' 
-                    : 'Some items remain pending due to insufficient stock.';
+                $message = 'Some items remain pending due to insufficient stock.';
             }
 
             DB::commit();
@@ -589,7 +630,7 @@ class InventoryController extends Controller
         foreach ($requests as $request) {
             $inventory = \DB::table('inventories')
                 ->join('brands', 'inventories.brand_id', '=', 'brands.id')
-                ->where(\DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
+                ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
                 ->select('inventories.unit_price')
                 ->first();
 

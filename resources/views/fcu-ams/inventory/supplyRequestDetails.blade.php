@@ -139,15 +139,14 @@
                                     {{ $request->item_name }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    @if($request->is_approved)
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Processed</span>
+                                    @if($request->status === 'approved')
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Approved</span>
+                                    @elseif($request->status === 'rejected')
+                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Rejected</span>
                                     @else
-                                        @php
-                                            $inventory = \App\Models\Inventory::find($request->inventory_id);
-                                            $isPreOrder = $inventory && $inventory->quantity == 0;
-                                        @endphp
-                                        @if($isPreOrder)
-                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending (Pre-Order)</span>
+                                        @if(str_contains($request->notes ?? '', 'Partially processed'))
+                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Partially Approved</span>
+                                            <p class="text-xs text-gray-600 mt-1">{{ explode("\n", $request->notes)[count(explode("\n", $request->notes))-1] }}</p>
                                         @else
                                             <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
                                         @endif
@@ -160,7 +159,7 @@
                                     ₱{{ number_format($request->unit_price, 2) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-left">
-                                    ₱{{ number_format($request->subtotal, 2) }}
+                                    ₱{{ number_format($request->total_price, 2) }}
                                 </td>
                             </tr>
                             @endforeach
