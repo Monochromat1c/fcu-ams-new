@@ -2,17 +2,60 @@
 @section('content')
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
-<div x-data="{ sidebarOpen: true }" class="grid grid-cols-6">
-    <div x-show="sidebarOpen" class="col-span-1">
+<div x-data="{ 
+    sidebarOpen: window.innerWidth >= 768,
+    isMobile: window.innerWidth < 768,
+    init() {
+        window.addEventListener('resize', () => {
+            this.isMobile = window.innerWidth < 768;
+            if (!this.isMobile) {
+                this.sidebarOpen = true;
+            }
+        });
+    }
+}" class="relative grid grid-cols-1 md:grid-cols-6">
+    <!-- Mobile Sidebar Overlay -->
+    <div x-show="sidebarOpen && isMobile" 
+         class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="opacity-0"
+         x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="opacity-100"
+         x-transition:leave-end="opacity-0"
+         @click="sidebarOpen = false">
+    </div>
+
+    <!-- Sidebar -->
+    <div x-show="sidebarOpen" 
+         class="fixed md:relative w-64 md:w-auto inset-y-0 left-0 z-50 md:z-0 transform transition-transform duration-300 ease-in-out"
+         :class="{'translate-x-0': sidebarOpen, '-translate-x-full': !sidebarOpen}"
+         x-transition:enter="transition ease-out duration-300"
+         x-transition:enter-start="-translate-x-full"
+         x-transition:enter-end="translate-x-0"
+         x-transition:leave="transition ease-in duration-300"
+         x-transition:leave-start="translate-x-0"
+         x-transition:leave-end="-translate-x-full">
+        
+        <!-- Mobile Close Button -->
+        <button @click="sidebarOpen = false" 
+                class="md:hidden absolute top-4 right-4 p-2 rounded-full hover:bg-gray-200 focus:outline-none">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
         @include('layouts.sidebar')
     </div>
-    <div :class="{ 'col-span-5': sidebarOpen, 'col-span-6': !sidebarOpen }" class="bg-slate-200 content min-h-screen">
-    <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
-    <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-    </button>
+
+    <div :class="{ 'md:col-span-5': sidebarOpen, 'md:col-span-6': !sidebarOpen }" 
+         class="bg-slate-200 content min-h-screen w-full transition-all duration-300">
+        <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
+            <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
             <h1 class="my-auto text-3xl">Dashboard</h1>
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="flex gap-3 focus:outline-none" style="min-width:100px;">
@@ -55,7 +98,8 @@
                     <div class="divide-y divide-gray-200">
                         <div class="flex items-center px-4 py-3.5 text-gray-700 hover:bg-gray-50 transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
+                                <path fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clip-rule="evenodd" />
                             </svg>
                             <p class="font-medium">Role</p>
                             <p class="ml-auto text-gray-600">{{ auth()->user()->role->role }}</p>
@@ -70,7 +114,7 @@
                         <button onclick="document.getElementById('logout-modal').classList.toggle('hidden')"
                             class="flex items-center px-4 py-3.5 text-red-600 hover:bg-red-50 w-full text-left transition-colors duration-200">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7a4 4 0 01-4 4v1a3 3 0 003 3h6a3 3 0 003-3v-1a4 4 0 01-4-4z" />
                             </svg>
                             <span class="font-medium">Logout</span>
                         </button>
@@ -78,7 +122,7 @@
                 </div>
             </div>
         </nav>
-        <div class="m-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 p-4">
             <a href="{{ route('asset.list') }}" class="dashboard-card">
                 <div class="p-6">
                     <div class="flex align-items-center mb-3">
@@ -132,17 +176,17 @@
                     <p class="text-3xl font-bold text-gray-900">₱{{ number_format($totalInventoryValue, 2) }}</p>
                 </div>
             </div>
-            <div class="chart-container col-span-2">
+            <div class="chart-container md:col-span-2">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Asset Value Distribution</h3>
                 <canvas id="assetValueDistributionChart"></canvas>
                 <div id="assetValueLegend" class="mt-4"></div>
             </div>
-            <div class="chart-container col-span-2">
+            <div class="chart-container md:col-span-2">
                 <h3 class="text-lg font-semibold text-gray-800 mb-4">Inventory Value Distribution</h3>
                 <canvas id="inventoryValueDistributionChart"></canvas>
                 <div id="inventoryValueLegend" class="mt-4"></div>
             </div>
-            <div class="chart-container col-span-4">
+            <div class="chart-container md:col-span-4">
                 <div class="flex justify-between items-center mb-4">
                     <h3 class="text-lg font-semibold text-gray-800">Monthly Asset Acquisition</h3>
                     <form method="GET" action="{{ route('dashboard') }}" class="flex items-center">
@@ -161,14 +205,14 @@
                 </div>
                 <canvas id="assetAcquisitionChart" class=""></canvas>
             </div>
-            <div class="col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
-                    <h3 class="text-xl font-bold text-gray-800 tracking-tight">Recent Actions</h3>
+            <div class="md:col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="px-4 sm:px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                    <h3 class="text-lg sm:text-xl font-bold text-gray-800 tracking-tight">Recent Actions</h3>
                 </div>
                 <div class="divide-y divide-gray-100">
                     @foreach($recentActions as $action)
-                        <div class="px-6 py-4 hover:bg-gray-50 transition-colors duration-150 group">
-                            <div class="flex justify-between items-center">
+                        <div class="px-4 sm:px-6 py-4 hover:bg-gray-50 transition-colors duration-150 group">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-2 sm:space-y-0">
                                 <div class="flex items-center space-x-4">
                                     @if($action['type'] === 'Asset')
                                         @if($action['action'] === 'added')
@@ -225,15 +269,15 @@
                     @endforeach
                 </div>
             </div>
-            <div class="col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-                <div class="px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
-                    <h3 class="text-xl font-bold text-gray-800 tracking-tight">Recent Requests</h3>
+            <div class="md:col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="px-4 sm:px-6 py-4 bg-gray-50 border-b border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
+                    <h3 class="text-lg sm:text-xl font-bold text-gray-800 tracking-tight">Recent Requests</h3>
                     <a href="{{ route('requests.index') }}" class="text-blue-600 hover:text-blue-800 text-sm">View All Requests</a>
                 </div>
                 <div class="divide-y divide-gray-100">
                     @forelse($recentRequests as $request)
                         <a href="{{ route('inventory.supply-request.details', $request->request_group_id) }}" class="block">
-                            <div class="px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
+                            <div class="px-4 sm:px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
                                 <div class="flex justify-between items-center">
                                     <div class="flex-1">
                                         <p class="text-sm font-medium text-gray-900">
@@ -261,7 +305,7 @@
                             </div>
                         </a>
                     @empty
-                        <div class="px-6 py-4">
+                        <div class="px-4 sm:px-6 py-4">
                             <p class="text-sm text-gray-500">No recent requests</p>
                         </div>
                     @endforelse
