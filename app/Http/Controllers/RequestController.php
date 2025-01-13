@@ -20,11 +20,32 @@ class RequestController extends Controller
         $units = Unit::all();
         $suppliers = Supplier::all();
         $requests = SupplyRequest::with('department')
-            ->select('request_group_id', 'department_id', 'request_date', DB::raw('COUNT(*) as total_items'))
-            ->groupBy('request_group_id', 'department_id', 'request_date')
-            ->get();
+            ->select(
+                'request_group_id', 
+                'department_id', 
+                'request_date',
+                'requester',
+                'status',
+                DB::raw('COUNT(*) as total_items'),
+                DB::raw('MAX(status) as group_status') // Get the overall status for the group
+            )
+            ->groupBy('request_group_id', 'department_id', 'request_date', 'requester', 'status')
+            ->orderBy('request_date', 'desc')
+            ->paginate(10);
 
-        return view('fcu-ams.inventory.supplyRequest', compact('requests', 'departments', 'brands', 'units', 'suppliers'));
+        // Get all departments for the filter
+        $allDepartments = Department::all();
+        $selectedDepartments = [];
+
+        return view('fcu-ams.request.index', compact(
+            'requests', 
+            'departments', 
+            'brands', 
+            'units', 
+            'suppliers', 
+            'allDepartments',
+            'selectedDepartments'
+        ));
     }
 
     public function destroy($request_group_id)

@@ -235,18 +235,25 @@
                                     {{ $request->department->department }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
+                                    {{ $request->total_items }} items
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-3 py-1 text-xs font-medium rounded-full
-                                        {{ $request->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                           ($request->status === 'approved' ? 'bg-green-100 text-green-800' : 
-                                           'bg-red-100 text-red-800') }}">
-                                        {{ ucfirst($request->status) }}
-                                    </span>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                    @if($request->group_status === 'pending')
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            Pending
+                                        </span>
+                                    @elseif($request->group_status === 'approved')
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            Approved
+                                        </span>
+                                    @else
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                            Rejected
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     <div class="flex justify-center space-x-2">
