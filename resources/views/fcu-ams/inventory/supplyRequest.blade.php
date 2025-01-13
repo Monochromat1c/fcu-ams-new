@@ -277,7 +277,7 @@
     <!-- Item Not Found Modal -->
     <div id="itemNotFoundModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
         class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
-        <div class="relative my-auto mx-auto p-4 w-full max-w-md h-full md:h-auto">
+        <div class="relative my-auto mx-auto p-4 w-full max-w-2xl h-full md:h-auto">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow">
                 <!-- Modal header -->
@@ -292,13 +292,108 @@
                     </button>
                 </div>
                 <!-- Modal body -->
-                <div class="p-4">
-                    <p id="itemNotFoundMessage" class="text-gray-700"></p>
+                <div class="p-6">
+                    <p id="itemNotFoundMessage" class="text-gray-700 mb-6"></p>
+                    <form method="POST" enctype="multipart/form-data" action="#" class="space-y-6">
+                        @csrf
+
+                        <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+                            <!-- Brand -->
+                            <div>
+                                <label for="brand_id_not_found" class="block text-sm font-medium text-gray-700">Brand</label>
+                                <div class="mt-1 flex space-x-2">
+                                    <select id="brand_id_not_found" name="brand_id" required
+                                        class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                        <option value="">Select a brand</option>
+                                        @foreach($brands as $brand)
+                                            <option value="{{ $brand->id }}">{{ $brand->brand }}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button"
+                                        class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Item/Specs -->
+                            <div>
+                                <label for="items_specs_not_found" class="block text-sm font-medium text-gray-700">Item/Specs</label>
+                                <div class="mt-1">
+                                    <input type="text" id="items_specs_not_found" name="items_specs" required
+                                        class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
+                                </div>
+                            </div>
+
+                            <!-- Unit -->
+                            <div>
+                                <label for="unit_id_not_found" class="block text-sm font-medium text-gray-700">Unit</label>
+                                <div class="mt-1 flex space-x-2">
+                                    <select id="unit_id_not_found" name="unit_id" required
+                                        class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                        <option value="">Select a unit</option>
+                                        @foreach($units as $unit)
+                                            <option value="{{ $unit->id }}">{{ $unit->unit }}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button"
+                                        class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Quantity -->
+                            <div>
+                                <label for="quantity_not_found" class="block text-sm font-medium text-gray-700">Quantity</label>
+                                <div class="mt-1">
+                                    <input type="number" id="quantity_not_found" name="quantity" required min="0"
+                                        class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
+                                </div>
+                            </div>
+
+                            <!-- Unit Price -->
+                            <div>
+                                <label for="unit_price_not_found" class="block text-sm font-medium text-gray-700">Unit Price</label>
+                                <div class="mt-1">
+                                    <input type="number" id="unit_price_not_found" name="unit_price" required min="0"
+                                        class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
+                                </div>
+                            </div>
+
+                            <!-- Supplier -->
+                            <div>
+                                <label for="supplier_id_not_found" class="block text-sm font-medium text-gray-700">Supplier</label>
+                                <div class="mt-1 flex space-x-2">
+                                    <select id="supplier_id_not_found" name="supplier_id" required
+                                        class="block w-full pl-3 pr-10 py-2 text-base border-2 border-slate-300 bg-slate-50 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                        <option value="">Select a supplier</option>
+                                        @foreach($suppliers as $supplier)
+                                            <option value="{{ $supplier->id }}">{{ $supplier->supplier }}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button"
+                                        class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <!-- Modal footer -->
-                <div class="flex items-center justify-end p-4 border-t border-gray-200">
-                    <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center item-not-found-close-button">
-                        Close
+                <div class="flex items-center justify-end p-4 border-t border-gray-200 gap-3">
+                    <button type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 item-not-found-close-button">
+                        Cancel
+                    </button>
+                    <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        Add Item
                     </button>
                 </div>
             </div>
@@ -536,8 +631,76 @@
     }
 
     function showItemNotFoundModal(itemName) {
-        document.getElementById('itemNotFoundMessage').textContent = `The item "${itemName}" does not exist in the inventory. Please check the item name and try again.`;
+        document.getElementById('itemNotFoundMessage').textContent = `The item you requested is not in the inventory. Please provide more details for approval.`;
         document.getElementById('itemNotFoundModal').classList.remove('hidden');
+    }
+
+    function populateDropdowns() {
+        // Populate brands dropdown
+        fetch('{{ route("inventory.brands") }}')
+            .then(response => response.json())
+            .then(brands => {
+                const brandSelect = document.getElementById('brand_id_not_found');
+                brands.forEach(brand => {
+                    const option = new Option(brand.brand, brand.id);
+                    brandSelect.add(option);
+                });
+            });
+
+        // Populate units dropdown
+        fetch('{{ route("inventory.units") }}')
+            .then(response => response.json())
+            .then(units => {
+                const unitSelect = document.getElementById('unit_id_not_found');
+                units.forEach(unit => {
+                    const option = new Option(unit.unit, unit.id);
+                    unitSelect.add(option);
+                });
+            });
+
+        // Populate suppliers dropdown
+        fetch('{{ route("inventory.suppliers") }}')
+            .then(response => response.json())
+            .then(suppliers => {
+                const supplierSelect = document.getElementById('supplier_id_not_found');
+                suppliers.forEach(supplier => {
+                    const option = new Option(supplier.supplier, supplier.id);
+                    supplierSelect.add(option);
+                });
+            });
+    }
+
+    function submitRequestedItem(event) {
+        event.preventDefault();
+        
+        const formData = {
+            brand_id: document.getElementById('brand_id_not_found').value,
+            items_specs: document.getElementById('items_specs_not_found').value,
+            unit_id: document.getElementById('unit_id_not_found').value,
+            quantity: document.getElementById('quantity_not_found').value,
+            unit_price: document.getElementById('unit_price_not_found').value,
+            supplier_id: document.getElementById('supplier_id_not_found').value,
+        };
+
+        fetch('{{ route("inventory.request.item.store") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('itemNotFoundModal').classList.add('hidden');
+                // You might want to show a success message here
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // You might want to show an error message here
+        });
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -627,7 +790,7 @@
                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                     <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0111 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
                         </svg>
                     </button>
                 </td>
@@ -697,6 +860,13 @@
                 document.getElementById('itemNotFoundModal').classList.add('hidden');
             });
         });
+
+        // Add form submit handler
+        const requestedItemForm = document.querySelector('#itemNotFoundModal form');
+        requestedItemForm.addEventListener('submit', submitRequestedItem);
+
+        // Populate dropdowns when modal opens
+        document.getElementById('itemNotFoundModal').addEventListener('show.bs.modal', populateDropdowns);
     });
 </script>
 @endsection

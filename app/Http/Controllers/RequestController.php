@@ -5,32 +5,26 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SupplyRequest;
 use App\Models\Department;
+use App\Models\RequestedItem;
+use App\Models\Brand;
+use App\Models\Unit;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\DB;
 
 class RequestController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $allDepartments = Department::all();
-        $selectedDepartments = $request->input('departments', []);
+        $departments = Department::all();
+        $brands = Brand::all();
+        $units = Unit::all();
+        $suppliers = Supplier::all();
+        $requests = SupplyRequest::with('department')
+            ->select('request_group_id', 'department_id', 'request_date', DB::raw('COUNT(*) as total_items'))
+            ->groupBy('request_group_id', 'department_id', 'request_date')
+            ->get();
 
-        $requests = SupplyRequest::select(
-            'request_group_id',
-            'requester',
-            'status',
-            'request_date',
-            'department_id',
-            DB::raw('COUNT(*) as items_count')
-        )
-        ->when(!empty($selectedDepartments), function ($query) use ($selectedDepartments) {
-            return $query->whereIn('department_id', $selectedDepartments);
-        })
-        ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'department_id')
-        ->with('department')
-        ->orderBy('created_at', 'desc')
-        ->paginate(10);
-
-        return view('fcu-ams.request.index', compact('requests', 'allDepartments', 'selectedDepartments'));
+        return view('fcu-ams.inventory.supplyRequest', compact('requests', 'departments', 'brands', 'units', 'suppliers'));
     }
 
     public function destroy($request_group_id)
@@ -54,5 +48,43 @@ class RequestController extends Controller
             DB::rollback();
             return redirect()->back()->with('error', 'Failed to delete supply request. Please try again.');
         }
+    }
+
+    public function storeRequestedItem(Request $request)
+    {
+        $request->validate([
+            'brand_id' => 'required|exists:brands,id',
+            'items_specs' => 'required|string',
+            'unit_id' => 'required|exists:units,id',
+            'quantity' => 'required|integer|min:1',
+            'unit_price' => 'required|numeric|min:0',
+            'supplier_id' => 'required|exists:suppliers,id',
+        ]);
+
+        $requestedItem = RequestedItem::create($request->all());
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Item request submitted successfully',
+            'data' => $requestedItem
+        ]);
+    }
+
+    public function getBrands()
+    {
+        $brands = Brand::all();
+        return response()->json($brands);
+    }
+
+    public function getUnits()
+    {
+        $units = Unit::all();
+        return response()->json($units);
+    }
+
+    public function getSuppliers()
+    {
+        $suppliers = Supplier::all();
+        return response()->json($suppliers);
     }
 } 

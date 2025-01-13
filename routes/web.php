@@ -91,6 +91,10 @@ Route::middleware(['auth.user'])->group(function () {
     Route::controller(RequestController::class)->group(function () {
         Route::get('/requests', 'index')->name('requests.index');
         Route::delete('/requests/{request_group_id}', 'destroy')->name('requests.destroy');
+        Route::post('/inventory/request-item', 'storeRequestedItem')->name('inventory.request.item.store');
+        Route::get('/inventory/brands', 'getBrands')->name('inventory.brands');
+        Route::get('/inventory/units', 'getUnits')->name('inventory.units');
+        Route::get('/inventory/suppliers', 'getSuppliers')->name('inventory.suppliers');
     });
 
     // Route::controller(UserController::class)->group(function () {

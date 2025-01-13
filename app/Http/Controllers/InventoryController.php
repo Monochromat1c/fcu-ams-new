@@ -377,6 +377,8 @@ class InventoryController extends Controller
             ->get();
         $departments = Department::all();
         $units = Unit::all();
+        $brands = Brand::all();
+        $suppliers = Supplier::all();
         $userDepartment = $user->department;
         
         // Debug information
@@ -386,7 +388,7 @@ class InventoryController extends Controller
             'department' => $userDepartment
         ]);
         
-        return view('fcu-ams.inventory.supplyRequest', compact('inventories', 'departments', 'user', 'userDepartment', 'units'));
+        return view('fcu-ams.inventory.supplyRequest', compact('inventories', 'departments', 'user', 'userDepartment', 'units', 'brands', 'suppliers'));
     }
 
     public function storeSupplyRequest(Request $request)
@@ -484,6 +486,7 @@ class InventoryController extends Controller
         foreach ($requests as $request) {
             $inventory = \DB::table('inventories')
                 ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+                ->join('units', 'inventories.unit_id', '=', 'units.id')
                 ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
                 ->select('inventories.unit_price')
                 ->first();
