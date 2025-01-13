@@ -44,7 +44,6 @@
             <tr class="bg-gray-100">
                 <th class="px-6 py-3 text-left">Item</th>
                 <th class="px-6 py-3 text-center">Quantity</th>
-                <th class="px-6 py-3 text-right">Status</th>
                 <th class="px-6 py-3 text-right">Unit Price</th>
                 <th class="px-6 py-3 text-right">Total</th>
             </tr>
@@ -54,21 +53,6 @@
                 <tr>
                     <td class="border-b px-6 py-4">{{ $request->item_name }}</td>
                     <td class="border-b px-6 py-4 text-center">{{ $request->quantity }}</td>
-                    <td class="border-b px-6 py-4 text-right">
-                        @if($request->is_approved)
-                            <span class="text-green-600">Processed</span>
-                        @else
-                            @php
-                                $inventory = \App\Models\Inventory::find($request->inventory_id);
-                                $isPreOrder = $inventory && $inventory->quantity == 0;
-                            @endphp
-                            @if($isPreOrder)
-                                <span class="text-yellow-600">Pending (Pre-Order)</span>
-                            @else
-                                <span class="text-yellow-600">Pending</span>
-                            @endif
-                        @endif
-                    </td>
                     <td class="border-b px-6 py-4 text-right">
                         @if($request->inventory_id)
                             ₱{{ number_format($request->inventory->unit_price ?? 0, 2) }}
@@ -88,7 +72,7 @@
         </tbody>
         <tfoot>
             <tr class="font-bold">
-                <td class="px-6 py-4" colspan="4">Overall Price:</td>
+                <td class="px-6 py-4" colspan="3">Overall Price:</td>
                 <td class="px-6 py-4 text-right">₱{{ number_format($totalPrice, 2) }}</td>
             </tr>
         </tfoot>
