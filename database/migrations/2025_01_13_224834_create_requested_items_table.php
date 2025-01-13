@@ -10,6 +10,7 @@ return new class extends Migration
     {
         Schema::create('requested_items', function (Blueprint $table) {
             $table->id();
+            $table->uuid('request_group_id')->nullable();
             $table->foreignId('brand_id')->constrained('brands');
             $table->string('items_specs');
             $table->foreignId('unit_id')->constrained('units');
