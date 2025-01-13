@@ -29,6 +29,8 @@ class SupplyRequest extends Model
         'is_approved' => 'boolean'
     ];
 
+    protected $with = ['department', 'unit'];
+
     public function inventory()
     {
         return $this->belongsTo(Inventory::class);
@@ -37,5 +39,10 @@ class SupplyRequest extends Model
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
     }
 }

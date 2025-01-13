@@ -128,6 +128,7 @@
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Item</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Quantity</th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit Price</th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Total Price</th>
                             </tr>
@@ -135,36 +136,23 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($requests as $request)
                             <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $request->item_name }}
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $request->item_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-3 py-1 text-xs font-medium rounded-full
+                                        {{ $request->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                        ($request->status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                        'bg-red-100 text-red-800') }}">
+                                        {{ ucfirst($request->status) }}
+                                    </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    @if($request->status === 'approved')
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">Approved</span>
-                                    @elseif($request->status === 'rejected')
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">Rejected</span>
-                                    @else
-                                        @if(str_contains($request->notes ?? '', 'Partially processed'))
-                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800">Partially Approved</span>
-                                            <p class="text-xs text-gray-600 mt-1">{{ explode("\n", $request->notes)[count(explode("\n", $request->notes))-1] }}</p>
-                                        @else
-                                            <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-800">Pending</span>
-                                        @endif
-                                    @endif
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $request->quantity }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-left">
-                                    ₱{{ number_format($request->unit_price, 2) }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-left">
-                                    ₱{{ number_format($request->total_price, 2) }}
-                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $request->quantity }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $request->unit_name }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱{{ number_format($request->unit_price, 2) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱{{ number_format($request->total_price, 2) }}</td>
                             </tr>
                             @endforeach
                             <tr class="bg-gray-50">
-                                <td colspan="4" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
+                                <td colspan="5" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-right">
                                     Total:
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-blue-600 text-left">

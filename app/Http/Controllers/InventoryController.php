@@ -445,7 +445,7 @@ class InventoryController extends Controller
 
     public function showSupplyRequestDetails($request_group_id)
     {
-        $requests = SupplyRequest::with(['department'])
+        $requests = SupplyRequest::with(['department', 'unit'])
             ->where('request_group_id', $request_group_id)
             ->get();
 
@@ -463,17 +463,19 @@ class InventoryController extends Controller
                     ->join('brands', 'inventories.brand_id', '=', 'brands.id')
                     ->join('units', 'inventories.unit_id', '=', 'units.id')
                     ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
-                    ->select('inventories.unit_price')
+                    ->select('inventories.unit_price', 'units.unit')
                     ->first();
 
                 if ($inventory) {
                     $request->unit_price = $inventory->unit_price;
                     $request->total_price = $inventory->unit_price * $request->quantity;
+                    $request->unit_name = $inventory->unit;
                 }
             } else {
                 // For non-inventory items
                 $request->unit_price = $request->estimated_unit_price;
                 $request->total_price = $request->estimated_unit_price * $request->quantity;
+                $request->unit_name = $request->unit ? $request->unit->unit : '';
             }
             
             $totalPrice += $request->total_price;
@@ -504,13 +506,25 @@ class InventoryController extends Controller
             $allFullyProcessed = true;
 
             foreach ($requests as $supplyRequest) {
-                // Skip non-inventory items
-                if (!$supplyRequest->inventory_id) {
-                    $hasPartialApproval = true;
-                    continue;
+                $inventory = null;
+                
+                if ($supplyRequest->inventory_id) {
+                    $inventory = Inventory::find($supplyRequest->inventory_id);
+                } else {
+                    // For non-inventory items, try to find matching inventory
+                    $inventory = DB::table('inventories')
+                        ->join('units', 'inventories.unit_id', '=', 'units.id')
+                        ->where('inventories.items_specs', '=', $supplyRequest->item_name)
+                        ->where('inventories.unit_id', '=', $supplyRequest->unit_id)
+                        ->where('inventories.unit_price', '=', $supplyRequest->estimated_unit_price)
+                        ->select('inventories.*')
+                        ->first();
+                        
+                    if (!$inventory) {
+                        $hasPartialApproval = true;
+                        continue;
+                    }
                 }
-
-                $inventory = Inventory::find($supplyRequest->inventory_id);
                 
                 if (!$inventory) {
                     continue;
@@ -521,6 +535,7 @@ class InventoryController extends Controller
                     $inventory->save();
                     
                     $supplyRequest->status = 'approved';
+                    $supplyRequest->inventory_id = $inventory->id; // Link to found inventory
                     $supplyRequest->save();
                 } else {
                     $allFullyProcessed = false;
@@ -530,7 +545,7 @@ class InventoryController extends Controller
             DB::commit();
 
             $message = $hasPartialApproval 
-                ? 'Request partially approved. Non-inventory items remain pending.' 
+                ? 'Request partially approved. Some non-inventory items remain pending.' 
                 : ($allFullyProcessed ? 'Supply request approved successfully.' : 'Some items could not be approved due to insufficient stock.');
 
             return redirect()->back()->with('success', $message);
