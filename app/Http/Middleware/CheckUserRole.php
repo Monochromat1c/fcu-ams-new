@@ -26,6 +26,7 @@ class CheckUserRole
             'inventory.supply-request.details',
             'inventory.search.items',
             'request.notifications',
+            'inventory.request.item.store',
         ];
 
         $deniedRoutesForManager = [

@@ -294,7 +294,7 @@
                 <!-- Modal body -->
                 <div class="p-6">
                     <p id="itemNotFoundMessage" class="text-gray-700 mb-6"></p>
-                    <form method="POST" enctype="multipart/form-data" action="#" class="space-y-6">
+                    <form id="request-item-form" method="POST" action="{{ route('inventory.request.item.store') }}" class="space-y-6">
                         @csrf
 
                         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
@@ -385,16 +385,16 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Modal footer -->
+                        <div class="flex items-center justify-end p-4 border-t border-gray-200 gap-3">
+                            <button type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 item-not-found-close-button">
+                                Cancel
+                            </button>
+                            <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                                Add Item
+                            </button>
+                        </div>
                     </form>
-                </div>
-                <!-- Modal footer -->
-                <div class="flex items-center justify-end p-4 border-t border-gray-200 gap-3">
-                    <button type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 item-not-found-close-button">
-                        Cancel
-                    </button>
-                    <button type="submit" class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                        Add Item
-                    </button>
                 </div>
             </div>
         </div>
