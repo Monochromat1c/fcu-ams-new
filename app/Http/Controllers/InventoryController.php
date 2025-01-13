@@ -415,6 +415,15 @@ class InventoryController extends Controller
                     ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $item['name'])
                     ->select('inventories.*')
                     ->first();
+            } else {
+                // For non-inventory items
+                $inventory = DB::table('inventories')
+                    ->join('units', 'inventories.unit_id', '=', 'units.id')
+                    ->where('inventories.items_specs', '=', $item['name'])
+                    ->where('inventories.unit_id', '=', $item['unit_id'])
+                    ->where('inventories.unit_price', '=', $item['unit_price'])
+                    ->select('inventories.*')
+                    ->first();
             }
 
             $supplyRequest = new SupplyRequest();
@@ -512,15 +521,17 @@ class InventoryController extends Controller
                     $inventory = Inventory::find($supplyRequest->inventory_id);
                 } else {
                     // For non-inventory items, try to find matching inventory
-                    $inventory = DB::table('inventories')
+                    $matchingInventory = DB::table('inventories')
                         ->join('units', 'inventories.unit_id', '=', 'units.id')
                         ->where('inventories.items_specs', '=', $supplyRequest->item_name)
                         ->where('inventories.unit_id', '=', $supplyRequest->unit_id)
                         ->where('inventories.unit_price', '=', $supplyRequest->estimated_unit_price)
-                        ->select('inventories.*')
+                        ->select('inventories.id')
                         ->first();
                         
-                    if (!$inventory) {
+                    if ($matchingInventory) {
+                        $inventory = Inventory::find($matchingInventory->id);
+                    } else {
                         $hasPartialApproval = true;
                         continue;
                     }
