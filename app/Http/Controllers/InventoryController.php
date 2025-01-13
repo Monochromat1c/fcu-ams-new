@@ -457,18 +457,26 @@ class InventoryController extends Controller
         $totalPrice = 0;
         
         foreach ($requests as $request) {
-            $inventory = \DB::table('inventories')
-                ->join('brands', 'inventories.brand_id', '=', 'brands.id')
-                ->join('units', 'inventories.unit_id', '=', 'units.id')
-                ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
-                ->select('inventories.unit_price')
-                ->first();
+            if ($request->inventory_id) {
+                // For inventory items
+                $inventory = \DB::table('inventories')
+                    ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+                    ->join('units', 'inventories.unit_id', '=', 'units.id')
+                    ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
+                    ->select('inventories.unit_price')
+                    ->first();
 
-            if ($inventory) {
-                $request->unit_price = $inventory->unit_price;
-                $request->total_price = $inventory->unit_price * $request->quantity;
-                $totalPrice += $request->total_price;
+                if ($inventory) {
+                    $request->unit_price = $inventory->unit_price;
+                    $request->total_price = $inventory->unit_price * $request->quantity;
+                }
+            } else {
+                // For non-inventory items
+                $request->unit_price = $request->estimated_unit_price;
+                $request->total_price = $request->estimated_unit_price * $request->quantity;
             }
+            
+            $totalPrice += $request->total_price;
         }
 
         // Store the URL that brought us to this page
