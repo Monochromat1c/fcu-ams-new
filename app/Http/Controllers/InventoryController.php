@@ -465,6 +465,18 @@ class InventoryController extends Controller
         $totalItems = $requests->count();
         $totalPrice = 0;
         
+        // Check if all items in the request are approved
+        $allApproved = $requests->every(function($request) {
+            return $request->status === 'approved';
+        });
+
+        // Update the overall status
+        if ($allApproved) {
+            $overallStatus = 'approved';
+        } else {
+            $overallStatus = 'pending';
+        }
+        
         foreach ($requests as $request) {
             if ($request->inventory_id) {
                 // For inventory items
@@ -496,7 +508,8 @@ class InventoryController extends Controller
         return view('fcu-ams.inventory.supplyRequestDetails', [
             'requests' => $requests,
             'totalItems' => $totalItems,
-            'totalPrice' => $totalPrice
+            'totalPrice' => $totalPrice,
+            'overallStatus' => $overallStatus
         ]);
     }
 
@@ -515,6 +528,11 @@ class InventoryController extends Controller
             $allFullyProcessed = true;
 
             foreach ($requests as $supplyRequest) {
+                // Skip if already approved
+                if ($supplyRequest->status === 'approved') {
+                    continue;
+                }
+
                 $inventory = null;
                 
                 if ($supplyRequest->inventory_id) {

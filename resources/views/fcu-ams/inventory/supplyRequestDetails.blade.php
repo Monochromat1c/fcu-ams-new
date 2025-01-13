@@ -91,10 +91,10 @@
                         <div>
                             <span class="font-medium">Status:</span>
                             <span class="ml-2 px-3 py-1 text-xs font-medium rounded-full
-                                {{ $requests->first()->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                ($requests->first()->status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                {{ $overallStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                ($overallStatus === 'approved' ? 'bg-green-100 text-green-800' : 
                                 'bg-red-100 text-red-800') }}">
-                                {{ ucfirst($requests->first()->status) }}
+                                {{ ucfirst($overallStatus) }}
                             </span>
                         </div>
                         <div>
