@@ -133,7 +133,7 @@
                                 <!-- Modal footer -->
                                 <div class="flex items-center justify-end p-4 border-t border-gray-200">
                                     <button type="button"
-                                        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 mr-2 close-modal-button">
+                                        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 close-modal-button">
                                         Cancel
                                     </button>
                                     <button type="button"
@@ -509,10 +509,7 @@
 
     function updateQuantityField(selectedItem) {
         const quantityInput = document.getElementById('new_item_quantity');
-        if (selectedItem) {
-            quantityInput.removeAttribute('max');
-            quantityInput.value = 1;
-        }
+        quantityInput.value = 1;
     }
 
     function searchItems(query) {
@@ -601,7 +598,7 @@
                     console.error('Error fetching items:', error);
                     loadingSpinner.classList.add('hidden');
                     suggestionsList.classList.remove('hidden');
-                    suggestionsList.innerHTML = '<li class="px-4 py-2 text-red-500">Error loading suggestions</li>';
+                    suggestionsList.innerHTML = '<li class="px-4 py-2 text-red-500">Error loading items</li>';
                 });
         }, 300);
     }
@@ -771,7 +768,7 @@
         addItemButton.addEventListener('click', function(e) {
             e.preventDefault();
             const itemName = document.getElementById('new_item_name').value.trim();
-            const itemQuantity = document.getElementById('new_item_quantity').value;
+            const itemQuantity = parseInt(document.getElementById('new_item_quantity').value);
 
             if (!itemName || !itemQuantity || itemQuantity < 1) {
                 showValidationModal();
@@ -784,9 +781,9 @@
                 return;
             }
 
+            // Show warning if quantity exceeds available stock
             if (selectedItemData.quantity < itemQuantity) {
                 showInsufficientStockModal(itemName, selectedItemData.quantity, itemQuantity, selectedItemData.unit);
-                return;
             }
 
             const totalPrice = calculateTotalPrice(itemQuantity, selectedItemData.price);

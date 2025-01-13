@@ -560,12 +560,42 @@ class InventoryController extends Controller
                 }
 
                 if ($inventory->quantity >= $supplyRequest->quantity) {
+                    // Full approval
                     $inventory->quantity -= $supplyRequest->quantity;
                     $inventory->save();
                     
                     $supplyRequest->status = 'approved';
-                    $supplyRequest->inventory_id = $inventory->id; // Link to found inventory
+                    $supplyRequest->inventory_id = $inventory->id;
                     $supplyRequest->save();
+                } else if ($inventory->quantity > 0) {
+                    // Partial approval
+                    $availableQuantity = $inventory->quantity;
+                    $requestedQuantity = $supplyRequest->quantity;
+                    
+                    // Update inventory
+                    $inventory->quantity = 0;
+                    $inventory->save();
+                    
+                    // Create a new request for the approved quantity
+                    $approvedRequest = new SupplyRequest();
+                    $approvedRequest->request_id = Str::uuid();
+                    $approvedRequest->request_group_id = $request_group_id;
+                    $approvedRequest->department_id = $supplyRequest->department_id;
+                    $approvedRequest->requester = $supplyRequest->requester;
+                    $approvedRequest->item_name = $supplyRequest->item_name;
+                    $approvedRequest->quantity = $availableQuantity;
+                    $approvedRequest->request_date = $supplyRequest->request_date;
+                    $approvedRequest->status = 'approved';
+                    $approvedRequest->inventory_id = $inventory->id;
+                    $approvedRequest->save();
+                    
+                    // Update original request with remaining quantity
+                    $supplyRequest->quantity = $requestedQuantity - $availableQuantity;
+                    $supplyRequest->notes = "Partially approved: {$availableQuantity} units approved, {$supplyRequest->quantity} units pending";
+                    $supplyRequest->save();
+                    
+                    $hasPartialApproval = true;
+                    $allFullyProcessed = false;
                 } else {
                     $allFullyProcessed = false;
                 }
@@ -574,7 +604,7 @@ class InventoryController extends Controller
             DB::commit();
 
             $message = $hasPartialApproval 
-                ? 'Request partially approved. Some non-inventory items remain pending.' 
+                ? 'Request partially approved. Some items were approved with available stock.' 
                 : ($allFullyProcessed ? 'Supply request approved successfully.' : 'Some items could not be approved due to insufficient stock.');
 
             return redirect()->back()->with('success', $message);

@@ -49,21 +49,24 @@
         <div class="bg-white m-3 shadow-md rounded-md p-6 2xl:max-w-7xl 2xl:mx-auto">
             <div class="flex justify-between items-start mb-6">
                 <h3 class="text-lg font-semibold">Request Information</h3>
-                @if($requests->first()->status === 'pending' && Auth::user()->role->role !== 'Viewer')
+                @if(Auth::user()->role->role !== 'Viewer')
                     <div class="flex gap-4">
                         <form action="{{ route('inventory.supply-request.approve', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST">
                             @csrf
-                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-white border-2 border-green-500 hover:bg-green-500 text-green-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">
+                            <button type="submit" 
+                                {{ $overallStatus === 'approved' ? 'disabled' : '' }}
+                                class="inline-flex items-center px-4 py-2 bg-white border-2 border-green-500 hover:bg-green-500 text-green-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-green-600">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                                 Approve
                             </button>
                         </form>
-                        <!-- approve button -->
                         <form action="{{ route('inventory.supply-request.reject', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST">
                             @csrf
-                            <button type="submit" class="inline-flex items-center px-4 py-2 bg-white border-2 border-red-500 hover:bg-red-500 text-red-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">
+                            <button type="submit"
+                                {{ $overallStatus === 'approved' ? 'disabled' : '' }}
+                                class="inline-flex items-center px-4 py-2 bg-white border-2 border-red-500 hover:bg-red-500 text-red-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-red-600">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                 </svg>
