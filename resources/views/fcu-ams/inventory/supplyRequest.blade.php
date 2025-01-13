@@ -358,7 +358,7 @@
 
                             <!-- Unit Price -->
                             <div>
-                                <label for="unit_price_not_found" class="block text-sm font-medium text-gray-700">Unit Price</label>
+                                <label for="unit_price_not_found" class="block text-sm font-medium text-gray-700">Estimated Unit Price</label>
                                 <div class="mt-1">
                                     <input type="number" id="unit_price_not_found" name="unit_price" required min="0"
                                         class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
