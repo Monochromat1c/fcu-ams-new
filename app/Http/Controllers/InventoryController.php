@@ -396,78 +396,51 @@ class InventoryController extends Controller
         $request->validate([
             'department_id' => 'required|exists:departments,id',
             'request_date' => 'required|date',
-            'items' => 'required|array',
-            'items.*.name' => 'required|string',
-            'items.*.quantity' => 'required|integer|min:1'
+            'selected_items' => 'required|json'
         ]);
 
-        try {
-            DB::beginTransaction();
-            
-            $requestGroupId = (string) Str::uuid();
-            $hasInsufficientStock = false;
-            $hasPreOrder = false;
-            
-            foreach ($request->items as $item) {
-                // Find the correct inventory by matching the item name
+        $data = json_decode($request->selected_items, true);
+        if (!isset($data['items']) || empty($data['items'])) {
+            return redirect()->back()->with('error', 'No items selected');
+        }
+
+        $requestGroupId = Str::uuid();
+
+        foreach ($data['items'] as $item) {
+            $inventory = null;
+            if (empty($item['is_new_item'])) {
+                // For existing inventory items
                 $inventory = DB::table('inventories')
                     ->join('brands', 'inventories.brand_id', '=', 'brands.id')
-                    ->join('units', 'inventories.unit_id', '=', 'units.id')
                     ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $item['name'])
-                    ->select('inventories.id', 'inventories.quantity', 'brands.brand', 'units.unit')
+                    ->select('inventories.*')
                     ->first();
-
-                // Check for insufficient stock
-                if ($inventory && $inventory->quantity < $item['quantity']) {
-                    $hasInsufficientStock = true;
-                }
-
-                // If inventory not found or quantity is 0, mark as pre-order
-                if (!$inventory || $inventory->quantity == 0) {
-                    $hasPreOrder = true;
-                }
-
-                $supplyRequest = new SupplyRequest();
-                $supplyRequest->request_id = (string) Str::uuid();
-                $supplyRequest->request_group_id = $requestGroupId;
-                $supplyRequest->department_id = $request->department_id;
-                $supplyRequest->notes = $request->notes;
-                $supplyRequest->inventory_id = $inventory ? $inventory->id : null;
-                $supplyRequest->requester = auth()->user()->first_name . ' ' . auth()->user()->last_name;
-                $supplyRequest->quantity = $item['quantity'];
-                $supplyRequest->request_date = $request->request_date;
-                $supplyRequest->item_name = $item['name'];
-                $supplyRequest->status = 'pending';
-                
-                // Add stock information in notes if insufficient
-                if ($inventory && $inventory->quantity < $item['quantity']) {
-                    $itemName = $inventory->brand . ' - ' . $item['name'];
-                    $supplyRequest->notes = ($supplyRequest->notes ? $supplyRequest->notes . "\n" : "") . 
-                        "Insufficient stock for {$itemName}. Current stock: {$inventory->quantity} {$inventory->unit}. Request: {$item['quantity']} {$inventory->unit}.";
-                }
-                
-                $supplyRequest->save();
             }
+
+            $supplyRequest = new SupplyRequest();
+            $supplyRequest->request_id = Str::uuid();
+            $supplyRequest->request_group_id = $requestGroupId;
+            $supplyRequest->department_id = $request->department_id;
+            $supplyRequest->requester = auth()->user()->first_name . ' ' . auth()->user()->last_name;
+            $supplyRequest->quantity = $item['quantity'];
+            $supplyRequest->request_date = $request->request_date;
+            $supplyRequest->item_name = $item['name'];
             
-            DB::commit();
-
-            $message = '';
-            if ($hasInsufficientStock) {
-                $message = 'Supply request has been forwarded to admin for approval due to insufficient stock. ';
-            }
-            if ($hasPreOrder) {
-                $message .= 'Some items will be treated as pre-orders.';
-            }
-            if (!$message) {
-                $message = 'Supply request submitted successfully.';
+            if ($inventory) {
+                // For existing inventory items
+                $supplyRequest->inventory_id = $inventory->id;
+            } else {
+                // For non-inventory items
+                $supplyRequest->brand_id = $item['brand_id'];
+                $supplyRequest->unit_id = $item['unit_id'];
+                $supplyRequest->supplier_id = $item['supplier_id'];
+                $supplyRequest->estimated_unit_price = $item['unit_price'];
             }
 
-            return redirect()->back()->with('success', $message);
-        } catch (\Exception $e) {
-            DB::rollback();
-            \Log::error('Supply request error: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to submit supply request. Please try again.');
+            $supplyRequest->save();
         }
+
+        return redirect()->route('inventory.supply.request')->with('success', 'Supply request submitted successfully.');
     }
 
     public function showSupplyRequestDetails($request_group_id)

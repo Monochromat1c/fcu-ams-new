@@ -22,6 +22,7 @@
         <div class="request-form bg-white m-3 shadow-md rounded-md p-5 2xl:max-w-7xl 2xl:mx-auto">
             <form id="supply-request-form" method="POST" action="{{ route('inventory.supply.request.store') }}">
                 @csrf
+                <input type="hidden" id="selected_items" name="selected_items" />
                 <div class="">
                     <h3 class="text-lg font-semibold mb-3">Request Details</h3>
                     <div class="mb-4">
@@ -195,9 +196,9 @@
                     <h3 class="text-xl font-semibold text-gray-900">
                         Validation Error
                     </h3>
-                    <button type="button" class="close-validation-modal text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
-                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    <button type="button" class="close-validation-modal text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
@@ -469,53 +470,28 @@
     }
 
     function updateSelectedItems() {
-        const selectedItemsContainer = document.getElementById('selected-items');
-        const rows = document.querySelectorAll('#added-items-table-body tr');
-        selectedItemsContainer.innerHTML = '';
-        const itemsContainer = document.getElementById('selected-items-container');
+        const rows = document.querySelectorAll('#added-items-table tbody tr');
+        const items = [];
 
-        if (rows.length === 0) {
-            itemsContainer.classList.add('hidden');
-            return;
-        }
+        rows.forEach(row => {
+            const isNewItem = row.getAttribute('data-is-new-item') === 'true';
+            const item = {
+                name: row.getAttribute('data-name'),
+                quantity: row.getAttribute('data-quantity'),
+                is_new_item: isNewItem
+            };
 
-        rows.forEach((row, index) => {
-            const name = row.getAttribute('data-name');
-            const quantity = row.getAttribute('data-quantity');
-            const unit = row.getAttribute('data-unit');
-            const unitPrice = row.getAttribute('data-unit-price');
-            const totalPrice = unitPrice !== 'N/A' ? calculateTotalPrice(quantity, unitPrice) : 'N/A';
+            if (isNewItem) {
+                item.brand_id = row.getAttribute('data-brand-id');
+                item.unit_id = row.getAttribute('data-unit-id');
+                item.supplier_id = row.getAttribute('data-supplier-id');
+                item.unit_price = row.getAttribute('data-unit-price');
+            }
 
-            const selectedRow = document.createElement('tr');
-            selectedRow.setAttribute('data-name', name);
-            selectedRow.setAttribute('data-quantity', quantity);
-            selectedRow.setAttribute('data-unit', unit);
-            selectedRow.setAttribute('data-unit-price', unitPrice);
-            
-            selectedRow.innerHTML = `
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${name}
-                    <input type="hidden" name="items[${index}][name]" value="${name}">
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${unit}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${unitPrice !== 'N/A' ? formatPrice(unitPrice) : 'N/A'}
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${quantity}
-                    <input type="hidden" name="items[${index}][quantity]" value="${quantity}">
-                </td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    ${totalPrice !== 'N/A' ? formatPrice(totalPrice) : 'N/A'}
-                </td>
-            `;
-            selectedItemsContainer.appendChild(selectedRow);
+            items.push(item);
         });
 
-        itemsContainer.classList.remove('hidden');
-        updateOverallTotals();
+        document.querySelector('#selected_items').value = JSON.stringify({ items: items });
     }
 
     function showInsufficientStockModal(itemName, currentStock, requestedQuantity, unit) {
@@ -739,12 +715,44 @@
             }
         });
 
-        // Handle enter key in the main form
-        form.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                return false;
+        // Handle form submission
+        const supplyRequestForm = document.getElementById('supply-request-form');
+        const submitButton = document.getElementById('submit-request-button');
+
+        submitButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get all items from the table
+            const rows = document.querySelectorAll('#added-items-table tbody tr');
+            if (rows.length === 0) {
+                document.getElementById('validationModal').classList.remove('hidden');
+                return;
             }
+
+            const items = [];
+            rows.forEach(row => {
+                const isNewItem = row.getAttribute('data-is-new-item') === 'true';
+                const item = {
+                    name: row.getAttribute('data-name'),
+                    quantity: row.getAttribute('data-quantity'),
+                    is_new_item: isNewItem
+                };
+
+                if (isNewItem) {
+                    item.brand_id = row.getAttribute('data-brand-id');
+                    item.unit_id = row.getAttribute('data-unit-id');
+                    item.supplier_id = row.getAttribute('data-supplier-id');
+                    item.unit_price = row.getAttribute('data-unit-price');
+                }
+
+                items.push(item);
+            });
+
+            // Set the items data in the hidden input
+            document.getElementById('selected_items').value = JSON.stringify({ items: items });
+            
+            // Submit the form
+            supplyRequestForm.submit();
         });
 
         // Close modal buttons
