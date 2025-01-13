@@ -41,18 +41,18 @@
     }
 </style>
 
-<div class="grid grid-cols-6">
-    @include('layouts.sidebar')
-    <div class="content min-h-screen bg-slate-200 col-span-5">
-        <!-- Header -->
-        <nav class="bg-white flex justify-between items-center py-3 px-4 m-3 shadow-md rounded-md relative">
-            <!-- Left spacer -->
-            <div class="w-14"></div>
-            
-            <!-- Centered title -->
-            <div class="absolute left-1/2 transform -translate-x-1/2">
-                <h1 class="text-3xl font-semibold text-gray-800">Reports</h1>
-            </div>
+<div x-data="{ sidebarOpen: true }" class="grid grid-cols-6">
+    <div x-show="sidebarOpen" class="col-span-1">
+        @include('layouts.sidebar')
+    </div>
+    <div :class="{ 'col-span-5': sidebarOpen, 'col-span-6': !sidebarOpen }" class="bg-slate-200 content min-h-screen">
+    <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
+    <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
+                <h1 class="text-3xl font-semibold text-gray-800 my-auto">Reports</h1>
             
             <!-- Profile section (right-aligned) -->
             <div class="relative" x-data="{ open: false }">

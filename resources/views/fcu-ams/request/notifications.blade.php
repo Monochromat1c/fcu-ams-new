@@ -3,24 +3,17 @@
 <link rel="stylesheet" href="{{ asset('css/stockin.css') }}">
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
-<div class="grid grid-cols-6">
-    @include('layouts.sidebar')
-    <div class="content min-h-screen bg-slate-200 col-span-5">
-        <!-- Header -->
-        <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
-            <div class="relative" x-data="{ open: false }">
-                <button @click="open = !open" class="invisible flex gap-3 focus:outline-none" style="min-width:100px;">
-                    <div>
-                        @if(auth()->user()->profile_picture)
-                            <img src="{{ asset(auth()->user()->profile_picture) }}" alt="User Profile"
-                                class="w-14 h-14 object-cover bg-no-repeat rounded-full mx-auto">
-                        @else
-                            <img src="{{ asset('profile/defaultProfile.png') }}" alt="Default Image"
-                                class="w-14 h-14 object-cover bg-no-repeat rounded-full mx-auto">
-                        @endif
-                    </div>
-                </button>
-            </div>
+<div x-data="{ sidebarOpen: true }" class="grid grid-cols-6">
+    <div x-show="sidebarOpen" class="col-span-1">
+        @include('layouts.sidebar')
+    </div>
+    <div :class="{ 'col-span-5': sidebarOpen, 'col-span-6': !sidebarOpen }" class="bg-slate-200 content min-h-screen">
+    <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
+    <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+    </button>
             <h1 class="my-auto text-3xl">Notifications</h1>
             <div class="relative" x-data="{ open: false }">
                 <button @click="open = !open" class="flex gap-3 focus:outline-none" style="min-width:100px;">
