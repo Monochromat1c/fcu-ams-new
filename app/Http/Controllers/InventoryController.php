@@ -454,7 +454,7 @@ class InventoryController extends Controller
 
     public function showSupplyRequestDetails($request_group_id)
     {
-        $requests = SupplyRequest::with(['department', 'unit'])
+        $requests = SupplyRequest::with(['department', 'unit', 'inventory'])
             ->where('request_group_id', $request_group_id)
             ->get();
 
@@ -483,14 +483,15 @@ class InventoryController extends Controller
                 $inventory = \DB::table('inventories')
                     ->join('brands', 'inventories.brand_id', '=', 'brands.id')
                     ->join('units', 'inventories.unit_id', '=', 'units.id')
-                    ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
+                    ->where('inventories.id', '=', $request->inventory_id)
                     ->select('inventories.unit_price', 'units.unit')
                     ->first();
 
                 if ($inventory) {
-                    $request->unit_price = $inventory->unit_price;
-                    $request->total_price = $inventory->unit_price * $request->quantity;
-                    $request->unit_name = $inventory->unit;
+                    // Use estimated_unit_price if it exists (for previously non-inventory items)
+                    $request->unit_price = $request->estimated_unit_price ?? $inventory->unit_price;
+                    $request->total_price = $request->unit_price * $request->quantity;
+                    $request->unit_name = $request->unit ? $request->unit->unit : $inventory->unit;
                 }
             } else {
                 // For non-inventory items
@@ -566,6 +567,10 @@ class InventoryController extends Controller
                     
                     $supplyRequest->status = 'approved';
                     $supplyRequest->inventory_id = $inventory->id;
+                    // Preserve original unit and price for non-inventory items
+                    if (!$supplyRequest->getOriginal('inventory_id')) {
+                        $supplyRequest->estimated_unit_price = $supplyRequest->estimated_unit_price;
+                    }
                     $supplyRequest->save();
                 } else if ($inventory->quantity > 0) {
                     // Partial approval
@@ -587,6 +592,9 @@ class InventoryController extends Controller
                     $approvedRequest->request_date = $supplyRequest->request_date;
                     $approvedRequest->status = 'approved';
                     $approvedRequest->inventory_id = $inventory->id;
+                    // Preserve original unit and price
+                    $approvedRequest->estimated_unit_price = $supplyRequest->estimated_unit_price;
+                    $approvedRequest->unit_id = $supplyRequest->unit_id;
                     $approvedRequest->save();
                     
                     // Update original request with remaining quantity

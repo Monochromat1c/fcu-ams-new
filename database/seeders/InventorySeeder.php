@@ -217,15 +217,6 @@ class InventorySeeder extends Seeder
             ]);
 
             Inventory::create([
-                'quantity' => 0, 
-                'unit_id' => 2, 
-                'items_specs' => 'Dual Tip Highlighter', 
-                'brand_id' => $Tombow->id,
-                'unit_price' => 40.00, 
-                'supplier_id' => 1,
-            ]);
-
-            Inventory::create([
                 'quantity' => 100, 
                 'unit_id' => 1, 
                 'items_specs' => 'Bond Paper Long', 
