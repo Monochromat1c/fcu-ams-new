@@ -8,9 +8,13 @@
         width: 150px;
         height: 150px;
     }
+
+    .sidebar-transition {
+        transition: all 0.3s ease-in-out;
+    }
 </style>
 
-<div class="sidebar flex-grow flex flex-col overflow-y-auto">
+<div class="sidebar flex-grow flex flex-col overflow-y-auto bg-white h-screen shadow-lg sidebar-transition">
     <div class="flex flex-col p-1 mx-auto">
         <a href="{{ route('dashboard') }}">
             <img class="fcu-icon mb-1 mx-auto" src="/img/login/fcu-icon.png" alt="" srcset="">
