@@ -504,66 +504,39 @@ class InventoryController extends Controller
             $allFullyProcessed = true;
 
             foreach ($requests as $supplyRequest) {
+                // Skip non-inventory items
+                if (!$supplyRequest->inventory_id) {
+                    $hasPartialApproval = true;
+                    continue;
+                }
+
                 $inventory = Inventory::find($supplyRequest->inventory_id);
                 
                 if (!$inventory) {
                     continue;
                 }
 
-                // Check if there's enough stock for full approval
                 if ($inventory->quantity >= $supplyRequest->quantity) {
-                    // Full approval
                     $inventory->quantity -= $supplyRequest->quantity;
                     $inventory->save();
                     
-                    $supplyRequest->is_approved = true;
                     $supplyRequest->status = 'approved';
                     $supplyRequest->save();
-                } else if ($inventory->quantity > 0) {
-                    // Partial approval
-                    $availableQuantity = $inventory->quantity;
-                    $requestedQuantity = $supplyRequest->quantity;
-                    
-                    // Update inventory
-                    $inventory->quantity = 0; // All available stock will be used
-                    $inventory->save();
-                    
-                    // Update supply request
-                    $supplyRequest->is_approved = false; // Not fully approved
-                    $supplyRequest->status = 'pending';
-                    $supplyRequest->notes = ($supplyRequest->notes ? $supplyRequest->notes . "\n" : "") . 
-                        "Partially processed: Released {$availableQuantity} out of {$requestedQuantity} requested quantity.";
-                    $supplyRequest->save();
-                    
-                    $hasPartialApproval = true;
-                    $allFullyProcessed = false;
                 } else {
-                    // No stock available
                     $allFullyProcessed = false;
-                    $supplyRequest->is_approved = false;
-                    $supplyRequest->status = 'pending';
-                    $supplyRequest->save();
                 }
             }
 
-            $message = '';
-            if ($allFullyProcessed) {
-                $message = 'All items have been approved and processed successfully.';
-                // Update all requests in the group to approved
-                SupplyRequest::where('request_group_id', $request_group_id)
-                    ->update(['status' => 'approved']);
-            } else if ($hasPartialApproval) {
-                $message = 'Some items were partially approved due to limited stock. Check item status for details.';
-            } else {
-                $message = 'Some items remain pending due to insufficient stock.';
-            }
-
             DB::commit();
+
+            $message = $hasPartialApproval 
+                ? 'Request partially approved. Non-inventory items remain pending.' 
+                : ($allFullyProcessed ? 'Supply request approved successfully.' : 'Some items could not be approved due to insufficient stock.');
+
             return redirect()->back()->with('success', $message);
 
         } catch (\Exception $e) {
             DB::rollback();
-            \Log::error('Supply request approval error: ' . $e->getMessage());
             return redirect()->back()->with('error', 'An error occurred while processing the request.');
         }
     }
