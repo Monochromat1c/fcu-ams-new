@@ -274,6 +274,36 @@
             </div>
         </div>
     </div>
+    <!-- Item Not Found Modal -->
+    <div id="itemNotFoundModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
+        class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+        <div class="relative my-auto mx-auto p-4 w-full max-w-md h-full md:h-auto">
+            <!-- Modal content -->
+            <div class="relative bg-white rounded-lg shadow">
+                <!-- Modal header -->
+                <div class="flex items-center justify-between p-4 border-b rounded-t bg-red-500">
+                    <h3 class="text-xl font-semibold text-white">
+                        Item Not Found in Inventory
+                    </h3>
+                    <button type="button" class="text-white bg-transparent hover:bg-red-600 hover:text-gray-100 rounded-lg text-sm w-8 h-8 flex items-center justify-center item-not-found-close-button">
+                        <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                        </svg>
+                    </button>
+                </div>
+                <!-- Modal body -->
+                <div class="p-4">
+                    <p id="itemNotFoundMessage" class="text-gray-700"></p>
+                </div>
+                <!-- Modal footer -->
+                <div class="flex items-center justify-end p-4 border-t border-gray-200">
+                    <button type="button" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center item-not-found-close-button">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -505,6 +535,11 @@
         }, 300);
     }
 
+    function showItemNotFoundModal(itemName) {
+        document.getElementById('itemNotFoundMessage').textContent = `The item "${itemName}" does not exist in the inventory. Please check the item name and try again.`;
+        document.getElementById('itemNotFoundModal').classList.remove('hidden');
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
         console.log('DOM Content Loaded');
         // Set default request date to today
@@ -564,24 +599,31 @@
                 return;
             }
 
-            if (selectedItemData && selectedItemData.quantity < itemQuantity) {
-                showInsufficientStockModal(itemName, selectedItemData.quantity, itemQuantity, selectedItemData.unit);
+            // Check if we have selected item data
+            if (!selectedItemData) {
+                showItemNotFoundModal(itemName);
+                return;
             }
 
-            const totalPrice = selectedItemData ? calculateTotalPrice(itemQuantity, selectedItemData.price) : 'N/A';
+            if (selectedItemData.quantity < itemQuantity) {
+                showInsufficientStockModal(itemName, selectedItemData.quantity, itemQuantity, selectedItemData.unit);
+                return;
+            }
+
+            const totalPrice = calculateTotalPrice(itemQuantity, selectedItemData.price);
 
             const newRow = document.createElement('tr');
             newRow.setAttribute('data-name', itemName);
             newRow.setAttribute('data-quantity', itemQuantity);
-            newRow.setAttribute('data-unit', selectedItemData ? selectedItemData.unit : 'N/A');
-            newRow.setAttribute('data-unit-price', selectedItemData ? selectedItemData.price : 'N/A');
+            newRow.setAttribute('data-unit', selectedItemData.unit);
+            newRow.setAttribute('data-unit-price', selectedItemData.price);
             
             newRow.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemName}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${selectedItemData ? selectedItemData.unit : 'N/A'}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${selectedItemData ? formatPrice(selectedItemData.price) : 'N/A'}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${selectedItemData.unit}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatPrice(selectedItemData.price)}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemQuantity}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${selectedItemData ? formatPrice(totalPrice) : 'N/A'}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatPrice(totalPrice)}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                     <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -647,6 +689,13 @@
             if (!itemNameInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
                 suggestionsContainer.classList.add('hidden');
             }
+        });
+
+        // Add event listeners for the new modal's close buttons
+        document.getElementById('itemNotFoundModal').querySelectorAll('.item-not-found-close-button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.getElementById('itemNotFoundModal').classList.add('hidden');
+            });
         });
     });
 </script>
