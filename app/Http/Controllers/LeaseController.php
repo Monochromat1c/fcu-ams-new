@@ -24,6 +24,8 @@ class LeaseController extends Controller
                     ->orWhere('leases.lease_date', 'like', '%' . $search . '%')
                     ->orWhere('leases.lease_expiration', 'like', '%' . $search . '%')
                     ->orWhere('leases.customer', 'like', '%' . $search . '%')
+                    ->orWhere('leases.contact_number', 'like', '%' . $search . '%')
+                    ->orWhere('leases.email', 'like', '%' . $search . '%')
                     ->orWhereHas('assets', function ($q) use ($search) {
                         $q->where('assets.asset_tag_id', 'like', '%' . $search . '%');
                     });
@@ -67,10 +69,22 @@ class LeaseController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'lease_date' => 'required|date',
+            'lease_expiration' => 'required|date|after:lease_date',
+            'customer' => 'required|string|max:255',
+            'contact_number' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'note' => 'nullable|string',
+            'selected_assets' => 'required|array|min:1',
+        ]);
+
         $lease = new Lease();
         $lease->lease_date = $request->input('lease_date');
         $lease->lease_expiration = $request->input('lease_expiration');
         $lease->customer = $request->input('customer');
+        $lease->contact_number = $request->input('contact_number');
+        $lease->email = $request->input('email');
         $lease->note = $request->input('note') ?? null;
         $lease->save();
 

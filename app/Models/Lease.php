@@ -13,6 +13,8 @@ class Lease extends Model
         'lease_date',
         'lease_expiration',
         'customer',
+        'contact_number',
+        'email',
         'note',
     ];
 

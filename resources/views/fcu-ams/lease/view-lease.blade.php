@@ -32,6 +32,14 @@
                         <p class="text-lg font-medium text-gray-900">{{ $lease->customer }}</p>
                     </div>
                     <div>
+                        <p class="text-sm text-gray-600">Contact Number</p>
+                        <p class="text-lg font-medium text-gray-900">{{ $lease->contact_number }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600">Email</p>
+                        <p class="text-lg font-medium text-gray-900">{{ $lease->email }}</p>
+                    </div>
+                    <div>
                         <p class="text-sm text-gray-600">Lease Date</p>
                         <p class="text-lg font-medium text-gray-900">{{ \Carbon\Carbon::parse($lease->lease_date)->format('M d, Y') }}</p>
                     </div>

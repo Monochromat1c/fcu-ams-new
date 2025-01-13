@@ -150,8 +150,30 @@
                         class="w-full p-2 border rounded-md" required>
                 </div>
                 <div class="mb-4">
-                    <label for="customer" class="block text-gray-700 font-bold mb-2">Customer:</label>
-                    <input type="text" id="customer" name="customer" class="w-full p-2 border rounded-md" required>
+                    <label for="customer" class="block text-gray-700 text-sm font-bold mb-2">Customer Name</label>
+                    <input type="text" name="customer" id="customer" value="{{ old('customer') }}" required
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('customer') border-red-500 @enderror">
+                    @error('customer')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="contact_number" class="block text-gray-700 text-sm font-bold mb-2">Contact Number</label>
+                    <input type="text" name="contact_number" id="contact_number" value="{{ old('contact_number') }}" required
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('contact_number') border-red-500 @enderror">
+                    @error('contact_number')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 text-sm font-bold mb-2">Email Address</label>
+                    <input type="email" name="email" id="email" value="{{ old('email') }}" required
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('email') border-red-500 @enderror">
+                    @error('email')
+                        <p class="text-red-500 text-xs italic">{{ $message }}</p>
+                    @enderror
                 </div>
                 <div class="mb-4">
                     <label for="note" class="block text-gray-700 font-bold mb-2">Note:</label>
