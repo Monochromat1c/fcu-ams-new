@@ -631,6 +631,14 @@
     }
 
     function showItemNotFoundModal(itemName) {
+        // Get the values from the add item form
+        const itemNameInput = document.getElementById('new_item_name').value;
+        const quantityInput = document.getElementById('new_item_quantity').value;
+
+        // Set the values in the Item Not Found modal
+        document.getElementById('items_specs_not_found').value = itemNameInput;
+        document.getElementById('quantity_not_found').value = quantityInput;
+
         document.getElementById('itemNotFoundMessage').textContent = `The item you requested is not in the inventory. Please provide more details for approval.`;
         document.getElementById('itemNotFoundModal').classList.remove('hidden');
     }
