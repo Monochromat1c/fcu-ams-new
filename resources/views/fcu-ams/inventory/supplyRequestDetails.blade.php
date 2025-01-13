@@ -141,12 +141,23 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $request->item_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="px-3 py-1 text-xs font-medium rounded-full
-                                        {{ $request->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                        ($request->status === 'approved' ? 'bg-green-100 text-green-800' : 
-                                        'bg-red-100 text-red-800') }}">
-                                        {{ ucfirst($request->status) }}
-                                    </span>
+                                    @if($request->status === 'approved')
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                            Approved
+                                        </span>
+                                    @elseif($request->status === 'rejected')
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                                            Rejected
+                                        </span>
+                                    @else
+                                        @php
+                                            $inventory = $request->inventory_id ? \App\Models\Inventory::find($request->inventory_id) : null;
+                                            $isPreOrder = $inventory && $inventory->quantity == 0;
+                                        @endphp
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                                            {{ $isPreOrder ? 'Pending (Pre-Order)' : 'Pending' }}
+                                        </span>
+                                    @endif
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $request->quantity }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $request->unit_name }}</td>
