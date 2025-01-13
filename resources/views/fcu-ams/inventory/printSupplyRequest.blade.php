@@ -69,8 +69,20 @@
                             @endif
                         @endif
                     </td>
-                    <td class="border-b px-6 py-4 text-right">₱{{ number_format($request->unit_price ?? 0, 2) }}</td>
-                    <td class="border-b px-6 py-4 text-right">₱{{ number_format($request->total_price ?? 0, 2) }}</td>
+                    <td class="border-b px-6 py-4 text-right">
+                        @if($request->inventory_id)
+                            ₱{{ number_format($request->inventory->unit_price ?? 0, 2) }}
+                        @else
+                            ₱{{ number_format($request->estimated_unit_price ?? 0, 2) }}
+                        @endif
+                    </td>
+                    <td class="border-b px-6 py-4 text-right">
+                        @if($request->inventory_id)
+                            ₱{{ number_format(($request->inventory->unit_price ?? 0) * $request->quantity, 2) }}
+                        @else
+                            ₱{{ number_format(($request->estimated_unit_price ?? 0) * $request->quantity, 2) }}
+                        @endif
+                    </td>
                 </tr>
             @endforeach
         </tbody>

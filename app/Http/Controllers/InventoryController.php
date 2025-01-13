@@ -655,7 +655,7 @@ class InventoryController extends Controller
             abort(403, 'Unauthorized action.');
         }
 
-        $requests = SupplyRequest::with(['department'])
+        $requests = SupplyRequest::with(['department', 'inventory'])
             ->where('request_group_id', $request_group_id)
             ->get();
 
@@ -667,17 +667,16 @@ class InventoryController extends Controller
         $totalPrice = 0;
         
         foreach ($requests as $request) {
-            $inventory = \DB::table('inventories')
-                ->join('brands', 'inventories.brand_id', '=', 'brands.id')
-                ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $request->item_name)
-                ->select('inventories.unit_price')
-                ->first();
-
-            if ($inventory) {
-                $request->unit_price = $inventory->unit_price;
-                $request->total_price = $inventory->unit_price * $request->quantity;
-                $totalPrice += $request->total_price;
+            if ($request->inventory_id) {
+                // For inventory items
+                $request->unit_price = $request->inventory->unit_price;
+                $request->total_price = $request->inventory->unit_price * $request->quantity;
+            } else {
+                // For non-inventory items
+                $request->unit_price = $request->estimated_unit_price;
+                $request->total_price = $request->estimated_unit_price * $request->quantity;
             }
+            $totalPrice += $request->total_price;
         }
 
         return view('fcu-ams.inventory.printSupplyRequest', compact('requests', 'totalItems', 'totalPrice'));
