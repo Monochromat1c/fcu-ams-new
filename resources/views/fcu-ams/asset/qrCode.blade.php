@@ -13,6 +13,8 @@
     @media print {
         body {
             background-color: white;
+            margin: 0;
+            padding: 0;
         }
 
         .no-print {
@@ -20,12 +22,40 @@
         }
 
         @page {
-            size: auto;
-            margin: 0mm;
+            size: 90mm 120mm;  /* Standard card size */
+            margin: 0;
+        }
+
+        .min-h-screen {
+            min-height: auto !important;
+            padding: 0 !important;
+        }
+
+        .bg-white {
+            padding: 15px !important;
+            max-width: none !important;
+            width: 100% !important;
+            margin: 0 !important;
         }
 
         .shadow-lg {
-            box-shadow: none;
+            box-shadow: none !important;
+        }
+
+        .space-y-6 {
+            margin: 0 !important;
+        }
+
+        .text-2xl {
+            font-size: 1.2rem !important;
+        }
+
+        .text-xl {
+            font-size: 1rem !important;
+        }
+
+        .text-lg {
+            font-size: 0.9rem !important;
         }
     }
 </style>
