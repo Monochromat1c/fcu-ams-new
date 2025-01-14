@@ -186,25 +186,50 @@
                 <canvas id="inventoryValueDistributionChart"></canvas>
                 <div id="inventoryValueLegend" class="mt-4"></div>
             </div>
-            <div class="chart-container md:col-span-4">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="text-lg font-semibold text-gray-800">Monthly Asset Acquisition</h3>
-                    <form method="GET" action="{{ route('dashboard') }}" class="flex items-center">
-                        <label for="yearFilter" class="mr-2 text-gray-600">Year:</label>
-                        <select name="year" id="yearFilter" 
-                            class="form-select border rounded-md px-3 py-1.5 text-gray-700 bg-white hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            onchange="this.form.submit()">
-                            @foreach($availableYears as $year)
-                                <option value="{{ $year }}"
-                                    {{ $selectedYear == $year ? 'selected' : '' }}>
-                                    {{ $year }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </form>
+            <!-- RECENT REQUESTS -->
+            <div class="md:col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
+                <div class="px-4 sm:px-6 py-4 bg-gray-50 border-b border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
+                    <h3 class="text-lg sm:text-xl font-bold text-gray-800 tracking-tight">Recent Requests</h3>
+                    <a href="{{ route('requests.index') }}" class="text-blue-600 hover:text-blue-800 text-sm">View All Requests</a>
                 </div>
-                <canvas id="assetAcquisitionChart" class=""></canvas>
+                <div class="divide-y divide-gray-100">
+                    @forelse($recentRequests as $request)
+                        <a href="{{ route('inventory.supply-request.details', $request->request_group_id) }}" class="block">
+                            <div class="px-4 sm:px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex-1">
+                                        <p class="text-sm font-medium text-gray-900">
+                                            {{ $request->requester }}
+                                            <span class="text-xs text-gray-500">
+                                                ({{ $request->department->department }})
+                                            </span>
+                                        </p>
+                                        <p class="text-sm text-gray-500">
+                                            Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
+                                        </p>
+                                        <p class="text-xs text-gray-400">
+                                            {{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <span class="px-3 py-1 text-xs font-medium rounded-full
+                                            {{ $request->status === 'pending' ? 'bg-yellow-100 px-5 py-[.50rem] text-yellow-800' : 
+                                               ($request->status === 'approved' ? 'bg-green-100 px-5 py-[.50rem] text-green-800' : 
+                                               'bg-red-100 px-5 py-[.50rem] text-red-800') }}">
+                                            {{ ucfirst($request->status) }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    @empty
+                        <div class="px-4 sm:px-6 py-4">
+                            <p class="text-sm text-gray-500">No recent requests</p>
+                        </div>
+                    @endforelse
+                </div>
             </div>
+            <!-- RECENT ACTIONS -->
             <div class="md:col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
                 <div class="px-4 sm:px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
                     <h3 class="text-lg sm:text-xl font-bold text-gray-800 tracking-tight">Recent Actions</h3>
@@ -269,47 +294,25 @@
                     @endforeach
                 </div>
             </div>
-            <div class="md:col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-                <div class="px-4 sm:px-6 py-4 bg-gray-50 border-b border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
-                    <h3 class="text-lg sm:text-xl font-bold text-gray-800 tracking-tight">Recent Requests</h3>
-                    <a href="{{ route('requests.index') }}" class="text-blue-600 hover:text-blue-800 text-sm">View All Requests</a>
+            <!-- MONTHLY ASSET ACQUISITION -->
+            <div class="chart-container md:col-span-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-800">Monthly Asset Acquisition</h3>
+                    <form method="GET" action="{{ route('dashboard') }}" class="flex items-center">
+                        <label for="yearFilter" class="mr-2 text-gray-600">Year:</label>
+                        <select name="year" id="yearFilter" 
+                            class="form-select border rounded-md px-3 py-1.5 text-gray-700 bg-white hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                            onchange="this.form.submit()">
+                            @foreach($availableYears as $year)
+                                <option value="{{ $year }}"
+                                    {{ $selectedYear == $year ? 'selected' : '' }}>
+                                    {{ $year }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </form>
                 </div>
-                <div class="divide-y divide-gray-100">
-                    @forelse($recentRequests as $request)
-                        <a href="{{ route('inventory.supply-request.details', $request->request_group_id) }}" class="block">
-                            <div class="px-4 sm:px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex-1">
-                                        <p class="text-sm font-medium text-gray-900">
-                                            {{ $request->requester }}
-                                            <span class="text-xs text-gray-500">
-                                                ({{ $request->department->department }})
-                                            </span>
-                                        </p>
-                                        <p class="text-sm text-gray-500">
-                                            Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
-                                        </p>
-                                        <p class="text-xs text-gray-400">
-                                            {{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <span class="px-3 py-1 text-xs font-medium rounded-full
-                                            {{ $request->status === 'pending' ? 'bg-yellow-100 px-5 py-[.50rem] text-yellow-800' : 
-                                               ($request->status === 'approved' ? 'bg-green-100 px-5 py-[.50rem] text-green-800' : 
-                                               'bg-red-100 px-5 py-[.50rem] text-red-800') }}">
-                                            {{ ucfirst($request->status) }}
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    @empty
-                        <div class="px-4 sm:px-6 py-4">
-                            <p class="text-sm text-gray-500">No recent requests</p>
-                        </div>
-                    @endforelse
-                </div>
+                <canvas id="assetAcquisitionChart" class=""></canvas>
             </div>
         </div>
     </div>
