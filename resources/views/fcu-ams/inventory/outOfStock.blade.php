@@ -6,7 +6,7 @@
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-200 col-span-5">
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
-            <a href="" onclick="window.history.back(); return false;"
+            <a href="{{ route('inventory.list') }}"
                 class="mr-4 hover:bg-gray-100 my-auto p-2 rounded-full transition">
                 <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
@@ -111,7 +111,7 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($outOfStock as $inventory)
+                            @foreach($outOfStockItems as $inventory)
                                 <tr class="hover:bg-gray-50 transition duration-200 ease-in-out">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                         {{ $inventory->unique_tag }}
@@ -145,6 +145,44 @@
                             @endforeach
                         </tbody>
                     </table>
+                </div>
+                <!-- Pagination Controls -->
+                <div class="mt-4 flex items-center justify-between px-4 mb-3">
+                    <div class="flex items-center gap-2">
+                        <a href="{{ $outOfStockItems->url(1) }}" class="p-2 inline-flex items-center justify-center rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="{{ $outOfStockItems->previousPageUrl() }}" class="p-2 inline-flex items-center justify-center rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M12.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L8.414 10l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <div class="text-sm text-gray-700">
+                        <span>Showing</span>
+                        <span class="font-medium">{{ $outOfStockItems->firstItem() }}</span>
+                        <span>to</span>
+                        <span class="font-medium">{{ $outOfStockItems->lastItem() }}</span>
+                        <span>of</span>
+                        <span class="font-medium">{{ $outOfStockItems->total() }}</span>
+                        <span>results</span>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <a href="{{ $outOfStockItems->nextPageUrl() }}" class="p-2 inline-flex items-center justify-center rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M7.293 15.707a1 1 0 001.414 0l5-5a1 1 0 000-1.414l-5-5a1 1 0 00-1.414 1.414L10.586 10l-4.293 4.293a1 1 0 000 1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                        <a href="{{ $outOfStockItems->url($outOfStockItems->lastPage()) }}" class="p-2 inline-flex items-center justify-center rounded-md border border-gray-300 bg-white text-gray-700 hover:bg-gray-50">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 001.414 0l5-5a1 1 0 000-1.414l-5-5a1 1 0 00-1.414 1.414L8.586 10l-4.293 4.293a1 1 0 000 1.414zm6 0a1 1 0 001.414 0l5-5a1 1 0 000-1.414l-5-5a1 1 0 00-1.414 1.414L14.586 10l-4.293 4.293a1 1 0 000 1.414z" clip-rule="evenodd" />
+                            </svg>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

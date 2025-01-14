@@ -123,25 +123,25 @@ class InventoryController extends Controller
 
     public function lowStock(Request $request)
     {
-        $lowStock = Inventory::with(['unit', 'supplier'])
+        $lowStockItems = Inventory::whereNull('deleted_at')
             ->where('quantity', '>=', 1)
             ->where('quantity', '<', 20)
-            ->whereNull('deleted_at')
-            ->orderBy('unique_tag', 'asc')
-            ->get();
+            ->with(['supplier', 'unit', 'brand'])
+            ->orderBy('quantity', 'asc')
+            ->paginate(10);
 
-        return view('fcu-ams/inventory/lowStock', compact('lowStock'));
+        return view('fcu-ams/inventory/lowStock', compact('lowStockItems'));
     }
 
     public function outOfStock(Request $request)
     {
-        $outOfStock = Inventory::with(['unit', 'supplier'])
+        $outOfStockItems = Inventory::whereNull('deleted_at')
             ->where('quantity', '=', 0)
-            ->whereNull('deleted_at')
+            ->with(['supplier', 'unit', 'brand'])
             ->orderBy('unique_tag', 'asc')
-            ->get();
+            ->paginate(10);
 
-        return view('fcu-ams/inventory/outOfStock', compact('outOfStock'));
+        return view('fcu-ams/inventory/outOfStock', compact('outOfStockItems'));
     }
 
     public function show($id)
