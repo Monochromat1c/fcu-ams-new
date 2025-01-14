@@ -11,13 +11,35 @@
             padding: 20px;
         }
         .header {
-            text-align: center;
+            width: 100%;
             margin-bottom: 30px;
+            position: relative;
+            min-height: 100px;
+            text-align: center;  /* Center all content */
+        }
+        .header-content {
+            display: inline-block;
+            width: 70%;
+            padding-top: 20px;  /* Add some top padding to align with logo */
         }
         .report-title {
-            font-size: 12pt;
+            font-size: 16pt;  /* Increased font size */
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .report-info {
+            font-size: 12pt;
+            line-height: 1.5;  /* Add some line spacing */
+        }
+        .report-info p {
+            margin: 5px 0;  /* Adjust paragraph spacing */
+        }
+        .logo {
+            position: absolute;
+            top: 6;  /* Center vertically */
+            right: 0;
+            width: 100px;
+            height: auto;
         }
         .report-info {
             font-size: 14px;
@@ -60,11 +82,14 @@
 </head>
 <body>
     <div class="header">
-        <div class="report-title">Assigned Assets Report</div>
-        <div class="report-info">
-            <p>Assignee: {{ $assignee }}</p>
-            <p>Report Generated: {{ $currentDate }}</p>
+        <div class="header-content">
+            <div class="report-title">Assigned Assets Report</div>
+            <div class="report-info">
+                <p>Assignee: {{ $assignee }}</p>
+                <p>Report Generated: {{ $currentDate }}</p>
+            </div>
         </div>
+        <img src="{{ public_path('img/login/fcu-icon.png') }}" alt="FCU Icon" class="logo">
     </div>
 
     <table>

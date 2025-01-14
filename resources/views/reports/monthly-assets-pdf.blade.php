@@ -22,6 +22,38 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
+        .header {
+            width: 100%;
+            margin-bottom: 30px;
+            position: relative;
+            min-height: 100px;
+            text-align: center;
+        }
+        .header-content {
+            display: inline-block;
+            width: 70%;
+            padding-top: 20px;
+        }
+        .report-title {
+            font-size: 16pt;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        .report-info {
+            font-size: 12pt;
+            line-height: 1.5;
+        }
+        .report-info p {
+            margin: 5px 0;
+        }
+        .logo {
+            position: absolute;
+            top: 6;
+            right: 0;
+            width: 100px;
+            height: auto;
+        }
+
         img {
             max-width: 100%;
             height: auto;
@@ -147,11 +179,16 @@
 </head>
 <body>
     <div class="monthly-assets-report">
-        <div class="text-center">
-            <h2>FILAMER CHRISTIAN UNIVERSITY, INC</h2>
-            <h3>Roxas Avenue, Roxas City</h3>
-            <h4>COMPREHENSIVE ASSETS INVENTORY REPORT</h4>
-            <h4>{{ $startDate }} to {{ $endDate }}</h4>
+        <div class="header">
+            <div class="header-content">
+                <div class="report-title">FILAMER CHRISTIAN UNIVERSITY, INC</div>
+                <div class="report-info">
+                    <p>Roxas Avenue, Roxas City</p>
+                    <p>Monthly Assets Report</p>
+                    <h4>{{ $startDate }} to {{ $endDate }}</h4>
+                </div>
+            </div>
+            <img src="{{ public_path('img/login/fcu-icon.png') }}" alt="FCU Icon" class="logo">
         </div>
 
         <table>
