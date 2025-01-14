@@ -23,6 +23,7 @@ use Illuminate\Validation\Rule;
 use App\Models\Brand;
 use App\Models\Unit;
 use Carbon\Carbon;
+use App\Models\SupplyRequest;
 use App\Services\ReportPrintService;
 
 class ReportController extends Controller
@@ -175,11 +176,35 @@ class ReportController extends Controller
             ['path' => $request->url(), 'query' => array_merge($request->query(), ['po_page' => $request->input('po_page', 1)])]
         );
 
+        // For supply requests
+        $supplyRequestStartDate = $request->input('supply_request_start_date', now()->startOfMonth()->toDateString());
+        $supplyRequestEndDate = $request->input('supply_request_end_date', now()->endOfMonth()->toDateString());
+
+        $supplyRequestStartDate = Carbon::parse($supplyRequestStartDate)->startOfDay();
+        $supplyRequestEndDate = Carbon::parse($supplyRequestEndDate)->endOfDay();
+
+        // Get approved supply requests
+        $approvedRequests = SupplyRequest::with('department')
+            ->select(
+                'request_group_id',
+                'department_id',
+                'request_date',
+                'requester',
+                DB::raw('COUNT(*) as total_items')
+            )
+            ->where('status', 'approved')
+            ->whereBetween('request_date', [$supplyRequestStartDate, $supplyRequestEndDate])
+            ->groupBy('request_group_id', 'department_id', 'request_date', 'requester')
+            ->orderBy('request_date', 'desc')
+            ->paginate(10, ['*'], 'supply_request_page');
+
+        $supplyRequestDateRangeDisplay = $supplyRequestStartDate->format('M d, Y') . ' - ' . $supplyRequestEndDate->format('M d, Y');
+
         return view('fcu-ams/reports/reports', array_merge(
             compact('stockOutRecords', 'assets', 'purchaseOrders', 'inventoriesForPrint',
                 'assetsDateRangeDisplay', 'poDateRangeDisplay', 'stockOutDateRangeDisplay',
                 'assignedAssets', 'assigneeQuery', 'chartLabels', 'chartData',
-                'departmentChartLabels', 'departmentChartData', 'trendLabels', 'trendData'),
+                'departmentChartLabels', 'departmentChartData', 'trendLabels', 'trendData', 'approvedRequests', 'supplyRequestDateRangeDisplay'),
             [
                 'inventories' => $inventories,
                 'startDate' => $startDate->toDateString(),
@@ -191,7 +216,10 @@ class ReportController extends Controller
                 'poDateRangeDisplay' => $poDateRangeDisplay,
                 'stockOutStartDate' => $stockOutStartDate->toDateString(),
                 'stockOutEndDate' => $stockOutEndDate->toDateString(),
-                'stockOutDateRangeDisplay' => $stockOutDateRangeDisplay
+                'stockOutDateRangeDisplay' => $stockOutDateRangeDisplay,
+                'supplyRequestStartDate' => $supplyRequestStartDate->toDateString(),
+                'supplyRequestEndDate' => $supplyRequestEndDate->toDateString(),
+                'supplyRequestDateRangeDisplay' => $supplyRequestDateRangeDisplay
             ]
         ));
     }

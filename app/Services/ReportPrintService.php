@@ -23,7 +23,7 @@ class ReportPrintService
             'totalValue' => $totalValue
         ]);
 
-        $fileName = "supplier_report_" . $startDate->format('Y-m-d') . "_to_" . $endDate->format('Y-m-d') . ".pdf";
+        $fileName = "inventory_report_" . $startDate->format('Y-m-d') . "_to_" . $endDate->format('Y-m-d') . ".pdf";
         return $pdf->download($fileName);
     }
 
