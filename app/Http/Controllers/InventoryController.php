@@ -687,6 +687,15 @@ class InventoryController extends Controller
         DB::beginTransaction();
         try {
             foreach ($requests as $request) {
+                // If the request was approved, return the quantity back to inventory
+                if ($request->status === 'approved' && $request->inventory_id) {
+                    $inventory = Inventory::find($request->inventory_id);
+                    if ($inventory) {
+                        $inventory->quantity += $request->quantity;
+                        $inventory->save();
+                    }
+                }
+                
                 $request->status = 'cancelled';
                 $request->save();
             }
