@@ -470,9 +470,16 @@ class InventoryController extends Controller
             return $request->status === 'approved';
         });
 
+        // Check if any item is rejected
+        $anyRejected = $requests->contains(function($request) {
+            return $request->status === 'rejected';
+        });
+
         // Update the overall status
         if ($allApproved) {
             $overallStatus = 'approved';
+        } elseif ($anyRejected) {
+            $overallStatus = 'rejected';
         } else {
             $overallStatus = 'pending';
         }
