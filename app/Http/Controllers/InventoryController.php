@@ -782,6 +782,13 @@ class InventoryController extends Controller
             ->selectRaw('COUNT(*) as items_count')
             ->where('requester', $user->first_name . ' ' . $user->last_name)
             ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'notes')
+            ->orderByRaw("CASE 
+                WHEN status = 'pending' THEN 1
+                WHEN status = 'partially_approved' THEN 2
+                WHEN status = 'approved' THEN 3
+                WHEN status = 'rejected' THEN 4
+                WHEN status = 'cancelled' THEN 5
+                ELSE 6 END")
             ->orderBy('request_date', 'desc')
             ->get();
 

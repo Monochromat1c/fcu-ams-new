@@ -36,7 +36,8 @@
                     <div class="p-4 rounded-lg border-l-4 flex items-start gap-4 {{ 
                         $notification->status === 'approved' ? 'border-green-500 bg-green-50' : 
                         ($notification->status === 'rejected' ? 'border-red-500 bg-red-50' : 
-                        'border-yellow-500 bg-yellow-50') 
+                        ($notification->status === 'cancelled' ? 'border-gray-500 bg-gray-50' : 
+                        'border-yellow-500 bg-yellow-50')) 
                     }}">
                         <!-- Status Icon -->
                         <div class="flex-shrink-0">
@@ -47,6 +48,10 @@
                             @elseif($notification->status === 'rejected')
                                 <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                            @elseif($notification->status === 'cancelled')
+                                <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
                             @else
                                 <svg class="h-6 w-6 text-yellow-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -62,12 +67,15 @@
                                     <p class="text-sm font-medium {{ 
                                         $notification->status === 'approved' ? 'text-green-800' : 
                                         ($notification->status === 'rejected' ? 'text-red-800' : 
-                                        'text-yellow-800') 
+                                        ($notification->status === 'cancelled' ? 'text-gray-800' : 
+                                        'text-yellow-800')) 
                                     }}">
                                         @if($notification->status === 'approved')
                                             Your request #{{ $notification->request_group_id }} has been approved
                                         @elseif($notification->status === 'rejected')
                                             Your request #{{ $notification->request_group_id }} has been rejected
+                                        @elseif($notification->status === 'cancelled')
+                                            Your request #{{ $notification->request_group_id }} has been cancelled
                                         @else
                                             Your request #{{ $notification->request_group_id }} is pending approval
                                         @endif
