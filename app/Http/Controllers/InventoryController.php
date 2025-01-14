@@ -775,21 +775,35 @@ class InventoryController extends Controller
     {
         $user = auth()->user();
         $notifications = SupplyRequest::with('inventory')
-            ->select('request_group_id', 'requester', 'status', 'created_at', 'notes')
+            ->select('request_group_id', 'requester', 'created_at', 'notes')
+            ->selectRaw('GROUP_CONCAT(DISTINCT status) as statuses')
             ->selectRaw('COUNT(*) as items_count')
             ->where('requester', $user->first_name . ' ' . $user->last_name)
-            ->groupBy('request_group_id', 'requester', 'status', 'notes', 'created_at')
-            ->orderByRaw("CASE 
-                WHEN status = 'pending' THEN 1
-                WHEN status = 'partially_approved' THEN 2
-                WHEN status = 'approved' THEN 3
-                WHEN status = 'rejected' THEN 4
-                WHEN status = 'cancelled' THEN 5
-                ELSE 6 END")
+            ->groupBy('request_group_id', 'requester', 'notes', 'created_at')
             ->orderBy('created_at', 'desc')
-            ->get();
-
+            ->get()
+            ->map(function ($notification) {
+                $notification->statuses = explode(',', $notification->statuses);
+                $notification->primary_status = $this->determinePrimaryStatus($notification->statuses);
+                return $notification;
+            });
+    
         return view('fcu-ams.request.notifications', compact('notifications'));
+    }
+    
+    private function determinePrimaryStatus($statuses)
+    {
+        $statusPriority = [
+            'pending' => 1,
+            'partially_approved' => 2,
+            'approved' => 3,
+            'rejected' => 4,
+            'cancelled' => 5
+        ];
+    
+        return collect($statuses)->sort(function ($a, $b) use ($statusPriority) {
+            return ($statusPriority[$a] ?? 6) - ($statusPriority[$b] ?? 6);
+        })->first();
     }
 
     public function searchItems(Request $request)
