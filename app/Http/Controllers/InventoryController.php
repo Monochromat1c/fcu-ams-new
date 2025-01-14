@@ -753,7 +753,6 @@ class InventoryController extends Controller
         $requests = SupplyRequest::select(
                 'request_group_id', 
                 'requester', 
-                'status', 
                 'request_date', 
                 'department_id',
                 DB::raw('COUNT(*) as items_count'),
@@ -766,7 +765,7 @@ class InventoryController extends Controller
                     ELSE 5 END as status_priority')
             )
             ->where('requester', $user->first_name . ' ' . $user->last_name)
-            ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'department_id')
+            ->groupBy('request_group_id', 'requester', 'request_date', 'department_id')
             ->with('department')
             ->orderBy('status_priority', 'asc')
             ->orderBy('request_date', 'desc')
