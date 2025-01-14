@@ -26,9 +26,16 @@ class RequestController extends Controller
                 'request_date',
                 'requester',
                 DB::raw('COUNT(*) as total_items'),
-                DB::raw('MAX(status) as group_status') // Get the overall status for the group
+                DB::raw('MAX(status) as group_status'), // Get the overall status for the group
+                DB::raw('CASE 
+                    WHEN MAX(status) = "pending" THEN 1
+                    WHEN MAX(status) = "partially_approved" THEN 2
+                    WHEN MAX(status) = "approved" THEN 3
+                    WHEN MAX(status) = "rejected" THEN 4
+                    ELSE 5 END as status_priority')
             )
             ->groupBy('request_group_id', 'department_id', 'request_date', 'requester')
+            ->orderBy('status_priority', 'asc')
             ->orderBy('request_date', 'desc')
             ->paginate(10);
 
