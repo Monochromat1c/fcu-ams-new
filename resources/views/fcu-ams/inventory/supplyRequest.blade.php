@@ -105,6 +105,9 @@
                                         <button type="button" id="add-item-button" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
                                             Add Item
                                         </button>
+                                        <button type="button" id="request-new-item-button" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-150 ease-in-out">
+                                            Request New Item
+                                        </button>
                                     </div>
                                     
                                     <!-- Added Items Table -->
@@ -612,11 +615,12 @@
         const itemNameInput = document.getElementById('new_item_name').value;
         const quantityInput = document.getElementById('new_item_quantity').value;
 
-        // Set the values in the Item Not Found modal
+        // Set the values in the item not found modal
         document.getElementById('items_specs_not_found').value = itemNameInput;
         document.getElementById('quantity_not_found').value = quantityInput;
+        document.getElementById('itemNotFoundMessage').textContent = `The item "${itemNameInput}" was not found in the inventory. Please provide additional details to request this item.`;
 
-        document.getElementById('itemNotFoundMessage').textContent = `The item you requested is not in the inventory. Please provide more details for approval.`;
+        // Show the modal
         document.getElementById('itemNotFoundModal').classList.remove('hidden');
     }
 
@@ -834,6 +838,25 @@
             document.getElementById('new_item_name').focus();
             
             rowCounter++;
+        });
+
+        const requestNewItemButton = document.getElementById('request-new-item-button');
+        requestNewItemButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            const itemName = document.getElementById('new_item_name').value.trim();
+            const itemQuantity = document.getElementById('new_item_quantity').value;
+        
+            // Set default values if empty
+            if (itemName) {
+                document.getElementById('item_name_not_found').value = itemName;
+            }
+            if (itemQuantity) {
+                document.getElementById('quantity_not_found').value = itemQuantity;
+            }
+        
+            // Show the modal directly
+            document.getElementById('itemNotFoundModal').classList.remove('hidden');
+            document.getElementById('itemNotFoundMessage').textContent = 'Please provide the details for the new item you want to request.';
         });
 
         // Add event listener for opening the modal

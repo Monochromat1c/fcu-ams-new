@@ -15,7 +15,7 @@
             margin-bottom: 30px;
         }
         .report-title {
-            font-size: 24px;
+            font-size: 12pt;
             font-weight: bold;
             margin-bottom: 10px;
         }
@@ -32,7 +32,7 @@
             border: 1px solid #ddd;
             padding: 6px 8px;
             text-align: left;
-            font-size: 11px;
+            font-size: 12pt;
             vertical-align: top;
         }
         th {
@@ -44,11 +44,11 @@
         }
         .summary {
             margin-top: 20px;
-            font-size: 14px;
+            font-size: 12pt;
         }
         .footer {
             margin-top: 30px;
-            font-size: 12px;
+            font-size: 12pt;
             text-align: center;
             color: #666;
         }

@@ -24,6 +24,10 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
 
+        h1 {
+            fontsize: 12pt;
+        }
+
         img {
             max-width: 100%;
             height: auto;
@@ -59,14 +63,14 @@
         h2 {
             color: #2c3e50;
             letter-spacing: 1px;
-            font-size: 1.5rem;
+            font-size: 12pt;
             font-weight: bold;
         }
 
         h3,
         h4 {
             color: #7f8c8d;
-            font-size: 1.25rem;
+            font-size: 16px;
         }
 
         /* Table Styling */
@@ -112,7 +116,7 @@
             padding: 1rem;
             border-radius: 4px;
             text-align: right;
-            font-size: 1.1rem;
+            font-size: 12pt;
             color: #2980b9;
             margin-top: 1rem;
             font-weight: bold;
