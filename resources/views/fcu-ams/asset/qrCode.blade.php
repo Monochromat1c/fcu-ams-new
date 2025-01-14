@@ -31,44 +31,75 @@
             padding: 0 !important;
         }
 
-        .bg-white {
-            padding: 10px !important;
-            max-width: 300px !important;  
-            width: 300px !important;      
-            margin: 20px !important;      
-            transform: scale(0.8);        
-            transform-origin: top left;   
+        .qr-code-container {
+            border: 1px solid black;
+            margin-top: 10px !important;
+            padding: 8px !important;
+            max-width: 180px !important;
+            width: 180px !important;
+            box-shadow: none !important;
+            margin: 10px auto !important;
+            transform: scale(0.7);
+            transform-origin: center;
+        }
+
+        .text-center {
+            text-align: center !important;
+        }
+
+        .flex.justify-center {
+            justify-content: center !important;
+            padding: 0 !important;
+        }
+
+        .space-y-6 > * {
+            margin-top: 0.25rem !important;
+            margin-bottom: 0.25rem !important;
+        }
+
+        .space-y-2 > * {
+            margin-top: 0.15rem !important;
+            margin-bottom: 0.15rem !important;
         }
 
         .text-2xl {
-            font-size: 1.2rem !important;
+            font-size: 1rem !important;
+            line-height: 1.2 !important;
+        }
+
+        .text-sm {
+            font-size: 0.7rem !important;
+        }
+
+        .text-xs {
+            font-size: 0.65rem !important;
         }
 
         .text-xl {
-            font-size: 1rem !important;
+            font-size: 0.9rem !important;
         }
 
         .text-lg {
-            font-size: 0.9rem !important;
+            font-size: 0.8rem !important;
         }
     }
 </style>
 
 <div class="min-h-screen flex items-center justify-center bg-slate-100 p-4">
-    <div class="bg-white rounded-xl p-8 max-w-lg w-full shadow-lg transform transition-all duration-300 hover:shadow-xl">
+    <div class="qr-code-container bg-white rounded-xl p-8 max-w-lg w-full shadow-none transform transition-all duration-300 hover:shadow-none">
         <div class="text-center space-y-6">
             <div class="space-y-2">
-                <h2 class="text-2xl font-bold text-gray-800 tracking-tight">FILAMER CHRISTIAN UNIVERSITY INC.</h2>
-                <p class="text-gray-500 text-sm">Asset Management System</p>
+                <h2 class="text-2xl font-bold text-gray-800 tracking-tight">FILAMER CHRISTIAN UNIVERSITY, INC.</h2>
+                <p class="text-sm text-gray-500">Asset Management System</p>
             </div>
             
-            <div class="flex justify-center p-4 bg-white rounded-lg">
+            <div class="flex justify-center p-0 qr-code bg-white rounded-lg">
                 {{ $qrCode }}
             </div>
 
             <div class="space-y-2">
                 <h2 class="text-xl font-semibold text-gray-700">Asset Tag ID:</h2>
-                <p class="text-lg font-mono bg-gray-50 py-2 px-4 rounded-lg inline-block">{{ $asset->asset_tag_id }}</p>
+                <p class="text-xs font-mono bg-gray-50 py-2 px-4 rounded-lg inline-block">{{ $asset->asset_tag_id }}</p>
             </div>
         </div>
 
