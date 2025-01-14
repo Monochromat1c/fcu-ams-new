@@ -52,8 +52,9 @@
                                     <span class="px-3 py-1 text-xs font-medium rounded-full
                                         {{ $request->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
                                            ($request->status === 'approved' ? 'bg-green-100 text-green-800' : 
-                                           'bg-red-100 text-red-800') }}">
-                                        {{ ucfirst($request->status) }}
+                                           ($request->status === 'partially_approved' ? 'bg-blue-100 text-blue-800' :
+                                           'bg-red-100 text-red-800')) }}">
+                                        {{ ucfirst(str_replace('_', ' ', $request->status)) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -74,4 +75,4 @@
         </div>
     </div>
 </div>
-@endsection 
+@endsection

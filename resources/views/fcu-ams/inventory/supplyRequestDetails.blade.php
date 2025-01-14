@@ -96,8 +96,9 @@
                             <span class="ml-2 px-3 py-1 text-xs font-medium rounded-full
                                 {{ $overallStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
                                 ($overallStatus === 'approved' ? 'bg-green-100 text-green-800' : 
-                                'bg-red-100 text-red-800') }}">
-                                {{ ucfirst($overallStatus) }}
+                                ($overallStatus === 'partially_approved' ? 'bg-blue-100 text-blue-800' :
+                                'bg-red-100 text-red-800')) }}">
+                                {{ ucfirst(str_replace('_', ' ', $overallStatus)) }}
                             </span>
                         </div>
                         <div>

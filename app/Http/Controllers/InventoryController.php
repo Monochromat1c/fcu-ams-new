@@ -475,11 +475,18 @@ class InventoryController extends Controller
             return $request->status === 'rejected';
         });
 
+        // Check if any item is approved
+        $anyApproved = $requests->contains(function($request) {
+            return $request->status === 'approved';
+        });
+
         // Update the overall status
         if ($allApproved) {
             $overallStatus = 'approved';
         } elseif ($anyRejected) {
             $overallStatus = 'rejected';
+        } elseif ($anyApproved) {
+            $overallStatus = 'partially_approved';
         } else {
             $overallStatus = 'pending';
         }
@@ -559,6 +566,8 @@ class InventoryController extends Controller
                         $inventory = Inventory::find($matchingInventory->id);
                     } else {
                         $hasPartialApproval = true;
+                        $supplyRequest->status = 'partially_approved';
+                        $supplyRequest->save();
                         continue;
                     }
                 }
@@ -607,12 +616,15 @@ class InventoryController extends Controller
                     // Update original request with remaining quantity
                     $supplyRequest->quantity = $requestedQuantity - $availableQuantity;
                     $supplyRequest->notes = "Partially approved: {$availableQuantity} units approved, {$supplyRequest->quantity} units pending";
+                    $supplyRequest->status = 'partially_approved';
                     $supplyRequest->save();
                     
                     $hasPartialApproval = true;
                     $allFullyProcessed = false;
                 } else {
                     $allFullyProcessed = false;
+                    $supplyRequest->status = 'partially_approved';
+                    $supplyRequest->save();
                 }
             }
 
