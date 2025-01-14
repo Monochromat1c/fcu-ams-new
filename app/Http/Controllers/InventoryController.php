@@ -396,7 +396,8 @@ class InventoryController extends Controller
         $request->validate([
             'department_id' => 'required|exists:departments,id',
             'request_date' => 'required|date',
-            'selected_items' => 'required|json'
+            'selected_items' => 'required|json',
+            'notes' => 'nullable|string'
         ]);
 
         $data = json_decode($request->selected_items, true);
@@ -446,6 +447,7 @@ class InventoryController extends Controller
                 $supplyRequest->estimated_unit_price = $item['unit_price'];
             }
 
+            $supplyRequest->notes = $request->notes;
             $supplyRequest->save();
         }
 

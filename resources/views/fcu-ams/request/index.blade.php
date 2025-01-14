@@ -169,7 +169,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse($requests as $request)
-                            <tr class="hover:bg-gray-50">
+                            <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='{{ route('inventory.supply-request.details', ['request_group_id' => $request->request_group_id]) }}'" style="cursor: pointer;">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {{ $request->requester }}
                                 </td>

@@ -25,11 +25,10 @@ class RequestController extends Controller
                 'department_id', 
                 'request_date',
                 'requester',
-                'status',
                 DB::raw('COUNT(*) as total_items'),
                 DB::raw('MAX(status) as group_status') // Get the overall status for the group
             )
-            ->groupBy('request_group_id', 'department_id', 'request_date', 'requester', 'status')
+            ->groupBy('request_group_id', 'department_id', 'request_date', 'requester')
             ->orderBy('request_date', 'desc')
             ->paginate(10);
 
