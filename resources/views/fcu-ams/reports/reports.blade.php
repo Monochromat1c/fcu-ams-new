@@ -207,11 +207,101 @@
                     </div>
                 </div>
             </div> -->
-
             <!-- Assigned Assets Section -->
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl segoe font-bold text-gray-700">Assigned Assets</h2>
+                    <div class="flex items-center gap-4">
+                        <!-- Search Form -->
+                        <form method="GET" action="{{ route('reports.index') }}" class="flex items-center">
+                            <div class="relative">
+                                <input type="text" name="assignee" id="assignee" value="{{ $assigneeQuery }}"
+                                    placeholder="Search by assignee name..."
+                                    class="w-64 rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
+                                <button type="submit" class="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-blue-500 hover:bg-blue-600 transition-colors duration-200">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+                        @if(isset($assignedAssets) && !$assignedAssets->isEmpty())
+                            <form method="GET" action="{{ route('reports.print-assigned') }}" target="_blank">
+                                <input type="hidden" name="assignee" value="{{ $assigneeQuery }}">
+                                <button type="submit"
+                                    class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                    </svg>
+                                    Print Report
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Divider -->
+                <div class="border-b-2 border-slate-200 mb-6"></div>
+
+                @if(isset($assignedAssets))
+                    @if($assignedAssets->isEmpty())
+                        <p class="text-center text-gray-500 py-4">No assets found assigned to
+                            "{{ $assigneeQuery }}".
+                        </p>
+                    @else
+                        <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
+                            <table class="min-w-full divide-y divide-gray-200">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Assigned To</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Asset Tag ID</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Brand</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Model</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Department</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Location</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Status</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                                            Condition</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="bg-white divide-y divide-gray-200">
+                                    @foreach($assignedAssets as $asset)
+                                        <tr class="hover:bg-gray-50">
+                                            <td class="px-6 py-4">{{ $asset->assigned_to ?? 'N/A' }}</td>
+                                            <td class="px-6 py-4">{{ $asset->asset_tag_id }}</td>
+                                            <td class="px-6 py-4">{{ $asset->brand->brand }}</td>
+                                            <td class="px-6 py-4">{{ $asset->model }}</td>
+                                            <td class="px-6 py-4">{{ $asset->department->department }}</td>
+                                            <td class="px-6 py-4">{{ $asset->location->location }}</td>
+                                            <td class="px-6 py-4">{{ $asset->status->status }}</td>
+                                            <td class="px-6 py-4">{{ $asset->condition->condition }}</td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-4 pagination-container flex w-full">
+                            {{ $assignedAssets->links() }}
+                        </div>
+                    @endif
+                @else
+                    <p class="text-center text-gray-500 py-4">Enter an assignee name to search for their assigned
+                        assets.</p>
+                @endif
+            </div>
+            <!-- Purchase Order -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl segoe font-bold text-gray-700">Purchase Order</h2>
                     <span class="text-sm text-gray-500">{{ $poDateRangeDisplay }}</span>
                 </div>
                 

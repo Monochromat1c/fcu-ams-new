@@ -38,6 +38,9 @@
         <h2 class="text-xl font-bold mb-3">Roxas Avenue, Roxas City</h2>
         <h2 class="text-xl font-bold">Purchase Order Receipt</h2>
         <p class="text-gray-600 mb-3">Date: {{ $record->po_date }}</p>
+        @if($record->note)
+            <p class="text-gray-600 mb-3">Note: {{ $record->note }}</p>
+        @endif
         <h2 class="text-xl font-bold">{{ $record->department->department ?? 'N/A' }}
         </h2>
     </div>
