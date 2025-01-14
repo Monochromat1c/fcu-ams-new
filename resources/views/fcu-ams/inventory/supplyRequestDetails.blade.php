@@ -25,7 +25,7 @@
                                 return $request->status === 'approved';
                             });
                         @endphp
-                        @if($allItemsApproved)
+                        @if($allItemsApproved && Auth::user()->role->role !== 'Viewer')
                         
                             <button onclick="window.location.href='{{ route('inventory.supply.request.print', $requests->first()->request_group_id) }}'" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
@@ -78,7 +78,7 @@
                     <div class="flex gap-4">
                         <!-- Edit button -->
                         <button type="button" 
-                            {{ $requests->first()->status === 'cancelled' ? 'disabled' : '' }}
+                            {{ $overallStatus === 'cancelled' || $overallStatus === 'approved' ? 'disabled' : '' }}
                             class="inline-flex items-center px-4 py-2 bg-white border-2 border-blue-500 hover:bg-blue-500 text-blue-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-blue-600">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -89,7 +89,7 @@
                         <form action="{{ route('inventory.supply-request.cancel', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST">
                             @csrf
                             <button type="submit"
-                                {{ $requests->first()->status === 'cancelled' ? 'disabled' : '' }}
+                                {{ $overallStatus === 'cancelled' || $overallStatus === 'approved' ? 'disabled' : '' }}
                                 class="inline-flex items-center px-4 py-2 bg-white border-2 border-red-500 hover:bg-red-500 text-red-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-red-600">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -97,6 +97,16 @@
                                 Cancel
                             </button>
                         </form>
+                        <!-- Print button -->
+                        @if(auth()->user()->role->role !== 'Viewer')
+                        <a href="{{ route('inventory.supply-request.print', ['request_group_id' => $requests->first()->request_group_id]) }}" target="_blank"
+                            class="inline-flex items-center px-4 py-2 bg-white border-2 border-gray-500 hover:bg-gray-500 text-gray-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+                            </svg>
+                            Print
+                        </a>
+                        @endif
                     </div>
                 @endif
             </div>
