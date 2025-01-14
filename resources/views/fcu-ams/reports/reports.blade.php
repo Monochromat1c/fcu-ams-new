@@ -477,8 +477,10 @@
                                             <td class="px-6 py-4">{{ $request->total_items }} items</td>
                                             <td class="px-6 py-4">{{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}</td>
                                             <td class="px-6 py-4">
-                                                <a href="{{ route('inventory.supply-request.details', ['request_group_id' => $request->request_group_id]) }}"
-                                                    class="text-blue-600 hover:text-blue-900">View Details</a>
+                                                <a href="{{ route('reports.print-approved-request', $request->request_group_id) }}" 
+                                                   class="text-blue-600 hover:text-blue-900">
+                                                    Print Request
+                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach

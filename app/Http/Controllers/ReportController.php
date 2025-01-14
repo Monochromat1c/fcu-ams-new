@@ -183,7 +183,13 @@ class ReportController extends Controller
         $supplyRequestStartDate = Carbon::parse($supplyRequestStartDate)->startOfDay();
         $supplyRequestEndDate = Carbon::parse($supplyRequestEndDate)->endOfDay();
 
-        // Get approved supply requests
+        // First, get all request groups where ALL items are approved
+        $fullyApprovedGroups = SupplyRequest::select('request_group_id')
+            ->groupBy('request_group_id')
+            ->havingRaw('COUNT(*) = SUM(CASE WHEN status = "approved" THEN 1 ELSE 0 END)')
+            ->pluck('request_group_id');
+        
+        // Then use these groups to get the request details
         $approvedRequests = SupplyRequest::with('department')
             ->select(
                 'request_group_id',
@@ -192,7 +198,7 @@ class ReportController extends Controller
                 'requester',
                 DB::raw('COUNT(*) as total_items')
             )
-            ->where('status', 'approved')
+            ->whereIn('request_group_id', $fullyApprovedGroups)
             ->whereBetween('request_date', [$supplyRequestStartDate, $supplyRequestEndDate])
             ->groupBy('request_group_id', 'department_id', 'request_date', 'requester')
             ->orderBy('request_date', 'desc')
@@ -355,5 +361,25 @@ class ReportController extends Controller
             ->where('quantity', '>', 0)
             ->orderBy('unique_tag')
             ->paginate(10);
+    }
+
+    public function printApprovedRequest($request_group_id)
+    {
+        $requests = SupplyRequest::with(['department', 'inventory'])
+            ->where('request_group_id', $request_group_id)
+            ->where('status', 'approved')
+            ->get();
+    
+        if ($requests->isEmpty()) {
+            return redirect()->back()->with('error', 'No approved requests found.');
+        }
+    
+        $totalPrice = $requests->sum(function ($request) {
+            return ($request->inventory_id ? 
+                ($request->inventory->unit_price ?? 0) : 
+                ($request->estimated_unit_price ?? 0)) * $request->quantity;
+        });
+    
+        return view('fcu-ams.reports.print-approved-request', compact('requests', 'totalPrice'));
     }
 }
