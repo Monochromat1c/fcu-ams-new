@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('inventory_id')->nullable();
             $table->string('requester');
             $table->integer('quantity');
-            $table->date('request_date');
+            $table->timestamp('request_date');
             $table->string('item_name');
             $table->decimal('estimated_unit_price', 10, 2)->nullable();
             $table->unsignedBigInteger('brand_id')->nullable();

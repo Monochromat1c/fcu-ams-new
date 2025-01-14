@@ -168,7 +168,7 @@
 
                     <div class="mb-4">
                         <label for="request_date" class="block text-gray-700 font-bold mb-2">Request Date:</label>
-                        <input type="date" id="request_date" name="request_date" class="w-full p-2 border-2 border-slate-300 rounded-md bg-slate-50" required>
+                        <input type="datetime-local" id="request_date" name="request_date" class="w-full p-2 border-2 border-slate-300 rounded-md bg-slate-50" required>
                     </div>
 
                     <div class="mb-4">
@@ -690,13 +690,15 @@
 
     document.addEventListener('DOMContentLoaded', function () {
         console.log('DOM Content Loaded');
-        // Set default request date to today
-        var today = new Date();
-        var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0');
-        var yyyy = today.getFullYear();
-        today = yyyy + '-' + mm + '-' + dd;
-        document.getElementById('request_date').value = today;
+        // Set default request date to current date and time
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = String(now.getMonth() + 1).padStart(2, '0');
+        var day = String(now.getDate()).padStart(2, '0');
+        var hours = String(now.getHours()).padStart(2, '0');
+        var minutes = String(now.getMinutes()).padStart(2, '0');
+        var datetime = `${year}-${month}-${day}T${hours}:${minutes}`;
+        document.getElementById('request_date').value = datetime;
 
         let rowCounter = 0;
         const addItemButton = document.getElementById('add-item-button');

@@ -395,7 +395,7 @@ class InventoryController extends Controller
     {
         $request->validate([
             'department_id' => 'required|exists:departments,id',
-            'request_date' => 'required|date',
+            'request_date' => 'required|date_format:Y-m-d\TH:i',
             'selected_items' => 'required|json',
             'notes' => 'nullable|string'
         ]);
@@ -778,10 +778,10 @@ class InventoryController extends Controller
     {
         $user = auth()->user();
         $notifications = SupplyRequest::with('inventory')
-            ->select('request_group_id', 'requester', 'status', 'request_date', 'notes')
+            ->select('request_group_id', 'requester', 'status', DB::raw('MAX(request_date) as request_date'), 'notes', 'updated_at')
             ->selectRaw('COUNT(*) as items_count')
             ->where('requester', $user->first_name . ' ' . $user->last_name)
-            ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'notes')
+            ->groupBy('request_group_id', 'requester', 'status', 'notes', 'updated_at')
             ->orderByRaw("CASE 
                 WHEN status = 'pending' THEN 1
                 WHEN status = 'partially_approved' THEN 2
