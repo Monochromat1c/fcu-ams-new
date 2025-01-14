@@ -118,12 +118,12 @@
                         <div>
                             <span class="font-medium">Status:</span>
                             <span class="ml-2 px-3 py-1 text-xs font-medium rounded-full
-                                {{ $requests->first()->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                   ($requests->first()->status === 'approved' ? 'bg-green-100 text-green-800' : 
-                                   ($requests->first()->status === 'partially_approved' ? 'bg-blue-100 text-blue-800' :
-                                   ($requests->first()->status === 'cancelled' ? 'bg-gray-100 text-gray-800' :
+                                {{ $overallStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                   ($overallStatus === 'approved' ? 'bg-green-100 text-green-800' : 
+                                   ($overallStatus === 'partially_approved' ? 'bg-blue-100 text-blue-800' :
+                                   ($overallStatus === 'cancelled' ? 'bg-gray-100 text-gray-800' :
                                    'bg-red-100 text-red-800'))) }}">
-                                {{ ucfirst(str_replace('_', ' ', $requests->first()->status)) }}
+                                {{ ucfirst(str_replace('_', ' ', $overallStatus)) }}
                             </span>
                         </div>
                         <div>

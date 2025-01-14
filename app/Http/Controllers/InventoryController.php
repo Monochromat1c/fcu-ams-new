@@ -477,13 +477,20 @@ class InventoryController extends Controller
             return $request->status === 'rejected';
         });
 
-        // Check if any item is approved
+        // Check if any item is approved or partially approved
         $anyApproved = $requests->contains(function($request) {
-            return $request->status === 'approved';
+            return $request->status === 'approved' || $request->status === 'partially_approved';
+        });
+
+        // Check if any item is cancelled
+        $anyCancelled = $requests->contains(function($request) {
+            return $request->status === 'cancelled';
         });
 
         // Update the overall status
-        if ($allApproved) {
+        if ($anyCancelled) {
+            $overallStatus = 'cancelled';
+        } elseif ($allApproved) {
             $overallStatus = 'approved';
         } elseif ($anyRejected) {
             $overallStatus = 'rejected';
