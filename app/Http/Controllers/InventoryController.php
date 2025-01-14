@@ -711,11 +711,25 @@ class InventoryController extends Controller
     {
         $user = auth()->user();
         
-        $requests = SupplyRequest::select('request_group_id', 'requester', 'status', 'request_date', 'department_id', 
-                     DB::raw('COUNT(*) as items_count'))
+        $requests = SupplyRequest::select(
+                'request_group_id', 
+                'requester', 
+                'status', 
+                'request_date', 
+                'department_id',
+                DB::raw('COUNT(*) as items_count'),
+                DB::raw('MAX(status) as group_status'),
+                DB::raw('CASE 
+                    WHEN MAX(status) = "pending" THEN 1
+                    WHEN MAX(status) = "partially_approved" THEN 2
+                    WHEN MAX(status) = "approved" THEN 3
+                    WHEN MAX(status) = "rejected" THEN 4
+                    ELSE 5 END as status_priority')
+            )
             ->where('requester', $user->first_name . ' ' . $user->last_name)
             ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'department_id')
             ->with('department')
+            ->orderBy('status_priority', 'asc')
             ->orderBy('request_date', 'desc')
             ->get();
             

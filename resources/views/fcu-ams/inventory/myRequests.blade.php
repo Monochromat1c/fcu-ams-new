@@ -38,7 +38,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse($requests as $request)
-                            <tr class="hover:bg-gray-50">
+                            <tr class="hover:bg-gray-50 cursor-pointer" onclick="window.location.href='{{ route('inventory.supply-request.details', ['request_group_id' => $request->request_group_id]) }}'">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}
                                 </td>
@@ -59,7 +59,8 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     <a href="{{ route('inventory.supply-request.details', ['request_group_id' => $request->request_group_id]) }}" 
-                                       class="text-blue-600 hover:text-blue-800">View Details</a>
+                                       class="text-blue-600 hover:text-blue-800"
+                                       onclick="event.stopPropagation()">View Details</a>
                                 </td>
                             </tr>
                         @empty
