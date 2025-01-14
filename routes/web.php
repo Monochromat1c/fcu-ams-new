@@ -120,6 +120,8 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/reports/print-assets', 'printAssetsReport')->name('reports.print-assets');
         Route::get('/reports/print-assigned', 'printAssignedAssets')->name('reports.print-assigned');
         Route::get('/reports/print-approved-request/{request_group_id}', 'printApprovedRequest')->name('reports.print-approved-request');
+        Route::get('/reports/export-inventory', 'exportInventory')->name('reports.export-inventory');
+        Route::get('/reports/export-assets', 'exportAssets')->name('reports.export-assets');
     });
 
     Route::controller(ProfileController::class)->group(function () {

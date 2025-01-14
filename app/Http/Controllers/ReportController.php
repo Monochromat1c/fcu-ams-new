@@ -24,6 +24,8 @@ use App\Models\Brand;
 use App\Models\Unit;
 use Carbon\Carbon;
 use App\Models\SupplyRequest;
+use App\Exports\InventoryExportReport;
+use App\Exports\AssetExportReport;
 use App\Services\ReportPrintService;
 
 class ReportController extends Controller
@@ -381,5 +383,27 @@ class ReportController extends Controller
         });
     
         return view('fcu-ams.reports.print-approved-request', compact('requests', 'totalPrice'));
+    }
+
+    public function exportInventory(Request $request)
+    {
+        $startDate = $request->input('start_date', now()->startOfMonth()->toDateString());
+        $endDate = $request->input('end_date', now()->endOfMonth()->toDateString());
+    
+        return Excel::download(
+            new InventoryExportReport($startDate, $endDate),
+            'inventory_report_' . Carbon::now()->format('Y-m-d_His') . '.csv'
+        );
+    }
+
+    public function exportAssets(Request $request)
+    {
+        $startDate = $request->input('assets_start_date', now()->startOfMonth()->toDateString());
+        $endDate = $request->input('assets_end_date', now()->endOfMonth()->toDateString());
+    
+        return Excel::download(
+            new AssetExportReport($startDate, $endDate),
+            'assets_report_' . Carbon::now()->format('Y-m-d_His') . '.csv'
+        );
     }
 }

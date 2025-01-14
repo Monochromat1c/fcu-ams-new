@@ -32,7 +32,7 @@
             border: 1px solid #ddd;
             padding: 6px 8px;
             text-align: left;
-            font-size: 12pt;
+            font-size: 11px;
             vertical-align: top;
         }
         th {
@@ -44,11 +44,11 @@
         }
         .summary {
             margin-top: 20px;
-            font-size: 12pt;
+            font-size: 14px;
         }
         .footer {
             margin-top: 30px;
-            font-size: 12pt;
+            font-size: 12px;
             text-align: center;
             color: #666;
         }
