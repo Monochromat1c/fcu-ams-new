@@ -28,6 +28,9 @@ class CheckUserRole
             'request.notifications',
             'inventory.request.item.store',
             'inventory.supply-request.cancel',
+            'brand.add',
+            'unit.add',
+            'supplier.add',
         ];
 
         $deniedRoutesForManager = [

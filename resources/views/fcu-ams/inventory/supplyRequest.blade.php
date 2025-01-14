@@ -306,6 +306,25 @@
                         @csrf
 
                         <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-2">
+
+                            <!-- Item/Specs -->
+                            <div>
+                                <label for="items_specs_not_found" class="block text-sm font-medium text-gray-700">Item/Specs</label>
+                                <div class="mt-1">
+                                    <input type="text" id="items_specs_not_found" name="items_specs" required
+                                        class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
+                                </div>
+                            </div>
+
+                            <!-- Quantity -->
+                            <div>
+                                <label for="quantity_not_found" class="block text-sm font-medium text-gray-700">Quantity</label>
+                                <div class="mt-1">
+                                    <input type="number" id="quantity_not_found" name="quantity" required min="0"
+                                        class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
+                                </div>
+                            </div>
+
                             <!-- Brand -->
                             <div>
                                 <label for="brand_id_not_found" class="block text-sm font-medium text-gray-700">Brand</label>
@@ -318,23 +337,15 @@
                                         @endforeach
                                     </select>
                                     <button type="button"
+                                        onclick="document.getElementById('add-brand-modal').classList.remove('hidden')"
                                         class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                                         </svg>
                                     </button>
                                 </div>
                             </div>
-
-                            <!-- Item/Specs -->
-                            <div>
-                                <label for="items_specs_not_found" class="block text-sm font-medium text-gray-700">Item/Specs</label>
-                                <div class="mt-1">
-                                    <input type="text" id="items_specs_not_found" name="items_specs" required
-                                        class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
-                                </div>
-                            </div>
-
+                            
                             <!-- Unit -->
                             <div>
                                 <label for="unit_id_not_found" class="block text-sm font-medium text-gray-700">Unit</label>
@@ -347,20 +358,12 @@
                                         @endforeach
                                     </select>
                                     <button type="button"
+                                        onclick="document.getElementById('add-unit-modal').classList.remove('hidden')"
                                         class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                                         </svg>
                                     </button>
-                                </div>
-                            </div>
-
-                            <!-- Quantity -->
-                            <div>
-                                <label for="quantity_not_found" class="block text-sm font-medium text-gray-700">Quantity</label>
-                                <div class="mt-1">
-                                    <input type="number" id="quantity_not_found" name="quantity" required min="0"
-                                        class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm rounded-md">
                                 </div>
                             </div>
 
@@ -385,9 +388,10 @@
                                         @endforeach
                                     </select>
                                     <button type="button"
+                                        onclick="document.getElementById('add-supplier-modal').classList.remove('hidden')"
                                         class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                            <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
                                         </svg>
                                     </button>
                                 </div>
@@ -407,6 +411,30 @@
             </div>
         </div>
     </div>
+
+    <!-- Add Brand Modal -->
+    <x-add-item-modal 
+        title="Add New Brand"
+        id="add-brand-modal"
+        route="{{ route('brand.add') }}"
+        field="brand"
+    />
+    
+    <!-- Add Unit Modal -->
+    <x-add-item-modal 
+        title="Add New Unit"
+        id="add-unit-modal"
+        route="{{ route('unit.add') }}"
+        field="unit"
+    />
+
+    <!-- Add Supplier Modal -->
+    <x-add-item-modal 
+        title="Add New Supplier"
+        id="add-supplier-modal"
+        route="{{ route('supplier.add') }}"
+        field="supplier"
+    />
 </div>
 
 <script>
@@ -960,6 +988,68 @@
             // Clear form and close modal
             requestedItemForm.reset();
             document.getElementById('itemNotFoundModal').classList.add('hidden');
+        });
+    });
+
+    // Function to update select options
+    function updateSelectOptions(selectId, items) {
+        const select = document.getElementById(selectId);
+        const currentValue = select.value;
+        
+        // Clear existing options
+        select.innerHTML = '<option value="">Select an option</option>';
+        
+        // Add new options
+        items.forEach(item => {
+            const option = document.createElement('option');
+            option.value = item.id;
+            option.textContent = selectId.includes('brand') ? item.brand : item.unit;
+            select.appendChild(option);
+        });
+        
+        // Restore selected value if it still exists
+        if (currentValue) {
+            select.value = currentValue;
+        }
+    }
+    
+    // Event listeners for modal form submissions
+    document.querySelectorAll('.modal form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(this);
+            const url = this.getAttribute('action');
+            
+            fetch(url, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+            if (data.success) {
+                // Update the corresponding select options
+                if (url.includes('brand')) {
+                    updateSelectOptions('brand_id_not_found', data.brands);
+                } else if (url.includes('unit')) {
+                    updateSelectOptions('unit_id_not_found', data.units);
+                } else if (url.includes('supplier')) {  // Add this condition
+                    updateSelectOptions('supplier_id_not_found', data.suppliers);
+                }
+                    
+                    // Close the modal
+                    const modal = this.closest('.modal');
+                    if (modal) {
+                        modal.classList.add('hidden');
+                    }
+                    
+                    // Clear the form
+                    this.reset();
+                }
+            })
+            .catch(error => console.error('Error:', error));
         });
     });
 </script>
