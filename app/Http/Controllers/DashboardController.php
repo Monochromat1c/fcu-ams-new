@@ -24,9 +24,16 @@ class DashboardController extends Controller
         $totalInventoryValue = Inventory::sum(DB::raw('unit_price * quantity'));
 
         // Get recent supply requests
-        $recentRequests = SupplyRequest::with(['inventory.brand', 'department'])
+        $recentRequestsQuery = SupplyRequest::with(['inventory.brand', 'department'])
             ->select('request_group_id', 'requester', 'status', 'request_date', 'department_id', 
-                     DB::raw('COUNT(*) as items_count'))
+                     DB::raw('COUNT(*) as items_count'));
+
+        // Only show cancelled requests to viewers
+        if (auth()->user()->role->role !== 'Viewer') {
+            $recentRequestsQuery->where('status', '!=', 'cancelled');
+        }
+
+        $recentRequests = $recentRequestsQuery
             ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'department_id')
             ->orderBy('created_at', 'desc')
             ->take(5)

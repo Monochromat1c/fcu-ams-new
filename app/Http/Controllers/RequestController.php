@@ -19,7 +19,8 @@ class RequestController extends Controller
         $brands = Brand::all();
         $units = Unit::all();
         $suppliers = Supplier::all();
-        $requests = SupplyRequest::with('department')
+        
+        $query = SupplyRequest::with('department')
             ->select(
                 'request_group_id', 
                 'department_id', 
@@ -33,8 +34,14 @@ class RequestController extends Controller
                     WHEN MAX(status) = "approved" THEN 3
                     WHEN MAX(status) = "rejected" THEN 4
                     ELSE 5 END as status_priority')
-            )
-            ->groupBy('request_group_id', 'department_id', 'request_date', 'requester')
+            );
+
+        // Only show cancelled requests to viewers
+        if (auth()->user()->role->role !== 'Viewer') {
+            $query->where('status', '!=', 'cancelled');
+        }
+
+        $requests = $query->groupBy('request_group_id', 'department_id', 'request_date', 'requester')
             ->orderBy('status_priority', 'asc')
             ->orderBy('request_date', 'desc')
             ->paginate(10);
