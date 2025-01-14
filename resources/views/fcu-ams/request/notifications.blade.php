@@ -98,10 +98,7 @@
                                 </div>
                                 <div class="flex flex-col items-end">
                                     <span class="text-sm text-gray-500">
-                                        Requested: {{ date('Y-m-d h:i A', strtotime($notification->request_date)) }}
-                                    </span>
-                                    <span class="text-sm text-gray-500">
-                                        Updated: {{ date('Y-m-d h:i A', strtotime($notification->updated_at)) }}
+                                        {{ date('M d, Y h:i A', strtotime($notification->created_at)) }}
                                     </span>
                                 </div>
                             </div>

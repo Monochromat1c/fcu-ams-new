@@ -65,7 +65,7 @@
                         <form action="{{ route('inventory.supply-request.reject', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST">
                             @csrf
                             <button type="submit"
-                                {{ $overallStatus === 'approved' || $overallStatus === 'rejected' ? 'disabled' : '' }}
+                                {{ $overallStatus === 'approved' || $overallStatus === 'rejected' || $overallStatus === 'partially_approved' ? 'disabled' : '' }}
                                 class="inline-flex items-center px-4 py-2 bg-white border-2 border-red-500 hover:bg-red-500 text-red-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-red-600">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
@@ -124,7 +124,7 @@
                         </div>
                         <div>
                             <span class="font-medium">Request Date:</span>
-                            <span class="ml-2">{{ \Carbon\Carbon::parse($requests->first()->request_date)->format('M d, Y') }}</span>
+                            <span class="ml-2">{{ date('M d, Y h:i A', strtotime($requests->first()->created_at)) }}</span>
                         </div>
                         <div>
                             <span class="font-medium">Status:</span>

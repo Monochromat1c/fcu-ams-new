@@ -395,7 +395,6 @@ class InventoryController extends Controller
     {
         $request->validate([
             'department_id' => 'required|exists:departments,id',
-            'request_date' => 'required|date_format:Y-m-d\TH:i',
             'selected_items' => 'required|json',
             'notes' => 'nullable|string'
         ]);
@@ -433,7 +432,6 @@ class InventoryController extends Controller
             $supplyRequest->department_id = $request->department_id;
             $supplyRequest->requester = auth()->user()->first_name . ' ' . auth()->user()->last_name;
             $supplyRequest->quantity = $item['quantity'];
-            $supplyRequest->request_date = $request->request_date;
             $supplyRequest->item_name = $item['name'];
             
             if ($inventory) {
@@ -614,7 +612,6 @@ class InventoryController extends Controller
                     $approvedRequest->requester = $supplyRequest->requester;
                     $approvedRequest->item_name = $supplyRequest->item_name;
                     $approvedRequest->quantity = $availableQuantity;
-                    $approvedRequest->request_date = $supplyRequest->request_date;
                     $approvedRequest->status = 'approved';
                     $approvedRequest->inventory_id = $inventory->id;
                     // Preserve original unit and price
@@ -778,10 +775,10 @@ class InventoryController extends Controller
     {
         $user = auth()->user();
         $notifications = SupplyRequest::with('inventory')
-            ->select('request_group_id', 'requester', 'status', DB::raw('MAX(request_date) as request_date'), 'notes', 'updated_at')
+            ->select('request_group_id', 'requester', 'status', 'created_at', 'notes')
             ->selectRaw('COUNT(*) as items_count')
             ->where('requester', $user->first_name . ' ' . $user->last_name)
-            ->groupBy('request_group_id', 'requester', 'status', 'notes', 'updated_at')
+            ->groupBy('request_group_id', 'requester', 'status', 'notes', 'created_at')
             ->orderByRaw("CASE 
                 WHEN status = 'pending' THEN 1
                 WHEN status = 'partially_approved' THEN 2
@@ -789,7 +786,7 @@ class InventoryController extends Controller
                 WHEN status = 'rejected' THEN 4
                 WHEN status = 'cancelled' THEN 5
                 ELSE 6 END")
-            ->orderBy('request_date', 'desc')
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return view('fcu-ams.request.notifications', compact('notifications'));

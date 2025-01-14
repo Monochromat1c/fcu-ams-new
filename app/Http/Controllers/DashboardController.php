@@ -25,7 +25,7 @@ class DashboardController extends Controller
 
         // Get recent supply requests
         $recentRequestsQuery = SupplyRequest::with(['inventory.brand', 'department'])
-            ->select('request_group_id', 'requester', 'status', 'request_date', 'department_id', 
+            ->select('request_group_id', 'requester', 'status', 'created_at', 'department_id', 
                      DB::raw('COUNT(*) as items_count'));
 
         // Only show cancelled requests to viewers
@@ -34,7 +34,7 @@ class DashboardController extends Controller
         }
 
         $recentRequests = $recentRequestsQuery
-            ->groupBy('request_group_id', 'requester', 'status', 'request_date', 'department_id')
+            ->groupBy('request_group_id', 'requester', 'status', 'created_at', 'department_id')
             ->orderBy('created_at', 'desc')
             ->take(5)
             ->get();

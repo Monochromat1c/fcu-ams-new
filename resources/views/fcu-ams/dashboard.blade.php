@@ -208,7 +208,7 @@
                                             Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
                                         </p>
                                         <p class="text-xs text-gray-400">
-                                            {{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}
+                                            {{ date('M d, Y h:i A', strtotime($request->created_at)) }}
                                         </p>
                                     </div>
                                     <div>
