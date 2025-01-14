@@ -23,7 +23,7 @@ return new class extends Migration
             $table->unsignedBigInteger('unit_id')->nullable();
             $table->unsignedBigInteger('supplier_id')->nullable();
             $table->text('notes')->nullable();
-            $table->enum('status', ['pending', 'approved', 'rejected', 'partially_approved'])->default('pending');
+            $table->enum('status', ['pending', 'approved', 'rejected', 'partially_approved', 'cancelled'])->default('pending');
             $table->boolean('is_approved')->default(false);
             $table->timestamps();
             $table->foreign('department_id')->references('id')->on('departments');

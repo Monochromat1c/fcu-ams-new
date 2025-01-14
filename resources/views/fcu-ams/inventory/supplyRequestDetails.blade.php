@@ -74,6 +74,30 @@
                             </button>
                         </form>
                     </div>
+                @else
+                    <div class="flex gap-4">
+                        <!-- Edit button -->
+                        <button type="button" 
+                            {{ $requests->first()->status === 'approved' || $requests->first()->status === 'rejected' || $requests->first()->status === 'cancelled' ? 'disabled' : '' }}
+                            class="inline-flex items-center px-4 py-2 bg-white border-2 border-blue-500 hover:bg-blue-500 text-blue-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-blue-600">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                            </svg>
+                            Edit
+                        </button>
+                        <!-- Cancel button -->
+                        <form action="{{ route('inventory.supply-request.cancel', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST">
+                            @csrf
+                            <button type="submit"
+                                {{ $requests->first()->status === 'approved' || $requests->first()->status === 'rejected' || $requests->first()->status === 'cancelled' ? 'disabled' : '' }}
+                                class="inline-flex items-center px-4 py-2 bg-white border-2 border-red-500 hover:bg-red-500 text-red-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-red-600">
+                                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                </svg>
+                                Cancel
+                            </button>
+                        </form>
+                    </div>
                 @endif
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -94,11 +118,12 @@
                         <div>
                             <span class="font-medium">Status:</span>
                             <span class="ml-2 px-3 py-1 text-xs font-medium rounded-full
-                                {{ $overallStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                ($overallStatus === 'approved' ? 'bg-green-100 text-green-800' : 
-                                ($overallStatus === 'partially_approved' ? 'bg-blue-100 text-blue-800' :
-                                'bg-red-100 text-red-800')) }}">
-                                {{ ucfirst(str_replace('_', ' ', $overallStatus)) }}
+                                {{ $requests->first()->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                   ($requests->first()->status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                   ($requests->first()->status === 'partially_approved' ? 'bg-blue-100 text-blue-800' :
+                                   ($requests->first()->status === 'cancelled' ? 'bg-gray-100 text-gray-800' :
+                                   'bg-red-100 text-red-800'))) }}">
+                                {{ ucfirst(str_replace('_', ' ', $requests->first()->status)) }}
                             </span>
                         </div>
                         <div>
@@ -142,23 +167,14 @@
                             <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $request->item_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    @if($request->status === 'approved')
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Approved
-                                        </span>
-                                    @elseif($request->status === 'rejected')
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                            Rejected
-                                        </span>
-                                    @else
-                                        @php
-                                            $inventory = $request->inventory_id ? \App\Models\Inventory::find($request->inventory_id) : null;
-                                            $isPreOrder = $inventory && $inventory->quantity == 0;
-                                        @endphp
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                            {{ $isPreOrder ? 'Pending (Pre-Order)' : 'Pending' }}
-                                        </span>
-                                    @endif
+                                    <span class="px-3 py-1 text-xs font-medium rounded-full
+                                        {{ $request->status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                           ($request->status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                           ($request->status === 'partially_approved' ? 'bg-blue-100 text-blue-800' :
+                                           ($request->status === 'cancelled' ? 'bg-gray-100 text-gray-800' :
+                                           'bg-red-100 text-red-800'))) }}">
+                                        {{ ucfirst(str_replace('_', ' ', $request->status)) }}
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $request->quantity }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $request->unit_name }}</td>

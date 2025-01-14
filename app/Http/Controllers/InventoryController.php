@@ -669,6 +669,29 @@ class InventoryController extends Controller
         }
     }
 
+    public function cancelSupplyRequest($request_group_id)
+    {
+        $requests = SupplyRequest::where('request_group_id', $request_group_id)->get();
+        
+        if ($requests->isEmpty()) {
+            return redirect()->back()->with('error', 'Supply request not found.');
+        }
+
+        DB::beginTransaction();
+        try {
+            foreach ($requests as $request) {
+                $request->status = 'cancelled';
+                $request->save();
+            }
+            
+            DB::commit();
+            return redirect()->back()->with('success', 'Supply request cancelled successfully.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Failed to cancel supply request. Please try again.');
+        }
+    }
+
     public function printSupplyRequest($request_group_id)
     {
         $user = auth()->user();
