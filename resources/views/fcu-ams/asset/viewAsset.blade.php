@@ -133,7 +133,7 @@
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-xs font-medium text-gray-500 uppercase">Cost</label>
-                                    <p class="text-sm font-medium text-gray-900">{{ $asset->cost }}</p>
+                                    <p class="text-sm font-medium text-gray-900">₱{{ number_format($asset->cost, 2) }}</p>
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-xs font-medium text-gray-500 uppercase">Category</label>

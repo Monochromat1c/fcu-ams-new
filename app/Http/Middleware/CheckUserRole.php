@@ -17,6 +17,7 @@ class CheckUserRole
             'profile.update',
             'profile.updatePersonalInformation',
             'asset.view',
+            'inventory.view',
             'logout',
             'inventory.supply.request',
             'inventory.supply.request.store',
