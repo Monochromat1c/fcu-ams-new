@@ -242,7 +242,7 @@
                     </div>
                 </div>
                 <div class="flex">
-                            @if(Auth::user()->role->role != 'Viewer')
+                            @if(Auth::user()->role->role != 'Department')
                             <a href="{{ route('asset.qrCode', $asset->id) }}" class="rounded-md shadow-md px-5 py-2 bg-blue-600 hover:shadow-md hover:bg-blue-500 transition-all
                                 duration-200 hover:scale-105 ml-auto ease-in hover:shadow-inner text-white flex gap-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"

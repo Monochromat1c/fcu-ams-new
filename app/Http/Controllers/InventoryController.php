@@ -708,7 +708,7 @@ class InventoryController extends Controller
     public function printSupplyRequest($request_group_id)
     {
         $user = auth()->user();
-        if ($user->role === 'Viewer') {
+        if ($user->role === 'Department') {
             abort(403, 'Unauthorized action.');
         }
 

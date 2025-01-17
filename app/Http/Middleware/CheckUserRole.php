@@ -10,7 +10,7 @@ class CheckUserRole
 {
     public function handle($request, Closure $next)
     {
-        $allowedRoutesForViewer = [
+        $allowedRoutesForDepartment = [
             'asset.list',
             'inventory.list',
             'profile.index',
@@ -40,8 +40,8 @@ class CheckUserRole
             'user.destroy',
         ];
 
-        if (Auth::check() && Auth::user()->role->role == 'Viewer' && !in_array(Route::currentRouteName(),
-        $allowedRoutesForViewer)) {
+        if (Auth::check() && Auth::user()->role->role == 'Department' && !in_array(Route::currentRouteName(),
+        $allowedRoutesForDepartment)) {
             return redirect()->route('asset.list');
         }
 

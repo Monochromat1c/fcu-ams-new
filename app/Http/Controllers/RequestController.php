@@ -36,8 +36,8 @@ class RequestController extends Controller
                     ELSE 5 END as status_priority')
             );
 
-        // Only show cancelled requests to viewers
-        if (auth()->user()->role->role !== 'Viewer') {
+        // Only show cancelled requests to departments
+        if (auth()->user()->role->role !== 'Department') {
             $query->where('status', '!=', 'cancelled');
         }
 

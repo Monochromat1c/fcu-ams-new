@@ -14,7 +14,7 @@ class RoleSeeder extends Seeder
      */
     public function run()
     {
-        $roles = ['Administrator', 'Manager', 'Viewer'];
+        $roles = ['Administrator', 'Manager', 'Department'];
 
         foreach ($roles as $role) {
             DB::table('roles')->insert([

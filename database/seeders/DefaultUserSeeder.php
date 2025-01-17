@@ -19,7 +19,7 @@ class DefaultUserSeeder extends Seeder
     {
         $adminRole = Role::where('role', 'Administrator')->first();
         $managerRole = Role::where('role', 'Manager')->first();
-        $viewerRole = Role::where('role', 'Viewer')->first();
+        $departmentRole = Role::where('role', 'Department')->first();
         $ccsDepartment = Department::where('department', 'CCS Department')->first();
 
         User::create([
@@ -54,7 +54,7 @@ class DefaultUserSeeder extends Seeder
             'last_name' => 'Hingco',
             'address' => 'Roxas City',
             'contact_number' => '09123476389',
-            'role_id' => $viewerRole->id,
+            'role_id' => $departmentRole->id,
             'username' => 'liling',
             'password' => Hash::make('liling@'),
             'department_id' => $ccsDepartment->id,

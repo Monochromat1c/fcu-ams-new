@@ -143,9 +143,9 @@ class UserController extends Controller
         $user->password = Hash::make($request->input('password'));
         $user->department_id = $request->input('department_id');
 
-        $viewerRole = Role::where('role', 'Viewer')->first();
-        if ($viewerRole) {
-            $user->role_id = $viewerRole->id;
+        $departmentRole = Role::where('role', 'Department')->first();
+        if ($departmentRole) {
+            $user->role_id = $departmentRole->id;
         }
 
         if ($request->hasFile('profile_picture')) {

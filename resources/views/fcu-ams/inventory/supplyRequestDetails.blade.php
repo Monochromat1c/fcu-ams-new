@@ -11,7 +11,7 @@
             <div class="px-4 sm:px-6 lg:px-8 py-6">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center justify-between w-full">
-                        <a href="{{ Auth::user()->role->role === 'Viewer' ? route('inventory.my.requests') : route('requests.index') }}"
+                        <a href="{{ Auth::user()->role->role === 'Department' ? route('inventory.my.requests') : route('requests.index') }}"
                         class="mr-4 hover:bg-gray-100 my-auto p-2 rounded-full transition">
                             <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -25,7 +25,7 @@
                                 return $request->status === 'approved';
                             });
                         @endphp
-                        @if($allItemsApproved && Auth::user()->role->role !== 'Viewer')
+                        @if($allItemsApproved && Auth::user()->role->role !== 'Department')
                         
                             <button onclick="window.location.href='{{ route('inventory.supply.request.print', $requests->first()->request_group_id) }}'" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
@@ -49,7 +49,7 @@
         <div class="bg-white m-3 shadow-md rounded-md p-6 2xl:max-w-7xl 2xl:mx-auto">
             <div class="flex justify-between items-start mb-6">
                 <h3 class="text-lg font-semibold">Request Information</h3>
-                @if(Auth::user()->role->role !== 'Viewer')
+                @if(Auth::user()->role->role !== 'Department')
                     <div class="flex gap-4">
                         <form action="{{ route('inventory.supply-request.approve', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST">
                             @csrf
@@ -99,7 +99,7 @@
                             </button>
                         </form>
                         <!-- Print button -->
-                        @if(auth()->user()->role->role !== 'Viewer')
+                        @if(auth()->user()->role->role !== 'Department')
                         <a href="{{ route('inventory.supply-request.print', ['request_group_id' => $requests->first()->request_group_id]) }}" target="_blank"
                             class="inline-flex items-center px-4 py-2 bg-white border-2 border-gray-500 hover:bg-gray-500 text-gray-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">
                             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">

@@ -1,5 +1,5 @@
-<!-- SIDEBAR LINK/S FOR VIEWER -->
-@if(Auth::user()->role->role == 'Viewer')
+<!-- SIDEBAR LINK/S FOR Department -->
+@if(Auth::user()->role->role == 'Department')
 <a href="{{ route('asset.list') }}"
     class="block px-4 flex gap-1 py-2 text-gray-700  hover:bg-slate-100
             {{ Request::is('asset/list') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">

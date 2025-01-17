@@ -28,8 +28,8 @@ class DashboardController extends Controller
             ->select('request_group_id', 'requester', 'status', 'created_at', 'department_id', 
                      DB::raw('COUNT(*) as items_count'));
 
-        // Only show cancelled requests to viewers
-        if (auth()->user()->role->role !== 'Viewer') {
+        // Only show cancelled requests to departments
+        if (auth()->user()->role->role !== 'Department') {
             $recentRequestsQuery->where('status', '!=', 'cancelled');
         }
 
