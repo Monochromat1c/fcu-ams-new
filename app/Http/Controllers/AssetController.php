@@ -40,11 +40,31 @@ class AssetController extends Controller
         $supplier = $request->input('supplier');
         $brand = $request->input('brand');
 
-        $totalAssets = DB::table('assets')->whereNull('deleted_at')->count();
-        $totalCost = DB::table('assets')->whereNull('deleted_at')->sum('cost');
+        $totalAssets = DB::table('assets')
+            ->leftJoin('conditions', 'assets.condition_id', '=', 'conditions.id')
+            ->whereNull('assets.deleted_at')
+            ->whereNotIn('conditions.condition', ['Disposed'])
+            ->count();
+            
+        $totalCost = DB::table('assets')
+            ->leftJoin('conditions', 'assets.condition_id', '=', 'conditions.id')
+            ->whereNull('assets.deleted_at')
+            ->whereNotIn('conditions.condition', ['Disposed'])
+            ->sum('cost');
         
-        $lowValueAssets = DB::table('assets')->where('cost', '<', 1000)->whereNull('deleted_at')->count();
-        $highValueAssets = DB::table('assets')->where('cost', '>=', 1000)->whereNull('deleted_at')->count();
+        $lowValueAssets = DB::table('assets')
+            ->leftJoin('conditions', 'assets.condition_id', '=', 'conditions.id')
+            ->where('cost', '<', 1000)
+            ->whereNull('assets.deleted_at')
+            ->whereNotIn('conditions.condition', ['Disposed'])
+            ->count();
+            
+        $highValueAssets = DB::table('assets')
+            ->leftJoin('conditions', 'assets.condition_id', '=', 'conditions.id')
+            ->where('cost', '>=', 1000)
+            ->whereNull('assets.deleted_at')
+            ->whereNotIn('conditions.condition', ['Disposed'])
+            ->count();
 
         $sort = $request->input('sort', 'asset_tag_id');
         $direction = $request->input('direction', 'asc');
@@ -68,7 +88,8 @@ class AssetController extends Controller
                 'categories.category as category_name', 
                 'departments.department as department_name',
                 'brands.brand as brand_name'
-            );
+            )
+            ->whereNotIn('conditions.condition', ['Disposed']);
 
         if ($search) {
             $query->where(function ($q) use ($search) {
