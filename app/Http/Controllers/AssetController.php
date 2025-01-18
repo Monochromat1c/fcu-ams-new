@@ -350,6 +350,7 @@ class AssetController extends Controller
             'condition_id' => 'required|integer|exists:conditions,id',
             'purchase_date' => 'required|date',
             'asset_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'disposed_amount' => 'nullable|numeric|min:0',
             'assigned_to' => 'nullable|string|max:255',
             'issued_date' => 'nullable|date',
             'notes' => 'nullable|string|max:1000'
@@ -394,6 +395,8 @@ class AssetController extends Controller
             if ($unavailableStatus) {
                 $asset->status_id = $unavailableStatus->id;
             }
+            // Set disposed amount when condition is Disposed
+            $asset->disposed_amount = $validatedData['disposed_amount'];
         } else {
             // Clear maintenance dates if condition is not maintenance
             $asset->maintenance_start_date = null;
@@ -569,6 +572,8 @@ class AssetController extends Controller
             if ($unavailableStatus) {
                 $asset->status_id = $unavailableStatus->id;
             }
+            // Set disposed amount when condition is Disposed
+            $asset->disposed_amount = $validatedData['disposed_amount'];
         } else {
             // Clear maintenance dates if condition is not maintenance
             $asset->maintenance_start_date = null;

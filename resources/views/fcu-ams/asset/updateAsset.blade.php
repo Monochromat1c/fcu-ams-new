@@ -405,6 +405,56 @@
                             </div>
                         </div>
 
+                        <!-- Disposed Amount Modal -->
+                        <div class="modal-container">
+                            <div id="disposed-modal" tabindex="-1" aria-hidden="true"
+                                class="modalBg fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
+                                <div class="flex min-h-screen items-center justify-center p-4">
+                                    <div class="relative w-full max-w-xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+                                        <!-- Header -->
+                                        <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                                            <div class="flex items-center justify-between">
+                                                <h3 class="text-lg font-medium text-gray-900">Enter Disposed Amount</h3>
+                                                <button type="button" class="text-gray-400 hover:text-gray-500" onclick="document.getElementById('disposed-modal').classList.toggle('hidden')">
+                                                    <span class="sr-only">Close</span>
+                                                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                                    </svg>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Content -->
+                                        <div class="px-6 py-4">
+                                            <div class="space-y-4">
+                                                <div>
+                                                    <label for="disposed_amount" class="block text-sm font-medium text-gray-700">Disposed Amount (₱)</label>
+                                                    <div class="mt-1">
+                                                        <input type="number" id="disposed_amount" name="disposed_amount" step="0.01" min="0" value="{{ $asset->disposed_amount }}"
+                                                            class="shadow-sm p-2 border focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Footer -->
+                                        <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+                                            <button type="button"
+                                                class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                onclick="document.getElementById('disposed-modal').classList.toggle('hidden')">
+                                                Cancel
+                                            </button>
+                                            <button type="button"
+                                                class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                                onclick="saveDisposedAmount()">
+                                                Save
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Assignment Modal -->
                         <div class="modal-container">
                             <div id="assignment-modal" tabindex="-1" aria-hidden="true"
@@ -565,6 +615,8 @@
     field="condition"
 />
 
+
+
 <script>
     // Preview image before upload
     document.getElementById('asset_image').addEventListener('change', function (e) {
@@ -686,6 +738,22 @@
             }
         });
     });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const conditionSelect = document.getElementById('condition_id');
+        const disposedModal = document.getElementById('disposed-modal');
+    
+        conditionSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.textContent.trim() === 'Disposed') {
+                disposedModal.classList.remove('hidden');
+            }
+        });
+    });
+    
+    function saveDisposedAmount() {
+        document.getElementById('disposed-modal').classList.add('hidden');
+    }
 </script>
 
 @endsection

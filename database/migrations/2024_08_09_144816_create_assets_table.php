@@ -45,6 +45,7 @@ return new class extends Migration
             $table->foreign('status_id')->references('id')->on('statuses');
             $table->unsignedBigInteger('condition_id')->nullable();
             $table->foreign('condition_id')->references('id')->on('conditions');
+            $table->decimal('disposed_amount', 10, 2)->nullable();
             $table->date('maintenance_start_date')->nullable();
             $table->date('maintenance_end_date')->nullable();
             $table->string('assigned_to')->nullable();
