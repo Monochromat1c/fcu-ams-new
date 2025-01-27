@@ -99,8 +99,8 @@
                         <div>
                             <label for="specs" class="block text-sm font-medium text-gray-700">Specification</label>
                             <div class="mt-1">
-                                <input type="text" id="specs" name="specs" value="{{ $asset->specs }}"
-                                    class="shadow-sm p-2 border  focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
+                                <textarea id="specs" name="specs" rows="4"
+                                    class="shadow-sm p-2 border focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">{{ $asset->specs }}</textarea>
                             </div>
                         </div>
 
