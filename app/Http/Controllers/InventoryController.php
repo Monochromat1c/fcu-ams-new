@@ -774,6 +774,10 @@ class InventoryController extends Controller
     public function notifications()
     {
         $user = auth()->user();
+        
+        // Update last_checked_notifications timestamp
+        $user->update(['last_checked_notifications' => now()]);
+        
         $notifications = SupplyRequest::with('inventory')
             ->select('request_group_id', 'requester', 'created_at', 'notes')
             ->selectRaw('GROUP_CONCAT(DISTINCT status) as statuses')

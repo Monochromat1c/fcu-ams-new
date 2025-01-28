@@ -89,13 +89,29 @@ class AppServiceProvider extends ServiceProvider
         view()->composer('*', function ($view) {
             $user = auth()->user();
             if ($user && $user->role->role === 'Department') {
-                $unreadNotificationsCount = \App\Models\SupplyRequest::where('department_id', $user->department_id)
+                \Log::info('User notifications check', [
+                    'user_id' => $user->id,
+                    'department_id' => $user->department_id,
+                    'last_checked' => $user->last_checked_notifications,
+                    'role' => $user->role->role
+                ]);
+
+                $query = \App\Models\SupplyRequest::where('department_id', $user->department_id)
                     ->whereIn('status', ['approved', 'rejected', 'partially_approved'])
                     ->when($user->last_checked_notifications, function ($query) use ($user) {
-                        return $query->where('updated_at', '>', $user->last_checked_notifications);
-                    })
-                    ->distinct('request_group_id')
-                    ->count('request_group_id');
+                        return $query->where(function ($q) use ($user) {
+                            $q->where('updated_at', '>', $user->last_checked_notifications)
+                              ->orWhere('created_at', '>', $user->last_checked_notifications);
+                        });
+                    });
+
+                \Log::info('Query debug', [
+                    'sql' => $query->toSql(),
+                    'bindings' => $query->getBindings(),
+                    'count' => $query->count()
+                ]);
+
+                $unreadNotificationsCount = $query->distinct('request_group_id')->count('request_group_id');
 
                 $view->with('unreadNotificationsCount', $unreadNotificationsCount);
             }

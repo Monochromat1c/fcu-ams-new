@@ -24,6 +24,12 @@ class User extends Authenticatable
         'username',
         'password',
         'department_id',
+        'last_checked_notifications',
+    ];
+
+    protected $casts = [
+        'last_checked_notifications' => 'datetime',
+        'last_checked_alerts' => 'datetime',
     ];
 
     public function role()
