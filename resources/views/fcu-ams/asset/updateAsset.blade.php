@@ -329,14 +329,12 @@
                                         </option>
                                     @endforeach
                                 </select>
-                                <button type="button"
-                                    onclick="document.getElementById('add-condition-modal').classList.remove('hidden')"
-                                    class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
                             </div>
+                            @if($asset->disposed_amount)
+                                <div class="mt-2">
+                                    <span class="text-sm text-gray-500">Disposed Amount: ₱{{ number_format($asset->disposed_amount, 2) }}</span>
+                                </div>
+                            @endif
                         </div>
 
                         <!-- Maintenance Modal -->
@@ -430,8 +428,23 @@
                                                 <div>
                                                     <label for="disposed_amount" class="block text-sm font-medium text-gray-700">Disposed Amount (₱)</label>
                                                     <div class="mt-1">
-                                                        <input type="number" id="disposed_amount" name="disposed_amount" step="0.01" min="0" value="{{ $asset->disposed_amount }}"
+                                                        <input type="number" id="disposed_amount" name="disposed_amount" step="0.01" min="0" 
+                                                            value="{{ $asset->disposed_amount }}" {{ $asset->disposed_amount ? 'disabled' : '' }}
+                                                            class="shadow-sm p-2 border focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md {{ $asset->disposed_amount ? 'bg-gray-100' : '' }}">
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label for="disposed_status_id" class="block text-sm font-medium text-gray-700">Disposal Status</label>
+                                                    <div class="mt-1">
+                                                        <select id="disposed_status_id" name="disposed_status_id" 
                                                             class="shadow-sm p-2 border focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
+                                                            @foreach($disposedStatuses as $disposedStatus)
+                                                                <option value="{{ $disposedStatus->id }}" 
+                                                                    {{ $asset->disposed_status_id == $disposedStatus->id ? 'selected' : '' }}>
+                                                                    {{ $disposedStatus->status }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>
@@ -752,6 +765,28 @@
     });
     
     function saveDisposedAmount() {
+        const disposedAmount = document.getElementById('disposed_amount').value;
+        const conditionDiv = document.getElementById('condition_id').closest('div').parentElement;
+        
+        // Remove existing disposed amount display if any
+        const existingDisplay = conditionDiv.querySelector('.mt-2');
+        if (existingDisplay) {
+            existingDisplay.remove();
+        }
+
+        // Add new disposed amount display if amount exists
+        if (disposedAmount) {
+            const displayDiv = document.createElement('div');
+            displayDiv.className = 'mt-2';
+            displayDiv.innerHTML = `<span class="text-sm text-gray-500">Disposed Amount: ₱${parseFloat(disposedAmount).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</span>`;
+            conditionDiv.appendChild(displayDiv);
+            
+            // Disable the input
+            document.getElementById('disposed_amount').disabled = true;
+            document.getElementById('disposed_amount').classList.add('bg-gray-100');
+        }
+
+        // Close the modal
         document.getElementById('disposed-modal').classList.add('hidden');
     }
 </script>

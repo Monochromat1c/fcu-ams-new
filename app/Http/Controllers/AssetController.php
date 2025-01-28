@@ -20,6 +20,7 @@ use App\Imports\AssetsImport;
 use Illuminate\Validation\Rule;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
+use App\Models\DisposedStatus;
 
 class AssetController extends Controller
 {
@@ -345,8 +346,10 @@ class AssetController extends Controller
         $brands = DB::table('brands')->get();
         $statuses = DB::table('statuses')->get();
         
+        $disposedStatuses = DisposedStatus::all();
+        
         return view('fcu-ams/asset/updateAsset', compact('asset', 'suppliers', 'sites', 'locations', 'categories',
-        'departments', 'conditions', 'statuses', 'brands'));
+        'departments', 'conditions', 'statuses', 'brands', 'disposedStatuses'));
     }
 
     public function update(Request $request, $id)
@@ -372,6 +375,7 @@ class AssetController extends Controller
             'purchase_date' => 'required|date',
             'asset_image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'disposed_amount' => 'nullable|numeric|min:0',
+            'disposed_status_id' => 'nullable|exists:disposed_statuses,id',
             'assigned_to' => 'nullable|string|max:255',
             'issued_date' => 'nullable|date',
             'notes' => 'nullable|string|max:1000'
@@ -416,8 +420,9 @@ class AssetController extends Controller
             if ($unavailableStatus) {
                 $asset->status_id = $unavailableStatus->id;
             }
-            // Set disposed amount when condition is Disposed
-            $asset->disposed_amount = $validatedData['disposed_amount'];
+            // Set disposed amount and status when condition is Disposed
+            $asset->disposed_amount = $request->input('disposed_amount') ?? null;
+            $asset->disposed_status_id = $request->input('disposed_status_id');
         } else {
             // Clear maintenance dates if condition is not maintenance
             $asset->maintenance_start_date = null;

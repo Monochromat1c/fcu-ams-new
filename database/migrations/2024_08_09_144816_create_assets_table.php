@@ -8,6 +8,12 @@ return new class extends Migration
 {
     public function up()
     {
+        Schema::create('disposed_statuses', function (Blueprint $table) {
+            $table->id();
+            $table->string('status');
+            $table->timestamps();
+        });
+
         Schema::create('conditions', function (Blueprint $table) {
             $table->id();
             $table->string('condition');
@@ -32,6 +38,8 @@ return new class extends Migration
             $table->decimal('cost', 10, 2);
             $table->unsignedBigInteger('supplier_id');
             $table->foreign('supplier_id')->references('id')->on('suppliers');
+            $table->unsignedBigInteger('disposed_status_id')->nullable();
+            $table->foreign('disposed_status_id')->references('id')->on('disposed_statuses');
             $table->unsignedBigInteger('site_id');
             $table->foreign('site_id')->references('id')->on('sites');
             $table->unsignedBigInteger('location_id');

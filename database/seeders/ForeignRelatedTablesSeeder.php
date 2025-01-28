@@ -12,6 +12,8 @@ use App\Models\Department;
 use App\Models\Status;
 use App\Models\Unit;
 use App\Models\Brand;
+use App\Models\Condition;
+use App\Models\DisposedStatus;
 
 class ForeignRelatedTablesSeeder extends Seeder
 {
@@ -50,6 +52,17 @@ class ForeignRelatedTablesSeeder extends Seeder
 
         foreach ($brands as $brand) {
             Brand::create($brand);
+        }
+
+        // Disposed_status seeder
+        $disposed_statuses = [
+            ['status' => 'Garbage'],
+            ['status' => 'Donated'],
+            ['status' => 'Sold'],
+        ];
+
+        foreach ($disposed_statuses as $disposed_status) {
+            DisposedStatus::create($disposed_status);
         }
 
         // Seed Site
