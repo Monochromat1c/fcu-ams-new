@@ -85,5 +85,20 @@ class AppServiceProvider extends ServiceProvider
                 $view->with('expiringLeasesCount', $expiringLeasesCount);
             }
         });
+
+        view()->composer('*', function ($view) {
+            $user = auth()->user();
+            if ($user && $user->role->role === 'Department') {
+                $unreadNotificationsCount = \App\Models\SupplyRequest::where('department_id', $user->department_id)
+                    ->whereIn('status', ['approved', 'rejected', 'partially_approved'])
+                    ->when($user->last_checked_notifications, function ($query) use ($user) {
+                        return $query->where('updated_at', '>', $user->last_checked_notifications);
+                    })
+                    ->distinct('request_group_id')
+                    ->count('request_group_id');
+
+                $view->with('unreadNotificationsCount', $unreadNotificationsCount);
+            }
+        });
     }
 }

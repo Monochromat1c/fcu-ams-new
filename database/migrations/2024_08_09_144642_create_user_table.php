@@ -23,6 +23,8 @@ return new class extends Migration
             $table->string('email');
             $table->string('username');
             $table->string('password');
+            $table->timestamp('last_checked_alerts')->nullable();
+            $table->timestamp('last_checked_notifications')->nullable();
             $table->timestamps();
         });
     }
