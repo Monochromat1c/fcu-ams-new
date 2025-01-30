@@ -329,7 +329,7 @@
                     </div>
                 </form>
 
-                @if($purchaseOrders->isEmpty() && $approvedRequests->isEmpty())
+                @if($purchaseOrders->isEmpty() && $approvedRequestsForPO->isEmpty())
                     <p class="text-center text-gray-500 py-4">No purchase order records available.</p>
                 @else
                     <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
@@ -356,7 +356,7 @@
                                         </td>
                                     </tr>
                                 @endforeach
-                                @foreach($approvedRequests as $request)
+                                @foreach($approvedRequestsForPO as $request)
                                     <tr class="hover:bg-gray-50">
                                         <td class="px-6 py-4">{{ $request->department->department }}</td>
                                         <td class="px-6 py-4">{{ $request->requester }}</td>
@@ -375,7 +375,7 @@
                     </div>
                     <div class="mt-4 pagination-container flex w-full">
                         {{ $purchaseOrders->appends(['po_page' => request('po_page')])->links() }}
-                        {{ $approvedRequests->appends(['supply_request_page' => request('supply_request_page')])->links() }}
+                        {{ $approvedRequestsForPO->appends(['po_request_page' => request('po_request_page')])->links() }}
                     </div>
                 @endif
             </div>

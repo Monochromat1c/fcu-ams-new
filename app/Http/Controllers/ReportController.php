@@ -159,6 +159,8 @@ class ReportController extends Controller
 
         // Purchase Order date range display
         $poDateRangeDisplay = $this->formatDateRange($poStartDate, $poEndDate, 'purchase order');
+        
+        // Get purchase orders
         $purchaseOrders = PurchaseOrder::with('supplier', 'department')
             ->whereBetween('po_date', [$poStartDate, $poEndDate])
             ->orderBy('po_date', 'desc')
@@ -169,7 +171,6 @@ class ReportController extends Controller
                 return $records->first();
             });
 
-
         $purchaseOrders = new LengthAwarePaginator(
             $purchaseOrders->forPage($request->input('po_page', 1), 10),
             $purchaseOrders->count(),
@@ -178,7 +179,27 @@ class ReportController extends Controller
             ['path' => $request->url(), 'query' => array_merge($request->query(), ['po_page' => $request->input('po_page', 1)])]
         );
 
-        // For supply requests
+        // Get approved requests for the purchase order section using the same date range
+        $fullyApprovedGroupsForPO = SupplyRequest::select('request_group_id')
+            ->groupBy('request_group_id')
+            ->havingRaw('COUNT(*) = SUM(CASE WHEN status = "approved" THEN 1 ELSE 0 END)')
+            ->pluck('request_group_id');
+        
+        $approvedRequestsForPO = SupplyRequest::with('department')
+            ->select(
+                'request_group_id',
+                'department_id',
+                'request_date',
+                'requester',
+                DB::raw('COUNT(*) as total_items')
+            )
+            ->whereIn('request_group_id', $fullyApprovedGroupsForPO)
+            ->whereBetween('request_date', [$poStartDate, $poEndDate])
+            ->groupBy('request_group_id', 'department_id', 'request_date', 'requester')
+            ->orderBy('request_date', 'desc')
+            ->paginate(10, ['*'], 'po_request_page');
+
+        // For supply requests section (separate filtering)
         $supplyRequestStartDate = $request->input('supply_request_start_date', now()->startOfMonth()->toDateString());
         $supplyRequestEndDate = $request->input('supply_request_end_date', now()->endOfMonth()->toDateString());
 
@@ -212,7 +233,8 @@ class ReportController extends Controller
             compact('stockOutRecords', 'assets', 'purchaseOrders', 'inventoriesForPrint',
                 'assetsDateRangeDisplay', 'poDateRangeDisplay', 'stockOutDateRangeDisplay',
                 'assignedAssets', 'assigneeQuery', 'chartLabels', 'chartData',
-                'departmentChartLabels', 'departmentChartData', 'trendLabels', 'trendData', 'approvedRequests', 'supplyRequestDateRangeDisplay'),
+                'departmentChartLabels', 'departmentChartData', 'trendLabels', 'trendData', 
+                'approvedRequests', 'approvedRequestsForPO', 'supplyRequestDateRangeDisplay'),
             [
                 'inventories' => $inventories,
                 'startDate' => $startDate->toDateString(),
