@@ -329,7 +329,7 @@
                     </div>
                 </form>
 
-                @if($purchaseOrders->isEmpty())
+                @if($purchaseOrders->isEmpty() && $approvedRequests->isEmpty())
                     <p class="text-center text-gray-500 py-4">No purchase order records available.</p>
                 @else
                     <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
@@ -337,249 +337,268 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requester/Type</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Items</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach($purchaseOrders as $record)
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-6 py-4">{{ $record->department->department }}</td>
-                                            <td class="px-6 py-4">{{ $record->po_date }}</td>
-                                            <td class="px-6 py-4">
-                                    <a href="{{ route('purchase-order-details', $record->id) }}"
-                                                    class="text-blue-600 hover:text-blue-900">View Details</a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-                        <div class="mt-4 pagination-container flex w-full">
-                            {{ $purchaseOrders->appends(['po_page' => request('po_page')])->links() }}
-                        </div>
-            @endif
-                                        </div>
-
-                <!-- Stock Out Records Section -->
-                <div class="bg-white rounded-lg shadow-md mb-6 p-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl segoe font-bold text-gray-700">Stock Out Records</h2>
-                        <span class="text-sm text-gray-500">{{ $stockOutDateRangeDisplay }}</span>
-                    </div>
-
-                    <!-- Filter Form -->
-                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div>
-                                <label for="stock_out_start_date" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
-                                <input type="date" name="stock_out_start_date" id="stock_out_start_date"
-                                    value="{{ request('stock_out_start_date', now()->startOfMonth()->toDateString()) }}"
-                                    class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
-                            </div>
-                            <div>
-                                <label for="stock_out_end_date" class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
-                                <input type="date" name="stock_out_end_date" id="stock_out_end_date"
-                                    value="{{ request('stock_out_end_date', now()->endOfMonth()->toDateString()) }}"
-                                    class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
-                            </div>
-                            <div class="flex items-end">
-                                <button type="submit"
-                                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                    Apply Filter
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    @if($stockOutRecords->isEmpty())
-                        <p class="text-center text-gray-500 py-4">No stock out records available.</p>
-                    @else
-                        <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Receiver</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @foreach($stockOutRecords as $record)
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-6 py-4">{{ $record->receiver }}</td>
-                                            <td class="px-6 py-4">{{ $record->stock_out_date }}</td>
-                                            <td class="px-6 py-4">
-                                        <a href="{{ route('stock.out.details', $record->id) }}"
-                                                    class="text-blue-600 hover:text-blue-900">View Details</a>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                        <div class="mt-4 pagination-container flex w-full">
-                            {{ $stockOutRecords->appends(['stock_out_page' => request('stock_out_page')])->links() }}
-                        </div>
-                    @endif
-                                    </div>
-
-                <!-- Supply Requests Section -->
-                <div class="bg-white rounded-lg shadow-md p-6 mb-6 col-span-2">
-                    <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-2xl segoe font-bold text-gray-700">Supply Requests</h2>
-                        <span class="text-sm text-gray-500">{{ $supplyRequestDateRangeDisplay }}</span>
-                    </div>
-
-                    <!-- Filter Form -->
-                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div>
-                                <label for="supply_request_start_date" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
-                                <input type="date" name="supply_request_start_date" id="supply_request_start_date"
-                                    value="{{ request('supply_request_start_date', now()->startOfMonth()->toDateString()) }}"
-                                    class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
-                            </div>
-                            <div>
-                                <label for="supply_request_end_date" class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
-                                <input type="date" name="supply_request_end_date" id="supply_request_end_date"
-                                    value="{{ request('supply_request_end_date', now()->endOfMonth()->toDateString()) }}"
-                                    class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
-                            </div>
-                            <div class="flex items-end">
-                                <button type="submit"
-                                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                    Apply Filter
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    @if($approvedRequests->isEmpty())
-                        <p class="text-center text-gray-500 py-4">No approved requests available.</p>
-                    @else
-                        <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requester</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Items</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach($approvedRequests as $request)
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-6 py-4">{{ $request->requester }}</td>
-                                            <td class="px-6 py-4">{{ $request->department->department }}</td>
-                                            <td class="px-6 py-4">{{ $request->total_items }} items</td>
-                                            <td class="px-6 py-4">{{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}</td>
-                                            <td class="px-6 py-4">
-                                                <a href="{{ route('reports.print-approved-request', $request->request_group_id) }}" 
-                                                   class="text-blue-600 hover:text-blue-900">
-                                                    Print Request
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="mt-4 pagination-container flex w-full">
-                            {{ $approvedRequests->appends(['supply_request_page' => request('supply_request_page')])->links() }}
-                        </div>
-                    @endif
-                </div>
-
-                <!-- Inventory Section -->
-                <div class="bg-white rounded-lg shadow-md p-6 mb-6">
-                    <div class="flex justify-between items-center mb-6">
-                        <div>
-                            <h2 class="text-2xl segoe font-bold text-gray-700">Inventory Report</h2>
-                            <p class="text-sm text-gray-500 mt-1">{{ $dateRangeDisplay }}</p>
-                        </div>
-                        <div class="flex space-x-2">
-                            <form method="GET" action="{{ route('reports.print') }}" target="_blank" class="ml-2">
-                            <input type="hidden" name="start_date" value="{{ request('start_date', now()->startOfMonth()->toDateString()) }}">
-                            <input type="hidden" name="end_date" value="{{ request('end_date', now()->endOfMonth()->toDateString()) }}">
-                                <button type="submit"
-                                class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                                    </svg>
-                                Print Report
-                                </button>
-                            </form>
-                            <a href="{{ route('reports.export-inventory', ['start_date' => request('start_date', now()->startOfMonth()->toDateString()), 'end_date' => request('end_date', now()->endOfMonth()->toDateString())]) }}" 
-                            class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                </svg>
-                                Export CSV
-                            </a>
-                        </div>
-                        </div>
-
-                    <!-- Filter Form -->
-                    <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div>
-                                <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
-                                <input type="date" name="start_date" id="start_date"
-                                    value="{{ request('start_date', now()->startOfMonth()->toDateString()) }}"
-                                    class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
-                            </div>
-                            <div>
-                                <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
-                                <input type="date" name="end_date" id="end_date"
-                                    value="{{ request('end_date', now()->endOfMonth()->toDateString()) }}"
-                                    class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
-                            </div>
-                            <div class="flex items-end">
-                                <button type="submit"
-                                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                    Apply Filter
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
-                    @if($inventories->isEmpty())
-                        <p class="text-center text-gray-500 py-4">No inventory records available.</p>
-                    @else
-                        <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
-                        <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unique Tag</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Items & Specs</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unit</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unit Price</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supplier</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Purchase Date</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach($inventories as $inventory)
-                                        <tr class="hover:bg-gray-50">
-                                            <td class="px-6 py-4">{{ $inventory->unique_tag }}</td>
-                                            <td class="px-6 py-4">{{ $inventory->items_specs }}</td>
-                                            <td class="px-6 py-4">{{ $inventory->quantity }}</td>
-                                            <td class="px-6 py-4">{{ $inventory->unit->unit }}</td>
-                                            <td class="px-6 py-4">{{ $inventory->unit_price }}</td>
-                                            <td class="px-6 py-4">{{ $inventory->supplier->supplier }}</td>
-                                            <td class="px-6 py-4">{{ date('F j, Y', strtotime($inventory->supplier->created_at)) }}</td>
+                                @foreach($purchaseOrders as $record)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4">{{ $record->department->department }}</td>
+                                        <td class="px-6 py-4">Purchase Order</td>
+                                        <td class="px-6 py-4">-</td>
+                                        <td class="px-6 py-4">{{ $record->po_date }}</td>
+                                        <td class="px-6 py-4">
+                                            <a href="{{ route('purchase-order-details', $record->id) }}"
+                                               class="text-blue-600 hover:text-blue-900">View Details</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                                @foreach($approvedRequests as $request)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4">{{ $request->department->department }}</td>
+                                        <td class="px-6 py-4">{{ $request->requester }}</td>
+                                        <td class="px-6 py-4">{{ $request->total_items }} items</td>
+                                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}</td>
+                                        <td class="px-6 py-4">
+                                            <a href="{{ route('reports.print-approved-request', $request->request_group_id) }}" 
+                                               class="text-blue-600 hover:text-blue-900">
+                                                Print Request
+                                            </a>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
                         </table>
                     </div>
-                        <div class="mt-4 pagination-container flex w-full">
-                            {{ $inventories->appends(['inventory_page' => request('inventory_page')])->links() }}
+                    <div class="mt-4 pagination-container flex w-full">
+                        {{ $purchaseOrders->appends(['po_page' => request('po_page')])->links() }}
+                        {{ $approvedRequests->appends(['supply_request_page' => request('supply_request_page')])->links() }}
+                    </div>
+                @endif
+            </div>
+
+            <!-- Stock Out Records Section -->
+            <div class="bg-white rounded-lg shadow-md mb-6 p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl segoe font-bold text-gray-700">Stock Out Records</h2>
+                    <span class="text-sm text-gray-500">{{ $stockOutDateRangeDisplay }}</span>
+                </div>
+
+                <!-- Filter Form -->
+                <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label for="stock_out_start_date" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                            <input type="date" name="stock_out_start_date" id="stock_out_start_date"
+                                value="{{ request('stock_out_start_date', now()->startOfMonth()->toDateString()) }}"
+                                class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
                         </div>
+                        <div>
+                            <label for="stock_out_end_date" class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                            <input type="date" name="stock_out_end_date" id="stock_out_end_date"
+                                value="{{ request('stock_out_end_date', now()->endOfMonth()->toDateString()) }}"
+                                class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit"
+                                class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Apply Filter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                @if($stockOutRecords->isEmpty())
+                    <p class="text-center text-gray-500 py-4">No stock out records available.</p>
+                @else
+                    <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Receiver</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($stockOutRecords as $record)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4">{{ $record->receiver }}</td>
+                                        <td class="px-6 py-4">{{ $record->stock_out_date }}</td>
+                                        <td class="px-6 py-4">
+                                            <a href="{{ route('stock.out.details', $record->id) }}"
+                                               class="text-blue-600 hover:text-blue-900">View Details</a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-4 pagination-container flex w-full">
+                        {{ $stockOutRecords->appends(['stock_out_page' => request('stock_out_page')])->links() }}
+                    </div>
+                @endif
+            </div>
+
+            <!-- Supply Requests Section -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6 col-span-2">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl segoe font-bold text-gray-700">Supply Requests</h2>
+                    <span class="text-sm text-gray-500">{{ $supplyRequestDateRangeDisplay }}</span>
+                </div>
+
+                <!-- Filter Form -->
+                <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label for="supply_request_start_date" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                            <input type="date" name="supply_request_start_date" id="supply_request_start_date"
+                                value="{{ request('supply_request_start_date', now()->startOfMonth()->toDateString()) }}"
+                                class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
+                        </div>
+                        <div>
+                            <label for="supply_request_end_date" class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                            <input type="date" name="supply_request_end_date" id="supply_request_end_date"
+                                value="{{ request('supply_request_end_date', now()->endOfMonth()->toDateString()) }}"
+                                class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit"
+                                class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Apply Filter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                @if($approvedRequests->isEmpty())
+                    <p class="text-center text-gray-500 py-4">No approved requests available.</p>
+                @else
+                    <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requester</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Items</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($approvedRequests as $request)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4">{{ $request->requester }}</td>
+                                        <td class="px-6 py-4">{{ $request->department->department }}</td>
+                                        <td class="px-6 py-4">{{ $request->total_items }} items</td>
+                                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}</td>
+                                        <td class="px-6 py-4">
+                                            <a href="{{ route('reports.print-approved-request', $request->request_group_id) }}" 
+                                               class="text-blue-600 hover:text-blue-900">
+                                                Print Request
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-4 pagination-container flex w-full">
+                        {{ $approvedRequests->appends(['supply_request_page' => request('supply_request_page')])->links() }}
+                    </div>
+                @endif
+            </div>
+
+            <!-- Inventory Section -->
+            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="text-2xl segoe font-bold text-gray-700">Inventory Report</h2>
+                        <p class="text-sm text-gray-500 mt-1">{{ $dateRangeDisplay }}</p>
+                    </div>
+                    <div class="flex space-x-2">
+                        <form method="GET" action="{{ route('reports.print') }}" target="_blank" class="ml-2">
+                        <input type="hidden" name="start_date" value="{{ request('start_date', now()->startOfMonth()->toDateString()) }}">
+                        <input type="hidden" name="end_date" value="{{ request('end_date', now()->endOfMonth()->toDateString()) }}">
+                            <button type="submit"
+                            class="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                                </svg>
+                            Print Report
+                            </button>
+                        </form>
+                        <a href="{{ route('reports.export-inventory', ['start_date' => request('start_date', now()->startOfMonth()->toDateString()), 'end_date' => request('end_date', now()->endOfMonth()->toDateString())]) }}" 
+                        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                            </svg>
+                            Export CSV
+                        </a>
+                    </div>
+                    </div>
+
+                <!-- Filter Form -->
+                <form method="GET" action="{{ route('reports.index') }}" class="bg-gray-50 rounded-lg p-6 mb-4 border-2 border-slate-300">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div>
+                            <label for="start_date" class="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+                            <input type="date" name="start_date" id="start_date"
+                                value="{{ request('start_date', now()->startOfMonth()->toDateString()) }}"
+                                class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
+                        </div>
+                        <div>
+                            <label for="end_date" class="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+                            <input type="date" name="end_date" id="end_date"
+                                value="{{ request('end_date', now()->endOfMonth()->toDateString()) }}"
+                                class="mt-1 block w-full rounded-md border-2 border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 bg-white px-4 py-2">
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit"
+                                class="w-full bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                Apply Filter
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                @if($inventories->isEmpty())
+                    <p class="text-center text-gray-500 py-4">No inventory records available.</p>
+                @else
+                    <div class="overflow-x-auto border-2 border-slate-300 rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unique Tag</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Items & Specs</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Quantity</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unit</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Unit Price</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Supplier</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Purchase Date</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                                @foreach($inventories as $inventory)
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4">{{ $inventory->unique_tag }}</td>
+                                        <td class="px-6 py-4">{{ $inventory->items_specs }}</td>
+                                        <td class="px-6 py-4">{{ $inventory->quantity }}</td>
+                                        <td class="px-6 py-4">{{ $inventory->unit->unit }}</td>
+                                        <td class="px-6 py-4">{{ $inventory->unit_price }}</td>
+                                        <td class="px-6 py-4">{{ $inventory->supplier->supplier }}</td>
+                                        <td class="px-6 py-4">{{ date('F j, Y', strtotime($inventory->supplier->created_at)) }}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                    <div class="mt-4 pagination-container flex w-full">
+                        {{ $inventories->appends(['inventory_page' => request('inventory_page')])->links() }}
+                    </div>
             @endif
         </div>
 

@@ -197,7 +197,7 @@
                                                 {{ $user->first_name . ' ' . $user->last_name }}
                                             </div>
                                             <div class="text-sm text-gray-500">
-                                                {{ $user->email }}
+                                                {{ $user->department->department }}
                                             </div>
                                         </div>
                                     </div>
