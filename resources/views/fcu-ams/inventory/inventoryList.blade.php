@@ -401,7 +401,8 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @foreach($inventories as $inventory)
-                            <tr class="hover:bg-gray-50 transition-colors duration-200">
+                            <tr class="hover:bg-gray-50 transition-colors duration-200"
+                                onclick="window.location.href='{{ route('inventory.view', $inventory->id) }}'">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $inventory->unique_tag }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $inventory->items_specs }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $inventory->brand->brand }}</td>
@@ -494,6 +495,13 @@
 
         searchInput.addEventListener('input', function() {
             clearTimeout(typingTimer);
+
+            // If the search input is empty, reload the page
+            if (this.value.trim() === '') {
+                window.location.href = "{{ route('inventory.list') }}";
+                return;
+            }
+
             typingTimer = setTimeout(performSearch, doneTypingInterval);
         });
 
@@ -525,6 +533,7 @@
             inventories.forEach(inventory => {
                 const row = document.createElement('tr');
                 row.className = 'hover:bg-gray-50 transition-colors duration-200';
+                row.onclick = () => window.location.href = `/inventory/${inventory.id}/view`;
                 
                 row.innerHTML = `
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${inventory.unique_tag}</td>
