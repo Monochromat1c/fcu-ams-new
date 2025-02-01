@@ -658,6 +658,61 @@ class AssetController extends Controller
 
         $asset->save();
 
-        return redirect()->back()->with('success', 'Asset has been returned successfully.');
+        return redirect()->route('asset.list')->with('success', 'Asset has been returned successfully.');
+    }
+
+    public function disposed(Request $request)
+    {
+        $sort = $request->input('sort', 'asset_tag_id');
+        $direction = $request->input('direction', 'asc');
+        $search = $request->input('search');
+
+        $query = DB::table('assets')
+            ->leftJoin('suppliers', 'assets.supplier_id', '=', 'suppliers.id')
+            ->leftJoin('sites', 'assets.site_id', '=', 'sites.id')
+            ->leftJoin('locations', 'assets.location_id', '=', 'locations.id')
+            ->leftJoin('categories', 'assets.category_id', '=', 'categories.id')
+            ->leftJoin('departments', 'assets.department_id', '=', 'departments.id')
+            ->leftJoin('conditions', 'assets.condition_id', '=', 'conditions.id')
+            ->leftJoin('statuses', 'assets.status_id', '=', 'statuses.id')
+            ->leftJoin('brands', 'assets.brand_id', '=', 'brands.id')
+            ->leftJoin('disposed_statuses', 'assets.disposed_status_id', '=', 'disposed_statuses.id')
+            ->select('assets.*', 
+                'suppliers.supplier as supplier_name', 
+                'sites.site as site_name', 
+                'statuses.status as status_name',
+                'conditions.condition as condition_name',
+                'locations.location as location_name', 
+                'categories.category as category_name', 
+                'departments.department as department_name',
+                'brands.brand as brand_name',
+                'disposed_statuses.status as disposed_status_name'
+            )
+            ->whereIn('conditions.condition', ['Disposed'])
+            ->whereNull('assets.deleted_at');
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('assets.asset_tag_id', 'like', '%' . $search . '%')
+                    ->orWhere('suppliers.supplier', 'like', '%' . $search . '%')
+                    ->orWhere('sites.site', 'like', '%' . $search . '%')
+                    ->orWhere('locations.location', 'like', '%' . $search . '%')
+                    ->orWhere('categories.category', 'like', '%' . $search . '%')
+                    ->orWhere('departments.department', 'like', '%' . $search . '%')
+                    ->orWhere('brands.brand', 'like', '%' . $search . '%');
+            });
+        }
+
+        $query->orderBy($sort, $direction);
+
+        $disposedAssets = $query->paginate(15)
+            ->appends($request->all());
+
+        return view('fcu-ams/asset/disposedAssets', compact(
+            'disposedAssets',
+            'sort',
+            'direction',
+            'search'
+        ));
     }
 }

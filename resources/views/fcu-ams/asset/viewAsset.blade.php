@@ -7,7 +7,7 @@
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-200 col-span-5">
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
-            <a href="{{ route('asset.list') }}" class="mr-4 hover:bg-gray-100 my-auto p-2 rounded-full transition">
+            <a href="{{ url()->previous() }}" class="mr-4 hover:bg-gray-100 my-auto p-2 rounded-full transition">
                 <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
