@@ -576,6 +576,13 @@
 
         searchInput.addEventListener('input', function() {
             clearTimeout(typingTimer);
+            
+            // If the search input is empty, reload the page
+            if (this.value.trim() === '') {
+                window.location.href = "{{ route('asset.list') }}";
+                return;
+            }
+            
             typingTimer = setTimeout(performSearch, doneTypingInterval);
         });
 
