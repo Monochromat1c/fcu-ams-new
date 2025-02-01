@@ -60,7 +60,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/asset/import', 'import')->name('asset.import');
         Route::post('/asset/{id}/update-condition', 'updateCondition')->name('asset.update.condition');
         Route::delete('/asset/{id}', 'destroy')->name('asset.destroy');
-
+        Route::put('/asset/{id}/return', 'return')->name('asset.return');
     }); 
 
     Route::controller(InventoryController::class)->group(function (){

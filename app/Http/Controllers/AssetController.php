@@ -193,7 +193,13 @@ class AssetController extends Controller
                 'conditions.condition as condition_name',
                 'statuses.status as status_name'
             )
-            ->where('assets.asset_tag_id', 'like', '%' . $searchQuery . '%')
+            ->where(function($q) use ($searchQuery) {
+                $q->where('assets.asset_tag_id', 'like', '%' . $searchQuery . '%')
+                  ->orWhere('assets.assigned_to', 'like', '%' . $searchQuery . '%')
+                  ->orWhere('suppliers.supplier', 'like', '%' . $searchQuery . '%')
+                  ->orWhere('categories.category', 'like', '%' . $searchQuery . '%')    
+                  ->orWhere('conditions.condition', 'like', '%' . $searchQuery . '%');
+            })
             ->whereNull('assets.deleted_at');
 
         // Apply filters if they exist
@@ -617,5 +623,41 @@ class AssetController extends Controller
         $asset->save();
 
         return redirect()->back()->with('success', 'Asset condition updated successfully.');
+    }
+
+    public function updateConditionToUsed()
+    {
+        $this->condition_id = Condition::where('condition', 'Used')->first()->id;
+        $this->save();
+    }
+
+    public function return($id)
+    {
+        $asset = Asset::findOrFail($id);
+        $oldAsset = clone $asset;
+
+        // Clear assignment details and set return timestamp
+        $asset->assigned_to = null;
+        $asset->issued_date = null;
+        $asset->returned_at = now(); // Record the exact date and time of return
+        
+        // Update status to Available
+        $availableStatus = Status::where('status', 'Available')->first();
+        if ($availableStatus) {
+            $asset->status_id = $availableStatus->id;
+        }
+
+        // Update condition to Used
+        $usedCondition = Condition::where('condition', 'Used')->first();
+        if ($usedCondition) {
+            $asset->condition_id = $usedCondition->id;
+        }
+
+        // Store the edit history
+        $this->storeEditHistory($asset, auth()->user(), $oldAsset);
+
+        $asset->save();
+
+        return redirect()->back()->with('success', 'Asset has been returned successfully.');
     }
 }

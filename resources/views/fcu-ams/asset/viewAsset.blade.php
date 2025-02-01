@@ -7,9 +7,7 @@
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-200 col-span-5">
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
-            <a href=""
-            onclick="window.history.back(); return false;"
-            class="mr-4 hover:bg-gray-100 my-auto p-2 rounded-full transition">
+            <a href="{{ route('asset.list') }}" class="mr-4 hover:bg-gray-100 my-auto p-2 rounded-full transition">
                 <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                     xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -190,7 +188,21 @@
                             <div class="grid gap-4">
                                 <div class="space-y-1">
                                     <label class="text-xs font-medium text-gray-500 uppercase">Assigned To</label>
-                                    <p class="text-sm font-medium text-gray-900">{{ $asset->assigned_to ?? 'Not Assigned' }}</p>
+                                    <div class="flex items-center justify-between">
+                                        <p class="text-sm font-medium text-gray-900">{{ $asset->assigned_to ?? 'Not Assigned' }}</p>
+                                        @if($asset->assigned_to && Auth::user()->role->role != 'Department')
+                                            <form action="{{ route('asset.return', $asset->id) }}" method="POST" class="ml-4">
+                                                @csrf
+                                                @method('PUT')
+                                                <button type="submit" class="flex items-center gap-1 px-3 py-1 text-xs font-medium text-red-600 bg-red-50 rounded-full hover:bg-red-100 transition-colors duration-200">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                                                    </svg>
+                                                    Return Asset
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-xs font-medium text-gray-500 uppercase">Date Issued</label>

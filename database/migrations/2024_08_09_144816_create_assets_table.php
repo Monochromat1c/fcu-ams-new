@@ -58,6 +58,7 @@ return new class extends Migration
             $table->date('maintenance_end_date')->nullable();
             $table->string('assigned_to')->nullable();
             $table->date('issued_date')->nullable();
+            $table->timestamp('returned_at')->nullable();
             $table->text('notes')->nullable();
             $table->timestamps();
             $table->softDeletes();

@@ -392,7 +392,7 @@
                         <div class="relative flex-1">
                             <input type="text" name="search" value="{{ request('search') }}"
                                 class="w-full rounded-md border-0 py-2 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                placeholder="Search by Asset Tag ID..." id="searchInput">
+                                placeholder="Search for assets..." id="searchInput">
                             <div class="absolute inset-y-0 right-0 flex items-center pr-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
                                     class="w-5 h-5 text-gray-400">
@@ -418,6 +418,16 @@
                                 <div class="flex items-center">
                                     <span>Asset Tag ID</span>
                                     <a class="ml-2" href="{{ route('asset.list', ['sort' => 'asset_tag_id', 'direction' => ($direction == 'asc' && $sort == 'asset_tag_id') ? 'desc' : 'asc']) }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
+                                        </svg>
+                                    </a>
+                                </div>
+                            </th>
+                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <div class="flex items-center">
+                                    <span>Assigned To</span>
+                                    <a class="ml-2" href="{{ route('asset.list', ['sort' => 'assigned_to', 'direction' => ($direction == 'asc' && $sort == 'assigned_to') ? 'desc' : 'asc']) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
                                         </svg>
@@ -481,6 +491,7 @@
                         @foreach($assets as $asset)
                             <tr class="hover:bg-gray-50 transition-colors duration-200 cursor-pointer" onclick="window.location.href='{{ route('asset.view', $asset->id) }}'">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->asset_tag_id }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->assigned_to ?: 'Not currently assigned' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱{{ number_format($asset->cost, 2) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->supplier_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->category_name }}</td>
@@ -559,7 +570,7 @@
         }
 
         const searchInput = document.getElementById('searchInput');
-        const tableBody = document.querySelector('table tbody');
+        const tableBody = document.querySelector('tbody');
         let typingTimer;
         const doneTypingInterval = 300;
 
@@ -602,7 +613,6 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log('Search results:', data); // Debug log
                 updateTable(data.assets);
             })
             .catch(error => {
@@ -618,13 +628,29 @@
                 row.className = 'hover:bg-gray-50 transition-colors duration-200 cursor-pointer';
                 row.onclick = () => window.location.href = `/asset/${asset.id}/view`;
                 
+                const statusClass = getStatusClass(asset.status_name);
+                const userRole = '{{ Auth::user()->role->role }}';
+                const actionButtons = userRole !== 'Department' ? `
+                    <a href="/asset/${asset.id}/edit" class="text-indigo-600 hover:text-indigo-900">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                    </a>
+                    <button onclick="event.stopPropagation(); document.getElementById('delete-asset-modal${asset.id}').classList.remove('hidden')" class="text-red-600 hover:text-red-900">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                    </button>
+                ` : '';
+
                 row.innerHTML = `
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${asset.asset_tag_id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${asset.assigned_to || 'Not currently assigned'}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱${Number(asset.cost).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${asset.supplier_name}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${asset.category_name}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-6 py-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClass(asset.status_name)}">
+                        <span class="px-6 py-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
                             ${asset.status_name}
                         </span>
                     </td>
@@ -633,7 +659,7 @@
                             ${asset.condition_name}
                         </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" onclick="event.stopPropagation()">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" onclick="event.stopPropagation();">
                         <div class="flex justify-center space-x-2">
                             <a href="/asset/${asset.id}/view" class="text-green-600 hover:text-blue-900 hover:scale-110 transition-transform duration-200">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -641,7 +667,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
                             </a>
-                            ${getActionButtons(asset.id)}
+                            ${actionButtons}
                         </div>
                     </td>
                 `;
@@ -659,27 +685,6 @@
                 default:
                     return 'bg-red-100 text-red-800';
             }
-        }
-
-        function getActionButtons(assetId) {
-            const userRole = '{{ Auth::user()->role->role }}';
-            if (userRole === 'Department') {
-                return '';
-            }
-            
-            return `
-                <a href="/asset/${assetId}/edit" class="text-indigo-600 hover:text-indigo-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                    </svg>
-                </a>
-                <button onclick="document.getElementById('delete-asset-modal${assetId}').classList.remove('hidden')"
-                        class="text-red-600 hover:text-red-900">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                </button>
-            `;
         }
     });
 </script>

@@ -30,6 +30,7 @@ class Asset extends Model
         'condition_id',
         'assigned_to',
         'issued_date',
+        'returned_at',
         'notes',
         'created_by',
         'deleted_by',
