@@ -427,14 +427,24 @@ class AssetController extends Controller
                 $asset->status_id = $unavailableStatus->id;
             }
             // Set disposed amount and status when condition is Disposed
-            $asset->disposed_amount = $request->input('disposed_amount') ?? null;
-            $asset->disposed_status_id = $request->input('disposed_status_id');
+            if ($request->filled('disposed_amount')) {
+                $asset->disposed_amount = $request->input('disposed_amount');
+            }
+            if ($request->filled('disposed_status_id')) {
+                $asset->disposed_status_id = $request->input('disposed_status_id');
+            }
         } else {
             // Clear maintenance dates if condition is not maintenance
             $asset->maintenance_start_date = null;
             $asset->maintenance_end_date = null;
+            // Clear disposed amount and status if condition is not disposed
+            if ($oldAsset->condition_id == Condition::where('condition', 'Disposed')->first()->id) {
+                $asset->disposed_amount = null;
+                $asset->disposed_status_id = null;
+            }
             // Set status back to Available if it was previously in maintenance or Disposed
-            if ($oldAsset->condition_id == Condition::where('condition', 'Maintenance')->first()->id || $oldAsset->condition_id == Condition::where('condition', 'Disposed')->first()->id) {
+            if ($oldAsset->condition_id == Condition::where('condition', 'Maintenance')->first()->id || 
+                $oldAsset->condition_id == Condition::where('condition', 'Disposed')->first()->id) {
                 $availableStatus = Status::where('status', 'Available')->first();
                 if ($availableStatus) {
                     $asset->status_id = $availableStatus->id;

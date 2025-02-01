@@ -43,6 +43,9 @@
                     class="space-y-6 p-6">
                     @csrf
                     <input type="hidden" name="id" value="{{ $asset->id }}">
+                    <!-- Add hidden inputs for disposed amount and status -->
+                    <input type="hidden" name="disposed_amount" id="hidden_disposed_amount" value="{{ $asset->disposed_amount }}">
+                    <input type="hidden" name="disposed_status_id" id="hidden_disposed_status_id" value="{{ $asset->disposed_status_id }}">
 
                     <!-- Asset Image -->
                     <div class="space-y-1">
@@ -766,6 +769,7 @@
     
     function saveDisposedAmount() {
         const disposedAmount = document.getElementById('disposed_amount').value;
+        const disposedStatusId = document.getElementById('disposed_status_id').value;
         const conditionDiv = document.getElementById('condition_id').closest('div').parentElement;
         
         // Remove existing disposed amount display if any
@@ -773,6 +777,10 @@
         if (existingDisplay) {
             existingDisplay.remove();
         }
+
+        // Update hidden inputs with the new values
+        document.getElementById('hidden_disposed_amount').value = disposedAmount;
+        document.getElementById('hidden_disposed_status_id').value = disposedStatusId;
 
         // Add new disposed amount display if amount exists
         if (disposedAmount) {
@@ -789,6 +797,33 @@
         // Close the modal
         document.getElementById('disposed-modal').classList.add('hidden');
     }
+
+    // Add event listener for condition change
+    document.addEventListener('DOMContentLoaded', function() {
+        const conditionSelect = document.getElementById('condition_id');
+        const disposedModal = document.getElementById('disposed-modal');
+    
+        conditionSelect.addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            if (selectedOption.textContent.trim() === 'Disposed') {
+                // Reset the disposed amount input when showing the modal
+                document.getElementById('disposed_amount').disabled = false;
+                document.getElementById('disposed_amount').classList.remove('bg-gray-100');
+                document.getElementById('disposed_amount').value = '';
+                // Show the modal
+                disposedModal.classList.remove('hidden');
+            } else {
+                // Clear disposed values when condition is not disposed
+                document.getElementById('hidden_disposed_amount').value = '';
+                document.getElementById('hidden_disposed_status_id').value = '';
+                // Remove the display if it exists
+                const existingDisplay = conditionSelect.closest('div').parentElement.querySelector('.mt-2');
+                if (existingDisplay) {
+                    existingDisplay.remove();
+                }
+            }
+        });
+    });
 </script>
 
 @endsection
