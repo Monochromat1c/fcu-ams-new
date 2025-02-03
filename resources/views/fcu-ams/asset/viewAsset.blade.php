@@ -209,6 +209,10 @@
                                     <p class="text-sm font-medium text-gray-900">{{ $asset->issued_date ? date('F j, Y', strtotime($asset->issued_date)) : 'Not Set' }}</p>
                                 </div>
                                 <div class="space-y-1">
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Date Returned</label>
+                                    <p class="text-sm font-medium text-gray-900">{{ $asset->return_date ? date('F j, Y', strtotime($asset->return_date)) : 'Not Set' }}</p>
+                                </div>
+                                <div class="space-y-1">
                                     <label class="text-xs font-medium text-gray-500 uppercase">Notes</label>
                                     <p class="text-sm font-medium text-gray-900">{{ $asset->notes ?? 'No notes available' }}</p>
                                 </div>

@@ -649,7 +649,8 @@ class AssetController extends Controller
         // Clear assignment details and set return timestamp
         $asset->assigned_to = null;
         $asset->issued_date = null;
-        $asset->returned_at = now(); // Record the exact date and time of return
+        $asset->return_date = now()->toDateString(); // Add return date
+        $asset->returned_at = now();
         
         // Update status to Available
         $availableStatus = Status::where('status', 'Available')->first();
