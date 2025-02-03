@@ -390,6 +390,17 @@ class AssetController extends Controller
         $asset = Asset::findOrFail($id);
         $oldAsset = clone $asset;
 
+        // Check if asset is being newly assigned (has return date but now getting new assignment)
+        if ($asset->return_date && $validatedData['assigned_to']) {
+            $asset->return_date = null;
+            $asset->returned_at = null;
+        }
+
+        // Set issued_date when asset is newly assigned
+        if ($validatedData['assigned_to'] && !$asset->assigned_to) {
+            $validatedData['issued_date'] = now()->toDateString();
+        }
+
         $asset->asset_tag_id = $validatedData['asset_tag_id'];
         $asset->model = $validatedData['model'];
         $asset->specs = $validatedData['specs'] ?? '';
