@@ -176,7 +176,7 @@
                     </div>
 
                     <div class="mb-4">
-                        <label for="requester" class="block text-gray-700 font-bold mb-2">Requester Name:</label>
+                        <label for="requester" class="block text-gray-700 font-bold mb-2">Requested By:</label>
                         <input type="text" id="requester" name="requester" 
                             value="{{ $user->first_name }} {{ $user->middle_name }} {{ $user->last_name }}" 
                             class="w-full p-2 border-2 border-slate-300 rounded-md bg-slate-50" required>

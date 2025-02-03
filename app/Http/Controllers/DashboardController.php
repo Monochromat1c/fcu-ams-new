@@ -200,9 +200,9 @@ class DashboardController extends Controller
         // Recent actions for asset additions
         $assetAdditions = Asset::withTrashed()->select(
             'assets.id', 
-            'assets.asset_tag_id as name', 
-            'assets.created_at', 
-            DB::raw("'Asset' as type"), 
+            'assets.asset_tag_id as name',
+            'assets.created_at',
+            DB::raw("'Asset' as type"),
             DB::raw("'added' as action"),
             'createdByUser.id as user_id',
             DB::raw("COALESCE(CONCAT(createdByUser.first_name, ' ', createdByUser.last_name), 'System') as user_name")
@@ -212,10 +212,10 @@ class DashboardController extends Controller
         // Recent actions for asset deletions
         $assetDeletions = Asset::withTrashed()
             ->select(
-                'assets.id', 
-                'assets.asset_tag_id as name', 
-                'assets.deleted_at as created_at', 
-                DB::raw("'Asset' as type"), 
+                'assets.id',
+                'assets.asset_tag_id as name',
+                'assets.deleted_at as created_at',
+                DB::raw("'Asset' as type"),
                 DB::raw("'removed' as action"),
                 'deletedByUser.id as user_id',
                 DB::raw("COALESCE(CONCAT(deletedByUser.first_name, ' ', deletedByUser.last_name), 'System') as user_name")
@@ -225,10 +225,10 @@ class DashboardController extends Controller
 
         // Recent actions for inventory additions
         $inventoryAdditions = Inventory::withTrashed()->select(
-            'inventories.id', 
-            'inventories.items_specs as name', 
-            'inventories.created_at', 
-            DB::raw("'Inventory' as type"), 
+            'inventories.id',
+            'inventories.items_specs as name',
+            'inventories.created_at',
+            DB::raw("'Inventory' as type"),
             DB::raw("'added' as action"),
             'createdByUser.id as user_id',
             DB::raw("COALESCE(CONCAT(createdByUser.first_name, ' ', createdByUser.last_name), 'System') as user_name")
@@ -238,10 +238,10 @@ class DashboardController extends Controller
         // Recent actions for inventory deletions
         $inventoryDeletions = Inventory::withTrashed()
             ->select(
-                'inventories.id', 
-                'inventories.items_specs as name', 
-                'inventories.deleted_at as created_at', 
-                DB::raw("'Inventory' as type"), 
+                'inventories.id',
+                'inventories.items_specs as name',
+                'inventories.deleted_at as created_at',
+                DB::raw("'Inventory' as type"),
                 DB::raw("'removed' as action"),
                 'deletedByUser.id as user_id',
                 DB::raw("COALESCE(CONCAT(deletedByUser.first_name, ' ', deletedByUser.last_name), 'System') as user_name")
@@ -251,10 +251,10 @@ class DashboardController extends Controller
 
         // Get edit history for assets
         $assetEditHistory = AssetEditHistory::select(
-            'asset_edit_histories.asset_id as id', 
+            'asset_edit_histories.asset_id as id',
             DB::raw("(SELECT asset_tag_id FROM assets WHERE id = asset_edit_histories.asset_id) as name"),
-            'asset_edit_histories.created_at', 
-            DB::raw("'Asset' as type"), 
+            'asset_edit_histories.created_at',
+            DB::raw("'Asset' as type"),
             DB::raw("'edited' as action"),
             'editUser.id as user_id',
             DB::raw("CONCAT(editUser.first_name, ' ', editUser.last_name) as user_name")
@@ -263,10 +263,10 @@ class DashboardController extends Controller
 
         // Get edit history for inventories
         $inventoryEditHistory = InventoryEditHistory::select(
-            'inventory_edit_histories.inventory_id as id', 
+            'inventory_edit_histories.inventory_id as id',
             DB::raw("(SELECT items_specs FROM inventories WHERE id = inventory_edit_histories.inventory_id) as name"),
-            'inventory_edit_histories.created_at', 
-            DB::raw("'Inventory' as type"), 
+            'inventory_edit_histories.created_at',
+            DB::raw("'Inventory' as type"),
             DB::raw("'edited' as action"),
             'editUser.id as user_id',
             DB::raw("CONCAT(editUser.first_name, ' ', editUser.last_name) as user_name")
@@ -285,6 +285,7 @@ class DashboardController extends Controller
             ->get()
             ->map(function ($action) {
                 return [
+                    'id' => $action->id,
                     'type' => $action->type,
                     'name' => $action->name,
                     'action' => $action->action,
