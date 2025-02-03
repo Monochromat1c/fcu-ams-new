@@ -233,8 +233,9 @@
             </div>
             <!-- RECENT ACTIONS -->
             <div class="md:col-span-2 bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-                <div class="px-4 sm:px-6 py-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+                <div class="px-4 sm:px-6 py-4 bg-gray-50 border-b border-gray-200 flex flex-col sm:flex-row items-start sm:items-center justify-between space-y-2 sm:space-y-0">
                     <h3 class="text-lg sm:text-xl font-bold text-gray-800 tracking-tight">Recent Actions</h3>
+                    <a href="{{ route('activities.index') }}" class="text-blue-600 hover:text-blue-800 text-sm">View All Actions</a>
                 </div>
                 <div class="divide-y divide-gray-100">
                     @foreach($recentActions as $action)

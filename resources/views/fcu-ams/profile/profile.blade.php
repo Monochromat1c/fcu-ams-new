@@ -6,7 +6,7 @@
     <div x-show="sidebarOpen" class="col-span-1">
         @include('layouts.sidebar')
     </div>
-    <div :class="{ 'col-span-5': sidebarOpen, 'col-span-6': !sidebarOpen }" class="content min-h-screen bg-gray-100">
+    <div :class="{ 'col-span-5': sidebarOpen, 'col-span-6': !sidebarOpen }" class="content min-h-screen bg-slate-200">
         <!-- Header -->
         <nav class="bg-white flex justify-between py-3 px-4 m-3 2xl:max-w-7xl 2xl:mx-auto shadow-md rounded-md">
             <button @click="sidebarOpen = !sidebarOpen" class="p-2 rounded-lg hover:bg-gray-100 transition-colors duration-200">

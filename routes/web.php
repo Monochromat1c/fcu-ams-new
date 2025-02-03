@@ -23,6 +23,7 @@ use App\Http\Controllers\LocationController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\RequestController;
+use App\Http\Controllers\ActivityController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login')->middleware('auth.redirect');
@@ -230,6 +231,10 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/user/add', 'add')->name('user.add');
         Route::post('/user/{id}', 'update')->name('user.update');
         Route::delete('/user/{id}', 'destroy')->name('user.destroy');
+    });
+
+    Route::controller(ActivityController::class)->group(function () {
+        Route::get('/activities', 'index')->name('activities.index');
     });
 
     Route::controller(PurchaseOrderController::class)->group(function (){
