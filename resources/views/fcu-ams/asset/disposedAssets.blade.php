@@ -119,9 +119,9 @@
                                 <div class="flex items-center">
                                     <span>Asset Tag ID</span>
                                     <a class="ml-2" href="{{ route('asset.disposed', ['sort' => 'asset_tag_id', 'direction' => ($direction == 'asc' && $sort == 'asset_tag_id') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                        </svg>
+                                        </svg> --}}
                                     </a>
                                 </div>
                             </th>
@@ -129,9 +129,9 @@
                                 <div class="flex items-center">
                                     <span>Category</span>
                                     <a class="ml-2" href="{{ route('asset.disposed', ['sort' => 'category_name', 'direction' => ($direction == 'asc' && $sort == 'category_name') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                        </svg>
+                                        </svg> --}}
                                     </a>
                                 </div>
                             </th>
@@ -139,9 +139,9 @@
                                 <div class="flex items-center">
                                     <span>Brand</span>
                                     <a class="ml-2" href="{{ route('asset.disposed', ['sort' => 'brand_name', 'direction' => ($direction == 'asc' && $sort == 'brand_name') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                        </svg>
+                                        </svg> --}}
                                     </a>
                                 </div>
                             </th>
@@ -149,9 +149,9 @@
                                 <div class="flex items-center">
                                     <span>Model</span>
                                     <a class="ml-2" href="{{ route('asset.disposed', ['sort' => 'model', 'direction' => ($direction == 'asc' && $sort == 'model') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                        </svg>
+                                        </svg> --}}
                                     </a>
                                 </div>
                             </th>
@@ -159,9 +159,9 @@
                                 <div class="flex items-center">
                                     <span>Department</span>
                                     <a class="ml-2" href="{{ route('asset.disposed', ['sort' => 'department_name', 'direction' => ($direction == 'asc' && $sort == 'department_name') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                        </svg>
+                                        </svg> --}}
                                     </a>
                                 </div>
                             </th>
@@ -169,9 +169,9 @@
                                 <div class="flex items-center">
                                     <span>Disposed Status</span>
                                     <a class="ml-2" href="{{ route('asset.disposed', ['sort' => 'disposed_status_name', 'direction' => ($direction == 'asc' && $sort == 'disposed_status_name') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                        </svg>
+                                        </svg> --}}
                                     </a>
                                 </div>
                             </th>
@@ -179,9 +179,9 @@
                                 <div class="flex items-center">
                                     <span>Disposed Amount</span>
                                     <a class="ml-2" href="{{ route('asset.disposed', ['sort' => 'disposed_amount', 'direction' => ($direction == 'asc' && $sort == 'disposed_amount') ? 'desc' : 'asc']) }}">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                        </svg>
+                                        </svg> --}}
                                     </a>
                                 </div>
                             </th>
@@ -189,7 +189,7 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
-                        @foreach($disposedAssets as $asset)
+                        @forelse($disposedAssets as $asset)
                             <tr class="hover:bg-gray-50 transition-colors duration-200 cursor-pointer" onclick="window.location.href='{{ route('asset.view', $asset->id) }}'">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->asset_tag_id }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->category_name }}</td>
@@ -210,7 +210,19 @@
                                     </div>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="8" class="px-6 py-12 text-center">
+                                    <div class="flex flex-col items-center justify-center space-y-3">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                                        </svg>
+                                        <p class="text-xl font-medium text-gray-500">No disposed assets found</p>
+                                        <p class="text-sm text-gray-400">There are currently no disposed assets in the system.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
