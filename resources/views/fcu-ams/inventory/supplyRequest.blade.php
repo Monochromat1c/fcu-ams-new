@@ -62,7 +62,7 @@
 
                     <!-- Modal -->
                     <div id="defaultModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
-                        class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+                        class="modalBg flex overflow-y-auto fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
                         <div class="relative my-auto mx-auto p-4 w-full max-w-4xl h-full md:h-auto">
                             <!-- Modal content -->
                             <div class="relative bg-white rounded-lg shadow-xl dark:bg-white border-0">
