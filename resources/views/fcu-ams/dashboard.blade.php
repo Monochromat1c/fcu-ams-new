@@ -208,7 +208,7 @@
                                             Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
                                         </p>
                                         <p class="text-xs text-gray-400">
-                                            {{ date('M d, Y h:i A', strtotime($request->request_date)) }}
+                                            {{ date('M j Y', strtotime($request->request_date)) }}
                                         </p>
                                     </div>
                                     <div>

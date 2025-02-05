@@ -27,8 +27,8 @@ class DashboardController extends Controller
         $recentRequests = SupplyRequest::select(
                 'request_group_id', 
                 'requester', 
-                'request_date', 
                 'department_id',
+                DB::raw('MIN(created_at) as request_date'),
                 DB::raw('COUNT(*) as items_count'),
                 DB::raw('MAX(status) as group_status'),
                 DB::raw('CASE 
@@ -38,7 +38,7 @@ class DashboardController extends Controller
                     WHEN MAX(status) = "rejected" THEN 4
                     ELSE 5 END as status_priority')
             )
-            ->groupBy('request_group_id', 'requester', 'request_date', 'department_id')
+            ->groupBy('request_group_id', 'requester', 'department_id')
             ->with('department')
             ->orderBy('status_priority', 'asc')
             ->orderBy('request_date', 'desc')

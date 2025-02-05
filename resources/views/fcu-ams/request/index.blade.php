@@ -177,29 +177,20 @@
                                     {{ $request->department->department }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                    {{ $request->total_items }} items
+                                    {{ $request->total_items }} {{ Str::plural('item', $request->total_items) }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     {{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
-                                    @if($request->group_status === 'pending')
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
-                                            Pending
-                                        </span>
-                                    @elseif($request->group_status === 'approved')
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Approved
-                                        </span>
-                                    @elseif($request->group_status === 'partially_approved')
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
-                                            Partially Approved
-                                        </span>
-                                    @else
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
-                                            Rejected
-                                        </span>
-                                    @endif
+                                    <span class="px-3 py-1 text-xs font-medium rounded-full
+                                        {{ $request->group_status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                           ($request->group_status === 'approved' ? 'bg-green-100 text-green-800' : 
+                                           ($request->group_status === 'partially_approved' ? 'bg-blue-100 text-blue-800' :
+                                           ($request->group_status === 'cancelled' ? 'bg-gray-100 text-gray-800' :
+                                           'bg-red-100 text-red-800'))) }}">
+                                        {{ ucfirst(str_replace('_', ' ', $request->group_status)) }}
+                                    </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     <div class="flex justify-center space-x-2">
@@ -211,7 +202,7 @@
                                             </svg>
                                         </a>
                                         @if(Auth::user()->role->role !== 'Department')
-                                            <button onclick="document.getElementById('delete-request-modal{{ $request->request_group_id }}').classList.remove('hidden')"
+                                            <button onclick="event.stopPropagation(); document.getElementById('delete-request-modal{{ $request->request_group_id }}').classList.remove('hidden')"
                                                 class="text-red-600 hover:text-red-900">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />

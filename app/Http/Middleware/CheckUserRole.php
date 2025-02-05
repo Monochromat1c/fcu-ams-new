@@ -32,6 +32,7 @@ class CheckUserRole
             'brand.add',
             'unit.add',
             'supplier.add',
+            'inventory.supply-request.update',
         ];
 
         $deniedRoutesForManager = [

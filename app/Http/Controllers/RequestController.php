@@ -24,10 +24,10 @@ class RequestController extends Controller
             ->select(
                 'request_group_id', 
                 'department_id', 
-                'request_date',
                 'requester',
+                DB::raw('MIN(created_at) as request_date'), // Use MIN of created_at
                 DB::raw('COUNT(*) as total_items'),
-                DB::raw('MAX(status) as group_status'), // Get the overall status for the group
+                DB::raw('MAX(status) as group_status'),
                 DB::raw('CASE 
                     WHEN MAX(status) = "pending" THEN 1
                     WHEN MAX(status) = "partially_approved" THEN 2
@@ -41,7 +41,7 @@ class RequestController extends Controller
             $query->where('status', '!=', 'cancelled');
         }
 
-        $requests = $query->groupBy('request_group_id', 'department_id', 'request_date', 'requester')
+        $requests = $query->groupBy('request_group_id', 'department_id', 'requester') // Remove request_date from groupBy
             ->orderBy('status_priority', 'asc')
             ->orderBy('request_date', 'desc')
             ->paginate(10);

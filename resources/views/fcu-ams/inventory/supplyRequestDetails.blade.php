@@ -3,6 +3,8 @@
 <link rel="stylesheet" href="{{ asset('css/stockin.css') }}">
 <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
 
+<meta name="csrf-token" content="{{ csrf_token() }}">
+
 <div class="grid grid-cols-6">
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-200 col-span-5">
@@ -77,7 +79,7 @@
                 @else
                     <div class="flex gap-4">
                         <!-- Edit button -->
-                        <!-- <button type="button" 
+                        <button type="button" 
                             {{ $overallStatus === 'cancelled' || $overallStatus === 'approved' ? 'disabled' : '' }}
                             onclick="document.getElementById('editRequestModal').classList.toggle('hidden')"
                             class="inline-flex items-center px-4 py-2 bg-white border-2 border-blue-500 hover:bg-blue-500 text-blue-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-blue-600">
@@ -85,7 +87,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                             </svg>
                             Edit
-                        </button> -->
+                        </button>
                         <!-- Cancel button -->
                         <form action="{{ route('inventory.supply-request.cancel', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST">
                             @csrf
@@ -231,82 +233,388 @@
             </div>
             <!-- Modal body -->
             <div class="p-6">
-                <div class="mb-4">
-                    <label for="item_id" class="block text-gray-700 font-bold mb-2">Items:</label>
-                    <div class="overflow-y-auto max-h-64">
-                        <div class="max-w-4xl mx-auto overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-300">
-                            <table class="min-w-full divide-y divide-gray-200 border">
-                                <thead>
-                                    <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Item</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit Price</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Quantity</th>
-                                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Total Price</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach($requests as $request)
-                                    <tr>
-                                        <td class="px-6 py-4">
-                                            @if($request->inventory)
-                                                {{ $request->inventory->items_specs }}
-                                            @else
-                                                {{ $request->items_specs }}
-                                            @endif
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            @if($request->inventory)
-                                                {{ $request->inventory->unit->unit }}
-                                            @else
-                                                {{ $request->unit->unit }}
-                                            @endif
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            @if($request->inventory)
-                                                ₱{{ number_format($request->inventory->unit_price, 2) }}
-                                            @else
-                                                ₱{{ number_format($request->estimated_unit_price, 2) }}
-                                            @endif
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            <input type="number" 
-                                                name="quantities[{{ $request->id }}]" 
-                                                value="{{ $request->quantity }}"
-                                                min="1"
-                                                class="block w-24 rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
-                                        </td>
-                                        <td class="px-6 py-4">
-                                            @if($request->inventory)
-                                                ₱{{ number_format($request->inventory->unit_price * $request->quantity, 2) }}
-                                            @else
-                                                ₱{{ number_format($request->estimated_unit_price * $request->quantity, 2) }}
-                                            @endif
-                                        </td>
-                                    </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
+                <form id="edit-request-form" method="POST" action="{{ route('inventory.supply-request.update', $requests->first()->request_group_id) }}">
+                    @csrf
+                    @method('PUT')
+                    <div class="mb-4">
+                        <div class="flex gap-4 mb-6">
+                            <div class="flex-1 relative">
+                                <input type="text" id="edit_item_name" class="block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" placeholder="Search Item">
+                                <div id="edit-suggestions-container" class="absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg z-50 max-h-60 overflow-y-auto hidden">
+                                    <!-- Add loading spinner -->
+                                    <div id="edit-suggestions-loading" class="hidden">
+                                        <div class="flex items-center justify-center p-4">
+                                            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                                            <span class="ml-2 text-gray-600">Searching...</span>
+                                        </div>
+                                    </div>
+                                    <ul id="edit-suggestions-list" class="py-1">
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <input type="number" id="edit_item_quantity" class="block w-full rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" placeholder="Quantity" min="1">
+                            </div>
+                            <button type="button" id="edit-add-item-button" class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out">
+                                Add Item
+                            </button>
+                        </div>
+
+                        <div class="overflow-y-auto max-h-64">
+                            <div class="max-w-4xl mx-auto overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-300">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead>
+                                        <tr class="bg-gradient-to-r from-blue-400 to-blue-500 text-white">
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Item</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Unit Price</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Quantity</th>
+                                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Total Price</th>
+                                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="edit-items-table-body" class="bg-white divide-y divide-gray-200">
+                                        @foreach($requests as $request)
+                                        <tr data-request-id="{{ $request->id }}" 
+                                            data-name="{{ $request->item_name }}"
+                                            data-quantity="{{ $request->quantity }}"
+                                            data-unit="{{ $request->unit ? $request->unit->unit : ($request->inventory ? $request->inventory->unit->unit : '') }}"
+                                            data-unit-price="{{ $request->inventory ? $request->inventory->unit_price : $request->estimated_unit_price }}">
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $request->item_name }}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                {{ $request->unit ? $request->unit->unit : ($request->inventory ? $request->inventory->unit->unit : '') }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                ₱{{ number_format($request->inventory ? $request->inventory->unit_price : $request->estimated_unit_price, 2) }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                <input type="number" 
+                                                    name="quantities[{{ $request->id }}]" 
+                                                    value="{{ $request->quantity }}"
+                                                    min="1"
+                                                    class="block w-24 rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                                    required>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                                ₱{{ number_format(($request->inventory ? $request->inventory->unit_price : $request->estimated_unit_price) * $request->quantity, 2) }}
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                                                <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                                                    </svg>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="bg-gray-50">
+                                            <td colspan="4" class="px-6 py-4 text-right font-semibold text-gray-900">Overall Total:</td>
+                                            <td id="edit-modal-total" class="px-6 py-4 text-left font-semibold text-gray-900">₱{{ number_format($totalPrice, 2) }}</td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!-- Modal footer -->
-                <div class="flex items-center justify-end pt-4 border-t border-gray-200 gap-3">
-                    <button type="button" 
-                        onclick="document.getElementById('editRequestModal').classList.toggle('hidden')"
-                        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">
-                        Cancel
-                    </button>
-                    <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                        Save Changes
-                    </button>
-                </div>
+                    <!-- Modal footer -->
+                    <div class="flex items-center justify-end pt-4 border-t border-gray-200 gap-3">
+                        <button type="button" 
+                            onclick="document.getElementById('editRequestModal').classList.toggle('hidden')"
+                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10">
+                            Cancel
+                        </button>
+                        <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Add the same modals from supply request for validation and warnings -->
+<div id="editValidationModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
+    class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+    <!-- Same content as validationModal but with different IDs -->
+</div>
+
+<div id="editInsufficientStockModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
+    class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+    <!-- Same content as insufficientStockModal but with different IDs -->
+</div>
+
+<div id="editItemNotFoundModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
+    class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
+    <!-- Same content as itemNotFoundModal but with different IDs -->
+</div>
+
 <script>
+    let editSelectedItemData = null;
+    let editSearchTimeout = null;
+
+    function searchEditItems(query) {
+        if (editSearchTimeout) {
+            clearTimeout(editSearchTimeout);
+        }
+
+        const suggestionsContainer = document.getElementById('edit-suggestions-container');
+        const loadingSpinner = document.getElementById('edit-suggestions-loading');
+        const suggestionsList = document.getElementById('edit-suggestions-list');
+
+        if (!query.trim()) {
+            suggestionsContainer.classList.add('hidden');
+            return;
+        }
+
+        suggestionsContainer.classList.remove('hidden');
+        loadingSpinner.classList.remove('hidden');
+        suggestionsList.classList.add('hidden');
+
+        editSearchTimeout = setTimeout(() => {
+            fetch('{{ url("/inventory/search-items") }}?query=' + encodeURIComponent(query))
+                .then(response => response.json())
+                .then(items => {
+                    loadingSpinner.classList.add('hidden');
+                    suggestionsList.classList.remove('hidden');
+                    
+                    if (!items || items.length === 0) {
+                        suggestionsList.innerHTML = '<li class="px-4 py-2 text-gray-500">No items found</li>';
+                        return;
+                    }
+
+                    suggestionsList.innerHTML = '';
+                    items.forEach(item => {
+                        const li = document.createElement('li');
+                        li.className = 'px-4 py-2 hover:bg-blue-50 cursor-pointer';
+                        const displayName = `${item.brand} - ${item.items_specs}`;
+                        li.innerHTML = `
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <span class="font-medium">${displayName}</span>
+                                    <span class="text-gray-500">(${item.unit})</span>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-blue-600">${formatPrice(item.price)}</span>
+                                    <span class="text-gray-500 ml-2">${item.quantity} left${item.quantity == 0 ? ' <span class="text-red-500 font-medium">(Pre-Order)</span>' : ''}</span>
+                                </div>
+                            </div>
+                        `;
+                        li.addEventListener('click', () => {
+                            document.getElementById('edit_item_name').value = displayName;
+                            editSelectedItemData = {
+                                name: displayName,
+                                unit: item.unit,
+                                price: item.price,
+                                quantity: item.quantity
+                            };
+                            document.getElementById('edit_item_quantity').value = '1';
+                            suggestionsContainer.classList.add('hidden');
+                            document.getElementById('edit_item_quantity').focus();
+                        });
+                        suggestionsList.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching items:', error);
+                    loadingSpinner.classList.add('hidden');
+                    suggestionsList.classList.remove('hidden');
+                    suggestionsList.innerHTML = '<li class="px-4 py-2 text-red-500">Error loading items</li>';
+                });
+        }, 300);
+    }
+
+    function updateEditModalTotal() {
+        let total = 0;
+        const rows = document.querySelectorAll('#edit-items-table-body tr');
+        
+        rows.forEach(row => {
+            const unitPrice = parseFloat(row.getAttribute('data-unit-price'));
+            const quantity = parseFloat(row.querySelector('input[type="number"]').value);
+            
+            if (!isNaN(unitPrice) && !isNaN(quantity)) {
+                total += unitPrice * quantity;
+            }
+        });
+        
+        document.getElementById('edit-modal-total').textContent = formatPrice(total);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add event listeners for the edit modal
+        const editItemNameInput = document.getElementById('edit_item_name');
+        const editSuggestionsContainer = document.getElementById('edit-suggestions-container');
+        
+        if (editItemNameInput) {
+            editItemNameInput.addEventListener('input', function() {
+                searchEditItems(this.value.trim());
+            });
+        }
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!editItemNameInput?.contains(e.target) && !editSuggestionsContainer?.contains(e.target)) {
+                editSuggestionsContainer?.classList.add('hidden');
+            }
+        });
+
+        // Add event listener for quantity changes
+        document.querySelectorAll('#edit-items-table-body input[type="number"]').forEach(input => {
+            input.addEventListener('change', updateEditModalTotal);
+        });
+
+        // Add event listener for the add item button in edit modal
+        const editAddItemButton = document.getElementById('edit-add-item-button');
+        if (editAddItemButton) {
+            editAddItemButton.addEventListener('click', function(e) {
+                e.preventDefault();
+                const itemName = document.getElementById('edit_item_name').value.trim();
+                const itemQuantity = parseInt(document.getElementById('edit_item_quantity').value);
+
+                if (!itemName || !itemQuantity || itemQuantity < 1) {
+                    document.getElementById('editValidationModal').classList.remove('hidden');
+                    return;
+                }
+
+                if (!editSelectedItemData) {
+                    document.getElementById('editItemNotFoundModal').classList.remove('hidden');
+                    return;
+                }
+
+                if (editSelectedItemData.quantity < itemQuantity) {
+                    document.getElementById('editInsufficientStockModal').classList.remove('hidden');
+                }
+
+                const totalPrice = calculateTotalPrice(itemQuantity, editSelectedItemData.price);
+
+                const newRow = document.createElement('tr');
+                newRow.setAttribute('data-name', itemName);
+                newRow.setAttribute('data-quantity', itemQuantity);
+                newRow.setAttribute('data-unit', editSelectedItemData.unit);
+                newRow.setAttribute('data-unit-price', editSelectedItemData.price);
+                
+                newRow.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemName}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${editSelectedItemData.unit}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatPrice(editSelectedItemData.price)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <input type="number" 
+                            name="quantities[]" 
+                            value="${itemQuantity}"
+                            min="1"
+                            class="block w-24 rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatPrice(totalPrice)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
+                        <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    </td>
+                `;
+
+                // Add delete functionality to the new row
+                const deleteButton = newRow.querySelector('.delete-row-button');
+                deleteButton.addEventListener('click', function() {
+                    newRow.remove();
+                    updateEditModalTotal();
+                });
+
+                // Add quantity change listener
+                const quantityInput = newRow.querySelector('input[type="number"]');
+                quantityInput.addEventListener('change', updateEditModalTotal);
+
+                document.getElementById('edit-items-table-body').appendChild(newRow);
+                updateEditModalTotal();
+
+                // Clear input fields and selected item data
+                document.getElementById('edit_item_name').value = '';
+                document.getElementById('edit_item_quantity').value = '';
+                editSelectedItemData = null;
+                document.getElementById('edit_item_name').focus();
+            });
+        }
+
+        // Add delete functionality to existing rows
+        document.querySelectorAll('#edit-items-table-body .delete-row-button').forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('tr').remove();
+                updateEditModalTotal();
+            });
+        });
+
+        // Handle edit form submission
+        const editRequestForm = document.getElementById('edit-request-form');
+        if (editRequestForm) {
+            editRequestForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get all rows from the table
+                const rows = document.querySelectorAll('#edit-items-table-body tr');
+                if (rows.length === 0) {
+                    alert('Please add at least one item to the request');
+                    return;
+                }
+
+                const existingItems = [];
+                const newItems = [];
+
+                // Collect all items (both existing and new)
+                Array.from(rows).forEach(row => {
+                    const quantity = row.querySelector('input[type="number"]').value;
+                    const requestId = row.getAttribute('data-request-id');
+                    
+                    if (requestId) {
+                        // Existing items
+                        existingItems.push({
+                            request_id: requestId,
+                            quantity: parseInt(quantity)
+                        });
+                    } else {
+                        // New items
+                        newItems.push({
+                            name: row.getAttribute('data-name'),
+                            quantity: parseInt(quantity),
+                            unit: row.getAttribute('data-unit'),
+                            unit_price: parseFloat(row.getAttribute('data-unit-price'))
+                        });
+                    }
+                });
+
+                // Send the request using fetch
+                fetch(this.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        _method: 'PUT',
+                        items: JSON.stringify(existingItems),
+                        new_items: JSON.stringify(newItems)
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        alert(data.message || 'Error updating request');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while updating the request');
+                });
+            });
+        }
+    });
+
     function showQuantityValidationModal(maxQuantity) {
         document.getElementById('maxQuantitySpan').textContent = maxQuantity;
         document.getElementById('quantityValidationModal').classList.remove('hidden');

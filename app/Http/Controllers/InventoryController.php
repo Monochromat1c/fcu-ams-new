@@ -750,8 +750,8 @@ class InventoryController extends Controller
         $requests = SupplyRequest::select(
                 'request_group_id', 
                 'requester', 
-                'request_date', 
                 'department_id',
+                DB::raw('MIN(created_at) as request_date'),
                 DB::raw('COUNT(*) as items_count'),
                 DB::raw('MAX(status) as group_status'),
                 DB::raw('CASE 
@@ -762,7 +762,7 @@ class InventoryController extends Controller
                     ELSE 5 END as status_priority')
             )
             ->where('requester', $user->first_name . ' ' . $user->last_name)
-            ->groupBy('request_group_id', 'requester', 'request_date', 'department_id')
+            ->groupBy('request_group_id', 'requester', 'department_id')
             ->with('department')
             ->orderBy('status_priority', 'asc')
             ->orderBy('request_date', 'desc')
@@ -854,6 +854,131 @@ class InventoryController extends Controller
             
             return response()->json(['error' => $e->getMessage()], 500)
                 ->header('Content-Type', 'application/json');
+        }
+    }
+
+    public function updateSupplyRequest(Request $request, $request_group_id)
+    {
+        try {
+            DB::beginTransaction();
+
+            // Validate request
+            $request->validate([
+                'items' => 'required|json',
+                'new_items' => 'nullable|json'
+            ]);
+
+            $items = json_decode($request->items, true);
+            $newItems = $request->has('new_items') ? json_decode($request->new_items, true) : [];
+            $user = auth()->user();
+
+            // Get all existing requests in this group
+            $existingRequests = SupplyRequest::where('request_group_id', $request_group_id)->get();
+            
+            // Log existing requests
+            \Log::info('Existing requests', [
+                'count' => $existingRequests->count(),
+                'request_group_id' => $request_group_id,
+                'requests' => $existingRequests->toArray()
+            ]);
+
+            // Only allow editing if user is the requester and request is not approved/rejected
+            $canEdit = $existingRequests->first()->requester === $user->first_name . ' ' . $user->last_name
+                && !$existingRequests->contains('status', 'approved')
+                && !$existingRequests->contains('status', 'rejected')
+                && !$existingRequests->contains('status', 'cancelled');
+
+            if (!$canEdit) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You cannot edit this request.'
+                ], 403);
+            }
+
+            // Get all request IDs from the submitted form
+            $submittedRequestIds = collect($items)->pluck('request_id')->filter()->all();
+
+            // Delete items that were removed (not present in the submitted form)
+            foreach ($existingRequests as $existingRequest) {
+                if (!in_array($existingRequest->id, $submittedRequestIds)) {
+                    \Log::info('Deleting request', [
+                        'request_id' => $existingRequest->id,
+                        'request_group_id' => $existingRequest->request_group_id
+                    ]);
+                    $existingRequest->delete();
+                }
+            }
+
+            // Update quantities for existing items
+            foreach ($items as $item) {
+                if (isset($item['request_id'])) {
+                    $supplyRequest = $existingRequests->find($item['request_id']);
+                    if ($supplyRequest) {
+                        $supplyRequest->quantity = $item['quantity'];
+                        $supplyRequest->save();
+                        \Log::info('Updated existing item', [
+                            'request_id' => $supplyRequest->id,
+                            'request_group_id' => $supplyRequest->request_group_id,
+                            'quantity' => $item['quantity']
+                        ]);
+                    }
+                }
+            }
+
+            // Handle new items
+            if (!empty($newItems)) {
+                foreach ($newItems as $newItem) {
+                    $supplyRequest = new SupplyRequest();
+                    $supplyRequest->request_id = Str::uuid();
+                    $supplyRequest->request_group_id = $request_group_id;
+                    $supplyRequest->department_id = $existingRequests->first()->department_id;
+                    $supplyRequest->requester = $user->first_name . ' ' . $user->last_name;
+                    $supplyRequest->item_name = $newItem['name'];
+                    $supplyRequest->quantity = $newItem['quantity'];
+                    $supplyRequest->status = 'pending';
+                    
+                    // Try to find matching inventory
+                    $inventory = DB::table('inventories')
+                        ->join('brands', 'inventories.brand_id', '=', 'brands.id')
+                        ->where(DB::raw("CONCAT(brands.brand, ' - ', inventories.items_specs)"), '=', $newItem['name'])
+                        ->select('inventories.*')
+                        ->first();
+
+                    if ($inventory) {
+                        $supplyRequest->inventory_id = $inventory->id;
+                    } else {
+                        // For non-inventory items
+                        $supplyRequest->estimated_unit_price = $newItem['unit_price'];
+                    }
+                    
+                    $supplyRequest->save();
+
+                    \Log::info('Added new item', [
+                        'request_id' => $supplyRequest->request_id,
+                        'request_group_id' => $supplyRequest->request_group_id,
+                        'item_name' => $newItem['name'],
+                        'quantity' => $newItem['quantity']
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Supply request updated successfully.'
+            ]);
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error('Error updating supply request', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error updating supply request: ' . $e->getMessage()
+            ], 500);
         }
     }
 }
