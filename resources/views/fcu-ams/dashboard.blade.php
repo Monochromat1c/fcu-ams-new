@@ -193,42 +193,54 @@
                     <a href="{{ route('requests.index') }}" class="text-blue-600 hover:text-blue-800 text-sm">View All Requests</a>
                 </div>
                 <div class="divide-y divide-gray-100">
+                    @php
+                        $hasDisplayableRequests = false;
+                    @endphp
                     @forelse($recentRequests as $request)
-                        <a href="{{ route('inventory.supply-request.details', $request->request_group_id) }}" class="block">
-                            <div class="px-4 sm:px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
-                                <div class="flex justify-between items-center">
-                                    <div class="flex-1">
-                                        <p class="text-sm font-medium text-gray-900">
-                                            {{ $request->requester }}
-                                            <span class="text-xs text-gray-500">
-                                                ({{ $request->department->department }})
+                        @if($request->group_status !== 'cancelled')
+                            @php
+                                $hasDisplayableRequests = true;
+                            @endphp
+                            <a href="{{ route('inventory.supply-request.details', $request->request_group_id) }}" class="block">
+                                <div class="px-4 sm:px-6 py-4 hover:bg-gray-50 transition-colors duration-150">
+                                    <div class="flex justify-between items-center">
+                                        <div class="flex-1">
+                                            <p class="text-sm font-medium text-gray-900">
+                                                {{ $request->requester }}
+                                                <span class="text-xs text-gray-500">
+                                                    ({{ $request->department->department }})
+                                                </span>
+                                            </p>
+                                            <p class="text-sm text-gray-500">
+                                                Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
+                                            </p>
+                                            <p class="text-xs text-gray-400">
+                                                {{ date('M j Y', strtotime($request->request_date)) }}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <span class="px-3 py-1 text-xs font-medium rounded-full
+                                                {{ $request->group_status === 'pending' ? 'bg-yellow-100 px-5 py-[.50rem] text-yellow-800' : 
+                                                   ($request->group_status === 'approved' ? 'bg-green-100 px-5 py-[.50rem] text-green-800' : 
+                                                   ($request->group_status === 'partially_approved' ? 'bg-blue-100 px-5 py-[.50rem] text-blue-800' :
+                                                   'bg-red-100 px-5 py-[.50rem] text-red-800')) }}">
+                                                {{ ucfirst(str_replace('_', ' ', $request->group_status)) }}
                                             </span>
-                                        </p>
-                                        <p class="text-sm text-gray-500">
-                                            Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
-                                        </p>
-                                        <p class="text-xs text-gray-400">
-                                            {{ date('M j Y', strtotime($request->request_date)) }}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <span class="px-3 py-1 text-xs font-medium rounded-full
-                                            {{ $request->group_status === 'pending' ? 'bg-yellow-100 px-5 py-[.50rem] text-yellow-800' : 
-                                               ($request->group_status === 'approved' ? 'bg-green-100 px-5 py-[.50rem] text-green-800' : 
-                                               ($request->group_status === 'partially_approved' ? 'bg-blue-100 px-5 py-[.50rem] text-blue-800' :
-                                               ($request->group_status === 'cancelled' ? 'bg-gray-100 px-5 py-[.50rem] text-gray-800' :
-                                               'bg-red-100 px-5 py-[.50rem] text-red-800'))) }}">
-                                            {{ ucfirst(str_replace('_', ' ', $request->group_status)) }}
-                                        </span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        @endif
                     @empty
                         <div class="px-4 sm:px-6 py-4">
                             <p class="text-sm text-gray-500">No recent requests</p>
                         </div>
                     @endforelse
+                    @if(!$hasDisplayableRequests && count($recentRequests) > 0)
+                        <div class="px-4 sm:px-6 py-4">
+                            <p class="text-sm text-gray-500">No recent requests</p>
+                        </div>
+                    @endif
                 </div>
             </div>
             <!-- RECENT ACTIONS -->
