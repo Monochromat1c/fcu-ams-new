@@ -24,18 +24,24 @@ class DashboardController extends Controller
         $totalInventoryValue = Inventory::sum(DB::raw('unit_price * quantity'));
 
         // Get recent supply requests
-        $recentRequestsQuery = SupplyRequest::with(['inventory.brand', 'department'])
-            ->select('request_group_id', 'requester', 'status', 'created_at', 'department_id', 
-                     DB::raw('COUNT(*) as items_count'));
-
-        // Only show cancelled requests to departments
-        if (auth()->user()->role->role !== 'Department') {
-            $recentRequestsQuery->where('status', '!=', 'cancelled');
-        }
-
-        $recentRequests = $recentRequestsQuery
-            ->groupBy('request_group_id', 'requester', 'status', 'created_at', 'department_id')
-            ->orderBy('created_at', 'desc')
+        $recentRequests = SupplyRequest::select(
+                'request_group_id', 
+                'requester', 
+                'request_date', 
+                'department_id',
+                DB::raw('COUNT(*) as items_count'),
+                DB::raw('MAX(status) as group_status'),
+                DB::raw('CASE 
+                    WHEN MAX(status) = "pending" THEN 1
+                    WHEN MAX(status) = "partially_approved" THEN 2
+                    WHEN MAX(status) = "approved" THEN 3
+                    WHEN MAX(status) = "rejected" THEN 4
+                    ELSE 5 END as status_priority')
+            )
+            ->groupBy('request_group_id', 'requester', 'request_date', 'department_id')
+            ->with('department')
+            ->orderBy('status_priority', 'asc')
+            ->orderBy('request_date', 'desc')
             ->take(5)
             ->get();
 

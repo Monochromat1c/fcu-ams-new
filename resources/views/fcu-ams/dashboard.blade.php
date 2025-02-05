@@ -208,17 +208,17 @@
                                             Requested {{ $request->items_count }} {{ Str::plural('item', $request->items_count) }}
                                         </p>
                                         <p class="text-xs text-gray-400">
-                                            {{ date('M d, Y h:i A', strtotime($request->created_at)) }}
+                                            {{ date('M d, Y h:i A', strtotime($request->request_date)) }}
                                         </p>
                                     </div>
                                     <div>
                                         <span class="px-3 py-1 text-xs font-medium rounded-full
-                                            {{ $request->status === 'pending' ? 'bg-yellow-100 px-5 py-[.50rem] text-yellow-800' : 
-                                               ($request->status === 'approved' ? 'bg-green-100 px-5 py-[.50rem] text-green-800' : 
-                                               ($request->status === 'partially_approved' ? 'bg-blue-100 px-5 py-[.50rem] text-blue-800' :
-                                               ($request->status === 'cancelled' ? 'bg-gray-100 px-5 py-[.50rem] text-gray-800' :
+                                            {{ $request->group_status === 'pending' ? 'bg-yellow-100 px-5 py-[.50rem] text-yellow-800' : 
+                                               ($request->group_status === 'approved' ? 'bg-green-100 px-5 py-[.50rem] text-green-800' : 
+                                               ($request->group_status === 'partially_approved' ? 'bg-blue-100 px-5 py-[.50rem] text-blue-800' :
+                                               ($request->group_status === 'cancelled' ? 'bg-gray-100 px-5 py-[.50rem] text-gray-800' :
                                                'bg-red-100 px-5 py-[.50rem] text-red-800'))) }}">
-                                            {{ ucfirst(str_replace('_', ' ', $request->status)) }}
+                                            {{ ucfirst(str_replace('_', ' ', $request->group_status)) }}
                                         </span>
                                     </div>
                                 </div>
