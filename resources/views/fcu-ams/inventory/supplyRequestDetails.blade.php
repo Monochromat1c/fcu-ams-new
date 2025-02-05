@@ -336,21 +336,135 @@
     </div>
 </div>
 
-<!-- Add the same modals from supply request for validation and warnings -->
+<!-- Empty Field Validation Modal -->
 <div id="editValidationModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
     class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
-    <!-- Same content as validationModal but with different IDs -->
+    <div class="relative my-auto mx-auto p-4 w-full max-w-md h-full md:h-auto">
+        <div class="relative bg-white rounded-lg shadow-xl dark:bg-white border-0">
+            <div class="flex items-center justify-between p-4 border-b rounded-t">
+                <h3 class="text-xl font-semibold text-gray-900">
+                    Validation Error
+                </h3>
+                <button type="button" onclick="document.getElementById('editValidationModal').classList.add('hidden')" 
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center">
+                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="text-gray-700">Please enter both item name and a valid quantity.</p>
+            </div>
+            <div class="flex items-center justify-end p-4 border-t border-gray-200">
+                <button type="button" onclick="document.getElementById('editValidationModal').classList.add('hidden')"
+                    class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- Insufficient Stock Warning Modal -->
 <div id="editInsufficientStockModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
     class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
-    <!-- Same content as insufficientStockModal but with different IDs -->
+    <div class="relative my-auto mx-auto p-4 w-full max-w-md h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 border-b rounded-t">
+                <h3 class="text-xl font-semibold text-yellow-600">
+                    ⚠️ Insufficient Stock Warning
+                </h3>
+                <button type="button" onclick="document.getElementById('editInsufficientStockModal').classList.add('hidden')"
+                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex items-center justify-center">
+                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-6">
+                <p id="editInsufficientStockMessage" class="text-gray-700"></p>
+                <p class="mt-4 text-sm text-gray-600">Your request will be forwarded to the admin for approval.</p>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center justify-end p-4 border-t border-gray-200">
+                <button type="button" onclick="document.getElementById('editInsufficientStockModal').classList.add('hidden')"
+                    class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
 
+<!-- Item Not Found Modal -->
 <div id="editItemNotFoundModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
     class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-50 p-4 w-full md:inset-0 hidden">
-    <!-- Same content as itemNotFoundModal but with different IDs -->
+    <div class="relative my-auto mx-auto p-4 w-full max-w-md h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow">
+            <!-- Modal header -->
+            <div class="flex items-center justify-between p-4 border-b rounded-t bg-red-500">
+                <h3 class="text-xl font-semibold text-white">
+                    Item Not Found in Inventory
+                </h3>
+                <button type="button" onclick="document.getElementById('editItemNotFoundModal').classList.add('hidden')"
+                    class="text-white bg-transparent hover:bg-red-600 hover:text-gray-100 rounded-lg text-sm w-8 h-8 flex items-center justify-center">
+                    <svg class="w-4 h-4" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                    </svg>
+                </button>
+            </div>
+            <!-- Modal body -->
+            <div class="p-6">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="flex-shrink-0">
+                        <svg class="w-8 h-8 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <p id="editItemNotFoundMessage" class="text-gray-700 font-medium"></p>
+                        <p class="text-sm text-gray-500 mt-1">Please try searching with a different keyword or check if the item name is correct.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal footer -->
+            <div class="flex items-center justify-end p-4 border-t border-gray-200">
+                <button type="button" onclick="document.getElementById('editItemNotFoundModal').classList.add('hidden')"
+                    class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-sm font-medium px-5 py-2.5 hover:scale-105 transition-all duration-200">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Add Brand Modal -->
+<x-add-item-modal 
+    title="Add New Brand"
+    id="add-brand-modal"
+    route="{{ route('brand.add') }}"
+    field="brand"
+/>
+
+<!-- Add Unit Modal -->
+<x-add-item-modal 
+    title="Add New Unit"
+    id="add-unit-modal"
+    route="{{ route('unit.add') }}"
+    field="unit"
+/>
+
+<!-- Add Supplier Modal -->
+<x-add-item-modal 
+    title="Add New Supplier"
+    id="add-supplier-modal"
+    route="{{ route('supplier.add') }}"
+    field="supplier"
+/>
 
 <script>
     let editSelectedItemData = null;
@@ -485,6 +599,8 @@
                 }
 
                 if (editSelectedItemData.quantity < itemQuantity) {
+                    const message = `Insufficient stock for ${itemName}. Current stock: ${editSelectedItemData.quantity}. Your request: ${itemQuantity}.`;
+                    document.getElementById('editInsufficientStockMessage').textContent = message;
                     document.getElementById('editInsufficientStockModal').classList.remove('hidden');
                 }
 

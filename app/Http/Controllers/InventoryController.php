@@ -778,20 +778,27 @@ class InventoryController extends Controller
         // Update last_checked_notifications timestamp
         $user->update(['last_checked_notifications' => now()]);
         
-        $notifications = SupplyRequest::with('inventory')
-            ->select('request_group_id', 'requester', 'created_at', 'notes')
-            ->selectRaw('GROUP_CONCAT(DISTINCT status) as statuses')
-            ->selectRaw('COUNT(*) as items_count')
+        $notifications = SupplyRequest::select(
+                'request_group_id', 
+                'requester', 
+                'department_id',
+                DB::raw('GREATEST(MAX(updated_at), MAX(created_at)) as request_date'),
+                DB::raw('COUNT(*) as items_count'),
+                DB::raw('MAX(status) as group_status'),
+                DB::raw('CASE 
+                    WHEN MAX(status) = "pending" THEN 1
+                    WHEN MAX(status) = "partially_approved" THEN 2
+                    WHEN MAX(status) = "approved" THEN 3
+                    WHEN MAX(status) = "rejected" THEN 4
+                    ELSE 5 END as status_priority')
+            )
             ->where('requester', $user->first_name . ' ' . $user->last_name)
-            ->groupBy('request_group_id', 'requester', 'notes', 'created_at')
-            ->orderBy('created_at', 'desc')
-            ->get()
-            ->map(function ($notification) {
-                $notification->statuses = explode(',', $notification->statuses);
-                $notification->primary_status = $this->determinePrimaryStatus($notification->statuses);
-                return $notification;
-            });
-    
+            ->groupBy('request_group_id', 'requester', 'department_id')
+            ->with('department')
+            ->orderBy('status_priority', 'asc')
+            ->orderBy('request_date', 'desc')
+            ->get();
+            
         return view('fcu-ams.request.notifications', compact('notifications'));
     }
     

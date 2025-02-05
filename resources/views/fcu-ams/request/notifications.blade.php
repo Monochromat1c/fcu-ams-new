@@ -85,27 +85,27 @@
             <div class="space-y-4">
                 @forelse($notifications as $notification)
                     <div class="p-4 rounded-lg border-l-4 flex items-start gap-4 {{ 
-                        $notification->primary_status === 'approved' ? 'border-green-500 bg-green-50' : 
-                        ($notification->primary_status === 'rejected' ? 'border-red-500 bg-red-50' : 
-                        ($notification->primary_status === 'cancelled' ? 'border-gray-500 bg-gray-50' : 
-                        ($notification->primary_status === 'partially_approved' ? 'border-blue-500 bg-blue-50' :
+                        $notification->group_status === 'approved' ? 'border-green-500 bg-green-50' : 
+                        ($notification->group_status === 'rejected' ? 'border-red-500 bg-red-50' : 
+                        ($notification->group_status === 'cancelled' ? 'border-gray-500 bg-gray-50' : 
+                        ($notification->group_status === 'partially_approved' ? 'border-blue-500 bg-blue-50' :
                         'border-yellow-500 bg-yellow-50'))) 
                     }}">
                         <!-- Status Icon -->
                         <div class="flex-shrink-0">
-                            @if($notification->primary_status === 'approved')
+                            @if($notification->group_status === 'approved')
                                 <svg class="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                                 </svg>
-                            @elseif($notification->primary_status === 'rejected')
+                            @elseif($notification->group_status === 'rejected')
                                 <svg class="h-6 w-6 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
-                            @elseif($notification->primary_status === 'cancelled')
+                            @elseif($notification->group_status === 'cancelled')
                                 <svg class="h-6 w-6 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                 </svg>
-                            @elseif($notification->primary_status === 'partially_approved')
+                            @elseif($notification->group_status === 'partially_approved')
                                 <svg class="h-6 w-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
                                 </svg>
@@ -118,29 +118,33 @@
         
                         <!-- Content -->
                         <div class="flex-1">
-                            <div class="flex justify-between">
-                                <p class="text-sm font-medium">
-                                    Your request #{{ $notification->request_group_id }} {{ 
-                                        $notification->primary_status === 'approved' ? 'has been approved' : 
-                                        ($notification->primary_status === 'rejected' ? 'has been rejected' : 
-                                        ($notification->primary_status === 'cancelled' ? 'has been cancelled' : 
-                                        ($notification->primary_status === 'partially_approved' ? 'has been partially approved' :
-                                        'is pending approval'))) 
-                                    }}
-                                </p>
-                                <p class="text-sm text-gray-500">{{ $notification->created_at->format('M d, Y h:i A') }}</p>
+                            <div class="flex justify-between items-start">
+                                <div>
+                                    <p class="text-sm font-medium">
+                                        Your request #{{ $notification->request_group_id }} {{ 
+                                            $notification->group_status === 'approved' ? 'has been approved' : 
+                                            ($notification->group_status === 'rejected' ? 'has been rejected' : 
+                                            ($notification->group_status === 'cancelled' ? 'has been cancelled' : 
+                                            ($notification->group_status === 'partially_approved' ? 'has been partially approved' :
+                                            'is pending approval'))) 
+                                        }}
+                                    </p>
+                                    <div class="mt-1">
+                                        <span class="text-sm text-gray-600">{{ $notification->items_count }} {{ Str::plural('item', $notification->items_count) }}</span>
+                                        <span class="text-gray-400 mx-2">•</span>
+                                        <span class="text-sm text-gray-600">{{ $notification->department->department }}</span>
+                                    </div>
+                                </div>
+                                <p class="text-sm text-gray-500">{{ date('M d, Y h:i A', strtotime($notification->first()->updated_at ?? $notification->first()->created_at)) }}</p>
+                                
                             </div>
-                            <p class="mt-1 text-sm text-gray-600">{{ $notification->items_count }} item(s) requested</p>
-                            @if($notification->notes)
-                                <p class="mt-2 text-sm text-gray-600">Notes: {{ $notification->notes }}</p>
-                            @endif
                             <a href="{{ route('inventory.supply-request.details', $notification->request_group_id) }}" 
-                                        class="inline-flex items-center mt-2 text-sm text-blue-600 hover:text-blue-800">
-                                        <span>View Details</span>
-                                        <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-                                        </svg>
-                                    </a>
+                                class="inline-flex items-center mt-2 text-sm text-blue-600 hover:text-blue-800">
+                                <span>View Details</span>
+                                <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                                </svg>
+                            </a>
                         </div>
                     </div>
                 @empty
