@@ -23,6 +23,7 @@ use App\Models\AssetEditHistory;
 use App\Models\InventoryEditHistory;
 use App\Imports\AssetsImport;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 
 class InventoryController extends Controller
 {
@@ -986,6 +987,101 @@ class InventoryController extends Controller
                 'success' => false,
                 'message' => 'Error updating supply request: ' . $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:csv,xlsx,xls|max:2048'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $file = $request->file('file');
+            $data = Excel::toCollection(null, $file)[0];
+
+            // Skip header row and validate structure
+            if ($data->count() <= 1) {
+                throw new \Exception('The file is empty or contains only headers.');
+            }
+
+            // Get the header row
+            $headers = $data[0];
+            $requiredColumns = ['items_specs', 'quantity', 'unit', 'brand', 'unit_price', 'supplier'];
+            
+            // Validate headers
+            foreach ($requiredColumns as $column) {
+                if (!$headers->contains($column)) {
+                    throw new \Exception("Required column '{$column}' is missing.");
+                }
+            }
+
+            // Process each row
+            foreach ($data->slice(1) as $row) {
+                // Map row data to associative array using headers
+                $rowData = [];
+                foreach ($headers as $index => $header) {
+                    $rowData[$header] = $row[$index];
+                }
+
+                // Validate required fields
+                foreach ($requiredColumns as $column) {
+                    if (empty($rowData[$column])) {
+                        throw new \Exception("Missing value for '{$column}' in one of the rows.");
+                    }
+                }
+
+                // Find or create related records
+                $unit = Unit::firstOrCreate(['unit' => $rowData['unit']]);
+                $brand = Brand::firstOrCreate(['brand' => $rowData['brand']]);
+                $supplier = Supplier::firstOrCreate(['supplier' => $rowData['supplier']]);
+
+                // Check for existing inventory with same specifications
+                $existingInventory = Inventory::where('items_specs', $rowData['items_specs'])
+                    ->where('brand_id', $brand->id)
+                    ->where('unit_id', $unit->id)
+                    ->where('unit_price', $rowData['unit_price'])
+                    ->where('supplier_id', $supplier->id)
+                    ->whereNull('deleted_at')
+                    ->first();
+
+                if ($existingInventory) {
+                    // Update existing inventory
+                    $existingInventory->quantity += $rowData['quantity'];
+                    $existingInventory->save();
+                } else {
+                    // Create new inventory
+                    $inventory = new Inventory();
+                    $inventory->items_specs = $rowData['items_specs'];
+                    $inventory->quantity = $rowData['quantity'];
+                    $inventory->unit_id = $unit->id;
+                    $inventory->brand_id = $brand->id;
+                    $inventory->unit_price = $rowData['unit_price'];
+                    $inventory->supplier_id = $supplier->id;
+                    $inventory->created_by = auth()->id();
+
+                    // Optional fields
+                    if (isset($rowData['department']) && !empty($rowData['department'])) {
+                        $department = Department::firstOrCreate(['department' => $rowData['department']]);
+                        $inventory->department_id = $department->id;
+                    }
+
+                    if (isset($rowData['stock_out_date']) && !empty($rowData['stock_out_date'])) {
+                        $inventory->stock_out_date = Carbon::parse($rowData['stock_out_date']);
+                    }
+
+                    $inventory->save();
+                }
+            }
+
+            DB::commit();
+            return redirect()->back()->with('success', 'Inventory data imported successfully.');
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            return redirect()->back()->with('error', 'Error importing data: ' . $e->getMessage());
         }
     }
 }

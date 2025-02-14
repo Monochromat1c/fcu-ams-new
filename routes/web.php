@@ -79,6 +79,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/inventory/stock/in', 'store')->name('inventory.stock.in.store');
         Route::post('/inventory/stock/in/{id}', 'update')->name('inventory.stock.in.update');
         Route::post('/inventory/stock/out', 'storeStockOut')->name('inventory.stock.out.store');
+        Route::post('/inventory/import', 'import')->name('inventory.import');
         Route::delete('/inventory/{id}', 'destroy')->name('inventory.destroy');
         Route::get('/inventory/supply-request', 'showSupplyRequest')->name('inventory.supply.request');
         Route::post('/inventory/supply-request', 'storeSupplyRequest')->name('inventory.supply.request.store');
