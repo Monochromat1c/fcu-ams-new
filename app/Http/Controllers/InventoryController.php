@@ -33,6 +33,7 @@ class InventoryController extends Controller
         
         $totalItems = DB::table('inventories')
             ->whereNull('deleted_at')
+            ->where('quantity', '>', 0)
             ->count();
             
         $totalValue = DB::table('inventories')

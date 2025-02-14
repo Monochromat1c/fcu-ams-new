@@ -1,0 +1,2 @@
+- php artisan db:reset
+- php artisan inventory:soft-delete-all
