@@ -992,95 +992,113 @@ class InventoryController extends Controller
 
     public function import(Request $request)
     {
-        $request->validate([
-            'file' => 'required|mimes:csv,xlsx,xls|max:2048'
-        ]);
-
         try {
-            DB::beginTransaction();
+            if (!auth()->check()) {
+                return redirect()->back()->with('error', 'You must be logged in to import data.');
+            }
+
+            $userId = auth()->id();
+
+            if (!$request->hasFile('file')) {
+                return redirect()->back()->with('error', 'No file uploaded.');
+            }
 
             $file = $request->file('file');
-            $data = Excel::toCollection(null, $file)[0];
+            $successCount = 0;
+            $errorCount = 0;
 
-            // Skip header row and validate structure
-            if ($data->count() <= 1) {
-                throw new \Exception('The file is empty or contains only headers.');
-            }
+            DB::beginTransaction();
 
-            // Get the header row
-            $headers = $data[0];
-            $requiredColumns = ['items_specs', 'quantity', 'unit', 'brand', 'unit_price', 'supplier'];
+            $data = Excel::toArray([], $file)[0];
             
-            // Validate headers
-            foreach ($requiredColumns as $column) {
-                if (!$headers->contains($column)) {
-                    throw new \Exception("Required column '{$column}' is missing.");
-                }
+            if (empty($data)) {
+                DB::rollback();
+                return redirect()->back()->with('error', 'The uploaded file is empty.');
             }
 
-            // Process each row
-            foreach ($data->slice(1) as $row) {
-                // Map row data to associative array using headers
-                $rowData = [];
-                foreach ($headers as $index => $header) {
-                    $rowData[$header] = $row[$index];
-                }
+            // Get the headers from the first row and convert to lowercase
+            $headers = array_map('strtolower', $data[0]);
+            
+            // Remove the header row
+            array_shift($data);
 
-                // Validate required fields
-                foreach ($requiredColumns as $column) {
-                    if (empty($rowData[$column])) {
-                        throw new \Exception("Missing value for '{$column}' in one of the rows.");
-                    }
-                }
+            foreach ($data as $rowNumber => $row) {
+                try {
+                    $rowData = array_combine($headers, $row);
 
-                // Find or create related records
-                $unit = Unit::firstOrCreate(['unit' => $rowData['unit']]);
-                $brand = Brand::firstOrCreate(['brand' => $rowData['brand']]);
-                $supplier = Supplier::firstOrCreate(['supplier' => $rowData['supplier']]);
-
-                // Check for existing inventory with same specifications
-                $existingInventory = Inventory::where('items_specs', $rowData['items_specs'])
-                    ->where('brand_id', $brand->id)
-                    ->where('unit_id', $unit->id)
-                    ->where('unit_price', $rowData['unit_price'])
-                    ->where('supplier_id', $supplier->id)
-                    ->whereNull('deleted_at')
-                    ->first();
-
-                if ($existingInventory) {
-                    // Update existing inventory
-                    $existingInventory->quantity += $rowData['quantity'];
-                    $existingInventory->save();
-                } else {
-                    // Create new inventory
-                    $inventory = new Inventory();
-                    $inventory->items_specs = $rowData['items_specs'];
-                    $inventory->quantity = $rowData['quantity'];
-                    $inventory->unit_id = $unit->id;
-                    $inventory->brand_id = $brand->id;
-                    $inventory->unit_price = $rowData['unit_price'];
-                    $inventory->supplier_id = $supplier->id;
-                    $inventory->created_by = auth()->id();
-
-                    // Optional fields
-                    if (isset($rowData['department']) && !empty($rowData['department'])) {
-                        $department = Department::firstOrCreate(['department' => $rowData['department']]);
-                        $inventory->department_id = $department->id;
+                    // Skip empty rows
+                    if (empty(array_filter($rowData))) {
+                        continue;
                     }
 
-                    if (isset($rowData['stock_out_date']) && !empty($rowData['stock_out_date'])) {
-                        $inventory->stock_out_date = Carbon::parse($rowData['stock_out_date']);
+                    // Validate required fields
+                    if (empty($rowData['items_specs']) || empty($rowData['quantity']) || 
+                        empty($rowData['unit']) || empty($rowData['brand']) || 
+                        empty($rowData['unit_price']) || empty($rowData['supplier'])) {
+                        \Log::warning('Skipping row due to missing required fields:', [
+                            'row_number' => $rowNumber + 2,
+                            'data' => $rowData
+                        ]);
+                        $errorCount++;
+                        continue;
                     }
+
+                    // Find or create unit
+                    $unit = Unit::firstOrCreate(['unit' => $rowData['unit']]);
+
+                    // Find or create brand
+                    $brand = Brand::firstOrCreate(['brand' => $rowData['brand']]);
+
+                    // Find or create supplier using the correct column name 'supplier'
+                    $supplier = Supplier::firstOrCreate(['supplier' => $rowData['supplier']]);
+
+                    // Clean up the unit price (remove currency symbol and commas)
+                    $unitPrice = str_replace(['₱', ','], '', $rowData['unit_price']);
+
+                    // Check if supplier was found/created successfully
+                    if (!$supplier || !$supplier->id) {
+                        throw new \Exception('Failed to create or find supplier');
+                    }
+
+                    // Create inventory item with all required fields
+                    $inventory = new Inventory([
+                        'items_specs' => $rowData['items_specs'],
+                        'quantity' => $rowData['quantity'],
+                        'unit_id' => $unit->id,
+                        'brand_id' => $brand->id,
+                        'unit_price' => $unitPrice,
+                        'supplier_id' => $supplier->id,  // Explicitly set supplier_id
+                        'created_by' => auth()->user()->id,
+                    ]);
 
                     $inventory->save();
+                    $successCount++;
+
+                } catch (\Exception $e) {
+                    \Log::error('Error processing row:', [
+                        'row_number' => $rowNumber + 2,
+                        'error' => $e->getMessage(),
+                        'data' => $rowData ?? []
+                    ]);
+                    $errorCount++;
                 }
             }
 
             DB::commit();
-            return redirect()->back()->with('success', 'Inventory data imported successfully.');
+
+            $message = "Import completed. Successfully processed {$successCount} items.";
+            if ($errorCount > 0) {
+                $message .= " {$errorCount} items were skipped due to errors.";
+            }
+
+            return redirect()->back()->with('success', $message);
 
         } catch (\Exception $e) {
             DB::rollback();
+            \Log::error('Import failed:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
             return redirect()->back()->with('error', 'Error importing data: ' . $e->getMessage());
         }
     }

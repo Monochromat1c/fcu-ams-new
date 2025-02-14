@@ -23,6 +23,7 @@ class Inventory extends Model
         'stock_out_date',
         'created_by',
         'deleted_by',
+        'supplier_id',
     ];
 
     public function supplier()
