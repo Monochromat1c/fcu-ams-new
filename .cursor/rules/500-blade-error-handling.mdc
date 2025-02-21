@@ -1,0 +1,134 @@
+# PHP Blade Error Handling Guidelines
+
+## Overview
+This rule ensures consistent and robust error handling in PHP Blade templates across the project.
+
+## Rules
+
+### 1. Exception Handling
+- Always wrap potentially dangerous operations in try-catch blocks
+- Use `@try`, `@catch`, and `@endtry` directives for template-level error handling
+```blade
+@try
+    {{-- Potentially dangerous operation --}}
+@catch(\Exception $e)
+    {{-- Error handling --}}
+@endtry
+```
+
+### 2. Form Validation Errors
+- Always check for validation errors using `@error` directive
+- Display error messages in a consistent manner
+```blade
+<input type="text" name="field" class="@error('field') is-invalid @enderror">
+@error('field')
+    <div class="invalid-feedback">{{ $message }}</div>
+@enderror
+```
+
+### 3. Null Checks
+- Use null coalescing operator (??) or `@isset` directive for checking null values
+```blade
+{{ $variable ?? 'Default Value' }}
+
+@isset($variable)
+    {{-- Variable exists and is not null --}}
+@endisset
+```
+
+### 4. Collection Handling
+- Always check if collections are not empty before iteration
+```blade
+@if($items->isNotEmpty())
+    @foreach($items as $item)
+        {{-- Process item --}}
+    @endforeach
+@else
+    {{-- Handle empty state --}}
+@endif
+```
+
+### 5. API Response Handling
+- Handle API response states appropriately
+```blade
+@if(isset($apiResponse['error']))
+    <div class="alert alert-danger">
+        {{ $apiResponse['error'] }}
+    </div>
+@endif
+```
+
+### 6. Database Query Error Handling
+- Handle database query failures gracefully
+```blade
+@try
+    {{-- Database operation --}}
+@catch(\Illuminate\Database\QueryException $e)
+    <div class="alert alert-danger">
+        Unable to complete the operation. Please try again later.
+    </div>
+@endtry
+```
+
+### 7. File Operation Errors
+- Handle file operation errors explicitly
+```blade
+@if(Storage::exists($filePath))
+    {{-- Process file --}}
+@else
+    {{-- Handle missing file --}}
+@endif
+```
+
+## Best Practices
+
+1. **User Feedback**
+   - Always provide clear, user-friendly error messages
+   - Use appropriate UI components for different types of errors (alerts, toasts, etc.)
+
+2. **Logging**
+   - Log critical errors for debugging purposes
+   - Include relevant context in error logs
+
+3. **Security**
+   - Never expose sensitive information in error messages
+   - Sanitize all user inputs before display
+
+4. **Maintenance**
+   - Keep error messages in language files for easy maintenance
+   - Use consistent error handling patterns across templates
+
+## Examples
+
+### Complete Error Handling Example
+```blade
+@try
+    @if($users->isNotEmpty())
+        @foreach($users as $user)
+            <div class="user-card">
+                {{ $user->name ?? 'Anonymous' }}
+                
+                @error('user.'.$user->id)
+                    <div class="alert alert-danger">
+                        {{ $message }}
+                    </div>
+                @enderror
+            </div>
+        @endforeach
+    @else
+        <p>No users found.</p>
+    @endif
+@catch(\Exception $e)
+    <div class="alert alert-danger">
+        {{ __('messages.general_error') }}
+    </div>
+    @php
+        \Log::error('User display error: ' . $e->getMessage());
+    @endphp
+@endtry
+```
+
+## Enforcement
+- Regular code reviews should check for compliance with these guidelines
+- Static analysis tools should be configured to detect missing error handling
+- CI/CD pipelines should include checks for proper error handling patterns 

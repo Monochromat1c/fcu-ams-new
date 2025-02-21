@@ -1,0 +1,4 @@
+Always run the command:
+
+**Always follow the rules inside:@.cursor/rules** 
+
