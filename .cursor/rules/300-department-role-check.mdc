@@ -1,0 +1,93 @@
+# Department Role Route Check Rule
+
+## Context
+When working with the FCU-AMS project, Department role routes need special handling to ensure proper access control and middleware checks.
+
+## Rule Description
+This rule enforces the following requirements when working with Department role routes:
+
+1. Project Name Check:
+   - Verify if the current project is "fcu-ams-new"
+   - Only apply these checks if working in the correct project
+
+2. Department Role Route Requirements:
+   - Any new route created for Department users must be added to:
+     - The `$allowedRoutesForDepartment` array in `app/Http/Middleware/CheckUserRole.php`
+
+3. Route Naming Convention:
+   - All Department routes should follow consistent naming patterns
+   - Common prefixes: 'asset.', 'inventory.', 'profile.', etc.
+
+## Implementation Guide
+
+### Adding New Department Routes
+When adding a new route for Department users:
+
+1. First add the route to `CheckUserRole.php`:
+```php
+$allowedRoutesForDepartment = [
+    // ... existing routes ...
+    'new.route.name',
+];
+```
+
+### Validation Steps
+Before implementing any Department role functionality:
+
+1. Verify project name is "fcu-ams-new"
+2. Check existing allowed routes in CheckUserRole middleware
+3. Test access with Department role credentials
+
+## Examples
+
+### ✅ Good Implementation
+```php
+// In routes/web.php
+Route::get('/department/new-feature', [DepartmentController::class, 'newFeature'])
+    ->name('department.new.feature')
+    ->middleware('auth');
+
+// In CheckUserRole.php
+$allowedRoutesForDepartment = [
+    // ... existing routes ...
+    'department.new.feature',
+];
+
+// In sidebar-links.blade.php
+@if(Auth::user()->role->role == 'Department')
+    <a href="{{ route('department.new.feature') }}" class="...">
+        New Feature
+    </a>
+@endif
+```
+
+### ❌ Bad Implementation
+```php
+// Missing from CheckUserRole.php
+Route::get('/department/feature', [DepartmentController::class, 'feature'])
+    ->name('department.feature');
+
+// Only adding to sidebar without middleware check
+@if(Auth::user()->role->role == 'Department')
+    <a href="{{ route('department.feature') }}">Feature</a>
+@endif
+```
+
+## Error Prevention
+This rule helps prevent:
+- Unauthorized access to Department routes
+- Inconsistent route access control
+- Missing sidebar links for new features
+- Improper middleware implementation
+
+## Compliance Check
+When reviewing code changes:
+1. Is the project "fcu-ams-new"?
+2. Are new Department routes added to CheckUserRole middleware?
+3. Are sidebar links properly implemented?
+4. Is the route naming consistent with existing patterns?
+
+## Related Files
+- `app/Http/Middleware/CheckUserRole.php`
+- `resources/views/layouts/sidebar-links.blade.php`
+- `routes/web.php` 

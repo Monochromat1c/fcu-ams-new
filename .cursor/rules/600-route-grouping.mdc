@@ -1,0 +1,88 @@
+# Route Grouping Structure Rule
+
+This rule ensures that routes are properly grouped and follow the established structure in the codebase.
+
+## Context
+
+In Laravel applications, routes should be organized in a clear and maintainable way. This means:
+1. Routes should be grouped by middleware where applicable
+2. Routes should be grouped by controllers
+3. Related functionality should be kept together
+4. Route groups should have clear and consistent naming
+
+## Rule Details
+
+When adding new routes, they should follow these patterns:
+
+✅ Do:
+```php
+Route::middleware(['auth.user'])->group(function () {
+    Route::controller(YourController::class)->group(function () {
+        Route::get('/your/route', 'method')->name('your.route');
+        Route::post('/your/other-route', 'otherMethod')->name('your.other-route');
+    });
+});
+```
+
+❌ Don't:
+```php
+// Don't add routes without proper grouping
+Route::get('/your/route', [YourController::class, 'method']);
+
+// Don't mix different controllers in the same group
+Route::group(function () {
+    Route::get('/route1', [Controller1::class, 'method1']);
+    Route::get('/route2', [Controller2::class, 'method2']);
+});
+```
+
+## Examples
+
+### Good Example:
+```php
+Route::controller(AssetController::class)->group(function () {
+    Route::get('/asset/list', 'index')->name('asset.list');
+    Route::get('/asset/add', 'create')->name('asset.add');
+    Route::post('/asset/add', 'store')->name('asset.add.store');
+    Route::get('/asset/{id}/edit', 'edit')->name('asset.edit');
+});
+```
+
+### Bad Example:
+```php
+Route::get('/asset/list', [AssetController::class, 'index']);
+Route::get('/asset/add', [AssetController::class, 'create']);
+Route::post('/asset/add', [AssetController::class, 'store']);
+```
+
+## When to Use
+
+- When adding new routes to the application
+- When refactoring existing routes
+- When creating new features that require routing
+
+## How to Fix
+
+1. Identify the controller responsible for the route
+2. Check if a route group for that controller already exists
+3. If it exists, add your route to that group
+4. If it doesn't exist, create a new route group following the pattern:
+   ```php
+   Route::controller(YourController::class)->group(function () {
+       // Your routes here
+   });
+   ```
+5. If the routes require authentication or other middleware, ensure they're within the appropriate middleware group
+
+## Benefits
+
+- Improved code organization
+- Better maintainability
+- Consistent route structure
+- Easier debugging
+- Clear relationship between routes and controllers
+
+## Related
+
+- Laravel Route Groups documentation: https://laravel.com/docs/routing#route-groups
+- Controller Route Groups: https://laravel.com/docs/controllers#resource-controllers 
