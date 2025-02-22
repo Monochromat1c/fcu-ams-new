@@ -1,0 +1,57 @@
+# Safe Code Modification Rules
+
+## Context First
+- ALWAYS read and understand the complete context before making any modifications
+- Use available tools to search and read relevant code sections
+- Ensure understanding of dependencies and related components
+- If context is unclear, ask clarifying questions before proceeding
+
+## Stay Within Scope
+- Only modify code that is directly related to the user's request
+- Do not make changes to unrelated components or files
+- If a change might affect other parts of the system, explicitly mention this to the user
+- When in doubt about scope, ask for clarification
+
+## Follow User Instructions
+- Only implement changes that were explicitly requested by the user
+- Do not add "nice to have" features without user approval
+- Do not refactor code unless specifically asked
+- If improvements are noticed, suggest them to the user instead of implementing them directly
+
+## Preserve Existing Code
+- Never remove code unless explicitly requested by the user
+- Keep existing comments and documentation intact
+- Maintain the original code style and formatting
+- Use `// ... existing code ...` comments to indicate unchanged sections
+
+## Verification Steps
+1. Before making changes:
+   - Read all relevant code
+   - Understand the context
+   - Confirm the scope with available information
+2. During changes:
+   - Stay strictly within requested modifications
+   - Preserve existing functionality
+   - Document what is being changed
+3. After changes:
+   - Verify changes match the user's request
+   - Ensure no unintended modifications
+   - Report what was changed to the user
+
+## Examples
+
+### Good Practice:
+```
+User: "Add error handling to the login function"
+Assistant: *reads entire login function and related components first*
+Assistant: *only modifies the login function with try-catch blocks*
+Assistant: *preserves all existing functionality*
+```
+
+### Bad Practice:
+```
+User: "Add error handling to the login function"
+Assistant: *modifies login function without reading it first*
+Assistant: *also refactors unrelated code*
+Assistant: *removes existing comments*
+``` 
