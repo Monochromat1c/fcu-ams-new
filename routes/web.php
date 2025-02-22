@@ -24,6 +24,7 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\RequestController;
 use App\Http\Controllers\ActivityController;
+use App\Http\Controllers\DepartmentReportController;
 
 Route::controller(LoginController::class)->group(function () {
     Route::get('/', 'index')->name('login')->middleware('auth.redirect');
@@ -179,9 +180,10 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/department/{id}', 'update')->name('department.update');
         Route::delete('/department/{id}', 'destroy')->name('department.destroy');
     });
-    // Route::controller(DepartmentController::class)->group(function (){
-    //     Route::post('/department/add', 'add')->name('department.add');
-    // });
+
+    Route::controller(DepartmentReportController::class)->group(function (){
+        Route::get('/department/reports', 'index')->name('department.reports');
+    });
 
     Route::controller(LocationController::class)->group(function (){
         Route::get('/location/index', 'index')->name('location.index');
