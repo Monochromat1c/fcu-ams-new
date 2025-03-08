@@ -1,4 +1,9 @@
 ---
+description: ENFORCE when WRITING or UPDATING Markdown files to ensure consistent formatting and readability
+globs: **/*
+alwaysApply: true
+---
+---
 description: ALWAYS use when writing or updating Markdown files to ensure consistent formatting and readability. This rule enforces standardized Markdown practices across all documentation.
 globs: **/*.{md,mdx}
 ---

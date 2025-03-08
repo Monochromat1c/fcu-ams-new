@@ -1,0 +1,104 @@
+---
+description: ENFORCE when MODIFYING UI elements to ensure all data display elements are preserved and functional
+globs: **/*
+alwaysApply: true
+---
+---
+description: ENFORCE when MODIFYING UI elements to ensure all data display elements are preserved and functional
+globs: **/*.{php,blade.php,html,jsx,tsx}
+tags: [ui, data, safety]
+priority: 1
+version: 1.0.0
+---
+
+# Data Display Preservation Rule
+
+## Context
+When modifying UI elements or styling, it's critical to preserve all data display elements and their functionality. This includes template variables, dynamic content, and data bindings.
+
+## Requirements
+
+### 1. Data Element Identification
+- Before making any changes, identify and document all data display elements:
+  - Template variables (e.g., {{ $variable }})
+  - Dynamic content bindings
+  - Loops and conditionals
+  - Form inputs and their values
+  - Data attributes
+
+### 2. Modification Process
+- Create a backup reference of all data elements
+- Track each data element's location and context
+- Verify each element has a corresponding display after modification
+- Maintain all data bindings and their relationships
+
+### 3. Testing Checklist
+- [ ] All template variables are present and correctly placed
+- [ ] Dynamic content displays properly
+- [ ] Loops and conditionals are preserved
+- [ ] Form inputs maintain their values and bindings
+- [ ] Data attributes are intact
+
+### 4. Common Data Elements to Preserve
+- Database field displays
+- Computed values
+- User input values
+- Status indicators
+- Timestamps and dates
+- Currency and numeric formats
+- Relationship data
+
+## Examples
+
+### Valid Modification
+<example>
+<!-- Original -->
+<div class="text-sm">
+    <span>Name: {{ $user->name }}</span>
+</div>
+
+<!-- Valid Update (preserves data) -->
+<div class="text-base font-medium">
+    <span>Name: {{ $user->name }}</span>
+</div>
+</example>
+
+### Invalid Modification
+<example type="invalid">
+<!-- Original -->
+<div class="text-sm">
+    <span>Name: {{ $user->name }}</span>
+</div>
+
+<!-- Invalid Update (loses data) -->
+<div class="text-base font-medium">
+    <span>Name: [Missing Data]</span>
+</div>
+</example>
+
+## Validation Process
+
+1. Pre-Modification
+   - Screenshot or document current data display
+   - List all dynamic elements
+   - Note any special formatting or conditions
+
+2. During Modification
+   - Keep data elements in their functional context
+   - Maintain any required parent-child relationships
+   - Preserve all loops and conditionals
+
+3. Post-Modification
+   - Compare against pre-modification list
+   - Verify all data elements are present
+   - Test with different data scenarios
+   - Validate special cases and edge conditions
+
+## Critical Warnings
+
+<critical>
+- NEVER remove or modify template variables without explicit instruction
+- ALWAYS verify data display after styling changes
+- MAINTAIN all dynamic content functionality
+- PRESERVE all data formatting and presentation logic
+</critical> 

@@ -1,4 +1,9 @@
 ---
+description: ENFORCE when CREATING or UPDATING architecture documentation to ensure consistent system design documentation
+globs: **/*
+alwaysApply: true
+---
+---
 description: ALWAYS use when creating or updating Architecture document to ensure consistent documentation of architectural decisions. This rule enforces standardized arch format with proper context, consequences, and status tracking.
 globs: **/arch*.md
 ---

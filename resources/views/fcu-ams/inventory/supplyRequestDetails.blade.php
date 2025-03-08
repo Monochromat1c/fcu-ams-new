@@ -115,46 +115,97 @@
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                 <div>
-                    <div class="space-y-3">
-                        <div>
-                            <span class="font-medium">Requester:</span>
-                            <span class="ml-2">{{ $requests->first()->requester }}</span>
+                    <div class="bg-white rounded-lg border border-slate-200">
+                        <div class="px-4 py-3 border-b border-slate-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-gray-500">Requester</p>
+                                    <p class="text-sm font-semibold text-gray-900">{{ $requests->first()->requester }}</p>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <span class="font-medium">Department:</span>
-                            <span class="ml-2">{{ $requests->first()->department->department }}</span>
+                        <div class="px-4 py-3 border-b border-slate-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-gray-500">Department</p>
+                                    <p class="text-sm font-semibold text-gray-900">{{ $requests->first()->department->department }}</p>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <span class="font-medium">Request Date:</span>
-                            <span class="ml-2">{{ date('M d, Y h:i A', strtotime($requests->first()->created_at)) }}</span>
+                        <div class="px-4 py-3 border-b border-slate-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-gray-500">Request Date</p>
+                                    <p class="text-sm font-semibold text-gray-900">{{ date('M d, Y h:i A', strtotime($requests->first()->created_at)) }}</p>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <span class="font-medium">Status:</span>
-                            <span class="ml-2 px-3 py-1 text-xs font-medium rounded-full
-                                {{ $overallStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                   ($overallStatus === 'approved' ? 'bg-green-100 text-green-800' : 
-                                   ($overallStatus === 'partially_approved' ? 'bg-blue-100 text-blue-800' :
-                                   ($overallStatus === 'cancelled' ? 'bg-gray-100 text-gray-800' :
-                                   'bg-red-100 text-red-800'))) }}">
-                                {{ ucfirst(str_replace('_', ' ', $overallStatus)) }}
-                            </span>
+                        <div class="px-4 py-3 border-b border-slate-200">
+                            <div class="flex items-center space-x-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-gray-500">Status</p>
+                                    <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full mt-1
+                                        {{ $overallStatus === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                           ($overallStatus === 'approved' ? 'bg-green-100 text-green-800' : 
+                                           ($overallStatus === 'partially_approved' ? 'bg-blue-100 text-blue-800' :
+                                           ($overallStatus === 'cancelled' ? 'bg-gray-100 text-gray-800' :
+                                           'bg-red-100 text-red-800'))) }}">
+                                        {{ ucfirst(str_replace('_', ' ', $overallStatus)) }}
+                                    </span>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <span class="font-medium">Note:</span>
-                            <span class="ml-2">{{ $requests->first()->notes }}</span>
+                        <div class="px-4 py-3">
+                            <div class="flex items-start space-x-3">
+                                <div class="flex-shrink-0 mt-1">
+                                    <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-gray-500">Additional Comments</p>
+                                    <p class="text-sm text-gray-700">{{ $requests->first()->notes ? $requests->first()->notes : 'No additional comments provided.' }}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-lg font-semibold mb-4">Summary</h3>
-                    <div class="space-y-3">
-                        <div>
-                            <span class="font-medium">Total Items:</span>
-                            <span class="ml-2">{{ $totalItems }}</span>
+                    <div class="bg-white rounded-lg border border-slate-200">
+                        <div class="px-4 py-3 border-b border-slate-200">
+                            <h3 class="text-sm font-semibold text-gray-900">Summary</h3>
                         </div>
-                        <div>
-                            <span class="font-medium">Total Price:</span>
-                            <span class="ml-2">₱{{ number_format($totalPrice, 2) }}</span>
+                        <div class="px-4 py-3">
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-500">Total Items</span>
+                                    <span class="text-sm font-semibold text-gray-900">{{ $totalItems }}</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-sm text-gray-500">Total Price</span>
+                                    <span class="text-sm font-semibold text-blue-600">₱{{ number_format($totalPrice, 2) }}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

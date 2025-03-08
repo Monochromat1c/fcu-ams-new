@@ -1,3 +1,8 @@
+---
+description: ENFORCE when MODIFYING CODE to ensure safe and consistent code modifications
+globs: **/*
+alwaysApply: true
+---
 # Safe Code Modification Rules
 
 ## Context First
@@ -29,29 +34,32 @@
    - Read all relevant code
    - Understand the context
    - Confirm the scope with available information
+   - **Identify all data display elements and their sources**
 2. During changes:
    - Stay strictly within requested modifications
    - Preserve existing functionality
    - Document what is being changed
+   - **Ensure all data display elements remain intact**
 3. After changes:
    - Verify changes match the user's request
    - Ensure no unintended modifications
+   - **Validate all data is still being displayed**
    - Report what was changed to the user
 
 ## Examples
 
 ### Good Practice:
 ```
-User: "Add error handling to the login function"
-Assistant: *reads entire login function and related components first*
-Assistant: *only modifies the login function with try-catch blocks*
-Assistant: *preserves all existing functionality*
+User: "Update the styling of the user info section"
+Assistant: *reads entire section and identifies data elements*
+Assistant: *preserves all {{ $variable }} and data displays*
+Assistant: *only updates CSS classes and layout structure*
 ```
 
 ### Bad Practice:
 ```
-User: "Add error handling to the login function"
-Assistant: *modifies login function without reading it first*
-Assistant: *also refactors unrelated code*
-Assistant: *removes existing comments*
+User: "Update the styling of the user info section"
+Assistant: *modifies section without checking data elements*
+Assistant: *accidentally removes {{ $variable }} displays*
+Assistant: *focuses only on visual improvements*
 ``` 

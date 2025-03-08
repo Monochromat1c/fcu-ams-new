@@ -1,3 +1,8 @@
+---
+description: ENFORCE when ADDING or MODIFYING routes to ensure proper grouping and organization
+globs: **/*
+alwaysApply: true
+---
 # Route Grouping Structure Rule
 
 This rule ensures that routes are properly grouped and follow the established structure in the codebase.

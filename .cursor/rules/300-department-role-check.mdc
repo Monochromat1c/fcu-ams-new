@@ -1,3 +1,8 @@
+---
+description: ENFORCE when CREATING or MODIFYING department role routes to ensure proper access control and middleware checks
+globs: **/*
+alwaysApply: true
+---
 # Department Role Route Check Rule
 
 ## Context

@@ -1,3 +1,8 @@
+---
+description: ENFORCE when IMPLEMENTING or MODIFYING Blade templates to ensure consistent error handling and validation
+globs: **/*
+alwaysApply: true
+---
 # PHP Blade Error Handling Guidelines
 
 ## Overview

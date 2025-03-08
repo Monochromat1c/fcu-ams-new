@@ -1,0 +1,76 @@
+---
+description: ENFORCE when MODIFYING specific UI elements to ensure changes are targeted and preserve existing layouts
+globs: **/*
+alwaysApply: true
+---
+---
+description: ENFORCE when MODIFYING specific UI elements to ensure changes are targeted and preserve existing layouts
+globs: **/*
+priority: 1
+version: 1.0.0
+---
+
+# Targeted UI Modification Rule
+
+## Context
+When making UI changes to specific sections or components within a larger layout:
+- Only modify the exact section requested
+- Preserve surrounding layout and structure
+- Maintain existing styling patterns
+
+## Requirements
+
+1. Scope Identification:
+   - Clearly identify the specific section to modify
+   - Document the parent and sibling elements that must remain unchanged
+   - Note any existing styling patterns that should be maintained
+
+2. Change Isolation:
+   - Only modify the target section's HTML/CSS
+   - Preserve all parent container structures
+   - Maintain existing grid layouts and spacing
+   - Keep existing responsive behavior
+
+3. Style Consistency:
+   - Use existing color schemes
+   - Match typography patterns
+   - Maintain spacing conventions
+   - Follow existing component patterns
+
+4. Layout Preservation:
+   - Keep parent grid/flex structures
+   - Maintain existing margins and padding
+   - Preserve responsive breakpoints
+   - Keep existing alignment patterns
+
+## Examples
+
+<example>
+<!-- Good: Targeted modification of just the notes section -->
+<div class="existing-parent">
+    <!-- ... existing code ... -->
+    <div class="modified-section">
+        <!-- Only this section is changed -->
+        <span class="font-medium">Notes:</span>
+        <p class="text-gray-600">{{ $notes }}</p>
+    </div>
+    <!-- ... existing code ... -->
+</div>
+</example>
+
+<example type="invalid">
+<!-- Bad: Modifying parent structures -->
+<div class="new-parent-structure">
+    <!-- Changed too much, affecting layout -->
+    <div class="new-grid">
+        <!-- Completely new structure -->
+    </div>
+</div>
+</example>
+
+## Validation Checklist
+- [ ] Changes limited to target section
+- [ ] Parent structure preserved
+- [ ] Existing styling patterns maintained
+- [ ] Responsive behavior unchanged
+- [ ] Layout grid/flex preserved 

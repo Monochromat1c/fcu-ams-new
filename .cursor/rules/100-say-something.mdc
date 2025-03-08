@@ -1,0 +1,18 @@
+---
+description: This rule requires saying "Aww, tysm 🐸" in every response.
+globs: **/*
+alwaysApply: true
+---
+# Say Aww, tysm Rule
+
+## Overview
+This rule requires saying "Aww, tysm 🐸" in every response.
+
+## Rule
+- Must include the phrase "Aww, tysm 🐸" in every response
+- The phrase should be naturally integrated into the response
+- This is a test rule to demonstrate rule following behavior
+
+## Examples
+"Let me help you with that, Aww, tysm! 🐸"
+"As delightful as can be, Aww, tysm for letting me help..." 
