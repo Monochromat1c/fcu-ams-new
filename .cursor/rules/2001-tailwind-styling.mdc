@@ -1,0 +1,129 @@
+---
+description: ENFORCE when MODIFYING or CREATING UI components to ensure consistent Tailwind CSS styling
+globs: **/*.{blade.php,jsx,tsx}
+alwaysApply: true
+---
+---
+description: ENFORCE when MODIFYING or CREATING UI components to ensure consistent Tailwind CSS styling
+globs: **/*.{blade.php,jsx,tsx}
+tags: [ui, styling, tailwind]
+priority: 1
+version: 1.0.0
+---
+
+# Tailwind CSS Styling Standards
+
+## Context
+When creating or modifying UI components in the FCU-AMS project, all styling must be done using Tailwind CSS utility classes to maintain consistency and follow the project's design system.
+
+## Requirements
+
+### 1. Use Tailwind Utility Classes
+- Always use Tailwind utility classes instead of custom CSS
+- Follow responsive design patterns using Tailwind breakpoints (sm:, md:, lg:, xl:)
+- Use Tailwind's color palette and spacing scale
+- Implement dark mode using Tailwind's dark: variant when required
+
+### 2. Layout & Spacing
+- Use flex and grid utilities for layouts
+- Follow spacing scale (m-{n}, p-{n}, gap-{n})
+- Use container and max-w-{size} for width constraints
+- Implement responsive padding and margins
+
+### 3. Typography
+- Use Tailwind's font-{size} utilities
+- Apply text-{color} from the project's color palette
+- Use font-{weight} for consistent typography
+- Implement proper line-height using leading-{size}
+
+### 4. Components
+- Use consistent class combinations for similar components
+- Apply hover:, focus:, and active: states
+- Implement transitions using Tailwind's transition utilities
+- Use shadow-{size} for elevation
+
+### 5. Forms
+- Style form elements using Tailwind's form utilities
+- Consistent input and button styling
+- Use proper focus states and outlines
+- Apply error states using Tailwind classes
+
+## Examples
+
+### Button Components
+<example>
+<!-- Good: Using Tailwind classes -->
+<button class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors">
+    Submit
+</button>
+
+<!-- Good: With responsive design -->
+<div class="mt-4 sm:mt-6 md:mt-8 flex flex-col sm:flex-row gap-4">
+    <button class="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg">
+        Primary Action
+    </button>
+</div>
+</example>
+
+<example type="invalid">
+<!-- Bad: Using custom CSS -->
+<button style="padding: 8px 16px; background: blue;">
+    Submit
+</button>
+
+<!-- Bad: Inconsistent spacing -->
+<div style="margin-top: 20px">
+    <button class="custom-btn">
+        Primary Action
+    </button>
+</div>
+</example>
+
+### Form Components
+<example>
+<!-- Good: Consistent form styling -->
+<div class="space-y-4">
+    <div class="flex flex-col gap-2">
+        <label class="text-sm font-medium text-gray-700">Username</label>
+        <input 
+            type="text"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        >
+    </div>
+</div>
+</example>
+
+### Layout Patterns
+<example>
+<!-- Good: Responsive grid layout -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+    <div class="bg-white rounded-lg shadow p-4">
+        <h3 class="text-lg font-semibold text-gray-900">Card Title</h3>
+        <p class="mt-2 text-gray-600">Card content goes here</p>
+    </div>
+</div>
+</example>
+
+## Common Class Combinations
+
+### Interactive Elements
+- Buttons: `px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors`
+- Links: `text-blue-600 hover:text-blue-700 underline`
+- Form inputs: `px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500`
+
+### Layout Containers
+- Card: `bg-white rounded-lg shadow p-4`
+- Section: `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
+- Grid: `grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4`
+
+### Typography
+- Headings: `text-2xl font-bold text-gray-900`
+- Body text: `text-base text-gray-600`
+- Labels: `text-sm font-medium text-gray-700`
+
+<critical>
+- NEVER use inline styles or custom CSS classes unless absolutely necessary
+- ALWAYS use Tailwind utility classes for styling
+- MAINTAIN consistent spacing and color usage across components
+- FOLLOW responsive design patterns using Tailwind breakpoints
+</critical> 
