@@ -1,0 +1,97 @@
+---
+description: ENFORCE when MODIFYING any code to ensure no unauthorized changes are made beyond what was explicitly requested
+globs: **/*
+alwaysApply: true
+---
+---
+description: ENFORCE when MODIFYING any code to ensure no unauthorized changes are made beyond what was explicitly requested
+globs: **/*
+tags: [code-modification, authorization, safety]
+priority: 1
+version: 1.0.0
+---
+
+# No Unauthorized Modifications Rule
+
+## Context
+When modifying code, it is critical to only make changes that were explicitly requested by the user. Adding new features, columns, or changing existing data access patterns without explicit authorization is strictly forbidden.
+
+## Requirements
+
+### 1. Strict Adherence to User Requests
+- Only implement changes that were explicitly requested by the user
+- Do not add "nice to have" features or columns without user approval
+- Do not modify existing data access patterns unless specifically instructed
+- Do not change the structure of tables, forms, or UI components beyond what was requested
+
+### 2. Preserve Existing Implementation Patterns
+- Observe how existing code accesses and displays data
+- Follow the same patterns when implementing requested changes
+- Do not introduce new patterns or approaches without explicit approval
+- Respect the existing architecture and design decisions
+
+### 3. When in Doubt, Ask
+- If the request is ambiguous, ask for clarification before proceeding
+- Present options to the user rather than making assumptions
+- Explain potential implications of requested changes
+- Never make significant architectural decisions without user approval
+
+## Examples
+
+### Valid Modification (Following Instructions)
+<example>
+User request: "Add a depreciation calculation method to the Asset model"
+
+// Good response - only adds the requested method without changing existing code
+public function calculateDepreciation() {
+    // Implementation of the requested method
+}
+</example>
+
+### Invalid Modification (Unauthorized Changes)
+<example type="invalid">
+User request: "Add a depreciation calculation method to the Asset model"
+
+// Bad response - adds requested method but also modifies existing view to display it
+// and changes how relationships are accessed
+<div class="text-sm font-medium text-gray-900">
+    @if(is_object($asset->brand) && method_exists($asset->brand, 'getAttribute'))
+        {{ $asset->brand->brand }} {{ $asset->model }}
+    @else
+        {{ $asset->brand }} {{ $asset->model }}
+    @endif
+</div>
+</example>
+
+## Critical Warnings
+
+<critical>
+- NEVER add new columns or fields without explicit request
+- NEVER change existing data access patterns without authorization
+- NEVER modify UI structure beyond what was specifically requested
+- NEVER make architectural decisions on behalf of the user
+- ALWAYS follow existing patterns when implementing changes
+- ALWAYS limit changes to exactly what was requested
+</critical>
+
+## Implementation Guide
+
+1. When receiving a request:
+   - Identify exactly what changes are being requested
+   - Document the scope of the changes
+   - Note any existing patterns that must be preserved
+
+2. Before implementing:
+   - Confirm the exact scope of changes
+   - If unclear, ask for clarification
+   - Identify potential side effects
+
+3. During implementation:
+   - Strictly adhere to the requested changes
+   - Follow existing patterns
+   - Do not introduce new features or patterns
+
+4. After implementation:
+   - Verify that only the requested changes were made
+   - Ensure existing functionality remains unchanged
+   - Confirm that no unauthorized modifications were introduced 

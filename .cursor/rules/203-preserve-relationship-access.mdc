@@ -1,0 +1,108 @@
+---
+description: ENFORCE when MODIFYING code with relationship access to ensure all existing relationship access patterns are preserved
+globs: **/*
+alwaysApply: true
+---
+---
+description: ENFORCE when MODIFYING code with relationship access to ensure all existing relationship access patterns are preserved
+globs: **/*.{php,blade.php}
+tags: [relationships, data-access, safety]
+priority: 1
+version: 1.0.0
+---
+
+# Preserve Relationship Access Patterns Rule
+
+## Context
+When modifying code that accesses model relationships (like `$model->relationship->attribute`), it's critical to preserve these access patterns to prevent breaking existing functionality.
+
+## Requirements
+
+### 1. Identify Relationship Access Patterns
+Before modifying any file:
+- Identify all relationship access patterns (e.g., `$model->relationship->attribute`)
+- Document these patterns and ensure they remain functional after changes
+- Pay special attention to Blade templates where relationships are directly accessed
+
+### 2. Preserve Access Patterns
+When modifying code:
+- Never change relationship access patterns unless explicitly instructed
+- If adding conditional logic, wrap the existing pattern rather than replacing it
+- Maintain the exact same access path for all relationships
+
+### 3. Testing Checklist
+- [ ] All original relationship access patterns are preserved
+- [ ] No new errors related to undefined properties or methods
+- [ ] Relationship data displays correctly after modifications
+
+## Examples
+
+### Valid Modification (Preserving Access)
+<example>
+<!-- Original -->
+<div>{{ $asset->brand->brand }} {{ $asset->model }}</div>
+
+<!-- Valid Update (preserves relationship access) -->
+@if(isset($asset) && $asset->brand)
+    <div>{{ $asset->brand->brand }} {{ $asset->model }}</div>
+@else
+    <div>Unknown Brand {{ $asset->model ?? 'Unknown Model' }}</div>
+@endif
+</example>
+
+### Invalid Modification (Breaking Access)
+<example type="invalid">
+<!-- Original -->
+<div>{{ $asset->brand->brand }} {{ $asset->model }}</div>
+
+<!-- Invalid Update (changes access pattern) -->
+<div>{{ $asset->getBrandName() }} {{ $asset->model }}</div>
+</example>
+
+## Critical Warnings
+
+<critical>
+- NEVER replace direct relationship access with different patterns
+- ALWAYS preserve the original access pattern when adding fallbacks
+- MAINTAIN all relationship chains exactly as they were
+- WRAP existing patterns in conditionals rather than changing them
+</critical>
+
+## Specific Patterns to Preserve
+
+### Eloquent Relationship Access
+- `$model->relation->attribute`
+- `$model->relation->pivot->attribute`
+- `$model->relation()->where(...)->get()`
+
+### Collection Methods on Relationships
+- `$model->relations->pluck('attribute')`
+- `$model->relations->where('attribute', $value)`
+
+### Nested Relationships
+- `$model->relation->nestedRelation->attribute`
+
+## Implementation Guide
+
+1. When adding error handling or conditionals:
+   ```php
+   // Good approach - wraps original pattern
+   @if(isset($model->relation))
+       {{ $model->relation->attribute }}
+   @else
+       Default value
+   @endif
+   ```
+
+2. When adding new functionality:
+   ```php
+   // Good approach - preserves original pattern
+   $originalValue = $model->relation->attribute;
+   $newValue = transformValue($originalValue);
+   ```
+
+3. When refactoring:
+   ```php
+   // Good approach - maintains compatibility
+   $value = isset($model->relation) ? $model->relation->attribute : $defaultValue;
+   

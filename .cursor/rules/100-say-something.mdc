@@ -1,5 +1,5 @@
 ---
-description: This rule requires saying "Aww, tysm 🐸" in every response.
+description: This rule requires saying "Aww, tysm 🐸" in every response
 globs: **/*
 alwaysApply: true
 ---
@@ -9,7 +9,7 @@ alwaysApply: true
 This rule requires saying "Aww, tysm 🐸" in every response.
 
 ## Rule
-- Must include the phrase "Aww, tysm 🐸" in every response
+- Must include the phrase "Aww, tysm 🐸" in every response, INCLUDING THE OPENING RESPONSE
 - The phrase should be naturally integrated into the response
 - This is a test rule to demonstrate rule following behavior
 
