@@ -152,6 +152,49 @@
                             </div>
                         </div>
 
+                        <!-- Depreciation Information -->
+                        <div class="space-y-4">
+                            <div class="flex items-center gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-blue-600">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
+                                <h3 class="text-lg font-semibold text-gray-800">Depreciation Details</h3>
+                            </div>
+                            <div class="grid gap-4">
+                                <div class="space-y-1">
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Current Value</label>
+                                    <p class="text-sm font-medium text-gray-900">₱{{ number_format($asset->current_value, 2) }}</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Depreciated Amount</label>
+                                    <p class="text-sm font-medium text-gray-900">₱{{ number_format($asset->cost - $asset->current_value, 2) }}</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Depreciation Rate</label>
+                                    <p class="text-sm font-medium text-gray-900">20% per year (5-year straight-line)</p>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Time Elapsed</label>
+                                    <p class="text-sm font-medium text-gray-900">
+                                        {{ $asset->months_elapsed }} months
+                                        @if($asset->months_elapsed < 60)
+                                            ({{ 60 - $asset->months_elapsed }} months left)
+                                        @else
+                                            (Fully depreciated)
+                                        @endif
+                                    </p>
+                                </div>
+                                <div class="relative pt-1">
+                                    <label class="text-xs font-medium text-gray-500 uppercase">Depreciation Progress</label>
+                                    <div class="overflow-hidden h-2 mt-2 text-xs flex rounded bg-gray-200">
+                                        <div style="width:{{ min(($asset->months_elapsed / 60) * 100, 100) }}%" 
+                                            class="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-blue-500">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Asset Location -->
                         <div class="space-y-4">
                             <div class="flex items-center gap-2">

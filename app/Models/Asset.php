@@ -37,6 +37,8 @@ class Asset extends Model
         'status_id'
     ];
 
+    protected $appends = ['current_value', 'months_elapsed'];
+
     public function supplier()
     {
         return $this->belongsTo(Supplier::class);
@@ -130,5 +132,33 @@ class Asset extends Model
                 $asset->deleted_by = auth()->id();
             }
         });
+    }
+
+    public function getCurrentValueAttribute()
+    {
+        // Get months elapsed since purchase
+        $monthsElapsed = $this->getMonthsElapsedAttribute();
+        
+        // Total depreciation period in months (5 years = 60 months)
+        $totalDepreciationPeriod = 60;
+        
+        // If more than 5 years have passed, value is 0
+        if ($monthsElapsed >= $totalDepreciationPeriod) {
+            return 0;
+        }
+        
+        // Calculate remaining value using straight-line depreciation
+        $monthlyDepreciationRate = 1 / $totalDepreciationPeriod;
+        $totalDepreciationPercentage = $monthsElapsed * $monthlyDepreciationRate;
+        $remainingValue = $this->cost * (1 - $totalDepreciationPercentage);
+        
+        return max(0, $remainingValue);
+    }
+
+    public function getMonthsElapsedAttribute()
+    {
+        $purchaseDate = \Carbon\Carbon::parse($this->purchase_date);
+        $now = \Carbon\Carbon::now();
+        return $purchaseDate->diffInMonths($now);
     }
 }
