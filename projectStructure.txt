@@ -1,0 +1,41 @@
+1. Core Project Structure:
+- Main project: FCU-AMS
+- 5 major modules: AssetManagement, InventoryManagement, LeaseManagement, UserManagement, and AlertSystem
+- 1 feature module: Dashboard
+
+2. Key Models:
+- Asset: Core model for tracking physical assets
+- Inventory: For managing stock and supplies
+- Lease: For managing asset leasing
+- Supporting models: Department, Category, Supplier, Location, Condition, Status, Brand
+
+3. Module Relationships:
+- UserManagement controls access to other modules
+- AlertSystem monitors assets, inventory, and leases
+- Dashboard displays asset and inventory information
+- LeaseManagement uses assets for leasing
+
+4. Model Relationships:
+- Assets belong to departments, categories, and brands
+- Assets are supplied by suppliers
+- Assets are located at locations
+- Assets have conditions and statuses
+- Inventory items belong to categories and brands
+- Inventory items are supplied by suppliers
+
+5. Access Control:
+- Role-based access control implemented
+- Department users have restricted access
+- Manager users have broader access but some restrictions
+
+The system appears to be a comprehensive asset management solution with:
+- Asset tracking and management
+- Inventory control
+- Lease management
+- Supply request handling
+- Maintenance tracking
+- QR code integration
+- Reporting capabilities
+- Role-based access control
+
+Would you like me to explore any particular aspect of the system in more detail?
