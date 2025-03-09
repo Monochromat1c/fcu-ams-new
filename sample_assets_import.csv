@@ -1,0 +1,4 @@
+asset_tag_id,model,specs,serial_number,cost,supplier,brand,site,location,category,department,purchase_date,assigned_to,issued_date,notes
+FCU-IT-2024-001,Latitude 5420,Intel i5 11th Gen 8GB RAM 256GB SSD,XYZ123456,45000,Dell Philippines,Dell,Main Campus,IT Office,Laptop,Information Technology,2024-03-20,John Doe,2024-03-21,New IT equipment
+FCU-IT-2024-002,Latitude 5420,Intel i5 11th Gen 8GB RAM 256GB SSD,XYZ123457,45000,Dell Philippines,Dell,Main Campus,IT Office,Laptop,Information Technology,2024-03-20,,,"Spare unit"
+FCU-HR-2024-001,ProBook 450,Intel i7 12th Gen 16GB RAM 512GB SSD,ABC789012,55000,HP Philippines,HP,Main Campus,HR Department,Laptop,Human Resources,2024-03-20,Jane Smith,2024-03-21,HR Manager laptop 

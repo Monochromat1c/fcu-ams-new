@@ -129,17 +129,7 @@
         <div class="mb-1 flex justify-between m-3 rounded-md">
             <div class="space-x-2 flex">
                 <!-- <div class ="import-list my-auto">
-                    <form action="{{ route('asset.import') }}" method="POST"
-                        enctype="multipart/form-data">
-                        @csrf
-                        <div class="flex space-x-2">
-                            <input type="file" class="border rounded-md py-1 px-2 text-sm" name="file" accept=".xlsx, .xls, .csv" required>
-                            <button type="submit"
-                                class="border border-amber-600 text-amber-600 hover:bg-amber-600 hover:text-white transition-all duration-200 ease-in rounded-md px-3 py-1 text-sm">
-                                Import from Excel
-                            </button>
-                        </div>
-                    </form>
+                    
                 </div> -->
                 @if(Auth::user()->role->role != 'Department')
                 <div class="export-list my-auto">
