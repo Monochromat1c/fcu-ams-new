@@ -200,12 +200,12 @@
             </div>
 
             <!-- Chart Section -->
-            <div class="bg-white rounded-lg shadow-md p-6 mb-6">
+            <!-- <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                 <h2 class="text-2xl segoe font-bold text-gray-700 mb-4">Request Trends (Last 6 Months)</h2>
                 <div class="w-full h-[300px] flex items-center justify-center">
                     <canvas id="trendChart"></canvas>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Requests List Section -->
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
