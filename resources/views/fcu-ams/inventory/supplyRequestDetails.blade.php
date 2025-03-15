@@ -78,28 +78,28 @@
                     </div>
                 @else
                     <div class="flex gap-4">
-                        <!-- Edit button -->
-                        <button type="button" 
-                            {{ $overallStatus === 'cancelled' || $overallStatus === 'approved' ? 'disabled' : '' }}
-                            onclick="document.getElementById('editRequestModal').classList.toggle('hidden')"
-                            class="inline-flex items-center px-4 py-2 bg-white border-2 border-blue-500 hover:bg-blue-500 text-blue-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-blue-600">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                            </svg>
-                            Edit
-                        </button>
-                        <!-- Cancel button -->
-                        <form action="{{ route('inventory.supply-request.cancel', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                {{ $overallStatus === 'cancelled' || $overallStatus === 'approved' ? 'disabled' : '' }}
-                                class="inline-flex items-center px-4 py-2 bg-white border-2 border-red-500 hover:bg-red-500 text-red-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-white disabled:hover:text-red-600">
+                        @if($overallStatus !== 'cancelled' && $overallStatus !== 'approved')
+                            <!-- Edit button -->
+                            <button type="button" 
+                                onclick="document.getElementById('editRequestModal').classList.toggle('hidden')"
+                                class="inline-flex items-center px-4 py-2 bg-white border-2 border-blue-500 hover:bg-blue-500 text-blue-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                 </svg>
-                                Cancel
+                                Edit
                             </button>
-                        </form>
+                            <!-- Cancel button -->
+                            <form action="{{ route('inventory.supply-request.cancel', ['request_group_id' => $requests->first()->request_group_id]) }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit"
+                                    class="inline-flex items-center px-4 py-2 bg-white border-2 border-red-500 hover:bg-red-500 text-red-600 hover:text-white text-sm font-medium rounded-lg shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">
+                                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    Cancel
+                                </button>
+                            </form>
+                        @endif
                         <!-- Print button -->
                         @if(auth()->user()->role->role !== 'Department')
                         <a href="{{ route('inventory.supply-request.print', ['request_group_id' => $requests->first()->request_group_id]) }}" target="_blank"
@@ -658,6 +658,7 @@
                 const totalPrice = calculateTotalPrice(itemQuantity, editSelectedItemData.price);
 
                 const newRow = document.createElement('tr');
+                newRow.setAttribute('data-request-id', editSelectedItemData.request_id);
                 newRow.setAttribute('data-name', itemName);
                 newRow.setAttribute('data-quantity', itemQuantity);
                 newRow.setAttribute('data-unit', editSelectedItemData.unit);
@@ -667,13 +668,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemName}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${editSelectedItemData.unit}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatPrice(editSelectedItemData.price)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                        <input type="number" 
-                            name="quantities[]" 
-                            value="${itemQuantity}"
-                            min="1"
-                            class="block w-24 rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6">
-                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemQuantity}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatPrice(totalPrice)}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                         <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">

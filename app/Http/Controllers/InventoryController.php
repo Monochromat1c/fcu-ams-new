@@ -548,8 +548,9 @@ class InventoryController extends Controller
                 }])
                 ->get();
 
-            $hasPartialApproval = false;
-            $allFullyProcessed = true;
+            if ($requests->isEmpty()) {
+                return redirect()->back()->with('error', 'Supply request not found.');
+            }
 
             foreach ($requests as $supplyRequest) {
                 // Skip if already approved
@@ -557,92 +558,13 @@ class InventoryController extends Controller
                     continue;
                 }
 
-                $inventory = null;
-                
-                if ($supplyRequest->inventory_id) {
-                    $inventory = Inventory::find($supplyRequest->inventory_id);
-                } else {
-                    // For non-inventory items, try to find matching inventory
-                    $matchingInventory = DB::table('inventories')
-                        ->join('units', 'inventories.unit_id', '=', 'units.id')
-                        ->where('inventories.items_specs', '=', $supplyRequest->item_name)
-                        ->where('inventories.unit_id', '=', $supplyRequest->unit_id)
-                        ->where('inventories.unit_price', '=', $supplyRequest->estimated_unit_price)
-                        ->select('inventories.id')
-                        ->first();
-                        
-                    if ($matchingInventory) {
-                        $inventory = Inventory::find($matchingInventory->id);
-                    } else {
-                        $hasPartialApproval = true;
-                        $supplyRequest->status = 'approved';
-                        $supplyRequest->save();
-                        continue;
-                    }
-                }
-                
-                if (!$inventory) {
-                    continue;
-                }
-
-                if ($inventory->quantity >= $supplyRequest->quantity) {
-                    // Full approval
-                    $inventory->quantity -= $supplyRequest->quantity;
-                    $inventory->save();
-                    
-                    $supplyRequest->status = 'approved';
-                    $supplyRequest->inventory_id = $inventory->id;
-                    // Preserve original unit and price for non-inventory items
-                    if (!$supplyRequest->getOriginal('inventory_id')) {
-                        $supplyRequest->estimated_unit_price = $supplyRequest->estimated_unit_price;
-                    }
-                    $supplyRequest->save();
-                } else if ($inventory->quantity > 0) {
-                    // Partial approval
-                    $availableQuantity = $inventory->quantity;
-                    $requestedQuantity = $supplyRequest->quantity;
-                    
-                    // Update inventory
-                    $inventory->quantity = 0;
-                    $inventory->save();
-                    
-                    // Create a new request for the approved quantity
-                    $approvedRequest = new SupplyRequest();
-                    $approvedRequest->request_id = Str::uuid();
-                    $approvedRequest->request_group_id = $request_group_id;
-                    $approvedRequest->department_id = $supplyRequest->department_id;
-                    $approvedRequest->requester = $supplyRequest->requester;
-                    $approvedRequest->item_name = $supplyRequest->item_name;
-                    $approvedRequest->quantity = $availableQuantity;
-                    $approvedRequest->status = 'approved';
-                    $approvedRequest->inventory_id = $inventory->id;
-                    // Preserve original unit and price
-                    $approvedRequest->estimated_unit_price = $supplyRequest->estimated_unit_price;
-                    $approvedRequest->unit_id = $supplyRequest->unit_id;
-                    $approvedRequest->save();
-                    
-                    // Update original request with remaining quantity
-                    $supplyRequest->quantity = $requestedQuantity - $availableQuantity;
-                    $supplyRequest->notes = "Partially approved: {$availableQuantity} units approved, {$supplyRequest->quantity} units pending";
-                    $supplyRequest->status = 'approved';
-                    $supplyRequest->save();
-                    
-                    $hasPartialApproval = true;
-                    $allFullyProcessed = false;
-                } else {
-                    $allFullyProcessed = false;
-                    $supplyRequest->status = 'approved';
-                    $supplyRequest->save();
-                }
+                // Simply mark the request as approved
+                $supplyRequest->status = 'approved';
+                $supplyRequest->save();
             }
 
             DB::commit();
-
-            $message = $hasPartialApproval 
-                ? 'Request partially approved. Some items were approved with available stock.' 
-                : ($allFullyProcessed ? 'Supply request approved successfully.' : 'Some items could not be approved due to insufficient stock.');
-
-            return redirect()->back()->with('success', $message);
+            return redirect()->back()->with('success', 'Supply request approved successfully.');
 
         } catch (\Exception $e) {
             DB::rollback();
