@@ -3,9 +3,9 @@
 <style>
     body {
         --tw-bg-opacity: 1;
-        background-color: rgb(241 245 249 / var(--tw-bg-opacity))
-            /* #f1f5f9 */
-        ;
+        background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+        font-size: 12px; /* Standard document font size */
+        line-height: 1.2; /* Tighter line height */
     }
 
     .fcu-icon {
@@ -15,6 +15,8 @@
     @media print {
         body {
             background-color: white;
+            margin: 0;
+            padding: 0;
         }
 
         .no-print {
@@ -22,27 +24,88 @@
         }
 
         @page {
-            size: auto;
-            margin: 0mm;
+            size: legal; /* 8.5" x 13" */
+            margin: 0.5in; /* Standard margin */
         }
 
         .shadow-lg {
             box-shadow: none;
         }
     }
+
+    /* Adjust heading sizes */
+    .header-title {
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .header-subtitle {
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    /* Adjust table text */
+    table {
+        font-size: 12px;
+    }
+
+    /* Adjust spacing */
+    .compact-spacing {
+        margin-bottom: 0.5rem;
+    }
 </style>
-<div class="bg-white rounded-lg p-8 mb-8 max-w-2xl my-9 mx-auto shadow-lg">
-    <div class="text-center mb-5">
-        <img class="fcu-icon mb-3 w-28 mx-auto" src="/img/login/fcu-icon.png" alt="" srcset="">
-        <h2 class="text-2xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>
-        <h2 class="text-xl font-bold mb-3">Roxas Avenue, Roxas City</h2>
-        <h2 class="text-xl font-bold">Purchase Order Receipt</h2>
-        <p class="text-gray-600 mb-3">Date: {{ $record->po_date }}</p>
-        @if($record->note)
-            <p class="text-gray-600 mb-3">Note: {{ $record->note }}</p>
-        @endif
-        <h2 class="text-xl font-bold">{{ $record->department->department ?? 'N/A' }}
-        </h2>
+<div class="bg-white p-4 mb-8 mx-auto mt-4" style="max-width: 8.5in;">
+    <div class="text-left compact-spacing">
+        <h1 class="header-title text-center mb-1">FILAMER CHRISTIAN UNIVERSITY, INC.</h1>
+        <h1 class="header-subtitle text-center italic mb-1">ROXAS AVENUE, ROXAS CITY</h1>
+        <h1 class="header-subtitle text-center mb-2">PROPERTY CUSTODIAN'S OFFICE</h1>
+        <table class="w-full border-collapse">
+            <tr>
+                <td class="border border-black p-2">Document Name:</td>
+                <td class="border border-black p-2">PURCHASE ORDER</td>
+                <td class="border border-black p-2">Effectivity:</td>
+                <td class="border border-black p-2">August 15, 2022</td>
+            </tr>
+            <tr>
+                <td class="border border-black p-2">Document No:</td>
+                <td class="border border-black p-2">PCO-2022-01</td>
+                <td class="border border-black p-2">Issuing Office</td>
+                <td class="border border-black p-2">Property Custodian's Office</td>
+            </tr>
+            <tr>
+                <td class="border border-black p-2">Revision No:</td>
+                <td class="border border-black p-2">1</td>
+                <td class="border border-black p-2">Page No.</td>
+                <td class="border border-black p-2">1</td>
+            </tr>
+        </table>
+
+        <h1 class="text-xl font-bold text-center mb-4">PURCHASE ORDER</h1>
+
+        <div class="mb-4">
+            <div class="flex mb-2">
+                <div class="w-24">P.O. No.</div>
+                <div class="text-red-600 mr-auto">{{ $record->po_number ?? '21938' }}</div>
+                <div>DATE: {{ $record->po_date ?? '07/31/2024' }}</div>
+            </div>
+            <div class="flex">
+                <div class="w-48">REQUESTING DEPARTMENT:</div>
+                <div>{{ $record->department->department ?? 'IT ADMIN' }}</div>
+            </div>
+        </div>
+
+        <div class="mb-4">
+            <div class="flex">
+                <div class="w-16">TO:</div>
+                <div>B-Y & SONS TRADING</div>
+            </div>
+            <div class="flex">
+                <div class="w-16">ADDRESS:</div>
+                <div>ROXAS AVENUE</div>
+            </div>
+        </div>
+
+        <p class="mb-4">Please supply us within ___ working days after receipt of this Purchase Order</p>
     </div>
 
     <table class="w-full mb-8">
