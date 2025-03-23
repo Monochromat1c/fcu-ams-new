@@ -338,18 +338,19 @@
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Department</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requester/Type</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Total Items</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Action</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach($purchaseOrders as $record)
-                                    <tr class="hover:bg-gray-50">
+                                    <tr class="hover:bg-gray-50"
+                                        onclick="window.location.href='{{ route('purchase-order-details', $record->id) }}'">
                                         <td class="px-6 py-4">{{ $record->department->department }}</td>
                                         <td class="px-6 py-4">Purchase Order</td>
-                                        <td class="px-6 py-4">-</td>
-                                        <td class="px-6 py-4">{{ $record->po_date }}</td>
+                                        <td class="px-6 py-4">
+                                            {{ \Carbon\Carbon::parse($record->po_date)->format('M d, Y') }}
+                                        </td>
                                         <td class="px-6 py-4">
                                             <a href="{{ route('purchase-order-details', $record->id) }}"
                                                class="text-blue-600 hover:text-blue-900">View Details</a>
@@ -357,15 +358,15 @@
                                     </tr>
                                 @endforeach
                                 @foreach($approvedRequestsForPO as $request)
-                                    <tr class="hover:bg-gray-50">
+                                    <tr class="hover:bg-gray-50"
+                                        onclick="window.location.href='{{ route('reports.print-approved-request', $request->request_group_id) }}'">
                                         <td class="px-6 py-4">{{ $request->department->department }}</td>
                                         <td class="px-6 py-4">{{ $request->requester }}</td>
-                                        <td class="px-6 py-4">{{ $request->total_items }} items</td>
                                         <td class="px-6 py-4">{{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}</td>
                                         <td class="px-6 py-4">
                                             <a href="{{ route('reports.print-approved-request', $request->request_group_id) }}" 
                                                class="text-blue-600 hover:text-blue-900">
-                                                Print Request
+                                                View Details
                                             </a>
                                         </td>
                                     </tr>
@@ -425,7 +426,7 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach($stockOutRecords as $record)
-                                    <tr class="hover:bg-gray-50">
+                                    <tr class="hover:bg-gray-50" onclick="window.location.href='{{ route('stock.out.details', $record->id) }}'">
                                         <td class="px-6 py-4">{{ $record->receiver }}</td>
                                         <td class="px-6 py-4">{{ $record->stock_out_date }}</td>
                                         <td class="px-6 py-4">
