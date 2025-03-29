@@ -4,6 +4,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (errorMessage) {
         setTimeout(() => {
             errorMessage.style.display = "none";
-        }, 6000);
+        }, 9000);
     }
 });

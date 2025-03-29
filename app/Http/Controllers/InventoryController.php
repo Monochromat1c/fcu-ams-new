@@ -1079,6 +1079,7 @@ class InventoryController extends Controller
 
             foreach ($data as $rowNumber => $row) {
                 $currentRowNumber = $rowNumber + 2; // Excel row number (1-based index + header)
+                $rowData = null; // Initialize rowData for logging in case of early failure
                 try {
                     // Pad the row with nulls if it has fewer columns than headers
                     $row = array_pad($row, count($headers), null);
@@ -1103,6 +1104,19 @@ class InventoryController extends Controller
                     }
                     if (!empty($missingFields)) {
                         throw new \Exception('Missing required fields: ' . implode(', ', $missingFields));
+                    }
+
+                    // --- Check if Asset Tag ID already exists ---
+                    $assetTagId = $rowData['asset_tag_id'];
+                    if (Asset::where('asset_tag_id', $assetTagId)->exists()) {
+                        $errorCount++;
+                        $skippedRows[] = $currentRowNumber;
+                        \Log::warning('Skipping asset import row due to existing asset_tag_id:', [
+                            'row_number' => $currentRowNumber,
+                            'asset_tag_id' => $assetTagId,
+                            'data' => $rowData
+                        ]);
+                        continue; // Skip to the next row
                     }
 
                     // --- Look up or Create Related Models ---
@@ -1188,7 +1202,7 @@ class InventoryController extends Controller
 
                     // --- Create Asset ---
                     $asset = new Asset([
-                        'asset_tag_id' => $rowData['asset_tag_id'],
+                        'asset_tag_id' => $assetTagId, // Use the validated asset tag ID
                         'brand_id' => $brand->id,
                         'model' => $rowData['model'],
                         'specs' => $rowData['specs'] ?? null,
@@ -1204,10 +1218,8 @@ class InventoryController extends Controller
                         'condition_id' => $condition ? $condition->id : 1,
                         'notes' => $rowData['notes'] ?? null,
                         'created_by' => $userId, // Use the fetched user ID
-                        // Add other optional fields if they exist in headers and rowData
-                        'assigned_to' => $rowData['assigned_to'] ?? null, // Uncommented and added null fallback
-                        'issued_date' => $issuedDate, // Add the parsed issued_date (will be null if empty or unparseable)
-                        // ... etc.
+                        'assigned_to' => $rowData['assigned_to'] ?? null,
+                        'issued_date' => $issuedDate,
                     ]);
 
                     $asset->save();
@@ -1219,7 +1231,7 @@ class InventoryController extends Controller
                     \Log::error('Error processing asset import row:', [
                         'row_number' => $currentRowNumber,
                         'error' => $e->getMessage(),
-                        'data' => $rowData ?? $row // Log raw row if array_combine failed
+                        'data' => $rowData ?? $row // Log raw row if array_combine failed or other early error
                     ]);
                     // Optional: Continue to next row instead of rolling back immediately
                     // DB::rollback(); // Uncomment if you want to stop the entire import on first error
@@ -1232,7 +1244,10 @@ class InventoryController extends Controller
 
             $message = "Asset import completed. Successfully processed {$successCount} assets.";
             if ($errorCount > 0) {
-                $message .= " {$errorCount} rows were skipped due to errors (Rows: " . implode(', ', $skippedRows) . "). Check logs for details.";
+                // Ensure skipped rows are unique in the message
+                $uniqueSkippedRows = array_unique($skippedRows);
+                sort($uniqueSkippedRows); // Optional: sort row numbers
+                $message .= " {$errorCount} rows were skipped due to errors or existing data (Rows: " . implode(', ', $uniqueSkippedRows) . "). Check logs for details.";
             }
 
             return redirect()->route('asset.list')->with('success', $message); // Redirect to asset list
