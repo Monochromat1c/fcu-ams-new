@@ -1064,7 +1064,7 @@ class InventoryController extends Controller
                 'supplier', 'site', 'location', 'category', 'department', 'purchase_date'
             ];
             // Optional but commonly used headers
-            $optionalHeaders = ['specs', 'status', 'condition', 'notes'];
+            $optionalHeaders = ['specs', 'status', 'condition', 'notes', 'assigned_to', 'issued_date'];
 
             // Check if all required headers are present
             $missingHeaders = array_diff($requiredHeaders, $headers);
@@ -1123,37 +1123,66 @@ class InventoryController extends Controller
                         throw new \Exception('Invalid format for cost field.');
                     }
 
-                    // Parse purchase date
+                    // --- Parse Purchase Date ---
                     $purchaseDateInput = $rowData['purchase_date'];
-                    $purchaseDate = null;
+                    $purchaseDate = null; // Initialize variable
                     try {
                         if (is_numeric($purchaseDateInput)) {
-                            // Handle Excel numeric date format
                             $purchaseDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($purchaseDateInput)->format('Y-m-d');
                         } elseif (is_string($purchaseDateInput) && !empty($purchaseDateInput)) {
-                            // Attempt to parse specific formats, prioritizing d/m/Y
                             try {
-                                // Try d/m/Y format first
                                 $purchaseDate = Carbon::createFromFormat('d/m/Y', $purchaseDateInput)->format('Y-m-d');
                             } catch (\InvalidArgumentException $e1) {
                                 try {
-                                    // Fallback to general parse (might handle Y-m-d, m/d/Y etc.)
                                     $purchaseDate = Carbon::parse($purchaseDateInput)->format('Y-m-d');
                                 } catch (\Exception $e2) {
-                                    // If both fail, rethrow the exception
                                     throw new \Exception("Could not parse date '{$purchaseDateInput}'. Expected formats like DD/MM/YYYY, YYYY-MM-DD, or Excel numeric date.");
                                 }
                             }
                         }
-
-                        // Check if date parsing was successful
-                        if (is_null($purchaseDate)) {
-                             throw new \Exception("Purchase date '{$purchaseDateInput}' is empty or could not be parsed.");
+                        if (is_null($purchaseDate) && in_array('purchase_date', $requiredHeaders)) {
+                             throw new \Exception("Purchase date '{$purchaseDateInput}' is empty or could not be parsed, and it is required.");
                         }
-
                     } catch (\Exception $dateError) {
-                        // Re-throw with a more specific message if needed, or use the caught message
                         throw new \Exception('Error parsing purchase_date field: ' . $dateError->getMessage());
+                    }
+
+                    // --- Parse Issued Date (Optional) ---
+                    $issuedDateInput = $rowData['issued_date'] ?? null; // Get value if header exists
+                    $issuedDate = null; // Initialize variable
+                    if (!empty($issuedDateInput)) { // Only parse if there's a value
+                        try {
+                            if (is_numeric($issuedDateInput)) {
+                                // Handle Excel numeric date format
+                                $issuedDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($issuedDateInput)->format('Y-m-d');
+                            } elseif (is_string($issuedDateInput)) {
+                                // Attempt to parse specific formats, prioritizing d/m/Y
+                                try {
+                                    // Try d/m/Y format first
+                                    $issuedDate = Carbon::createFromFormat('d/m/Y', $issuedDateInput)->format('Y-m-d');
+                                } catch (\InvalidArgumentException $e1) {
+                                    try {
+                                        // Fallback to general parse
+                                        $issuedDate = Carbon::parse($issuedDateInput)->format('Y-m-d');
+                                    } catch (\Exception $e2) {
+                                        // Log warning instead of throwing error for optional field
+                                        \Log::warning('Could not parse optional issued_date field:', [
+                                            'row_number' => $currentRowNumber,
+                                            'value' => $issuedDateInput,
+                                            'error' => $e2->getMessage()
+                                        ]);
+                                        // Keep $issuedDate as null if parsing fails
+                                    }
+                                }
+                            }
+                        } catch (\Exception $dateError) {
+                             \Log::warning('Error parsing optional issued_date field:', [
+                                'row_number' => $currentRowNumber,
+                                'value' => $issuedDateInput,
+                                'error' => $dateError->getMessage()
+                             ]);
+                             // Keep $issuedDate as null if parsing fails
+                        }
                     }
 
                     // --- Create Asset ---
@@ -1175,7 +1204,8 @@ class InventoryController extends Controller
                         'notes' => $rowData['notes'] ?? null,
                         'created_by' => $userId, // Use the fetched user ID
                         // Add other optional fields if they exist in headers and rowData
-                        // 'assigned_to' => $rowData['assigned_to'] ?? null,
+                        'assigned_to' => $rowData['assigned_to'] ?? null, // Uncommented and added null fallback
+                        'issued_date' => $issuedDate, // Add the parsed issued_date (will be null if empty or unparseable)
                         // ... etc.
                     ]);
 

@@ -764,5 +764,38 @@
         }
     });
 </script>
+<script>
+    // File upload handling
+    document.addEventListener('DOMContentLoaded', function () {
+        const fileInput = document.getElementById('file');
+        const fileNameDisplay = document.getElementById('file-name');
+        const importModal = document.getElementById('importModal');
+
+        fileInput.addEventListener('change', function () {
+            if (this.files && this.files[0]) {
+                const fileName = this.files[0].name;
+                fileNameDisplay.textContent = `Selected file: ${fileName}`;
+
+                // Validate file size (2MB = 2 * 1024 * 1024 bytes)
+                if (this.files[0].size > 2 * 1024 * 1024) {
+                    alert('File size exceeds 2MB limit. Please choose a smaller file.');
+                    this.value = '';
+                    fileNameDisplay.textContent = '';
+                }
+            } else {
+                fileNameDisplay.textContent = '';
+            }
+        });
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            if (event.target == importModal) {
+                importModal.classList.add('hidden');
+                fileInput.value = '';
+                fileNameDisplay.textContent = '';
+            }
+        }
+    });
+</script>
 
 @endsection
