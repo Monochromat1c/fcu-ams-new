@@ -80,7 +80,7 @@
             </tr>
         </table>
 
-        <h1 class="text-xl font-bold text-center mb-4">PURCHASE ORDER</h1>
+        <h1 class="header-title text-center mb-1">PURCHASE ORDER</h1>
 
         <div class="mb-4">
             <div class="flex mb-2">

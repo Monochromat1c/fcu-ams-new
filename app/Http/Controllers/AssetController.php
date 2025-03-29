@@ -20,6 +20,15 @@ use Illuminate\Validation\Rule;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
 use App\Models\DisposedStatus;
+use Illuminate\Support\Str;
+use App\Models\SupplyRequest;
+use App\Models\StockOut;
+use App\Models\Inventory;
+use App\Exports\InventoryExport;
+use App\Models\Unit;
+use App\Models\InventoryEditHistory;
+use App\Imports\AssetsImport;
+use Carbon\Carbon;
 
 class AssetController extends Controller
 {

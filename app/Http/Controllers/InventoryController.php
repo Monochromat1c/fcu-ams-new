@@ -21,7 +21,7 @@ use App\Models\Brand;
 use App\Models\Unit;
 use App\Models\AssetEditHistory;
 use App\Models\InventoryEditHistory;
-use App\Imports\AssetsImport;
+// use App\Imports\AssetsImport;
 use Illuminate\Validation\Rule;
 use Carbon\Carbon;
 
@@ -1023,6 +1023,201 @@ class InventoryController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
             return redirect()->back()->with('error', 'Error importing data: ' . $e->getMessage());
+        }
+    }
+
+    public function importAsset(Request $request)
+    {
+        try {
+            if (!auth()->check()) {
+                return redirect()->back()->with('error', 'You must be logged in to import data.');
+            }
+
+            $userId = auth()->user()->id;
+
+            if (!$request->hasFile('file')) {
+                return redirect()->back()->with('error', 'No file uploaded.');
+            }
+
+            $file = $request->file('file');
+            $successCount = 0;
+            $errorCount = 0;
+            $skippedRows = []; // Keep track of skipped rows for detailed feedback
+
+            DB::beginTransaction();
+
+            $data = Excel::toArray([], $file)[0];
+
+            if (empty($data) || count($data) < 2) { // Check if data exists and has at least one data row besides header
+                DB::rollback();
+                return redirect()->back()->with('error', 'The uploaded file is empty or missing headers.');
+            }
+
+            // Get the headers from the first row and convert to lowercase, trim whitespace
+            $headers = array_map(function($header) {
+                return trim(strtolower($header));
+            }, $data[0]);
+
+            // Define required headers based on the assets table structure
+            $requiredHeaders = [
+                'asset_tag_id', 'brand', 'model', 'serial_number', 'cost',
+                'supplier', 'site', 'location', 'category', 'department', 'purchase_date'
+            ];
+            // Optional but commonly used headers
+            $optionalHeaders = ['specs', 'status', 'condition', 'notes'];
+
+            // Check if all required headers are present
+            $missingHeaders = array_diff($requiredHeaders, $headers);
+            if (!empty($missingHeaders)) {
+                DB::rollback();
+                return redirect()->back()->with('error', 'Missing required columns in the file: ' . implode(', ', $missingHeaders));
+            }
+
+            // Remove the header row
+            array_shift($data);
+
+            foreach ($data as $rowNumber => $row) {
+                $currentRowNumber = $rowNumber + 2; // Excel row number (1-based index + header)
+                try {
+                    // Pad the row with nulls if it has fewer columns than headers
+                    $row = array_pad($row, count($headers), null);
+                    $rowData = array_combine($headers, $row);
+
+                    // Trim whitespace from all values
+                    $rowData = array_map(function($value) {
+                        return is_string($value) ? trim($value) : $value;
+                    }, $rowData);
+
+                    // Skip empty rows (all values are null or empty strings)
+                    if (empty(array_filter($rowData, function($value) { return !is_null($value) && $value !== ''; }))) {
+                        continue;
+                    }
+
+                    // --- Basic Validation ---
+                    $missingFields = [];
+                    foreach ($requiredHeaders as $reqHeader) {
+                        if (!isset($rowData[$reqHeader]) || $rowData[$reqHeader] === '' || is_null($rowData[$reqHeader])) {
+                            $missingFields[] = $reqHeader;
+                        }
+                    }
+                    if (!empty($missingFields)) {
+                        throw new \Exception('Missing required fields: ' . implode(', ', $missingFields));
+                    }
+
+                    // --- Look up or Create Related Models ---
+                    $brand = Brand::firstOrCreate(['brand' => $rowData['brand']]);
+                    $supplier = Supplier::firstOrCreate(['supplier' => $rowData['supplier']]);
+                    $site = Site::firstOrCreate(['site' => $rowData['site']]);
+                    $location = Location::firstOrCreate(['location' => $rowData['location']]);
+                    $category = Category::firstOrCreate(['category' => $rowData['category']]);
+                    $department = Department::firstOrCreate(['department' => $rowData['department']]);
+
+                    // Optional: Status and Condition
+                    $status = isset($rowData['status']) && !empty($rowData['status']) ? Status::firstOrCreate(['status' => $rowData['status']]) : null;
+                    $condition = isset($rowData['condition']) && !empty($rowData['condition']) ? Condition::firstOrCreate(['condition' => $rowData['condition']]) : null;
+
+                    // --- Data Cleaning and Formatting ---
+                    // Clean up the cost (remove currency symbols and commas)
+                    $cost = str_replace([',', '₱', '$'], '', $rowData['cost']);
+                    if (!is_numeric($cost)) {
+                        throw new \Exception('Invalid format for cost field.');
+                    }
+
+                    // Parse purchase date
+                    $purchaseDateInput = $rowData['purchase_date'];
+                    $purchaseDate = null;
+                    try {
+                        if (is_numeric($purchaseDateInput)) {
+                            // Handle Excel numeric date format
+                            $purchaseDate = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($purchaseDateInput)->format('Y-m-d');
+                        } elseif (is_string($purchaseDateInput) && !empty($purchaseDateInput)) {
+                            // Attempt to parse specific formats, prioritizing d/m/Y
+                            try {
+                                // Try d/m/Y format first
+                                $purchaseDate = Carbon::createFromFormat('d/m/Y', $purchaseDateInput)->format('Y-m-d');
+                            } catch (\InvalidArgumentException $e1) {
+                                try {
+                                    // Fallback to general parse (might handle Y-m-d, m/d/Y etc.)
+                                    $purchaseDate = Carbon::parse($purchaseDateInput)->format('Y-m-d');
+                                } catch (\Exception $e2) {
+                                    // If both fail, rethrow the exception
+                                    throw new \Exception("Could not parse date '{$purchaseDateInput}'. Expected formats like DD/MM/YYYY, YYYY-MM-DD, or Excel numeric date.");
+                                }
+                            }
+                        }
+
+                        // Check if date parsing was successful
+                        if (is_null($purchaseDate)) {
+                             throw new \Exception("Purchase date '{$purchaseDateInput}' is empty or could not be parsed.");
+                        }
+
+                    } catch (\Exception $dateError) {
+                        // Re-throw with a more specific message if needed, or use the caught message
+                        throw new \Exception('Error parsing purchase_date field: ' . $dateError->getMessage());
+                    }
+
+                    // --- Create Asset ---
+                    $asset = new Asset([
+                        'asset_tag_id' => $rowData['asset_tag_id'],
+                        'brand_id' => $brand->id,
+                        'model' => $rowData['model'],
+                        'specs' => $rowData['specs'] ?? null,
+                        'serial_number' => $rowData['serial_number'],
+                        'cost' => $cost,
+                        'supplier_id' => $supplier->id,
+                        'site_id' => $site->id,
+                        'location_id' => $location->id,
+                        'category_id' => $category->id,
+                        'department_id' => $department->id,
+                        'purchase_date' => $purchaseDate, // Use the parsed date
+                        'status_id' => $status ? $status->id : 1,
+                        'condition_id' => $condition ? $condition->id : 1,
+                        'notes' => $rowData['notes'] ?? null,
+                        'created_by' => $userId, // Use the fetched user ID
+                        // Add other optional fields if they exist in headers and rowData
+                        // 'assigned_to' => $rowData['assigned_to'] ?? null,
+                        // ... etc.
+                    ]);
+
+                    $asset->save();
+                    $successCount++;
+
+                } catch (\Exception $e) {
+                    $errorCount++;
+                    $skippedRows[] = $currentRowNumber; // Add row number to skipped list
+                    \Log::error('Error processing asset import row:', [
+                        'row_number' => $currentRowNumber,
+                        'error' => $e->getMessage(),
+                        'data' => $rowData ?? $row // Log raw row if array_combine failed
+                    ]);
+                    // Optional: Continue to next row instead of rolling back immediately
+                    // DB::rollback(); // Uncomment if you want to stop the entire import on first error
+                    // return redirect()->back()->with('error', "Error processing row {$currentRowNumber}: " . $e->getMessage()); // Uncomment for immediate feedback
+                }
+            }
+
+            // If we processed all rows without critical failure (or chose to continue on errors)
+            DB::commit();
+
+            $message = "Asset import completed. Successfully processed {$successCount} assets.";
+            if ($errorCount > 0) {
+                $message .= " {$errorCount} rows were skipped due to errors (Rows: " . implode(', ', $skippedRows) . "). Check logs for details.";
+            }
+
+            return redirect()->route('asset.list')->with('success', $message); // Redirect to asset list
+
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error('Asset import failed:', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            // Provide more specific error if possible
+             if (isset($currentRowNumber)) {
+                 return redirect()->back()->with('error', "Error importing data near row {$currentRowNumber}: " . $e->getMessage());
+             } else {
+                 return redirect()->back()->with('error', 'Error importing data: ' . $e->getMessage());
+             }
         }
     }
 }

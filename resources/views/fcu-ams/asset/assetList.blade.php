@@ -128,9 +128,88 @@
         </div>
         <div class="mb-1 flex justify-between m-3 rounded-md">
             <div class="space-x-2 flex">
-                <!-- <div class ="import-list my-auto">
-                    
-                </div> -->
+                <div class="import-list my-auto">
+                    <button type="button" onclick="document.getElementById('importModal').classList.remove('hidden')"
+                        class="flex gap-2 items-center bg-green-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+                        </svg>
+                        Import Excel
+                    </button>
+                </div>
+
+                <!-- Import Modal -->
+                <div id="importModal"
+                    class="fixed inset-0 flex items-center justify-center z-50 hidden backdrop-blur-sm">
+                    <div class="fixed inset-0 bg-gray-500 bg-opacity-50 transition-opacity duration-300"></div>
+                    <div
+                        class="bg-white rounded-xl shadow-2xl p-8 w-11/12 md:w-2/3 lg:w-1/2 max-h-[85vh] overflow-y-auto relative z-50 transform transition-all duration-300">
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">Import Asset Data</h2>
+                            <button type="button"
+                                onclick="document.getElementById('importModal').classList.add('hidden')"
+                                class="text-gray-400 hover:text-gray-500 transition-colors duration-200">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+
+                        <form action="{{ route('inventory.asset.import') }}" method="POST"
+                            enctype="multipart/form-data" class="space-y-6">
+                            @csrf
+                            <div class="space-y-4">
+                                <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                                    <h3 class="text-lg font-semibold text-blue-800 mb-2">Import Instructions</h3>
+                                    <ul class="list-disc list-inside space-y-2 text-blue-700">
+                                        <li>File must be in Excel format (CSV, XLSX, XLS)</li>
+                                        <li>Maximum file size is 2MB</li>
+                                        <li>Required columns: items_specs, quantity, unit, brand, unit_price, supplier
+                                        </li>
+                                        <li>Optional columns: department, stock_out_date</li>
+                                    </ul>
+                                </div>
+
+                                <div class="relative border-2 border-gray-300 border-dashed rounded-lg p-6 text-center">
+                                    <input type="file" name="file" id="file" accept=".csv,.xlsx,.xls"
+                                        class="absolute inset-0 w-full h-full opacity-0 cursor-pointer">
+                                    <div class="space-y-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-12 w-12 text-gray-400"
+                                            fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                        </svg>
+                                        <div class="text-sm text-gray-600">
+                                            <label for="file"
+                                                class="relative cursor-pointer rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500">
+                                                <span>Upload a file</span>
+                                            </label>
+                                            <p class="pl-1">or drag and drop</p>
+                                        </div>
+                                        <p class="text-xs text-gray-500">CSV, XLSX, XLS up to 2MB</p>
+                                    </div>
+                                    <div id="file-name" class="mt-2 text-sm text-gray-600"></div>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-end gap-4 pt-6 border-t border-gray-200">
+                                <button type="button"
+                                    onclick="document.getElementById('importModal').classList.add('hidden')"
+                                    class="px-6 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300 transition-all duration-200">
+                                    Cancel
+                                </button>
+                                <button type="submit"
+                                    class="px-6 py-2.5 bg-blue-600 text-white rounded-lg shadow-sm hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+                                    Import Data
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
                 @if(Auth::user()->role->role != 'Department')
                 <div class="export-list my-auto">
                     <button type="button" onclick="window.location.href='{{ route('asset.export') }}'"
