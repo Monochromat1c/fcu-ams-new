@@ -18,6 +18,7 @@ use App\Models\Category;
 use App\Models\Condition;
 use App\Models\Department;
 use App\Models\Brand;
+use App\Models\Status;
 use App\Models\Unit;
 use App\Models\AssetEditHistory;
 use App\Models\InventoryEditHistory;
@@ -1243,11 +1244,11 @@ class InventoryController extends Controller
                 'trace' => $e->getTraceAsString()
             ]);
             // Provide more specific error if possible
-             if (isset($currentRowNumber)) {
-                 return redirect()->back()->with('error', "Error importing data near row {$currentRowNumber}: " . $e->getMessage());
-             } else {
-                 return redirect()->back()->with('error', 'Error importing data: ' . $e->getMessage());
-             }
+            if (isset($currentRowNumber)) {
+                return redirect()->back()->with('error', "Error importing data near row {$currentRowNumber}: " . $e->getMessage());
+            } else {
+                return redirect()->back()->with('error', 'Error importing data: ' . $e->getMessage());
+            }
         }
     }
 }

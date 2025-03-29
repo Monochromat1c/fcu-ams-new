@@ -1,4 +1,5 @@
-asset_tag_id,model,specs,serial_number,cost,supplier,brand,site,location,category,department,purchase_date,assigned_to,issued_date,notes
-_leli,Latitude 5420,Intel i5 11th Gen 8GB RAM 256GB SSD,XYZ123456,45000,Dell Philippines,Dell,Main Campus,IT Office,Laptop,Information Technology,03/03/2024,Gimelle Jen A. Galera,21/03/2024,New IT equipment
-_lelii,Latitude 5420,Intel i5 11th Gen 8GB RAM 256GB SSD,XYZ123457,45000,Dell Philippines,Dell,Main Campus,IT Office,Laptop,Information Technology,03/03/2024,Gimelle Jen A. Galera,,Spare unit
-_leliii,ProBook 450,Intel i7 12th Gen 16GB RAM 512GB SSD,ABC789012,55000,HP Philippines,HP,Main Campus,HR Department,Laptop,Human Resources,03/03/2024,Gimelle Jen A. Galera,21/03/2024,HR Manager laptop 
+asset_tag_id,model,specs,serial_number,cost,supplier,brand,site,location,category,department,purchase_date,assigned_to,issued_date,notes,,status,condition
+_leli,Latitude 5420,Intel i5 11th Gen 8GB RAM 256GB SSD,XYZ123456,45000,Dell Philippines,Dell,Main Campus,IT Office,Laptop,Information Technology,03/03/2024,Gimelle Jen A. Galera,21/03/2024,New IT equipment,,Available,New
+_lelii,Latitude 5420,Intel i5 11th Gen 8GB RAM 256GB SSD,XYZ123457,45000,Dell Philippines,Dell,Main Campus,IT Office,Laptop,Information Technology,03/03/2024,Gimelle Jen A. Galera,,Spare unit,,Available,New
+_leliii,ProBook 450,Intel i7 12th Gen 16GB RAM 512GB SSD,ABC789012,55000,HP Philippines,HP,Main Campus,HR Department,Laptop,Human Resources,03/03/2024,Gimelle Jen A. Galera,21/03/2024,HR Manager laptop ,,Available,New
+_test,_test,_test,_test,55000,_test,_test,_test,_test,_test,_test,03/03/2024,_test,03/03/2024,_test,,Available,New

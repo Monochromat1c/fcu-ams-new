@@ -168,9 +168,14 @@
                                     <ul class="list-disc list-inside space-y-2 text-blue-700">
                                         <li>File must be in Excel format (CSV, XLSX, XLS)</li>
                                         <li>Maximum file size is 2MB</li>
-                                        <li>Required columns: items_specs, quantity, unit, brand, unit_price, supplier
+                                        <li>
+                                            Required columns: `asset_tag_id`, `model`, `serial_number`, `cost`, `supplier`, `brand`, `site`, `location`, `category`, `department`, `purchase_date`
                                         </li>
-                                        <li>Optional columns: department, stock_out_date</li>
+                                        <li>
+                                            Optional columns: `specs`, `assigned_to`, `issued_date`, `notes`, `condition`, `status`
+                                        </li>
+                                        <li>Ensure column headers in your file match these names exactly.</li>
+                                        <li>Date format: YYYY-MM-DD or MM/DD/YYYY.</li>
                                     </ul>
                                 </div>
 
@@ -726,7 +731,7 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${asset.supplier_name}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${asset.category_name}</td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        <span class="px-6 py-2 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">
+                        <span class="px-6 py-2 inline-flex text-xs leading-5 font-semibold ${statusClass}">
                             ${asset.status_name}
                         </span>
                     </td>
