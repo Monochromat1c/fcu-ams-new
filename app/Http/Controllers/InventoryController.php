@@ -930,6 +930,7 @@ class InventoryController extends Controller
             $file = $request->file('file');
             $successCount = 0;
             $errorCount = 0;
+            $skippedRows = []; // Keep track of skipped rows
 
             DB::beginTransaction();
 
@@ -947,24 +948,33 @@ class InventoryController extends Controller
             array_shift($data);
 
             foreach ($data as $rowNumber => $row) {
+                $currentRowNumber = $rowNumber + 2; // Excel row number
+                $rowData = null;
                 try {
+                    // Pad the row with nulls if it has fewer columns than headers
+                    $row = array_pad($row, count($headers), null);
                     $rowData = array_combine($headers, $row);
 
+                    // Trim whitespace from all values
+                    $rowData = array_map(function($value) {
+                        return is_string($value) ? trim($value) : $value;
+                    }, $rowData);
+
                     // Skip empty rows
-                    if (empty(array_filter($rowData))) {
+                    if (empty(array_filter($rowData, function($value) { return !is_null($value) && $value !== ''; }))) {
                         continue;
                     }
 
                     // Validate required fields
-                    if (empty($rowData['items_specs']) || empty($rowData['quantity']) || 
-                        empty($rowData['unit']) || empty($rowData['brand']) || 
-                        empty($rowData['unit_price']) || empty($rowData['supplier'])) {
-                        \Log::warning('Skipping row due to missing required fields:', [
-                            'row_number' => $rowNumber + 2,
-                            'data' => $rowData
-                        ]);
-                        $errorCount++;
-                        continue;
+                    $requiredImportHeaders = ['items_specs', 'quantity', 'unit', 'brand', 'unit_price', 'supplier'];
+                    $missingImportFields = [];
+                    foreach ($requiredImportHeaders as $reqHeader) {
+                        if (!isset($rowData[$reqHeader]) || $rowData[$reqHeader] === '' || is_null($rowData[$reqHeader])) {
+                             $missingImportFields[] = $reqHeader;
+                        }
+                    }
+                    if (!empty($missingImportFields)) {
+                        throw new \Exception('Missing required fields: ' . implode(', ', $missingImportFields));
                     }
 
                     // Find or create unit
@@ -977,53 +987,89 @@ class InventoryController extends Controller
                     $supplier = Supplier::firstOrCreate(['supplier' => $rowData['supplier']]);
 
                     // Clean up the unit price (remove currency symbol and commas)
-                    $unitPrice = str_replace(['₱', ','], '', $rowData['unit_price']);
+                    $unitPrice = str_replace(['₱', ',', '$'], '', $rowData['unit_price']);
+                    if (!is_numeric($unitPrice)) {
+                        throw new \Exception('Invalid format for unit_price field.');
+                    }
+                    if (!is_numeric($rowData['quantity'])) {
+                        throw new \Exception('Invalid format for quantity field.');
+                    }
 
                     // Check if supplier was found/created successfully
                     if (!$supplier || !$supplier->id) {
                         throw new \Exception('Failed to create or find supplier');
                     }
 
-                    // Create inventory item with all required fields
-                    $inventory = new Inventory([
-                        'items_specs' => $rowData['items_specs'],
-                        'quantity' => $rowData['quantity'],
-                        'unit_id' => $unit->id,
-                        'brand_id' => $brand->id,
-                        'unit_price' => $unitPrice,
-                        'supplier_id' => $supplier->id,  // Explicitly set supplier_id
-                        'created_by' => auth()->user()->id,
-                    ]);
+                    // --- Check for existing inventory ---
+                    $existingInventory = Inventory::where('items_specs', $rowData['items_specs'])
+                        ->where('brand_id', $brand->id)
+                        ->where('unit_id', $unit->id)
+                        ->where('unit_price', $unitPrice)
+                        ->where('supplier_id', $supplier->id)
+                        ->whereNull('deleted_at')
+                        ->first();
 
-                    $inventory->save();
+                    if ($existingInventory) {
+                        // --- Update existing inventory quantity ---
+                        $existingInventory->quantity += $rowData['quantity'];
+                        $existingInventory->save();
+                        \Log::info('Updated existing inventory quantity:', [
+                            'row_number' => $currentRowNumber,
+                            'inventory_id' => $existingInventory->id,
+                            'added_quantity' => $rowData['quantity']
+                        ]);
+                    } else {
+                        // --- Create new inventory item ---
+                        $inventory = new Inventory([
+                            'items_specs' => $rowData['items_specs'],
+                            'quantity' => $rowData['quantity'],
+                            'unit_id' => $unit->id,
+                            'brand_id' => $brand->id,
+                            'unit_price' => $unitPrice,
+                            'supplier_id' => $supplier->id,  // Explicitly set supplier_id
+                            'created_by' => $userId, // Use the fetched user ID
+                        ]);
+                        $inventory->save();
+                    }
+
                     $successCount++;
 
                 } catch (\Exception $e) {
-                    \Log::error('Error processing row:', [
-                        'row_number' => $rowNumber + 2,
-                        'error' => $e->getMessage(),
-                        'data' => $rowData ?? []
-                    ]);
                     $errorCount++;
+                    $skippedRows[] = $currentRowNumber; // Add row number to skipped list
+                    \Log::error('Error processing inventory import row:', [
+                        'row_number' => $currentRowNumber,
+                        'error' => $e->getMessage(),
+                        'data' => $rowData ?? $row // Log raw row if array_combine failed
+                    ]);
+                    // Optional: Continue to next row instead of rolling back immediately
                 }
             }
 
             DB::commit();
 
-            $message = "Import completed. Successfully processed {$successCount} items.";
+            $message = "Inventory import completed. Successfully processed/updated {$successCount} items.";
             if ($errorCount > 0) {
-                $message .= " {$errorCount} items were skipped due to errors.";
+                // Ensure skipped rows are unique in the message
+                $uniqueSkippedRows = array_unique($skippedRows);
+                sort($uniqueSkippedRows); // Optional: sort row numbers
+                $message .= " {$errorCount} rows were skipped due to errors (Rows: " . implode(', ', $uniqueSkippedRows) . "). Check logs for details.";
             }
 
-            return redirect()->back()->with('success', $message);
+            return redirect()->route('inventory.list')->with('success', $message); // Redirect to inventory list
 
         } catch (\Exception $e) {
             DB::rollback();
-            \Log::error('Import failed:', [
+            \Log::error('Inventory import failed:', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            return redirect()->back()->with('error', 'Error importing data: ' . $e->getMessage());
+             // Provide more specific error if possible
+            if (isset($currentRowNumber)) {
+                return redirect()->back()->with('error', "Error importing data near row {$currentRowNumber}: " . $e->getMessage());
+            } else {
+                return redirect()->back()->with('error', 'Error importing data: ' . $e->getMessage());
+            }
         }
     }
 
