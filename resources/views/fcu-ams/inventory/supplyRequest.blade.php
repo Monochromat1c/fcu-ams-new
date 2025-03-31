@@ -706,7 +706,8 @@
             modal.classList.add('hidden');
         });
 
-        addItemButton.addEventListener('click', function(e) {
+        // Add event listener for the add item button
+        document.getElementById('add-item-button').addEventListener('click', function(e) {
             e.preventDefault();
             const itemName = document.getElementById('new_item_name').value.trim();
             const itemQuantity = parseInt(document.getElementById('new_item_quantity').value);
@@ -716,11 +717,56 @@
                 return;
             }
 
-            // Check if we have selected item data
-            if (!selectedItemData) {
-                showItemNotFoundModal(itemName);
+            if (!selectedItemData || selectedItemData.name !== itemName) {
+                document.getElementById('itemNotFoundMessage').textContent = `Please select a valid item from the suggestions list for "${itemName}".`;
+                document.getElementById('itemNotFoundModal').classList.remove('hidden');
+                selectedItemData = null; // Clear potentially stale data
                 return;
             }
+
+            // --- Check if item already exists in the modal table ---
+            let existingRow = null;
+            addedItemsTableBody.querySelectorAll('tr').forEach(row => {
+                // Use data-name attribute for comparison
+                if (row.getAttribute('data-name') === itemName) {
+                    existingRow = row;
+                }
+            });
+
+            if (existingRow) {
+                // --- Item exists, update quantity ---
+                const currentQuantity = parseInt(existingRow.getAttribute('data-quantity')) || 0;
+                const newQuantity = currentQuantity + itemQuantity;
+                const unitPrice = parseFloat(existingRow.getAttribute('data-unit-price'));
+
+                // Optional: Check against available stock again if needed for the *total* quantity
+                if (selectedItemData.quantity < newQuantity) {
+                     showInsufficientStockModal(itemName, selectedItemData.quantity, newQuantity, selectedItemData.unit);
+                     // Continue even if insufficient, as per existing logic
+                }
+
+                // Update data attribute and cell content
+                existingRow.setAttribute('data-quantity', newQuantity);
+                existingRow.querySelector('td:nth-child(4)').textContent = newQuantity; // Update quantity cell
+                existingRow.querySelector('td:nth-child(5)').textContent = formatPrice(calculateTotalPrice(newQuantity, unitPrice)); // Update total price cell
+
+                // Update totals and hidden input
+                updateSelectedItems();
+                updateOverallTotals();
+
+                // Clear inputs and reset selection
+                document.getElementById('new_item_name').value = '';
+                document.getElementById('new_item_quantity').value = '';
+                selectedItemData = null;
+                document.getElementById('new_item_name').focus();
+
+                // Optionally show a confirmation message
+                // alert(`${itemName} quantity updated to ${newQuantity}.`);
+
+                return; // Stop execution to prevent adding a new row
+            }
+
+            // --- Item does not exist, proceed to add new row ---
 
             // Show warning if quantity exceeds available stock
             if (selectedItemData.quantity < itemQuantity) {
@@ -731,15 +777,16 @@
 
             const newRow = document.createElement('tr');
             newRow.setAttribute('data-name', itemName);
-            newRow.setAttribute('data-quantity', itemQuantity);
+            newRow.setAttribute('data-quantity', itemQuantity); // Store quantity here
             newRow.setAttribute('data-unit', selectedItemData.unit);
             newRow.setAttribute('data-unit-price', selectedItemData.price);
-            
+            // Ensure no data-is-new-item attribute is set here unless it's from the "Request New Item" flow
+
             newRow.innerHTML = `
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemName}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${selectedItemData.unit}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatPrice(selectedItemData.price)}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemQuantity}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemQuantity}</td> {{-- Display quantity --}}
                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatPrice(totalPrice)}</td>
                 <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                     <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
@@ -767,7 +814,7 @@
             document.getElementById('new_item_quantity').value = '';
             selectedItemData = null;
             document.getElementById('new_item_name').focus();
-            
+
             rowCounter++;
         });
 
