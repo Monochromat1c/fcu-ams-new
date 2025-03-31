@@ -517,6 +517,33 @@
     field="supplier"
 />
 
+<!-- Edit Success Modal -->
+<div id="editSuccessModal" style="min-height:100vh; background-color: rgba(0, 0, 0, 0.5);" tabindex="-1" aria-hidden="true"
+    class="modalBg flex fixed top-0 left-0 right-0 bottom-0 z-[60] p-4 w-full md:inset-0 hidden">
+    <div class="relative my-auto mx-auto p-4 w-full max-w-md h-full md:h-auto">
+        <!-- Modal content -->
+        <div class="relative bg-white rounded-lg shadow-xl dark:bg-white border-0">
+            <!-- Modal body -->
+            <div class="p-6 text-center">
+                {{-- Success Icon --}}
+                <svg class="mx-auto mb-4 text-green-500 w-12 h-12" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/> {{-- Simple checkmark alternative: <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/> --}}
+                </svg>
+                {{-- Title --}}
+                <h3 class="mb-2 text-xl font-semibold text-gray-900">Success!</h3>
+                {{-- Message --}}
+                <p id="editSuccessMessage" class="mb-5 text-base font-normal text-gray-600">Request updated successfully!</p>
+                {{-- OK Button --}}
+                <button type="button" id="editSuccessOkButton"
+                    class="text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     let editSelectedItemData = null;
     let editSearchTimeout = null;
@@ -811,8 +838,12 @@
                 })
                 .then(data => {
                     if (data.success) {
-                        alert(data.message || 'Request updated successfully!');
-                        window.location.reload();
+                        // --- Show Success Modal ---
+                        document.getElementById('editSuccessMessage').textContent = data.message || 'Request updated successfully!';
+                        document.getElementById('editSuccessModal').classList.remove('hidden');
+                        // --- Remove alert and direct reload ---
+                        // alert(data.message || 'Request updated successfully!');
+                        // window.location.reload();
                     } else {
                         alert(data.message || 'Error updating request');
                     }
@@ -822,6 +853,15 @@
                     const errorMessage = error.message || 'An error occurred while updating the request. Please check the console for details.';
                     alert(errorMessage);
                 });
+            });
+        }
+
+        // --- Add Event Listener for Success Modal OK Button ---
+        const editSuccessOkButton = document.getElementById('editSuccessOkButton');
+        if (editSuccessOkButton) {
+            editSuccessOkButton.addEventListener('click', function() {
+                document.getElementById('editSuccessModal').classList.add('hidden');
+                window.location.reload(); // Reload the page after closing the modal
             });
         }
     });
