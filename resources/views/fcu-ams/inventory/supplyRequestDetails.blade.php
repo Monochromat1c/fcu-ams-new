@@ -682,10 +682,11 @@
                 const itemName = itemNameInput.value.trim();
                 const itemQuantity = parseInt(itemQuantityInput.value);
 
-                if (!itemName || !itemQuantity || itemQuantity < 1) {
-                    document.getElementById('editValidationModal').classList.remove('hidden');
-                    return;
-                }
+                // if (!itemName || !itemQuantity || itemQuantity < 1) {
+                //     // Consider showing a specific validation modal here if needed
+                //     alert('Please enter a valid item name and quantity (at least 1).');
+                //     return;
+                // }
 
                 // Ensure an item was actually selected from the suggestions
                 if (!editSelectedItemData || editSelectedItemData.name !== itemName) {
@@ -695,19 +696,61 @@
                     return;
                 }
 
+                // --- Check if item already exists in the table ---
+                let existingRow = null;
+                editItemsTableBody.querySelectorAll('tr').forEach(row => {
+                    if (row.getAttribute('data-name') === itemName) {
+                        existingRow = row;
+                    }
+                });
+
+                if (existingRow) {
+                    // --- Item exists, update quantity ---
+                    const quantityInput = existingRow.querySelector('input[type="number"]');
+                    const currentQuantity = parseInt(quantityInput.value) || 0;
+                    const newQuantity = currentQuantity + itemQuantity;
+
+                    // Optional: Check against available stock again if needed for the *total* quantity
+                    // if (editSelectedItemData.quantity < newQuantity) { ... show insufficient stock ... }
+
+                    quantityInput.value = newQuantity;
+
+                    // Manually trigger the input event to update totals
+                    quantityInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+                    // Clear inputs and reset selection
+                    itemNameInput.value = '';
+                    itemQuantityInput.value = '';
+                    editSelectedItemData = null;
+                    itemNameInput.focus();
+
+                    // Optionally show a confirmation message
+                    // alert(`${itemName} quantity updated to ${newQuantity}.`);
+
+                    return; // Stop execution to prevent adding a new row
+                }
+
+                // --- Item does not exist, proceed to add new row ---
+
+                // Optional: Check insufficient stock for the *initial* quantity
                 if (editSelectedItemData.quantity < itemQuantity) {
-                    const message = `Insufficient stock for ${itemName}. Current stock: ${editSelectedItemData.quantity}. Your request: ${itemQuantity}.`;
+                    const message = `Insufficient stock for ${itemName}. Current stock: ${editSelectedItemData.quantity}. Your request: ${itemQuantity}. Adding anyway.`;
                     document.getElementById('editInsufficientStockMessage').textContent = message;
                     document.getElementById('editInsufficientStockModal').classList.remove('hidden');
+                    // Allow adding even with insufficient stock, as per the modal message
                 }
+
 
                 const totalPrice = calculateTotalPrice(itemQuantity, editSelectedItemData.price);
 
                 const newRow = document.createElement('tr');
+                // Set data attributes for the new row
                 newRow.setAttribute('data-name', itemName);
+                // data-quantity might be less relevant now the input holds the value, but keep for consistency if needed elsewhere
                 newRow.setAttribute('data-quantity', itemQuantity);
                 newRow.setAttribute('data-unit', editSelectedItemData.unit);
                 newRow.setAttribute('data-unit-price', editSelectedItemData.price);
+                // Ensure no data-request-id is set for new items
 
                 newRow.innerHTML = `
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemName}</td>
@@ -715,11 +758,12 @@
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatPrice(editSelectedItemData.price)}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                         <input type="number"
-                               name="new_quantities[]"
+                               name="new_quantities[]" {{-- Name might need adjustment if backend differentiates updates vs adds --}}
                                value="${itemQuantity}"
                                min="1"
                                class="block w-24 rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                required>
+                        {{-- Hidden inputs might be redundant if using JSON submission, but kept for potential flexibility --}}
                         <input type="hidden" name="new_items_details[${itemName}][name]" value="${itemName}">
                         <input type="hidden" name="new_items_details[${itemName}][unit]" value="${editSelectedItemData.unit}">
                         <input type="hidden" name="new_items_details[${itemName}][unit_price]" value="${editSelectedItemData.price}">
@@ -747,18 +791,18 @@
                     const row = this.closest('tr');
                     const unitPrice = parseFloat(row.getAttribute('data-unit-price'));
                     const quantity = parseFloat(this.value);
-                    const totalPriceCell = row.querySelector('td:nth-child(5)');
+                    const totalPriceCell = row.querySelector('td:nth-child(5)'); // Get the 5th cell (Total Price)
 
                     if (!isNaN(unitPrice) && !isNaN(quantity) && quantity >= 1) {
                         const totalPrice = unitPrice * quantity;
                         totalPriceCell.textContent = formatPrice(totalPrice);
                     } else {
-                         totalPriceCell.textContent = formatPrice(0);
+                         totalPriceCell.textContent = formatPrice(0); // Or handle invalid input
                     }
                     updateEditModalTotal();
                 });
 
-                editItemsTableBody.appendChild(newRow);
+                editItemsTableBody.appendChild(newRow); // Append to the correct table body
                 updateEditModalTotal();
 
                 // Clear input fields and selected item data
