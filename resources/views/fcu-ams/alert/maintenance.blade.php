@@ -6,7 +6,7 @@
     @include('layouts.sidebar')
     <div class="content min-h-screen bg-slate-200 col-span-5">
         <nav class="bg-white flex justify-between py-3 px-4 m-3 shadow-md rounded-md">
-            <div class="flex items-center">
+            <div class="flex items-center w-full justify-between">
                 <a href="{{ route('alerts.index') }}"
                     class="mr-4 hover:bg-gray-100 p-2 rounded-full transition">
                     <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -16,6 +16,14 @@
                     </svg>
                 </a>
                 <h1 class="text-3xl font-semibold text-gray-800">Overdue Assets</h1>
+                <a href="{{ route('alerts.index') }}"
+                    class="mr-4 hover:bg-gray-100 invisible p-2 rounded-full transition">
+                    <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                </a>
             </div>
         </nav>
 
