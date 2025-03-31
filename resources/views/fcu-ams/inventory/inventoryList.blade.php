@@ -151,6 +151,7 @@
         </div>
         <div class="mb-1 flex justify-between m-3 rounded-md">
             <div class="gap-2 flex">
+                @if(Auth::user()->role->role != 'Department')
                 <div class="import-list my-auto">
                     <button type="button" onclick="document.getElementById('importModal').classList.remove('hidden')"
                         class="flex gap-2 items-center bg-green-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
@@ -234,6 +235,7 @@
                         Export to Excel
                     </button>
                 </div>
+                @endif
             </div>
             <div class="pagination-here flex justify-between align-items-center">
                 <div class="flex align-items-center">

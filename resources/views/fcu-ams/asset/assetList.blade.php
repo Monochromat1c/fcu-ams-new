@@ -128,6 +128,7 @@
         </div>
         <div class="mb-1 flex justify-between m-3 rounded-md">
             <div class="space-x-2 flex">
+                @if(Auth::user()->role->role != 'Department')
                 <div class="import-list my-auto">
                     <button type="button" onclick="document.getElementById('importModal').classList.remove('hidden')"
                         class="flex gap-2 items-center bg-green-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
@@ -215,7 +216,6 @@
                         </form>
                     </div>
                 </div>
-                @if(Auth::user()->role->role != 'Department')
                 <div class="export-list my-auto">
                     <button type="button" onclick="window.location.href='{{ route('asset.export') }}'"
                         class="flex gap-2 items-center bg-indigo-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
