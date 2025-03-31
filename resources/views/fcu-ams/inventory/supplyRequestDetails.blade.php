@@ -612,7 +612,8 @@
         // Add event listeners for the edit modal
         const editItemNameInput = document.getElementById('edit_item_name');
         const editSuggestionsContainer = document.getElementById('edit-suggestions-container');
-        
+        const editItemsTableBody = document.getElementById('edit-items-table-body');
+
         if (editItemNameInput) {
             editItemNameInput.addEventListener('input', function() {
                 searchEditItems(this.value.trim());
@@ -626,9 +627,22 @@
             }
         });
 
-        // Add event listener for quantity changes
-        document.querySelectorAll('#edit-items-table-body input[type="number"]').forEach(input => {
-            input.addEventListener('change', updateEditModalTotal);
+        // Add event listener for quantity changes on existing rows
+        editItemsTableBody.querySelectorAll('input[type="number"]').forEach(input => {
+            input.addEventListener('input', function() {
+                const row = this.closest('tr');
+                const unitPrice = parseFloat(row.getAttribute('data-unit-price'));
+                const quantity = parseFloat(this.value);
+                const totalPriceCell = row.querySelector('td:nth-child(5)');
+
+                if (!isNaN(unitPrice) && !isNaN(quantity) && quantity >= 1) {
+                    const totalPrice = unitPrice * quantity;
+                    totalPriceCell.textContent = formatPrice(totalPrice);
+                } else {
+                    totalPriceCell.textContent = formatPrice(0);
+                }
+                updateEditModalTotal();
+            });
         });
 
         // Add event listener for the add item button in edit modal
@@ -636,16 +650,21 @@
         if (editAddItemButton) {
             editAddItemButton.addEventListener('click', function(e) {
                 e.preventDefault();
-                const itemName = document.getElementById('edit_item_name').value.trim();
-                const itemQuantity = parseInt(document.getElementById('edit_item_quantity').value);
+                const itemNameInput = document.getElementById('edit_item_name');
+                const itemQuantityInput = document.getElementById('edit_item_quantity');
+                const itemName = itemNameInput.value.trim();
+                const itemQuantity = parseInt(itemQuantityInput.value);
 
                 if (!itemName || !itemQuantity || itemQuantity < 1) {
                     document.getElementById('editValidationModal').classList.remove('hidden');
                     return;
                 }
 
-                if (!editSelectedItemData) {
+                // Ensure an item was actually selected from the suggestions
+                if (!editSelectedItemData || editSelectedItemData.name !== itemName) {
+                    document.getElementById('editItemNotFoundMessage').textContent = `Please select a valid item from the suggestions list for "${itemName}".`;
                     document.getElementById('editItemNotFoundModal').classList.remove('hidden');
+                    editSelectedItemData = null;
                     return;
                 }
 
@@ -658,17 +677,26 @@
                 const totalPrice = calculateTotalPrice(itemQuantity, editSelectedItemData.price);
 
                 const newRow = document.createElement('tr');
-                newRow.setAttribute('data-request-id', editSelectedItemData.request_id);
                 newRow.setAttribute('data-name', itemName);
                 newRow.setAttribute('data-quantity', itemQuantity);
                 newRow.setAttribute('data-unit', editSelectedItemData.unit);
                 newRow.setAttribute('data-unit-price', editSelectedItemData.price);
-                
+
                 newRow.innerHTML = `
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemName}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${editSelectedItemData.unit}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatPrice(editSelectedItemData.price)}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${itemQuantity}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <input type="number"
+                               name="new_quantities[]"
+                               value="${itemQuantity}"
+                               min="1"
+                               class="block w-24 rounded-md border-0 py-1.5 pl-3 pr-3 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                               required>
+                        <input type="hidden" name="new_items_details[${itemName}][name]" value="${itemName}">
+                        <input type="hidden" name="new_items_details[${itemName}][unit]" value="${editSelectedItemData.unit}">
+                        <input type="hidden" name="new_items_details[${itemName}][unit_price]" value="${editSelectedItemData.price}">
+                    </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${formatPrice(totalPrice)}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium">
                         <button type="button" class="delete-row-button inline-flex items-center p-2 border border-transparent rounded-full text-red-600 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition duration-150 ease-in-out">
@@ -686,23 +714,36 @@
                     updateEditModalTotal();
                 });
 
-                // Add quantity change listener
+                // Add quantity change listener to the new row's input
                 const quantityInput = newRow.querySelector('input[type="number"]');
-                quantityInput.addEventListener('change', updateEditModalTotal);
+                quantityInput.addEventListener('input', function() {
+                    const row = this.closest('tr');
+                    const unitPrice = parseFloat(row.getAttribute('data-unit-price'));
+                    const quantity = parseFloat(this.value);
+                    const totalPriceCell = row.querySelector('td:nth-child(5)');
 
-                document.getElementById('edit-items-table-body').appendChild(newRow);
+                    if (!isNaN(unitPrice) && !isNaN(quantity) && quantity >= 1) {
+                        const totalPrice = unitPrice * quantity;
+                        totalPriceCell.textContent = formatPrice(totalPrice);
+                    } else {
+                         totalPriceCell.textContent = formatPrice(0);
+                    }
+                    updateEditModalTotal();
+                });
+
+                editItemsTableBody.appendChild(newRow);
                 updateEditModalTotal();
 
                 // Clear input fields and selected item data
-                document.getElementById('edit_item_name').value = '';
-                document.getElementById('edit_item_quantity').value = '';
+                itemNameInput.value = '';
+                itemQuantityInput.value = '';
                 editSelectedItemData = null;
-                document.getElementById('edit_item_name').focus();
+                itemNameInput.focus();
             });
         }
 
         // Add delete functionality to existing rows
-        document.querySelectorAll('#edit-items-table-body .delete-row-button').forEach(button => {
+        editItemsTableBody.querySelectorAll('.delete-row-button').forEach(button => {
             button.addEventListener('click', function() {
                 this.closest('tr').remove();
                 updateEditModalTotal();
@@ -714,9 +755,9 @@
         if (editRequestForm) {
             editRequestForm.addEventListener('submit', function(e) {
                 e.preventDefault();
-                
+
                 // Get all rows from the table
-                const rows = document.querySelectorAll('#edit-items-table-body tr');
+                const rows = editItemsTableBody.querySelectorAll('tr');
                 if (rows.length === 0) {
                     alert('Please add at least one item to the request');
                     return;
@@ -727,9 +768,10 @@
 
                 // Collect all items (both existing and new)
                 Array.from(rows).forEach(row => {
-                    const quantity = row.querySelector('input[type="number"]').value;
+                    const quantityInput = row.querySelector('input[type="number"]');
+                    const quantity = quantityInput.value;
                     const requestId = row.getAttribute('data-request-id');
-                    
+
                     if (requestId) {
                         // Existing items
                         existingItems.push({
@@ -761,9 +803,15 @@
                         new_items: JSON.stringify(newItems)
                     })
                 })
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => { throw err; });
+                    }
+                    return response.json();
+                })
                 .then(data => {
                     if (data.success) {
+                        alert(data.message || 'Request updated successfully!');
                         window.location.reload();
                     } else {
                         alert(data.message || 'Error updating request');
@@ -771,7 +819,8 @@
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    alert('An error occurred while updating the request');
+                    const errorMessage = error.message || 'An error occurred while updating the request. Please check the console for details.';
+                    alert(errorMessage);
                 });
             });
         }
@@ -803,7 +852,7 @@
     }
 
     function formatPrice(price) {
-        if (!price || isNaN(price)) return 'N/A';
+        if (!price || isNaN(price)) return '₱0.00';
         return new Intl.NumberFormat('en-PH', {
             style: 'currency',
             currency: 'PHP'
@@ -811,7 +860,7 @@
     }
 
     function calculateTotalPrice(quantity, unitPrice) {
-        if (!unitPrice || isNaN(unitPrice)) return 'N/A';
+        if (!unitPrice || isNaN(unitPrice) || !quantity || isNaN(quantity) || quantity < 1) return 0;
         return quantity * unitPrice;
     }
 
