@@ -78,7 +78,7 @@
                     </div>
                 @else
                     <div class="flex gap-4">
-                        @if($overallStatus !== 'cancelled' && $overallStatus !== 'approved')
+                        @if($overallStatus !== 'cancelled' && $overallStatus !== 'approved' && $overallStatus !== 'rejected')
                             <!-- Edit button -->
                             <button type="button" 
                                 onclick="document.getElementById('editRequestModal').classList.toggle('hidden')"
