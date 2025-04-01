@@ -48,8 +48,8 @@
         }
         .logo {
             position: absolute;
-            top: 6;
-            right: 0;
+            top: 26;
+            left: 30;
             width: 100px;
             height: auto;
         }
