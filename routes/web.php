@@ -213,6 +213,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/status/list', 'list')->name('status.list');
         Route::post('/status/add', 'add')->name('status.add');
         Route::post('/status/{id}', 'update')->name('status.update');
+        Route::delete('/status/{id}', 'destroy')->name('status.destroy');
     });
 
     Route::controller(RequestController::class)->group(function (){
