@@ -10,6 +10,11 @@
 
     .fcu-icon {
         filter: grayscale(100%);
+        position: absolute;
+        top: 40px;
+        left: 70px;
+        width: 100px;
+        height: auto;
     }
 
     @media print {
@@ -32,33 +37,33 @@
     }
 </style>
 <div class="bg-white rounded-lg p-8 mb-8 max-w-2xl my-9 mx-auto shadow-lg">
-    <div class="text-center mb-5">
-        <img class="fcu-icon mb-3 w-28 mx-auto" src="/img/login/fcu-icon.png" alt="" srcset="">
-        <h2 class="text-2xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>
-        <h2 class="text-xl font-bold mb-3">Roxas Avenue, Roxas City</h2>
-        <h2 class="text-xl font-bold">Stock Out Receipt</h2>
-        <p class="text-gray-600 mb-3">Date: {{ $record->stock_out_date }}</p>
-        <h2 class="text-xl font-bold">{{ $record->department->department ?? 'N/A' }}
+    <div class="text-center mb-5 relative">
+        <img class="fcu-icon" src="/img/login/fcu-icon.png" alt="" srcset="">
+        <h2 class="text-xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>
+        <h2 class="text-lg font-bold mb-3">Roxas Avenue, Roxas City</h2>
+        <h2 class="text-lg font-bold">Stock Out Receipt</h2>
+        <p class="text-gray-600 mb-3 text-sm">Date: {{ $record->stock_out_date }}</p>
+        <h2 class="text-lg font-bold">{{ $record->department->department ?? 'N/A' }}
         </h2>
     </div>
 
-    <table class="w-full mb-8">
+    <table class="w-full mb-8 text-sm">
         <thead>
             <tr class="bg-gray-100">
-                <th class="px-6 py-3 text-left">Item</th>
-                <th class="px-6 py-3 text-center">Quantity</th>
-                <th class="px-6 py-3 text-right">Price</th>
-                <th class="px-6 py-3 text-right">Total</th>
+                <th class="px-4 py-2 text-left font-semibold">Item</th>
+                <th class="px-4 py-2 text-center font-semibold">Quantity</th>
+                <th class="px-4 py-2 text-right font-semibold">Price</th>
+                <th class="px-4 py-2 text-right font-semibold">Total</th>
             </tr>
         </thead>
         <tbody>
             @foreach($stockOutDetails as $detail)
                 <tr>
-                    <td class="border-b px-6 py-4">{{ $detail['item'] }}</td>
-                    <td class="border-b px-6 py-4 text-center">{{ $detail['quantity'] }}</td>
-                    <td class="border-b px-6 py-4 text-right">
+                    <td class="border-b px-4 py-2">{{ $detail['item'] }}</td>
+                    <td class="border-b px-4 py-2 text-center">{{ $detail['quantity'] }}</td>
+                    <td class="border-b px-4 py-2 text-right">
                         ₱{{ number_format($detail['price'], 2) }}</td>
-                    <td class="border-b px-6 py-4 text-right">
+                    <td class="border-b px-4 py-2 text-right">
                         ₱{{ number_format($detail['quantity'] * $detail['price'], 2) }}
                     </td>
                 </tr>
@@ -66,21 +71,21 @@
         </tbody>
         <tfoot>
             <tr class="font-bold">
-                <td class="px-6 py-4" colspan="3">Overall Price:</td>
-                <td class="px-6 py-4 text-right">₱{{ number_format($totalPrice, 2) }}</td>
+                <td class="px-4 py-2" colspan="3">Overall Price:</td>
+                <td class="px-4 py-2 text-right">₱{{ number_format($totalPrice, 2) }}</td>
             </tr>
         </tfoot>
     </table>
 
-    <div class="flex justify-between mt-12 pt-6 border-t">
+    <div class="flex justify-between mt-12 pt-6 border-t text-sm">
         <div class="text-center">
-            <p class="font-bold mb-2">Released by:</p>
+            <p class="font-bold mb-1">Released by:</p>
             <p>{{ (auth()->user() ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'N/A') }}
             </p>
         </div>
-        <div class="text-center flex s space-x-9">
+        <div class="text-center">
             <div>
-                <p class="font-bold mb-2">Received by:</p>
+                <p class="font-bold mb-1">Received by:</p>
                 <p>{{ $record->receiver }}</p>
             </div>
         </div>
