@@ -85,7 +85,7 @@
                                     <input type="text" id="approved_by" name="approved_by" 
                                         class="mt-1 block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out" required>
                                 </div>
-                                <div class="md:col-span-2">
+                                <div class="">
                                     <label for="note" class="block text-sm font-medium text-gray-700">Note</label>
                                     <textarea id="note" name="note" rows="3" 
                                         class="mt-1 block w-full px-4 py-2 border-2 border-slate-300 rounded-md shadow-sm focus:border-blue-500 bg-slate-50 focus:ring-1 focus:ring-blue-500 sm:text-sm transition duration-150 ease-in-out"></textarea>
