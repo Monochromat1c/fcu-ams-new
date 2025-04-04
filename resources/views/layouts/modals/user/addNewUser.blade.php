@@ -104,6 +104,18 @@
                             </select>
                         </div>
 
+                        <div class="bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
+                            <label class="block text-xs font-semibold text-gray-500 mb-2">Department</label>
+                            <select name="department_id"
+                                class="w-full bg-transparent border-b-2 border-gray-300 focus:border-blue-500 transition-colors"
+                                required>
+                                <option value="">Select a department</option>
+                                @foreach($departments as $department)
+                                    <option value="{{ $department->id }}">{{ $department->department }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
                         <div class=" bg-white/60 border-2 border-gray-200 backdrop-blur-sm rounded-xl p-4 shadow-md">
                             <label class="block text-xs font-semibold text-gray-500 mb-2">Email</label>
                             <input type="email" name="email"

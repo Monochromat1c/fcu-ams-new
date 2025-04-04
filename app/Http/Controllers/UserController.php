@@ -7,14 +7,16 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Department;
 
 class UserController extends Controller
 {
     public function index() {
         $users = User::with('role')->orderBy('first_name', 'asc')->paginate(10);
         $roles = Role::all();
+        $departments = Department::all();
 
-        return view('fcu-ams/users/usersList', compact('users', 'roles'));
+        return view('fcu-ams/users/usersList', compact('users', 'roles', 'departments'));
     }
 
     public function add(Request $request)
