@@ -20,13 +20,13 @@
             <h1 class="my-auto text-3xl">Stock Out</h1>
             <div class="w-10"></div>
         </nav>
+        <div class="m-3 rounded-md 2xl:max-w-7xl 2xl:mx-auto">
+            @include('layouts.messageWithoutTimerForError')
+        </div>
         <div class="stockout-form bg-white m-3 shadow-md rounded-md p-5 2xl:max-w-7xl 2xl:mx-auto">
             <form method="POST" action="{{ route('inventory.stock.out.store') }}">
                 @csrf
                 <div class="">
-                    <div class="mb-3">
-                        @include('layouts.messageWithoutTimerForError')
-                    </div>
                     <h3 class="text-lg font-semibold mb-3">Item Details</h3>
                     <div class="mb-4">
                         <label for="item_id" class="block text-gray-700 font-bold mb-2">Item:</label>

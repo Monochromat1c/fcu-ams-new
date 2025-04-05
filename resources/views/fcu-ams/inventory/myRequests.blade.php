@@ -33,7 +33,7 @@
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Department</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Items</th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Status</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Actions</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">

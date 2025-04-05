@@ -2,8 +2,7 @@
 @section('content')
 <style>
     body {
-        --tw-bg-opacity: 1;
-        background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+        background-color: #f1f5f9;
     }
 
     .fcu-icon {
@@ -41,8 +40,8 @@
         <h2 class="text-xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>
         <h2 class="text-lg font-bold mb-3">Roxas Avenue, Roxas City</h2>
         <h2 class="text-lg font-bold">Supply Request Details</h2>
-        <p class="text-gray-600 mb-3 text-sm">Request Date: {{ \Carbon\Carbon::parse($requests->first()->request_date)->format('M d, Y') }}</p>
-        <h2 class="text-lg font-bold">{{ $requests->first()->department->department ?? 'N/A' }}</h2>
+        <p class="text-gray-600 mb-3 text-sm">Request Date: {{ \Carbon\Carbon::parse($requestGroup->first()->request_date)->format('M d, Y') }}</p>
+        <h2 class="text-lg font-bold">{{ $requestGroup->first()->department->department }}</h2>
     </div>
 
     <table class="w-full mb-8 text-sm">
@@ -55,31 +54,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach($requests as $request)
+            @foreach($requestGroup as $request)
                 <tr>
                     <td class="border-b px-4 py-2">{{ $request->item_name }}</td>
                     <td class="border-b px-4 py-2 text-center">{{ $request->quantity }}</td>
                     <td class="border-b px-4 py-2 text-right">
-                        @if($request->inventory_id)
-                            ₱{{ number_format($request->inventory->unit_price ?? 0, 2) }}
-                        @else
-                            ₱{{ number_format($request->estimated_unit_price ?? 0, 2) }}
-                        @endif
-                    </td>
+                        ₱{{ number_format($request->estimated_unit_price, 2) }}</td>
                     <td class="border-b px-4 py-2 text-right">
-                        @if($request->inventory_id)
-                            ₱{{ number_format(($request->inventory->unit_price ?? 0) * $request->quantity, 2) }}
-                        @else
-                            ₱{{ number_format(($request->estimated_unit_price ?? 0) * $request->quantity, 2) }}
-                        @endif
+                        ₱{{ number_format($request->quantity * $request->estimated_unit_price, 2) }}
                     </td>
                 </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr class="font-bold">
-                <td class="px-4 py-2" colspan="3">Total Cost:</td>
-                <td class="px-4 py-2 text-right">₱{{ number_format($totalPrice, 2) }}</td>
+                <td class="px-4 py-2" colspan="3">Total Estimated Cost:</td>
+                <td class="px-4 py-2 text-right">₱{{ number_format($totalEstimatedCost, 2) }}</td>
             </tr>
         </tfoot>
     </table>
@@ -87,20 +77,20 @@
     <div class="flex justify-between mt-12 pt-6 border-t text-sm">
         <div class="text-center">
             <p class="font-bold mb-1">Requester:</p>
-            <p>{{ $requests->first()->requester }}</p>
+            <p>{{ $requestGroup->first()->requester }}</p>
         </div>
         <div class="text-center">
             <p class="font-bold mb-1">Department:</p>
-            <p>{{ $requests->first()->department->department ?? 'N/A' }}</p>
+            <p>{{ $requestGroup->first()->department->department }}</p>
         </div>
         <div class="text-center">
             <p class="font-bold mb-1">Request Date:</p>
-            <p>{{ \Carbon\Carbon::parse($requests->first()->request_date)->format('M d, Y') }}</p>
+            <p>{{ \Carbon\Carbon::parse($requestGroup->first()->request_date)->format('M d, Y') }}</p>
         </div>
     </div>
 
     <div class="flex justify-between mt-8 no-print">
-        <button onclick="window.history.back()" 
+        <button onclick="window.history.back()"
             class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-6 rounded">
             Back
         </button>
@@ -110,4 +100,4 @@
         </button>
     </div>
 </div>
-@endsection
+@endsection 

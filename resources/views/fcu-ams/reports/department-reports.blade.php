@@ -254,7 +254,8 @@
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @foreach($requests as $request)
-                                    <tr class="hover:bg-gray-50">
+                                    <tr class="hover:bg-gray-50 cursor-pointer"
+                                        onclick="window.location.href='{{ route('inventory.supply.request.print', $request->request_group_id) }}'">
                                         <td class="px-6 py-4">{{ $request->requester }}</td>
                                         <td class="px-6 py-4">{{ $request->total_items }} items</td>
                                         <td class="px-6 py-4">{{ \Carbon\Carbon::parse($request->request_date)->format('M d, Y') }}</td>
@@ -270,7 +271,7 @@
                                             @endif
                                         </td>
                                         <td class="px-6 py-4">
-                                            <a href="#" 
+                                            <a href="{{ route('inventory.supply.request.print', $request->request_group_id) }}" 
                                                class="text-blue-600 hover:text-blue-900">
                                                 View Details
                                             </a>

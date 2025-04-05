@@ -21,7 +21,7 @@ class DepartmentReportController extends Controller
         $startDate = Carbon::parse($startDate)->startOfDay();
         $endDate = Carbon::parse($endDate)->endOfDay();
 
-        // Get all requests for the department
+        // Modified query with status filter
         $requests = SupplyRequest::with('department')
             ->select(
                 'request_group_id',
@@ -39,6 +39,7 @@ class DepartmentReportController extends Controller
             )
             ->where('department_id', $departmentId)
             ->whereBetween('created_at', [$startDate, $endDate])
+            ->whereIn('status', ['approved', 'rejected', 'cancelled'])
             ->groupBy('request_group_id', 'department_id', 'requester')
             ->orderBy('status_priority', 'asc')
             ->orderBy('request_date', 'desc')
@@ -120,5 +121,25 @@ class DepartmentReportController extends Controller
             $endDate->day,
             $endDate->year
         );
+    }
+
+    public function showRequestDetails($requestGroupId)
+    {
+        $requestGroup = SupplyRequest::with('department')
+            ->where('request_group_id', $requestGroupId)
+            ->get();
+
+        if($requestGroup->isEmpty()) {
+            abort(404);
+        }
+
+        $totalEstimatedCost = $requestGroup->sum(function($item) {
+            return $item->quantity * $item->estimated_unit_price;
+        });
+
+        return view('fcu-ams.reports.supply-request-details', [
+            'requestGroup' => $requestGroup,
+            'totalEstimatedCost' => $totalEstimatedCost
+        ]);
     }
 } 

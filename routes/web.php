@@ -184,6 +184,7 @@ Route::middleware(['auth.user'])->group(function () {
 
     Route::controller(DepartmentReportController::class)->group(function (){
         Route::get('/department/reports', 'index')->name('department.reports');
+        // Route::get('/reports/supply-request/{request_group_id}', 'showRequestDetails')->name('reports.supply-request-details');
     });
 
     Route::controller(LocationController::class)->group(function (){

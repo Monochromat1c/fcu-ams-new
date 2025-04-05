@@ -34,6 +34,8 @@ class CheckUserRole
             'supplier.add',
             'inventory.supply-request.update',
             'department.reports',
+            'reports.supply-request-details',
+            'inventory.supply.request.print'
         ];
 
         $deniedRoutesForManager = [
