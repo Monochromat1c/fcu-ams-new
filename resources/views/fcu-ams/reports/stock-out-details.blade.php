@@ -42,7 +42,7 @@
         <h2 class="text-xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>
         <h2 class="text-lg font-bold mb-3">Roxas Avenue, Roxas City</h2>
         <h2 class="text-lg font-bold">Stock Out Receipt</h2>
-        <p class="text-gray-600 mb-3 text-sm">Date: {{ $record->stock_out_date }}</p>
+        <p class="text-gray-600 mb-3 text-sm">Date: {{ \Carbon\Carbon::parse($record->stock_out_date)->format('M d, Y') }}</p>
         <h2 class="text-lg font-bold">{{ $record->department->department ?? 'N/A' }}
         </h2>
     </div>

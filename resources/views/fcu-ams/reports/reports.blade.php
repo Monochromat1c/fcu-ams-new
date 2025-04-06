@@ -428,7 +428,7 @@
                                 @foreach($stockOutRecords as $record)
                                     <tr class="hover:bg-gray-50" onclick="window.location.href='{{ route('stock.out.details', $record->id) }}'">
                                         <td class="px-6 py-4">{{ $record->receiver }}</td>
-                                        <td class="px-6 py-4">{{ $record->stock_out_date }}</td>
+                                        <td class="px-6 py-4">{{ \Carbon\Carbon::parse($record->stock_out_date)->format('M d, Y') }}</td>
                                         <td class="px-6 py-4">
                                             <a href="{{ route('stock.out.details', $record->id) }}"
                                                class="text-blue-600 hover:text-blue-900">View Details</a>
