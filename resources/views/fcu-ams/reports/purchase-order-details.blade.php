@@ -4,7 +4,7 @@
     body {
         --tw-bg-opacity: 1;
         background-color: rgb(241 245 249 / var(--tw-bg-opacity));
-        font-size: 12px; /* Standard document font size */
+        font-size: 17px; /* Standard document font size */
         line-height: 1.2; /* Tighter line height */
     }
 
@@ -17,6 +17,7 @@
             background-color: white;
             margin: 0;
             padding: 0;
+            font-size: 17px !important; /* Explicitly set font size for print */
         }
 
         .no-print {
@@ -25,7 +26,7 @@
 
         @page {
             size: legal; /* 8.5" x 13" */
-            margin: 0.5in; /* Standard margin */
+            margin: 0; /* Remove margin */
         }
 
         .shadow-lg {
@@ -35,18 +36,18 @@
 
     /* Adjust heading sizes */
     .header-title {
-        font-size: 14px;
+        font-size: 17px;
         font-weight: bold;
     }
 
     .header-subtitle {
-        font-size: 12px;
+        font-size: 17px;
         font-weight: bold;
     }
 
     /* Adjust table text */
     table {
-        font-size: 12px;
+        font-size: 17px;
     }
 
     /* Adjust spacing */

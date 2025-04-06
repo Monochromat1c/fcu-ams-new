@@ -20,6 +20,9 @@
     @media print {
         body {
             background-color: white;
+            margin: 0;
+            padding: 0;
+            font-size: 17px !important; /* Explicitly set font size for print */
         }
 
         .no-print {
