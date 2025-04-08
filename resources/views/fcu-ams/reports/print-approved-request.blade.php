@@ -38,11 +38,32 @@
     }
 </style>
 <div class="bg-white rounded-lg p-8 mb-8 max-w-2xl my-9 mx-auto shadow-lg">
-    <div class="text-center mb-5 relative">
-        <img class="fcu-icon" src="/img/login/fcu-icon.png" alt="FCU Logo">
-        <h2 class="text-xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>
-        <h2 class="text-lg font-bold mb-3">Roxas Avenue, Roxas City</h2>
-        <h2 class="text-lg font-bold">Supply Request</h2>
+    <div class="text-center mb-5">
+        <h2 class="text-xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC.</h2>
+        <h2 class="text-lg font-bold uppercase italic">Roxas Avenue, Roxas City</h2>
+        <h2 class="text-lg font-bold">PROPERTY CUSTODIAN'S OFFICE</h2>
+        
+        <table class="w-full mb-4 text-sm">
+            <tr>
+                <td class="px-2 py-1 font-semibold border border-black">Document Name:</td>
+                <td class="px-2 py-1 border border-black">OFFICE SUPPLIES REQUISITION SLIP</td>
+                <td class="px-2 py-1 font-semibold border border-black">Effectivity:</td>
+                <td class="px-2 py-1 border border-black">August 15, 2022</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 font-semibold border border-black">Document No:</td>
+                <td class="px-2 py-1 border border-black">PCO-2023-03</td>
+                <td class="px-2 py-1 font-semibold border border-black">Issuing Office:</td>
+                <td class="px-2 py-1 border border-black" colspan="2">Property Custodian's Office</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 font-semibold border border-black">Revision No:</td>
+                <td class="px-2 py-1 border border-black">1</td>
+                <td class="px-2 py-1 font-semibold border border-black">Page No.</td>
+                <td class="px-2 py-1 border border-black" colspan="2">1</td>
+            </tr>
+        </table>
+
         <p class="text-gray-600 mb-3 text-sm">Date: {{ \Carbon\Carbon::parse($requests->first()->created_at)->format('M d, Y') }}</p>
         <h2 class="text-lg font-bold">{{ $requests->first()->department->department ?? 'N/A' }}</h2>
     </div>
