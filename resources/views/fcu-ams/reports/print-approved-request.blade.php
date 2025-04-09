@@ -46,7 +46,7 @@
         }
     }
 </style>
-<div class="bg-white rounded-lg p-8 mb-8 max-w-2xl my-9 mx-auto shadow-lg">
+<div class="bg-white rounded-lg p-8 mb-8 max-w-3xl my-9 mx-auto shadow-lg">
     <div class="text-center">
         <h2 class="title segoe font-bold">FILAMER CHRISTIAN UNIVERSITY, INC.</h2>
         <h2 class="sub-title segoe font-bold italic">Roxas Avenue, Roxas City</h2>
@@ -84,7 +84,7 @@
         </table>
     </div>
 
-    <table class="w-full border mt-2 border-black">
+    <table class="w-full border mt-2 mb-4 border-black">
         <thead>
             <tr class="bg-gray-100">
                 <th class="px-4 py-2 text-center segoe font-semibold border border-black">Qty</th>
@@ -132,7 +132,82 @@
         </tfoot>
     </table>
 
-    <div class="flex justify-between mt-12 pt-6 border-t">
+    <table class="w-full">
+        <div>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Requested by:</td>
+                <td class="px-2 py-1 segoe font-semibold text-center border-b border-black">
+                    {{ $requests->first()->requester }}</td>
+                <td class="px-2 py-1 segoe font-semibold text-left pl-10">Stocks Available:</td>
+                <td class="px-2 py-1 segoe font-semibold text-left">Budget Available: </td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Dept/Unit: </td>
+                <td class="px-2 py-1 segoe font-semibold text-center">
+                    {{ $requests->first()->department->department ?? 'N/A' }}</td>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+            </tr>
+        </div>
+        <div>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Noted by:</td>
+                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left pl-10">SHERALYN A. DE LEON</td>
+                <td class="px-2 py-1 segoe font-semibold text-left">MELINOR B. SUMAYGAYSAY</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-center">Head of Office</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10">Acting Property Custodian</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left">OIC-Accountant</td>
+            </tr>
+        </div>
+        <div>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Released by:</td>
+                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left pl-10"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-center">PCO Staff</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10">Recommending Approval</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left">Approved</td>
+            </tr>
+        </div>
+        <div>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Received by:</td>
+                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left pl-10"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-center"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left"></td>
+            </tr>
+        </div>
+        <div>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Checker:</td>
+                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left pl-10">ESTHER S. ARCEÑO,CPA</td>
+                <td class="px-2 py-1 segoe font-semibold text-left">DR. GEORGE O. CORTEL</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-center">PCO Staff</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10">TIC, VP-Finance</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left">President</td>
+            </tr>
+        </div>
+    </table>
+
+    <!-- <div class="flex justify-between mt-12 pt-6 border-t">
         <div class="text-center">
             <p class="segoe font-bold mb-1">Processed by:</p>
             <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
@@ -141,7 +216,7 @@
             <p class="segoe font-bold mb-1">Requested by:</p>
             <p>{{ $requests->first()->requester }}</p>
         </div>
-    </div>
+    </div> -->
 
     <div class="flex justify-between mt-8 no-print">
         <button onclick="window.history.back()" 
