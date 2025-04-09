@@ -87,25 +87,33 @@
     <table class="w-full border mt-2 border-black">
         <thead>
             <tr class="bg-gray-100">
-                <th class="px-4 py-2 text-left segoe font-semibold">Item</th>
-                <th class="px-4 py-2 text-center segoe font-semibold">Quantity</th>
-                <th class="px-4 py-2 text-right segoe font-semibold">Unit Price</th>
-                <th class="px-4 py-2 text-right segoe font-semibold">Total</th>
+                <th class="px-4 py-2 text-center segoe font-semibold border border-black">Qty</th>
+                <th class="px-4 py-2 text-left segoe font-semibold border border-black">Unit</th>
+                <th class="px-4 py-2 text-left segoe font-semibold border border-black">Items</th>
+                <th class="px-4 py-2 text-right segoe font-semibold border border-black">Unit Cost</th>
+                <th class="px-4 py-2 text-right segoe font-semibold border border-black">Amount</th>
             </tr>
         </thead>
         <tbody>
             @foreach($requests as $request)
                 <tr>
-                    <td class="border-b px-4 py-2">{{ $request->item_name }}</td>
-                    <td class="border-b px-4 py-2 text-center">{{ $request->quantity }}</td>
-                    <td class="border-b px-4 py-2 text-right">
+                    <td class="border border-black px-4 py-2 text-center">{{ $request->quantity }}</td>
+                    <td class="border border-black px-4 py-2 text-left">
+                        @if($request->inventory_id)
+                            {{ $request->inventory->unit->unit ?? 'N/A' }}
+                        @else
+                            N/A
+                        @endif
+                    </td>
+                    <td class="border border-black px-4 py-2 text-left">{{ $request->item_name }}</td>
+                    <td class="border border-black px-4 py-2 text-right">
                         @if($request->inventory_id)
                             ₱{{ number_format($request->inventory->unit_price ?? 0, 2) }}
                         @else
                             ₱{{ number_format($request->estimated_unit_price ?? 0, 2) }}
                         @endif
                     </td>
-                    <td class="border-b px-4 py-2 text-right">
+                    <td class="border border-black px-4 py-2 text-right">
                         @if($request->inventory_id)
                             ₱{{ number_format(($request->inventory->unit_price ?? 0) * $request->quantity, 2) }}
                         @else
@@ -117,8 +125,9 @@
         </tbody>
         <tfoot>
             <tr class="segoe font-bold">
-                <td class="px-4 py-2" colspan="3">Overall Price:</td>
-                <td class="px-4 py-2 text-right">₱{{ number_format($totalPrice, 2) }}</td>
+                <td colspan="3"></td>
+                <td class="px-4 py-2 text-right border border-black">Grand Total:</td>
+                <td class="px-4 py-2 text-right border border-black">₱{{ number_format($totalPrice, 2) }}</td>
             </tr>
         </tfoot>
     </table>
