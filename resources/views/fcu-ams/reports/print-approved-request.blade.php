@@ -37,7 +37,7 @@
 
         @page {
             size: auto;
-            margin: -3mm;
+            margin: -4mm;
 
         }
 

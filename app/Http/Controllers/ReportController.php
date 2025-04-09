@@ -289,14 +289,18 @@ class ReportController extends Controller
         $stockOutDetails = [];
         $totalPrice = 0;
 
-        $stockOutRecords = StockOut::where('stock_out_id', $record->stock_out_id)->get();
+        $stockOutRecords = StockOut::where('stock_out_id', $record->stock_out_id)
+            ->with('inventory.unit')
+            ->get();
 
         foreach ($stockOutRecords as $stockOutRecord) {
             $inventory = $stockOutRecord->inventory;
             $stockOutDetails[] = [
+                'inventory_id' => $stockOutRecord->inventory_id,
                 'item' => $inventory->brand->brand . ' ' . $inventory->items_specs,
                 'quantity' => $stockOutRecord->quantity,
                 'price' => $inventory->unit_price,
+                'unit' => $inventory->unit->unit ?? 'N/A'
             ];
             $totalPrice += $stockOutRecord->quantity * $inventory->unit_price;
         }
