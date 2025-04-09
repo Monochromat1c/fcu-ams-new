@@ -504,7 +504,8 @@ class AssetController extends Controller
             ->orderBy('maintenance_start_date', 'desc')
             ->paginate(15);
         $conditions = Condition::all();
-        return view('fcu-ams/asset/maintenance', compact('assets', 'conditions'));
+        $disposedStatuses = DisposedStatus::all(); // Add this line
+        return view('fcu-ams/asset/maintenance', compact('assets', 'conditions', 'disposedStatuses')); // Add to compact
     }
 
     public function storeEditHistory($asset, $user, $oldAsset)
@@ -607,7 +608,9 @@ class AssetController extends Controller
         $validatedData = $request->validate([
             'condition_id' => 'required|integer|exists:conditions,id',
             'maintenance_start_date' => 'nullable|date',
-            'maintenance_end_date' => 'nullable|date|after_or_equal:maintenance_start_date'
+            'maintenance_end_date' => 'nullable|date|after_or_equal:maintenance_start_date',
+            'disposed_amount' => 'nullable|numeric|min:0',
+            'disposed_status_id' => 'nullable|exists:disposed_statuses,id'
         ]);
 
         $asset = Asset::findOrFail($id);
@@ -615,32 +618,29 @@ class AssetController extends Controller
 
         $asset->condition_id = $validatedData['condition_id'];
 
-        // If condition is maintenance, update maintenance dates
         $maintenanceCondition = Condition::where('condition', 'Maintenance')->first();
-        $toBeDisposedCondition = Condition::where('condition', 'Disposed')->first();
-        
+        $disposedCondition = Condition::where('condition', 'Disposed')->first();
+
         if ($validatedData['condition_id'] == $maintenanceCondition->id) {
             $asset->maintenance_start_date = $validatedData['maintenance_start_date'];
             $asset->maintenance_end_date = $validatedData['maintenance_end_date'];
-            // Set status to Unavailable when condition is maintenance
             $unavailableStatus = Status::where('status', 'Unavailable')->first();
             if ($unavailableStatus) {
                 $asset->status_id = $unavailableStatus->id;
             }
-        } elseif ($validatedData['condition_id'] == $toBeDisposedCondition->id) {
-            // Set status to Unavailable when condition is Disposed
+        } elseif ($validatedData['condition_id'] == $disposedCondition->id) {
             $unavailableStatus = Status::where('status', 'Unavailable')->first();
             if ($unavailableStatus) {
                 $asset->status_id = $unavailableStatus->id;
             }
-            // Set disposed amount when condition is Disposed
-            $asset->disposed_amount = $validatedData['disposed_amount'];
+            // Add disposal fields with null coalescing
+            $asset->disposed_amount = $validatedData['disposed_amount'] ?? null;
+            $asset->disposed_status_id = $validatedData['disposed_status_id'] ?? null;
         } else {
-            // Clear maintenance dates if condition is not maintenance
             $asset->maintenance_start_date = null;
             $asset->maintenance_end_date = null;
-            // Set status back to Available if it was previously in maintenance or Disposed
-            if ($oldAsset->condition_id == $maintenanceCondition->id || $oldAsset->condition_id == $toBeDisposedCondition->id) {
+            if ($oldAsset->condition_id == $maintenanceCondition->id || 
+                $oldAsset->condition_id == $disposedCondition->id) {
                 $availableStatus = Status::where('status', 'Available')->first();
                 if ($availableStatus) {
                     $asset->status_id = $availableStatus->id;

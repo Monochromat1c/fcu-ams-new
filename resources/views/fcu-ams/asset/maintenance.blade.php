@@ -263,6 +263,69 @@
                         Update Condition
                     </button>
                 </div>
+
+                <!-- Add these hidden inputs below the form -->
+                <input type="hidden" name="disposed_amount" id="hidden_disposed_amount"
+                    value="{{ $asset->disposed_amount ?? '' }}">
+                <input type="hidden" name="disposed_status_id" id="hidden_disposed_status_id"
+                    value="{{ $asset->disposed_status_id ?? '' }}">
+
+                <!-- Disposal Modal -->
+                <div id="disposed-modal"
+                    class="fixed inset-0 z-[100] overflow-y-auto bg-gray-900/50 backdrop-blur-sm hidden">
+                    <div class="flex min-h-screen items-center justify-center p-4">
+                        <div
+                            class="relative w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
+                            <!-- Header -->
+                            <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                                <div class="flex items-center justify-between">
+                                    <h3 class="text-lg font-semibold text-gray-900">Disposal Details</h3>
+                                    <button type="button" class="text-gray-400 hover:text-gray-500"
+                                        onclick="closeDisposalModal()">
+                                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Body -->
+                            <div class="px-6 py-4 space-y-4">
+                                <div>
+                                    <label for="disposed_amount" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Disposed Amount (₱)
+                                    </label>
+                                    <input type="number" id="disposed_amount" step="0.01" min="0"
+                                        class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label for="disposed_status" class="block text-sm font-medium text-gray-700 mb-1">
+                                        Disposal Status
+                                    </label>
+                                    <select id="disposed_status"
+                                        class="w-full px-3 py-2 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                        @foreach($disposedStatuses as $status)
+                                            <option value="{{ $status->id }}">{{ $status->status }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Footer -->
+                            <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+                                <button type="button" onclick="closeDisposalModal()"
+                                    class="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-700 hover:bg-gray-50 transition-colors">
+                                    Cancel
+                                </button>
+                                <button type="button" onclick="saveDisposalDetails()"
+                                    class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                                    Save Details
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </form>
         </div>
     </div>
@@ -274,6 +337,7 @@
         const form = document.getElementById('update-condition-form');
         const conditionSelect = document.getElementById('condition_id');
         const maintenanceDates = document.getElementById('maintenance-dates');
+        const disposalModal = document.getElementById('disposed-modal');
 
         // Set the form action
         form.action = `/asset/${assetId}/update-condition`;
@@ -292,14 +356,29 @@
         conditionSelect.addEventListener('change', function() {
             const selectedOption = this.options[this.selectedIndex];
             maintenanceDates.classList.toggle('hidden', selectedOption.text !== 'Maintenance');
+            
+            // Show disposal modal if Disposed is selected
+            if (selectedOption.text === 'Disposed') {
+                disposalModal.classList.remove('hidden');
+            }
         });
 
         // Trigger change event to set initial state
         conditionSelect.dispatchEvent(new Event('change'));
     }
 
-    function closeConditionModal() {
-        document.getElementById('condition-modal').classList.add('hidden');
+    function saveDisposalDetails() {
+        const disposedAmount = document.getElementById('disposed_amount').value;
+        const disposedStatus = document.getElementById('disposed_status').value;
+        
+        document.getElementById('hidden_disposed_amount').value = disposedAmount;
+        document.getElementById('hidden_disposed_status_id').value = disposedStatus;
+        
+        closeDisposalModal();
+    }
+
+    function closeDisposalModal() {
+        document.getElementById('disposed-modal').classList.add('hidden');
     }
 </script>
 
