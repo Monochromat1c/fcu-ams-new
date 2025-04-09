@@ -4,8 +4,6 @@
     body {
         --tw-bg-opacity: 1;
         background-color: rgb(241 245 249 / var(--tw-bg-opacity));
-        font-size: 17px; /* Standard document font size */
-        line-height: 1.2; /* Tighter line height */
     }
 
     .fcu-icon {
@@ -17,7 +15,7 @@
             background-color: white;
             margin: 0;
             padding: 0;
-            font-size: 17px !important; /* Explicitly set font size for print */
+            font-size: 14px !important;
         }
 
         .no-print {
@@ -25,143 +23,168 @@
         }
 
         @page {
-            size: legal; /* 8.5" x 13" */
-            margin: 0; /* Remove margin */
+            size: auto;
+            margin: -3mm;
         }
 
         .shadow-lg {
             box-shadow: none;
         }
     }
-
-    /* Adjust heading sizes */
-    .header-title {
-        font-size: 17px;
-        font-weight: bold;
-    }
-
-    .header-subtitle {
-        font-size: 17px;
-        font-weight: bold;
-    }
-
-    /* Adjust table text */
-    table {
-        font-size: 17px;
-    }
-
-    /* Adjust spacing */
-    .compact-spacing {
-        margin-bottom: 0.5rem;
-    }
 </style>
-<div class="bg-white p-4 mb-8 mx-auto mt-4" style="max-width: 8.5in;">
-    <div class="text-left compact-spacing">
-        <h1 class="header-title text-center mb-1">FILAMER CHRISTIAN UNIVERSITY, INC.</h1>
-        <h1 class="header-subtitle text-center italic mb-1">ROXAS AVENUE, ROXAS CITY</h1>
-        <h1 class="header-subtitle text-center mb-2">PROPERTY CUSTODIAN'S OFFICE</h1>
-        <table class="w-full border-collapse">
+
+<div class="bg-white rounded-lg p-8 mb-8 max-w-3xl my-9 mx-auto shadow-lg">
+    <div class="text-center">
+        <h2 class="title segoe font-bold">FILAMER CHRISTIAN UNIVERSITY, INC.</h2>
+        <h2 class="sub-title segoe font-bold italic">Roxas Avenue, Roxas City</h2>
+        <h2 class="sub-title segoe font-bold">PROPERTY CUSTODIAN'S OFFICE</h2>
+
+        <table class="w-full">
             <tr>
-                <td class="border border-black p-2">Document Name:</td>
-                <td class="border border-black p-2">PURCHASE ORDER</td>
-                <td class="border border-black p-2">Effectivity:</td>
-                <td class="border border-black p-2">August 15, 2022</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Document Name:</td>
+                <td class="px-2 py-1 border border-black text-left">OFFICE SUPPLIES REQUISITION SLIP</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Effectivity:</td>
+                <td class="px-2 py-1 border border-black text-left">August 15, 2022</td>
             </tr>
             <tr>
-                <td class="border border-black p-2">Document No:</td>
-                <td class="border border-black p-2">PCO-2022-01</td>
-                <td class="border border-black p-2">Issuing Office</td>
-                <td class="border border-black p-2">Property Custodian's Office</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Document No:</td>
+                <td class="px-2 py-1 border border-black text-left">PCO-2023-03</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Issuing Office:</td>
+                <td class="px-2 py-1 border border-black text-left" colspan="2">Property Custodian's Office</td>
             </tr>
             <tr>
-                <td class="border border-black p-2">Revision No:</td>
-                <td class="border border-black p-2">1</td>
-                <td class="border border-black p-2">Page No.</td>
-                <td class="border border-black p-2">1</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Revision No:</td>
+                <td class="px-2 py-1 border border-black text-left">1</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Page No.</td>
+                <td class="px-2 py-1 border border-black text-left" colspan="2">1</td>
             </tr>
         </table>
 
-        <h1 class="header-title text-center mb-1">PURCHASE ORDER</h1>
-
-        <div class="mb-4">
-            <div class="flex mb-2">
-                <div class="w-24">P.O. No.</div>
-                <div class="text-red-600 mr-auto">{{ $record->po_number ?? '21938' }}</div>
-                <div>DATE: {{ $record->po_date ?? '07/31/2024' }}</div>
-            </div>
-            <div class="flex">
-                <div class="w-48">REQUESTING DEPARTMENT:</div>
-                <div>{{ $record->department->department ?? 'IT ADMIN' }}</div>
-            </div>
-        </div>
-
-        <div class="mb-4">
-            <div class="flex">
-                <div class="w-16">TO:</div>
-                <div>B-Y & SONS TRADING</div>
-            </div>
-            <div class="flex">
-                <div class="w-16">ADDRESS:</div>
-                <div>ROXAS AVENUE</div>
-            </div>
-        </div>
-
-        <p class="mb-4">Please supply us within ___ working days after receipt of this Purchase Order</p>
+        <h2 class="segoe font-bold mt-2 mb-2">PURCHASE ORDER DETAILS</h2>
+        <table class="w-full">
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Department/Unit:</td>
+                <td class="px-2 py-1 text-left">{{ $record->department->department ?? 'N/A' }}</td>
+                <td class="px-2 py-1 segoe font-semibold text-left">Date:</td>
+                <td class="px-2 py-1 text-left">{{ \Carbon\Carbon::parse($record->created_at)->format('M d, Y') }}</td>
+            </tr>
+        </table>
     </div>
-
-    <table class="w-full mb-8">
+    
+    <!-- Items Table -->
+    <table class="w-full border mt-2 mb-4 border-black">
         <thead>
             <tr class="bg-gray-100">
-                <th class="px-6 py-3 text-left">Item</th>
-                <th class="px-6 py-3 text-center">Quantity</th>
-                <th class="px-6 py-3 text-right">Unit Price</th>
-                <th class="px-6 py-3 text-right">Total</th>
+                <th class="px-4 py-2 text-center segoe font-semibold border border-black">Qty</th>
+                <th class="px-4 py-2 text-left segoe font-semibold border border-black">Unit</th>
+                <th class="px-4 py-2 text-left segoe font-semibold border border-black">Items</th>
+                <th class="px-4 py-2 text-right segoe font-semibold border border-black">Unit Cost</th>
+                <th class="px-4 py-2 text-right segoe font-semibold border border-black">Amount</th>
             </tr>
         </thead>
         <tbody>
             @foreach($purchaseOrderDetails as $detail)
-                <tr>
-                    <td class="border-b px-6 py-4">{{ $detail['items_specs'] }}</td>
-                    <td class="border-b px-6 py-4 text-center">{{ $detail['quantity'] }}</td>
-                    <td class="border-b px-6 py-4 text-right">
-                        ₱{{ number_format($detail['unit_price'], 2) }}</td>
-                    <td class="border-b px-6 py-4 text-right">
-                        ₱{{ number_format($detail['quantity'] * $detail['unit_price'], 2) }}
-                    </td>
-                </tr>
+            <tr>
+                <td class="border border-black px-4 py-2 text-center">{{ $detail['quantity'] }}</td>
+                <td class="border border-black px-4 py-2 text-left">{{ $detail['unit'] }}</td>
+                <td class="border border-black px-4 py-2 text-left">{{ $detail['items_specs'] }}</td>
+                <td class="border border-black px-4 py-2 text-right">₱{{ number_format($detail['unit_price'], 2) }}</td>
+                <td class="border border-black px-4 py-2 text-right">₱{{ number_format($detail['quantity'] * $detail['unit_price'], 2) }}</td>
+            </tr>
             @endforeach
         </tbody>
         <tfoot>
-            <tr class="font-bold">
-                <td class="px-6 py-4" colspan="3">Overall Price:</td>
-                <td class="px-6 py-4 text-right">₱{{ number_format($totalPrice, 2) }}</td>
+            <tr class="segoe font-bold">
+                <td colspan="3"></td>
+                <td class="px-4 py-2 text-right border border-black">Grand Total:</td>
+                <td class="px-4 py-2 text-right border border-black">₱{{ number_format($totalPrice, 2) }}</td>
             </tr>
         </tfoot>
     </table>
 
-    <div class="flex justify-between mt-12 pt-6 border-t">
-        <div class="text-center">
-            <p class="font-bold mb-2">Prepared by:</p>
-            <p>{{ (auth()->user() ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'N/A') }}
-            </p>
+    <table class="w-full">
+        <div>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Requested by:</td>
+                <td class="px-2 py-1 segoe font-semibold text-center border-b border-black"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left pl-10">Stocks Available:</td>
+                <td class="px-2 py-1 segoe font-semibold text-left">Budget Available: </td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Dept/Unit: </td>
+                <td class="px-2 py-1 segoe font-semibold text-center">
+                    {{ $record->department->department ?? 'N/A' }}</td>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+            </tr>
         </div>
-        <div class="text-center flex s space-x-9">
-            <div>
-                <p class="font-bold mb-2">Approved by:</p>
-                <p>{{ $record->approved_by }}</p>
-            </div>
+        <div>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Noted by:</td>
+                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left pl-10">SHERALYN A. DE LEON</td>
+                <td class="px-2 py-1 segoe font-semibold text-left">MELINOR B. SUMAYGAYSAY</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-center">Head of Office</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10">Acting Property Custodian</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left">OIC-Accountant</td>
+            </tr>
         </div>
-    </div>
+        <div>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Released by:</td>
+                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left pl-10"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-center">PCO Staff</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10">Recommending Approval</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left">Approved</td>
+            </tr>
+        </div>
+        <div>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Received by:</td>
+                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left pl-10"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-center"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left"></td>
+            </tr>
+        </div>
+        <div>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Checker:</td>
+                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
+                <td class="px-2 py-1 segoe font-semibold text-left pl-10">ESTHER S. ARCEÑO,CPA</td>
+                <td class="px-2 py-1 segoe font-semibold text-left">DR. GEORGE O. CORTEL</td>
+            </tr>
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left"></td>
+                <td class="px-2 py-1 segoe font-semibold italic text-center">PCO Staff</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10">TIC, VP-Finance</td>
+                <td class="px-2 py-1 segoe font-semibold italic text-left">President</td>
+            </tr>
+        </div>
+    </table>
 
+    <!-- Print Buttons -->
     <div class="flex justify-between mt-8 no-print">
-        <button onclick="window.history.back()"
-            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-6 rounded">
+        <button onclick="window.history.back()" class="bg-red-500 hover:bg-red-700 text-white segoe font-bold py-2 px-6 rounded">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
             </svg>
         </button>
-        <button onclick="window.print()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
+        <button onclick="window.print()" class="bg-blue-500 hover:bg-blue-700 text-white segoe font-bold py-2 px-6 rounded">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
@@ -170,10 +193,4 @@
         </button>
     </div>
 </div>
-
-<script>
-    function printReceipt() {
-        window.print();
-    }
-</script>
 @endsection

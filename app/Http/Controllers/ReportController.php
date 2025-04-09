@@ -161,7 +161,7 @@ class ReportController extends Controller
         $poDateRangeDisplay = $this->formatDateRange($poStartDate, $poEndDate, 'purchase order');
         
         // Get purchase orders
-        $purchaseOrders = PurchaseOrder::with('supplier', 'department')
+        $purchaseOrders = PurchaseOrder::with('supplier', 'department', 'unit')
             ->whereBetween('po_date', [$poStartDate, $poEndDate])
             ->orderBy('po_date', 'desc')
             ->orderBy('created_at', 'desc')
@@ -306,17 +306,20 @@ class ReportController extends Controller
 
     public function purchaseOrderDetails($id)
     {
-        $record = PurchaseOrder::with('department', 'supplier')->findOrFail($id);
+        $record = PurchaseOrder::with('department', 'supplier', 'unit')->findOrFail($id);
         $purchaseOrderDetails = [];
         $totalPrice = 0;
 
-        $purchaseOrderRecords = PurchaseOrder::where('group_id_for_items_purchased_at_the_same_time', $record->group_id_for_items_purchased_at_the_same_time)->get();
+        $purchaseOrderRecords = PurchaseOrder::with('unit')
+            ->where('group_id_for_items_purchased_at_the_same_time', $record->group_id_for_items_purchased_at_the_same_time)
+            ->get();
 
         foreach ($purchaseOrderRecords as $purchaseOrderRecord) {
             $purchaseOrderDetails[] = [
                 'items_specs' => $purchaseOrderRecord->items_specs,
                 'quantity' => $purchaseOrderRecord->quantity,
                 'unit_price' => $purchaseOrderRecord->unit_price,
+                'unit' => $purchaseOrderRecord->unit->unit ?? 'N/A'
             ];
             $totalPrice += $purchaseOrderRecord->quantity * $purchaseOrderRecord->unit_price;
         }
