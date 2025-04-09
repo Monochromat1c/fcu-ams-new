@@ -380,6 +380,10 @@
     function closeDisposalModal() {
         document.getElementById('disposed-modal').classList.add('hidden');
     }
+
+    function closeConditionModal() {
+        document.getElementById('condition-modal').classList.add('hidden');
+    }
 </script>
 
 @endsection
