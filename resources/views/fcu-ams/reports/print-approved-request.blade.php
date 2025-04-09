@@ -18,10 +18,18 @@
     @media print {
         body {
             background-color: white;
-            margin: 0;
-            padding: 0;
-            font-size: 17px !important; /* Explicitly set font size for print */
+            /* margin: 0;
+            padding: 0; */
+            font-size: 14px !important; /* Explicitly set font size for print */
         }
+
+        .title {
+            font-size: 18px;
+        }
+
+        .sub-title {
+            font-size: 16px;
+        }   
 
         .no-print {
             display: none;
@@ -29,7 +37,8 @@
 
         @page {
             size: auto;
-            margin: 0mm;
+            margin: -3mm;
+
         }
 
         .shadow-lg {
@@ -38,43 +47,50 @@
     }
 </style>
 <div class="bg-white rounded-lg p-8 mb-8 max-w-2xl my-9 mx-auto shadow-lg">
-    <div class="text-center mb-5">
-        <h2 class="text-xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC.</h2>
-        <h2 class="text-lg font-bold uppercase italic">Roxas Avenue, Roxas City</h2>
-        <h2 class="text-lg font-bold">PROPERTY CUSTODIAN'S OFFICE</h2>
+    <div class="text-center">
+        <h2 class="title segoe font-bold">FILAMER CHRISTIAN UNIVERSITY, INC.</h2>
+        <h2 class="sub-title segoe font-bold italic">Roxas Avenue, Roxas City</h2>
+        <h2 class="sub-title segoe font-bold">PROPERTY CUSTODIAN'S OFFICE</h2>
         
-        <table class="w-full mb-4 text-sm">
+        <table class="w-full">
             <tr>
-                <td class="px-2 py-1 font-semibold border border-black">Document Name:</td>
-                <td class="px-2 py-1 border border-black">OFFICE SUPPLIES REQUISITION SLIP</td>
-                <td class="px-2 py-1 font-semibold border border-black">Effectivity:</td>
-                <td class="px-2 py-1 border border-black">August 15, 2022</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Document Name:</td>
+                <td class="px-2 py-1 border border-black text-left">OFFICE SUPPLIES REQUISITION SLIP</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Effectivity:</td>
+                <td class="px-2 py-1 border border-black text-left">August 15, 2022</td>
             </tr>
             <tr>
-                <td class="px-2 py-1 font-semibold border border-black">Document No:</td>
-                <td class="px-2 py-1 border border-black">PCO-2023-03</td>
-                <td class="px-2 py-1 font-semibold border border-black">Issuing Office:</td>
-                <td class="px-2 py-1 border border-black" colspan="2">Property Custodian's Office</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Document No:</td>
+                <td class="px-2 py-1 border border-black text-left">PCO-2023-03</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Issuing Office:</td>
+                <td class="px-2 py-1 border border-black text-left" colspan="2">Property Custodian's Office</td>
             </tr>
             <tr>
-                <td class="px-2 py-1 font-semibold border border-black">Revision No:</td>
-                <td class="px-2 py-1 border border-black">1</td>
-                <td class="px-2 py-1 font-semibold border border-black">Page No.</td>
-                <td class="px-2 py-1 border border-black" colspan="2">1</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Revision No:</td>
+                <td class="px-2 py-1 border border-black text-left">1</td>
+                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Page No.</td>
+                <td class="px-2 py-1 border border-black text-left" colspan="2">1</td>
             </tr>
         </table>
 
-        <p class="text-gray-600 mb-3 text-sm">Date: {{ \Carbon\Carbon::parse($requests->first()->created_at)->format('M d, Y') }}</p>
-        <h2 class="text-lg font-bold">{{ $requests->first()->department->department ?? 'N/A' }}</h2>
+        <h2 class="segoe font-bold mt-2 mb-2">OFFICE SUPPLIES REQUESITION SLIP</h2>
+        <table class="w-full">
+            <tr>
+                <td class="px-2 py-1 segoe font-semibold text-left">Department/Unit:</td>
+                <td class="px-2 py-1 text-left">{{ $requests->first()->department->department ?? 'N/A' }}</td>
+                <td class="px-2 py-1 segoe font-semibold text-left">Date:</td>
+                <td class="px-2 py-1 text-left">{{ \Carbon\Carbon::parse($requests->first()->created_at)->format('M d, Y') }}</td>
+            </tr>
+        </table>
     </div>
 
-    <table class="w-full mb-8 text-sm">
+    <table class="w-full border mt-2 border-black">
         <thead>
             <tr class="bg-gray-100">
-                <th class="px-4 py-2 text-left font-semibold">Item</th>
-                <th class="px-4 py-2 text-center font-semibold">Quantity</th>
-                <th class="px-4 py-2 text-right font-semibold">Unit Price</th>
-                <th class="px-4 py-2 text-right font-semibold">Total</th>
+                <th class="px-4 py-2 text-left segoe font-semibold">Item</th>
+                <th class="px-4 py-2 text-center segoe font-semibold">Quantity</th>
+                <th class="px-4 py-2 text-right segoe font-semibold">Unit Price</th>
+                <th class="px-4 py-2 text-right segoe font-semibold">Total</th>
             </tr>
         </thead>
         <tbody>
@@ -100,34 +116,34 @@
             @endforeach
         </tbody>
         <tfoot>
-            <tr class="font-bold">
+            <tr class="segoe font-bold">
                 <td class="px-4 py-2" colspan="3">Overall Price:</td>
                 <td class="px-4 py-2 text-right">₱{{ number_format($totalPrice, 2) }}</td>
             </tr>
         </tfoot>
     </table>
 
-    <div class="flex justify-between mt-12 pt-6 border-t text-sm">
+    <div class="flex justify-between mt-12 pt-6 border-t">
         <div class="text-center">
-            <p class="font-bold mb-1">Processed by:</p>
+            <p class="segoe font-bold mb-1">Processed by:</p>
             <p>{{ auth()->user()->first_name . ' ' . auth()->user()->last_name }}</p>
         </div>
         <div class="text-center">
-            <p class="font-bold mb-1">Requested by:</p>
+            <p class="segoe font-bold mb-1">Requested by:</p>
             <p>{{ $requests->first()->requester }}</p>
         </div>
     </div>
 
     <div class="flex justify-between mt-8 no-print">
         <button onclick="window.history.back()" 
-            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-6 rounded">
+            class="bg-red-500 hover:bg-red-700 text-white segoe font-bold py-2 px-6 rounded">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
             </svg>
         </button>
         <button onclick="window.print()" 
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded">
+            class="bg-blue-500 hover:bg-blue-700 text-white segoe font-bold py-2 px-6 rounded">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                 stroke="currentColor" class="size-6">
                 <path stroke-linecap="round" stroke-linejoin="round"
