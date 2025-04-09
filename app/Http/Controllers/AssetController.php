@@ -591,7 +591,7 @@ class AssetController extends Controller
         $encodedData = base64_encode(json_encode($assetData));
         $githubUrl = "https://monochromat1c.github.io/forViewingAssetThroughQRCode/?data=" . $encodedData;
 
-        $qrCode = QrCode::size(66)
+        $qrCode = QrCode::size(192)
             ->margin(1)
             ->backgroundColor(255, 255, 255)
             ->color(0, 0, 0)

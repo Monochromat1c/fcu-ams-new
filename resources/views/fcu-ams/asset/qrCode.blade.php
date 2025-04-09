@@ -15,6 +15,7 @@
             background-color: white;
             margin: 0;
             padding: 0;
+            font-size: 16px;
         }
 
         .no-print {
@@ -35,12 +36,17 @@
             border: 1px solid black;
             margin-top: 10px !important;
             padding: 8px !important;
-            max-width: 180px !important;
-            width: 180px !important;
+            max-width: 300px !important;
+            width: 300px !important;
             box-shadow: none !important;
             margin: 10px auto !important;
             transform: scale(0.7);
             transform-origin: center;
+        }
+
+        .background-color {
+            --tw-bg-opacity: 1;
+            background-color: rgb(249 250 251 / var(--tw-bg-opacity)) /* #f9fafb */;
         }
 
         .text-center {
@@ -60,14 +66,10 @@
         .space-y-2 > * {
             margin-top: 0.15rem !important;
             margin-bottom: 0.15rem !important;
-        }
-
-        .text-2xl {
+        }{
             font-size: 1rem !important;
             line-height: 1.2 !important;
-        }
-
-        .text-sm {
+        } {
             font-size: 0.7rem !important;
         }
 
@@ -89,8 +91,8 @@
     <div class="qr-code-container bg-white rounded-xl p-8 max-w-lg w-full shadow-none transform transition-all duration-300 hover:shadow-none">
         <div class="text-center space-y-6">
             <div class="space-y-2">
-                <h2 class="text-2xl font-bold text-gray-800 tracking-tight">FILAMER CHRISTIAN UNIVERSITY, INC.</h2>
-                <p class="text-sm text-gray-500">Asset Management System</p>
+                <h2 class="font-bold text-gray-800 tracking-tight">FILAMER CHRISTIAN UNIVERSITY, INC.</h2>
+                <p class=" text-gray-500">Asset Management System</p>
             </div>
             
             <div class="flex justify-center p-0 qr-code bg-white rounded-lg">
@@ -98,8 +100,9 @@
             </div>
 
             <div class="space-y-2">
-                <h2 class="text-xl font-semibold text-gray-700">Asset Tag ID:</h2>
-                <p class="text-xs font-mono bg-gray-50 py-2 px-4 rounded-lg inline-block">{{ $asset->asset_tag_id }}</p>
+                <h2 class=" font-semibold text-gray-700">Asset Tag ID:</h2>
+                <p class=" font-mono background-color bg-gray-50 py-2 px-4 rounded-lg inline-block">
+                    {{ $asset->asset_tag_id }}</p>
             </div>
         </div>
 

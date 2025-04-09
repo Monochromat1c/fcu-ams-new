@@ -12,7 +12,7 @@
         }
         .header {
             width: 100%;
-            margin-bottom: 30px;
+            margin-bottom: 9px;
             position: relative;
             min-height: 100px;
             text-align: center;  /* Center all content */
@@ -23,9 +23,9 @@
             padding-top: 20px;  /* Add some top padding to align with logo */
         }
         .report-title {
-            font-size: 16pt;  /* Increased font size */
+            font-size: 18px;  /* Increased font size */
             font-weight: bold;
-            margin-bottom: 15px;
+            margin-bottom: 6px;
         }
         .report-info {
             font-size: 12pt;
@@ -36,8 +36,8 @@
         }
         .logo {
             position: absolute;
-            top: 6;  /* Center vertically */
-            right: 0;
+            top: 6;
+            left: 70px;
             width: 100px;
             height: auto;
         }
