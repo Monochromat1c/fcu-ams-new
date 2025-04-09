@@ -86,7 +86,8 @@
                 @csrf
                 <div class="mb-4">
                     <label for="lease_date" class="block text-gray-700 font-bold mb-2">Lease Date:</label>
-                    <input type="date" id="lease_date" name="lease_date" class="w-full p-2 border rounded-md" required>
+                    <input type="date" id="lease_date" name="lease_date" class="w-full p-2 border rounded-md" required
+                        value="{{ old('purchase_date', now()->format('Y-m-d')) }}">
                 </div>
                 <div class="mb-4">
                     <label for="lease_expiration" class="block text-gray-700 font-bold mb-2">Lease Expiration:</label>

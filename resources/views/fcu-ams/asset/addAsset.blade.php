@@ -112,6 +112,7 @@
                                 Date</label>
                             <div class="mt-1">
                                 <input type="date" id="purchase_date" name="purchase_date" required
+                                    value="{{ old('purchase_date', now()->format('Y-m-d')) }}"
                                     class="shadow-sm border-2 border-slate-300 p-2 bg-slate-50 focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-slate-300 rounded-md">
                             </div>
                         </div>

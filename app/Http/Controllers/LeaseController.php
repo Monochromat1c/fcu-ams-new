@@ -123,8 +123,12 @@ class LeaseController extends Controller
 
     public function show($id)
     {
-        $lease = Lease::with(['assets.category', 'assets.brand'])->findOrFail($id);
-        return view('fcu-ams.lease.view-lease', compact('lease'));
+        $lease = Lease::findOrFail($id);
+        $assets = $lease->assets()
+            ->with(['category', 'brand'])
+            ->paginate(10);
+            
+        return view('fcu-ams.lease.view-lease', compact('lease', 'assets'));
     }
 
     // public function endLease(Request $request, Lease $lease)
