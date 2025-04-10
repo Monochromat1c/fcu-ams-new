@@ -156,17 +156,26 @@
                         </div>
                     <div class="mb-4">
                         <label for="department_id" class="block text-gray-700 font-bold mb-2">Department:</label>
-                        <select id="department_id" name="department_id" class="w-full p-2 border-2 border-slate-300 rounded-md bg-slate-50" required>
-                            <option value="">Select a department</option>
-                            @foreach($departments as $department)
-                                <option value="{{ $department->id }}">{{ $department->department }}</option>
-                            @endforeach
-                        </select>
+                        <div class="flex space-x-2">
+                            <select id="department_id" name="department_id" class="w-full p-2 border-2 border-slate-300 rounded-md bg-slate-50" required>
+                                <option value="">Select a department</option>
+                                @foreach($departments as $department)
+                                    <option value="{{ $department->id }}">{{ $department->department }}</option>
+                                @endforeach
+                            </select>
+                            <button type="button"
+                                onclick="document.getElementById('add-department-modal').classList.remove('hidden')"
+                                class="inline-flex items-center p-2 border border-transparent rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                     <div class="mb-4">
                         <label for="stock_out_date" class="block text-gray-700 font-bold mb-2">Stock Out Date:</label>
                         <input type="date" id="stock_out_date" name="stock_out_date"
-                            class="w-full p-2 border-2 border-slate-300 rounded-md bg-slate-50" required>
+                            class="w-full p-2 border-2 border-slate-300 rounded-md bg-slate-50" required value="{{ old('stock_out_date', date('Y-m-d')) }}">
                     </div>
                     <div class="mb-4">
                         <label for="receiver" class="block text-gray-700 font-bold mb-2">Received by:</label>
@@ -314,4 +323,11 @@ modalSearchInput.addEventListener('input', function() {
     });
 });
 </script>
+
+<x-add-item-modal 
+    title="Add New Department"
+    id="add-department-modal"
+    route="{{ route('department.add') }}"
+    field="department"
+/>
 @endsection
