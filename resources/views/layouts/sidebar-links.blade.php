@@ -119,6 +119,13 @@
                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
             </svg>
             Add Asset</a>
+        <a href="{{ route('asset.assigned') }}"
+            class="block px-4 py-2 text-gray-700  hover:bg-slate-100 flex items-center
+            {{ Request::is('asset/assigned') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+            </svg>
+            Assigned Assets</a>
         <a href="{{ route('lease.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100 flex items-center
             {{ Request::is('lease') ? 'bg-slate-200 hover:bg-slate-200' : '' }}"
@@ -337,6 +344,13 @@
                 <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
             </svg>
             Add Asset</a>
+        <a href="{{ route('asset.assigned') }}"
+            class="block px-4 py-2 text-gray-700  hover:bg-slate-100 flex items-center
+            {{ Request::is('asset/assigned') ? 'bg-slate-200 hover:bg-slate-200' : '' }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+            </svg>
+            Assigned Assets</a>
         <a href="{{ route('lease.index') }}"
             class="block px-4 py-2 text-gray-700  hover:bg-slate-100 flex items-center
             {{ Request::is('lease') ? 'bg-slate-200 hover:bg-slate-200' : '' }}"

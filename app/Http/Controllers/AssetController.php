@@ -745,4 +745,60 @@ class AssetController extends Controller
             'search'
         ));
     }
+
+    /**
+     * Display a listing of assets grouped by the person they are assigned to.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function assignedAssets(Request $request)
+    {
+        $search = $request->input('search');
+        $sort = $request->input('sort', 'assigned_to'); // Default sort by assigned user
+        $direction = $request->input('direction', 'asc');
+
+        $query = Asset::with(['brand', 'category', 'status', 'condition', 'department'])
+            ->whereNotNull('assigned_to')
+            ->where('assigned_to', '!=', '')
+            ->whereHas('condition', function ($q) {
+                $q->where('condition', '!=', 'Disposed'); // Exclude disposed assets
+            });
+
+        if ($search) {
+            $query->where(function ($q) use ($search) {
+                $q->where('assigned_to', 'like', '%' . $search . '%')
+                  ->orWhere('asset_tag_id', 'like', '%' . $search . '%')
+                  ->orWhereHas('brand', function ($subQ) use ($search) {
+                      $subQ->where('brand', 'like', '%' . $search . '%');
+                  })
+                  ->orWhereHas('category', function ($subQ) use ($search) {
+                      $subQ->where('category', 'like', '%' . $search . '%');
+                  });
+            });
+        }
+        
+        // Instead of grouping in the query (which complicates pagination),
+        // we'll fetch sorted, paginated results and group in the view or handle differently.
+        
+        // Apply sorting
+        if ($sort === 'assigned_to') {
+            $query->orderBy('assigned_to', $direction);
+        } else {
+             // Allow sorting by other asset fields if needed in the future
+             $query->orderBy($sort, $direction);
+        }
+       
+        $assignedAssets = $query->paginate(20)->appends($request->all());
+
+        // You might group in the view if needed, or display as a flat list sorted by user.
+        // For now, we'll pass the paginated list.
+
+        return view('fcu-ams.asset.assignedAssets', compact(
+            'assignedAssets',
+            'search',
+            'sort',
+            'direction'
+        ));
+    }
 }

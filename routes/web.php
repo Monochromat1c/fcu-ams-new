@@ -58,6 +58,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/asset/{id}/qrCode', 'generateQrCode')->name('asset.qrCode');
         Route::get('/search', 'search')->name('asset.search');
         Route::get('/disposed', 'disposed')->name('asset.disposed');
+        Route::get('/asset/assigned', 'assignedAssets')->name('asset.assigned');
         Route::post('/asset/add', 'store')->name('asset.add.store');
         Route::post('/asset/{id}', 'update')->name('asset.update');
         Route::post('/asset/import', 'import')->name('asset.import');
