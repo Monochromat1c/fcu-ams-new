@@ -695,6 +695,7 @@ class AssetController extends Controller
     {
         $asset = Asset::findOrFail($id);
         $oldAsset = clone $asset;
+        $assigneeName = $asset->assigned_to; // Get the assignee name before clearing it
 
         // Clear assignment details and set return timestamp
         $asset->assigned_to = null;
@@ -719,8 +720,14 @@ class AssetController extends Controller
 
         $asset->save();
 
-        // Redirect back to the assigned assets page
-        return redirect()->route('asset.assigned')->with('success', 'Asset has been returned successfully.');
+        // Redirect back to the specific assignee's detail page
+        if ($assigneeName) {
+            return redirect()->route('asset.assigned.show', ['assigneeName' => urlencode($assigneeName)])
+                             ->with('success', 'Asset has been returned successfully.');
+        } else {
+             // Fallback if assignee name was somehow lost (shouldn't happen)
+            return redirect()->route('asset.assigned')->with('success', 'Asset has been returned successfully.');
+        }
     }
 
     public function disposed(Request $request)
@@ -779,7 +786,7 @@ class AssetController extends Controller
     }
 
     /**
-     * Display a listing of assets grouped by the person they are assigned to.
+     * Display a listing of unique assignees with their assigned asset count, total cost, and last issued date.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
@@ -787,20 +794,59 @@ class AssetController extends Controller
     public function assignedAssets(Request $request)
     {
         $search = $request->input('search');
-        $sort = $request->input('sort', 'assigned_to'); // Default sort by assigned user
+
+        $query = Asset::query()
+            ->whereNotNull('assigned_to')
+            ->where('assigned_to', '!=', '')
+            ->whereHas('condition', function ($q) {
+                $q->where('condition', '!=', 'Disposed');
+            })
+            ->selectRaw('assigned_to, 
+                         COUNT(*) as asset_count, 
+                         SUM(cost) as total_cost, 
+                         MAX(issued_date) as last_issued_date') // Added SUM(cost) and MAX(issued_date)
+            ->groupBy('assigned_to');
+
+        if ($search) {
+            $query->where('assigned_to', 'like', '%' . $search . '%');
+        }
+        
+        $query->orderBy('assigned_to', 'asc');
+
+        $assignees = $query->paginate(20)->appends($request->all());
+
+        return view('fcu-ams.asset.assignedAssets', compact(
+            'assignees',
+            'search'
+        ));
+    }
+
+    /**
+     * Display a listing of assets assigned to a specific person.
+     *
+     * @param  string  $assigneeName The URL-encoded name of the assignee.
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function showAssetsByAssignee(Request $request, $assigneeName)
+    {
+        $decodedAssigneeName = urldecode($assigneeName); // Decode the name from the URL
+        $search = $request->input('search');
+        $sort = $request->input('sort', 'asset_tag_id'); // Default sort by asset tag
         $direction = $request->input('direction', 'asc');
 
         $query = Asset::with(['brand', 'category', 'status', 'condition', 'department'])
-            ->whereNotNull('assigned_to')
-            ->where('assigned_to', '!=', '')
+            ->where('assigned_to', $decodedAssigneeName) // Filter by the specific assignee
             ->whereHas('condition', function ($q) {
                 $q->where('condition', '!=', 'Disposed'); // Exclude disposed assets
             });
 
+        // Apply search within this assignee's assets
         if ($search) {
             $query->where(function ($q) use ($search) {
-                $q->where('assigned_to', 'like', '%' . $search . '%')
-                  ->orWhere('asset_tag_id', 'like', '%' . $search . '%')
+                $q->where('asset_tag_id', 'like', '%' . $search . '%')
+                  ->orWhere('model', 'like', '%' . $search . '%')
+                  ->orWhere('serial_number', 'like', '%' . $search . '%')
                   ->orWhereHas('brand', function ($subQ) use ($search) {
                       $subQ->where('brand', 'like', '%' . $search . '%');
                   })
@@ -809,25 +855,15 @@ class AssetController extends Controller
                   });
             });
         }
-        
-        // Instead of grouping in the query (which complicates pagination),
-        // we'll fetch sorted, paginated results and group in the view or handle differently.
-        
+
         // Apply sorting
-        if ($sort === 'assigned_to') {
-            $query->orderBy('assigned_to', $direction);
-        } else {
-             // Allow sorting by other asset fields if needed in the future
-             $query->orderBy($sort, $direction);
-        }
+        $query->orderBy($sort, $direction);
        
-        $assignedAssets = $query->paginate(20)->appends($request->all());
+        $assets = $query->paginate(15)->appends($request->except('page')); // Paginate the results for this assignee
 
-        // You might group in the view if needed, or display as a flat list sorted by user.
-        // For now, we'll pass the paginated list.
-
-        return view('fcu-ams.asset.assignedAssets', compact(
-            'assignedAssets',
+        return view('fcu-ams.asset.showAssetsByAssignee', compact(
+            'assets',
+            'decodedAssigneeName', // Pass the assignee name to the view
             'search',
             'sort',
             'direction'
