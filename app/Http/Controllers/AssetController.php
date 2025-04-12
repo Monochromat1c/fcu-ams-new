@@ -691,6 +691,38 @@ class AssetController extends Controller
         return redirect()->route('asset.list')->with('success', 'Asset has been returned successfully.');
     }
 
+    public function returnFromAssigned($id)
+    {
+        $asset = Asset::findOrFail($id);
+        $oldAsset = clone $asset;
+
+        // Clear assignment details and set return timestamp
+        $asset->assigned_to = null;
+        $asset->issued_date = null;
+        $asset->return_date = now()->toDateString(); // Add return date
+        $asset->returned_at = now();
+        
+        // Update status to Available
+        $availableStatus = Status::where('status', 'Available')->first();
+        if ($availableStatus) {
+            $asset->status_id = $availableStatus->id;
+        }
+
+        // Update condition to Used
+        $usedCondition = Condition::where('condition', 'Used')->first();
+        if ($usedCondition) {
+            $asset->condition_id = $usedCondition->id;
+        }
+
+        // Store the edit history
+        $this->storeEditHistory($asset, auth()->user(), $oldAsset);
+
+        $asset->save();
+
+        // Redirect back to the assigned assets page
+        return redirect()->route('asset.assigned')->with('success', 'Asset has been returned successfully.');
+    }
+
     public function disposed(Request $request)
     {
         $sort = $request->input('sort', 'asset_tag_id');

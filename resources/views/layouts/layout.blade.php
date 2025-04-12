@@ -19,6 +19,8 @@
     <script src="{{ asset('js/errorMessageTimer.js') }}"></script>
     <script src="{{ asset('js/sidebarLinkDropdownScript.js') }}"></script>
     <script src="{{ asset('js/alpine.min.js') }}" defer></script>
+    <script src="{{ asset('js/app.js') }}"></script>
+    @stack('scripts')
 </body>
 
 </html>

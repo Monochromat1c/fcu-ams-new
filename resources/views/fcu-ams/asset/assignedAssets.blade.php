@@ -123,7 +123,9 @@
                 </div>
             </div>
         </div>
-        
+        <div class="m-3">
+            @include('layouts.messageWithoutTimerForError')
+        </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex justify-between mb-6">
                 <h2 class="text-2xl font-bold my-auto">Assigned Asset List</h2>
@@ -202,10 +204,13 @@
                                             </svg>
                                         </a>
                                         @if(Auth::user()->role->role != 'Department')
-                                        <form action="{{ route('asset.return', $asset->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to mark this asset as returned?');" class="inline-block">
+                                        <form id="return-asset-form-{{ $asset->id }}" action="{{ route('asset.return.from.assigned', $asset->id) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('PUT')
-                                            <button type="submit" class="text-blue-600 hover:text-blue-900 hover:scale-110 transition-transform duration-200" title="Return Asset">
+                                            <button type="button" 
+                                                    onclick="openConfirmModal('return-asset-form-{{ $asset->id }}', 'Confirm Return', 'Do you want to return this asset? (Tag: {{ $asset->asset_tag_id }})')" 
+                                                    class="text-blue-600 hover:text-blue-900 hover:scale-110 transition-transform duration-200" 
+                                                    title="Return Asset">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                                                     <path fill-rule="evenodd" d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
                                                 </svg>
@@ -228,6 +233,8 @@
     </div>
 </div>
 
+{{-- Include the new confirmation modal --}}
+@include('layouts.modals.confirmActionModal')
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {

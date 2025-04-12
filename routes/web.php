@@ -65,6 +65,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/asset/{id}/update-condition', 'updateCondition')->name('asset.update.condition');
         Route::delete('/asset/{id}', 'destroy')->name('asset.destroy');
         Route::put('/asset/{id}/return', 'return')->name('asset.return');
+        Route::put('/asset/{id}/return-from-assigned', 'returnFromAssigned')->name('asset.return.from.assigned');
     }); 
 
     Route::controller(InventoryController::class)->group(function (){
