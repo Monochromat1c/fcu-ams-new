@@ -15,3 +15,9 @@ E RUN SA TERMINAL (pasunod)
  - php artisan storage:link
  - php artisan serve
  - npm run build
+
+ Run the project:
+ - E open ang start.bat nga file
+ or
+ - E run sa terminal: 
+    .\start.ps1
