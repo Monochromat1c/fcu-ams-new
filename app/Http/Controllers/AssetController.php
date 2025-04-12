@@ -481,7 +481,7 @@ class AssetController extends Controller
 
         $asset->save();
 
-        return redirect()->back()->with('success', 'Asset updated successfully.');
+        return redirect()->route('asset.list')->with('success', 'Asset updated successfully.');
     }
 
     public function destroy($id)
@@ -868,5 +868,66 @@ class AssetController extends Controller
             'sort',
             'direction'
         ));
+    }
+
+    /**
+     * Return all assets assigned to a specific person.
+     *
+     * @param  string  $assigneeName The URL-encoded name of the assignee.
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function returnAllAssetsForAssignee($assigneeName)
+    {
+        $decodedAssigneeName = urldecode($assigneeName);
+        $user = auth()->user();
+
+        $assetsToReturn = Asset::where('assigned_to', $decodedAssigneeName)
+                               ->whereHas('condition', function ($q) {
+                                   $q->where('condition', '!=', 'Disposed');
+                               })
+                               ->get();
+
+        if ($assetsToReturn->isEmpty()) {
+            return redirect()->back()->with('error', 'No assets found assigned to ' . $decodedAssigneeName . ' to return.');
+        }
+
+        $availableStatus = Status::where('status', 'Available')->first();
+        $usedCondition = Condition::where('condition', 'Used')->first();
+        $returnDate = now()->toDateString();
+        $returnedAt = now();
+        
+        $returnedCount = 0;
+
+        DB::beginTransaction(); // Start transaction for atomicity
+        try {
+            foreach ($assetsToReturn as $asset) {
+                $oldAsset = clone $asset;
+
+                $asset->assigned_to = null;
+                $asset->issued_date = null;
+                $asset->return_date = $returnDate;
+                $asset->returned_at = $returnedAt;
+                
+                if ($availableStatus) {
+                    $asset->status_id = $availableStatus->id;
+                }
+                if ($usedCondition) {
+                    $asset->condition_id = $usedCondition->id;
+                }
+
+                $this->storeEditHistory($asset, $user, $oldAsset); // Log individual changes
+                $asset->save();
+                $returnedCount++;
+            }
+            DB::commit(); // Commit transaction if all successful
+        } catch (\Exception $e) {
+            DB::rollBack(); // Rollback on error
+            \Log::error("Error returning all assets for {$decodedAssigneeName}: " . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while returning assets. Please try again.');
+        }
+
+        // Redirect back to the main assignee list page after returning all
+        return redirect()->route('asset.assigned')
+                         ->with('success', $returnedCount . ' asset(s) for ' . $decodedAssigneeName . ' have been returned successfully.');
     }
 }

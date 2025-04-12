@@ -95,12 +95,34 @@
         </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex flex-wrap justify-between mb-6 gap-4">
-                <a href="{{ route('asset.assigned') }}" class="flex items-center bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                      <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                    </svg>
-                    Back to Assignees
-                </a>
+                <div class="flex gap-2 items-center">
+                    <a href="{{ route('asset.assigned') }}" class="flex items-center bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                        </svg>
+                        Back to Assignees
+                    </a>
+                    {{-- Return All Button and Form --}}
+                    @if($assets->isNotEmpty() && Auth::user()->role->role != 'Department')
+                    <form id="return-all-form-{{ Str::slug($decodedAssigneeName) }}" action="{{ route('asset.assigned.return-all', ['assigneeName' => urlencode($decodedAssigneeName)]) }}" method="POST" class="inline-block">
+                        @csrf
+                        <button type="button" 
+                                onclick="openConfirmModal('return-all-form-{{ Str::slug($decodedAssigneeName) }}', 'Confirm Return All', 'Are you sure you want to return ALL assets assigned to {{ $decodedAssigneeName }}? This action cannot be undone.')"
+                                class="flex items-center bg-orange-500 text-white hover:bg-orange-600 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm" 
+                                title="Return All Assets for {{ $decodedAssigneeName }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="h-5 w-5 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                            </svg>
+                            Return All Assets
+                        </button>
+                    </form>
+                    @endif
+                </div>
+
+                
+
                 {{-- Search adapted for assets within this assignee's list --}}
                 <div class="searchBox flex gap-2">
                     <form action="{{ route('asset.assigned.show', ['assigneeName' => urlencode($decodedAssigneeName)]) }}" method="GET" class="flex gap-2">
@@ -177,7 +199,11 @@
                                                     onclick="openConfirmModal('return-asset-form-{{ $asset->id }}', 'Confirm Return', 'Do you want to return this asset? (Tag: {{ $asset->asset_tag_id }})')" 
                                                     class="text-blue-600 hover:text-blue-900 hover:scale-110 transition-transform duration-200" 
                                                     title="Return Asset">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" /></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                                                </svg>
                                             </button>
                                         </form>
                                         @endif

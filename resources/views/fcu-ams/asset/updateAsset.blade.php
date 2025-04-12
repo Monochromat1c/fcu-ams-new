@@ -146,7 +146,9 @@
                             <label for="assigned_to" class="block text-sm font-medium text-gray-700">Assigned To</label>
                             <div class="mt-1">
                                 <button type="button" id="show-assignment-modal"
-                                    class="w-full text-left p-2 border border-2 bg-slate-50 border-gray-300 rounded-md shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500 hover:bg-gray-50">
+                                    class="w-full text-left p-2 border border-2 bg-slate-50 border-gray-300 rounded-md shadow-sm text-sm focus:ring-indigo-500 focus:border-indigo-500 
+                                           {{ $asset->assigned_to ? 'bg-gray-100 cursor-not-allowed text-gray-500' : 'hover:bg-gray-50' }}"
+                                    {{ $asset->assigned_to ? 'disabled' : '' }}> 
                                     {{ $asset->assigned_to ? $asset->assigned_to : 'Click to assign' }}
                                 </button>
                                 <input type="hidden" name="assigned_to" id="assigned_to"
@@ -156,6 +158,9 @@
                                 <input type="hidden" name="notes" id="notes"
                                     value="{{ old('notes', $asset->notes) }}">
                             </div>
+                            @if($asset->assigned_to)
+                                <p class="mt-1 text-xs text-gray-500">Asset is currently assigned. Please return it first to reassign.</p>
+                            @endif
                         </div>
 
                         <!-- Supplier -->
@@ -672,7 +677,9 @@
         if (showAssignmentButton && assignmentModal) {
             showAssignmentButton.addEventListener('click', function(e) {
                 e.preventDefault();
-                assignmentModal.classList.remove('hidden');
+                if (!this.disabled) {
+                    assignmentModal.classList.remove('hidden');
+                }
             });
         }
 

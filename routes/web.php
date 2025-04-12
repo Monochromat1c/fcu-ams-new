@@ -60,6 +60,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::get('/disposed', 'disposed')->name('asset.disposed');
         Route::get('/asset/assigned', 'assignedAssets')->name('asset.assigned');
         Route::get('/asset/assigned/{assigneeName}', 'showAssetsByAssignee')->name('asset.assigned.show');
+        Route::post('/asset/assigned/{assigneeName}/return-all', 'returnAllAssetsForAssignee')->name('asset.assigned.return-all');
         Route::post('/asset/add', 'store')->name('asset.add.store');
         Route::post('/asset/{id}', 'update')->name('asset.update');
         Route::post('/asset/import', 'import')->name('asset.import');
