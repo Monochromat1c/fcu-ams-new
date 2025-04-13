@@ -104,55 +104,56 @@
                             </div>
                         </div>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Basic Info -->
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-2">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Basic Info - Wrapped in styled container -->
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200 space-y-4">
+                        <!-- Added bg-gray-100 header styling -->
+                        <div class="flex items-center gap-2 border-b pb-2 border-gray-200 bg-gray-100 -m-4 mb-4 p-4 rounded-t-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-blue-600">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" />
                             </svg>
                             <h3 class="text-lg font-semibold text-gray-800">Basic Information</h3>
                         </div>
-                        <div class="grid gap-4">
-                            <div class="space-y-1">
+                        <div class="grid grid-cols-2 gap-x-4 gap-y-3">
+                            <div class="space-y-1 col-span-2">
                                 <label class="text-xs font-medium text-gray-500 uppercase">Items & Specs</label>
-                                <p class="text-sm font-medium text-gray-900">{{ $inventory->items_specs }}</p>
+                                <p class="text-sm font-semibold text-gray-900">{{ $inventory->items_specs }}</p>
                             </div>
                             <div class="space-y-1">
                                 <label class="text-xs font-medium text-gray-500 uppercase">Brand</label>
-                                <p class="text-sm font-medium text-gray-900">{{ $inventory->brand->brand }}</p>
+                                <p class="text-sm font-semibold text-gray-900">{{ $inventory->brand->brand }}</p>
                             </div>
                             <div class="space-y-1">
                                 <label class="text-xs font-medium text-gray-500 uppercase">Unit</label>
-                                <p class="text-sm font-medium text-gray-900">{{ $inventory->unit->unit }}</p>
+                                <p class="text-sm font-semibold text-gray-900">{{ $inventory->unit->unit }}</p>
                             </div>
                             <div class="space-y-1">
                                 <label class="text-xs font-medium text-gray-500 uppercase">Quantity</label>
-                                <p class="text-sm font-medium text-gray-900">{{ $inventory->quantity }}</p>
+                                <p class="text-sm font-semibold text-gray-900">{{ $inventory->quantity }}</p>
                             </div>
                             <div class="space-y-1">
                                 <label class="text-xs font-medium text-gray-500 uppercase">Unit Price</label>
-                                <p class="text-sm font-medium text-gray-900">₱{{ number_format($inventory->unit_price, 2) }}</p>
+                                <p class="text-sm font-semibold text-gray-900">₱{{ number_format($inventory->unit_price, 2) }}</p>
                             </div>
-                            <div class="space-y-1">
+                            <div class="space-y-1 col-span-2">
                                 <label class="text-xs font-medium text-gray-500 uppercase">Total Value</label>
-                                <p class="text-sm font-medium text-gray-900">₱{{ number_format($inventory->quantity * $inventory->unit_price, 2) }}</p>
+                                <p class="text-lg font-bold text-blue-700">₱{{ number_format($inventory->quantity * $inventory->unit_price, 2) }}</p>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Supplier Info -->
-                    <div class="space-y-4">
-                        <div class="flex items-center gap-2">
+                    <!-- Supplier Info - Wrapped in styled container -->
+                    <div class="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200 space-y-4">
+                        <div class="flex items-center gap-2 border-b pb-2 border-gray-200 bg-gray-100 -m-4 mb-4 p-4 rounded-t-lg">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-blue-600">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
                             </svg>
                             <h3 class="text-lg font-semibold text-gray-800">Supplier Information</h3>
                         </div>
-                        <div class="grid gap-4">
+                        <div class="grid grid-cols-1 gap-y-3">
                             <div class="space-y-1">
                                 <label class="text-xs font-medium text-gray-500 uppercase">Supplier Name</label>
-                                <p class="text-sm font-medium text-gray-900">{{ $inventory->supplier->supplier }}</p>
+                                <p class="text-sm font-semibold text-gray-900">{{ $inventory->supplier->supplier }}</p>
                             </div>
                         </div>
                     </div>

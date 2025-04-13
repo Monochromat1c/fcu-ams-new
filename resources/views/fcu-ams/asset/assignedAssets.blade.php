@@ -148,18 +148,29 @@
                         <tr>
                             <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">Assignee Name</th>
                             <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-center text-xs font-medium uppercase tracking-wider">Total Assets</th>
-                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-right text-xs font-medium uppercase tracking-wider">Total Cost</th>
-                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-center text-xs font-medium uppercase tracking-wider">Last Issued</th>
+                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">Total Cost</th>
+                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">Last Issued</th>
                             <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-center text-xs font-medium uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse($assignees as $assignee)
                             <tr class="hover:bg-gray-50 transition-colors duration-200">
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">{{ $assignee->assigned_to }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-8 w-8 bg-gray-100 rounded-full flex items-center justify-center">
+                                            <span class="text-sm font-medium text-gray-600">
+                                                {{ strtoupper(substr($assignee->assigned_to, 0, 1)) }}
+                                            </span>
+                                        </div>
+                                        <div class="ml-3">
+                                            <p class="text-sm font-medium text-gray-900">{{ $assignee->assigned_to }}</p>
+                                        </div>
+                                    </div>
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $assignee->asset_count }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right">₱{{ number_format($assignee->total_cost, 2) }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $assignee->last_issued_date ? \Carbon\Carbon::parse($assignee->last_issued_date)->format('M d, Y') : 'N/A' }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-left">₱{{ number_format($assignee->total_cost, 2) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-left">{{ $assignee->last_issued_date ? \Carbon\Carbon::parse($assignee->last_issued_date)->format('M d, Y') : 'N/A' }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
                                     <a href="{{ route('asset.assigned.show', ['assigneeName' => urlencode($assignee->assigned_to)]) }}" 
                                        class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-xs font-medium rounded-md hover:bg-green-700 transition-colors duration-200">
