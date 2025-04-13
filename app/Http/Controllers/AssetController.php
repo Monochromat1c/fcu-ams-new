@@ -958,7 +958,7 @@ class AssetController extends Controller
         $decodedAssigneeName = urldecode($assigneeName);
         \Log::debug("Decoded assignee name: {$decodedAssigneeName}");
         
-        // Get all assets for the current assignee - including a more targeted query
+        // Get all assets for the current assignee
         $assets = Asset::where('assigned_to', $decodedAssigneeName)->get();
         \Log::debug("Found " . $assets->count() . " assets to turnover");
         
@@ -966,36 +966,39 @@ class AssetController extends Controller
             return redirect()->back()->with('error', 'No assets found for this assignee.')->withInput();
         }
 
-        // Verify the AssetEditHistory model exists and is properly namespaced
-        if (!class_exists(\App\Models\AssetEditHistory::class)) {
-            \Log::error("AssetEditHistory model not found");
-            return redirect()->back()->with('error', 'System configuration error: Asset history model not found.')->withInput();
-        }
-
         // Begin transaction to ensure all updates complete or none do
         \DB::beginTransaction();
         
         try {
             $turnoverCount = 0;
+            $timestamp = now()->format('Y-m-d H:i:s');
             
             foreach ($assets as $asset) {
                 \Log::debug("Processing asset ID: " . $asset->id);
                 
-                // Using the standard edit history approach from the other methods
+                // Store the old asset data for history
                 $oldAsset = clone $asset;
                 
-                // Update asset directly without the update() method
+                // Format the turnover note with a timestamp and clear structure
+                $turnoverNote = "--- TURNOVER [{$timestamp}] ---\n";
+                $turnoverNote .= "From: {$decodedAssigneeName}\n";
+                $turnoverNote .= "To: {$request->new_assignee}\n";
+                
+                if (!empty($request->notes)) {
+                    $turnoverNote .= "Notes: {$request->notes}\n";
+                }
+                
+                // Append the new note to existing notes with proper formatting
+                if ($asset->notes) {
+                    $asset->notes = $turnoverNote . "\n\n" . $asset->notes;
+                } else {
+                    $asset->notes = $turnoverNote;
+                }
+                
+                // Update asset directly
                 $asset->assigned_to = $request->new_assignee;
                 $asset->department_id = $request->department_id;
                 $asset->issued_date = $request->turnover_date;
-                
-                // Properly append notes
-                $newNote = "Turned over from " . $decodedAssigneeName . " to " . $request->new_assignee . " on " . now()->format('Y-m-d');
-                $asset->notes = $asset->notes ? ($asset->notes . "\n\n" . $newNote) : $newNote;
-                
-                if (!empty($request->notes)) {
-                    $asset->notes .= "\n\nTurnover Notes: " . $request->notes;
-                }
                 
                 // Save the asset
                 $asset->save();
@@ -1009,7 +1012,7 @@ class AssetController extends Controller
             \DB::commit();
             \Log::debug("Turnover successful, processed {$turnoverCount} assets");
             
-            // Use with() for flash messages consistently
+            // Notify admin of successful turnover
             return redirect()->route('asset.assigned')
                 ->with('success', "{$turnoverCount} assets successfully turned over from {$decodedAssigneeName} to {$request->new_assignee}.");
         } catch (\Exception $e) {

@@ -241,12 +241,12 @@
 <div id="turnover-modal" class="fixed inset-0 z-50 hidden overflow-y-auto overflow-x-hidden">
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" onclick="closeTurnoverModal()"></div>
-        <div class="relative bg-white rounded-lg shadow-xl max-w-md w-full">
-            <div class="flex items-center justify-between p-4 border-b rounded-t">
-                <h3 class="text-xl font-semibold text-gray-900">
+        <div class="relative bg-white rounded-lg shadow-xl w-full max-w-md mx-auto">
+            <div class="flex items-center justify-between p-4 border-b rounded-t bg-gradient-to-r from-purple-500 to-purple-700">
+                <h3 class="text-xl font-semibold text-white">
                     Turnover Assets
                 </h3>
-                <button type="button" onclick="closeTurnoverModal()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                <button type="button" onclick="closeTurnoverModal()" class="text-white bg-transparent hover:bg-purple-800/50 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
                     </svg>
@@ -254,49 +254,96 @@
             </div>
             <form action="{{ route('asset.assigned.turnover', ['assigneeName' => urlencode($decodedAssigneeName)]) }}" method="POST">
                 @csrf
-                <div class="p-6 space-y-4">
-                    <div>
-                        <label for="new_assignee" class="block text-sm font-medium text-gray-700">New Assignee Name</label>
-                        <input type="text" name="new_assignee" id="new_assignee" required 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                <div class="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+                    <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-purple-300 transition-colors">
+                        <label for="new_assignee" class="block text-sm font-medium text-gray-700 mb-2">New Assignee Name</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input type="text" name="new_assignee" id="new_assignee" required 
+                                class=" border pl-10 py-2.5 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 transition-colors">
+                        </div>
                     </div>
                     
-                    <div>
-                        <label for="department_id" class="block text-sm font-medium text-gray-700">Department</label>
-                        <select name="department_id" id="department_id" required
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
-                            <option value="">Select Department</option>
-                            @foreach(\App\Models\Department::orderBy('department')->get() as $department)
-                                <option value="{{ $department->id }}">{{ $department->department }}</option>
-                            @endforeach
-                        </select>
+                    <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-purple-300 transition-colors">
+                        <label for="department_id" class="block text-sm font-medium text-gray-700 mb-2">Department</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4zm3 1h6v4H7V5zm8 8V7H5v6h10z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <select name="department_id" id="department_id" required
+                                class=" border pl-10 py-2.5 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 transition-colors appearance-none bg-white">
+                                <option value="">Select Department</option>
+                                @foreach(\App\Models\Department::orderBy('department')->get() as $department)
+                                    <option value="{{ $department->id }}">{{ $department->department }}</option>
+                                @endforeach
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div>
-                        <label for="turnover_date" class="block text-sm font-medium text-gray-700">Turnover Date</label>
-                        <input type="date" name="turnover_date" id="turnover_date" required value="{{ date('Y-m-d') }}" 
-                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-purple-300 transition-colors">
+                        <label for="turnover_date" class="block text-sm font-medium text-gray-700 mb-2">Turnover Date</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input type="date" name="turnover_date" id="turnover_date" required value="{{ date('Y-m-d') }}" 
+                                class=" border pl-10 py-2.5 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 transition-colors">
+                        </div>
                     </div>
                     
-                    <div>
-                        <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
-                        <textarea name="notes" id="notes" rows="3" 
-                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                                  placeholder="Optional notes about this turnover"></textarea>
+                    <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-purple-300 transition-colors">
+                        <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">Notes</label>
+                        <div class="relative">
+                            <div class="absolute top-3 left-3 flex items-start pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <textarea name="notes" id="notes" rows="3" 
+                                class="border pl-10 py-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring focus:ring-purple-200 focus:ring-opacity-50 transition-colors"
+                                placeholder="Optional notes about this turnover"></textarea>
+                        </div>
                     </div>
                     
-                    <div class="bg-gray-100 p-3 rounded-lg">
-                        <p class="text-sm text-gray-700 mb-1 font-medium">Turnover Summary:</p>
-                        <p class="text-sm text-gray-600">{{ $assets->count() }} assets will be turned over from <span class="font-semibold">{{ $decodedAssigneeName }}</span> to the new assignee.</p>
+                    <div class="bg-purple-50 p-5 rounded-lg border-2 border-purple-200 shadow-sm mt-6">
+                        <div class="flex items-center mb-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                            </svg>
+                            <p class="text-sm font-bold text-purple-800">Turnover Summary</p>
+                        </div>
+                        <p class="text-sm text-purple-700 ml-8 leading-relaxed">
+                            <span class="font-semibold">{{ $assets->count() }}</span> asset(s) will be turned over from 
+                            <span class="font-semibold bg-purple-100 px-1.5 py-0.5 rounded">{{ $decodedAssigneeName }}</span> to the new assignee.
+                        </p>
                     </div>
                 </div>
-                <div class="flex items-center justify-end p-4 space-x-2 border-t border-gray-200 rounded-b">
+                <div class="flex items-center justify-end p-4 space-x-3 border-t-2 border-gray-200 rounded-b bg-gray-50">
                     <button type="button" onclick="closeTurnoverModal()" 
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
                         Cancel
                     </button>
                     <button type="submit" 
-                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                            class="inline-flex items-center px-5 py-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-all transform hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                        </svg>
                         Turnover Assets
                     </button>
                 </div>
