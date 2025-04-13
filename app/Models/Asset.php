@@ -161,4 +161,9 @@ class Asset extends Model
         $now = \Carbon\Carbon::now();
         return $purchaseDate->diffInMonths($now);
     }
+
+    public function turnoverHistory()
+    {
+        return $this->hasMany(AssetTurnoverHistory::class);
+    }
 }

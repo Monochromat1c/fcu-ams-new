@@ -376,6 +376,17 @@
     function closeTurnoverModal() {
         document.getElementById('turnover-modal').classList.add('hidden');
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const turnoverForm = document.querySelector('form[action*="turnover"]');
+        
+        if (turnoverForm) {
+            turnoverForm.addEventListener('submit', function(e) {
+                const submitButton = this.querySelector('button[type="submit"]');
+                submitButton.disabled = true;
+            });
+        }
+    });
 </script>
 @stack('scripts') {{-- For the confirmActionModal script --}}
 

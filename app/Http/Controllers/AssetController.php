@@ -29,6 +29,7 @@ use App\Models\Unit;
 use App\Models\InventoryEditHistory;
 use App\Imports\AssetsImport;
 use Carbon\Carbon;
+use App\Models\AssetTurnoverHistory;
 
 class AssetController extends Controller
 {
@@ -271,24 +272,11 @@ class AssetController extends Controller
 
     public function show($id)
     {
-        $asset = Asset::with(['supplier', 'site', 'location', 'category', 'department', 'condition'])->findOrFail($id);
+        $asset = Asset::with(['brand', 'supplier', 'site', 'location', 'category', 'department', 'status', 'condition'])->findOrFail($id);
+        $editHistory = AssetEditHistory::where('asset_id', $id)->with('user')->orderBy('created_at', 'desc')->paginate(5);
+        $turnoverHistory = $this->getAssetTurnoverHistory($id);
         
-        // Get paginated edit history
-        $editHistory = $asset->editHistory()
-            ->orderBy('created_at', 'desc')
-            ->paginate(10);
-
-        $suppliers = DB::table('suppliers')->get();
-        $sites = DB::table('sites')->get();
-        $locations = DB::table('locations')->get();
-        $categories = DB::table('categories')->get();
-        $departments = DB::table('departments')->get();
-        $conditions = DB::table('conditions')->get();
-        $brands = DB::table('brands')->get();
-        $statuses = DB::table('statuses')->get();
-        
-        return view('fcu-ams/asset/viewAsset', compact('asset', 'editHistory', 'suppliers', 'sites', 'locations', 'categories',
-        'departments', 'conditions', 'statuses', 'brands'));
+        return view('fcu-ams.asset.viewAsset', compact('asset', 'editHistory', 'turnoverHistory'));
     }
 
     public function store(Request $request)
@@ -941,54 +929,65 @@ class AssetController extends Controller
     public function turnoverAssetsForAssignee(Request $request, $assigneeName)
     {
         try {
-            \DB::beginTransaction();
+            // Validate request data first
+            $validated = $request->validate([
+                'new_assignee' => 'required|string|max:255',
+                'department_id' => 'required|exists:departments,id',
+                'turnover_date' => 'required|date',
+                'notes' => 'nullable|string'
+            ]);
+
+            DB::beginTransaction();
             
             $decodedAssigneeName = urldecode($assigneeName);
-            $turnoverCount = 0;
             $assets = Asset::where('assigned_to', $decodedAssigneeName)->get();
             
+            if ($assets->isEmpty()) {
+                throw new \Exception('No assets found for turnover');
+            }
+
+            $turnoverCount = 0;
+            $turnoverDateTime = Carbon::now();
+
             foreach ($assets as $asset) {
-                // Extract existing notes
-                $existingNotes = $asset->notes;
-                $previousAssigneesNotes = '';
-                
-                if ($existingNotes) {
-                    // Keep all existing notes
-                    $previousAssigneesNotes = $existingNotes . "\n\n";
-                }
-                
-                // Add the new turnover record
-                $formattedDateTime = date('F j, Y \a\t g:i A');
-                $previousAssigneesNotes .= "{$decodedAssigneeName} turned over the asset to {$request->new_assignee} on {$formattedDateTime}";
-                
-                // Add turnover notes if provided
-                if ($request->notes) {
-                    $previousAssigneesNotes .= "\nTurnover Notes: " . $request->notes;
-                }
-                
+                AssetTurnoverHistory::create([
+                    'asset_id' => $asset->id,
+                    'previous_assignee' => $decodedAssigneeName,
+                    'new_assignee' => $validated['new_assignee'],
+                    'turnover_date' => $turnoverDateTime,
+                    'notes' => $validated['notes'],
+                    'user_id' => auth()->user()->id
+                ]);
+
                 $asset->update([
-                    'assigned_to' => $request->new_assignee,
-                    'department_id' => $request->department_id,
-                    'issued_date' => $request->turnover_date,
-                    'notes' => $previousAssigneesNotes
+                    'assigned_to' => $validated['new_assignee'],
+                    'department_id' => $validated['department_id'],
+                    'issued_date' => $validated['turnover_date'],
+                    'notes' => $validated['notes'] ?? null
                 ]);
                 
                 $turnoverCount++;
             }
             
-            \DB::commit();
-            \Log::debug("Turnover successful, processed {$turnoverCount} assets");
+            DB::commit();
             
-            return redirect()->route('asset.assigned')
-                ->with('success', "{$turnoverCount} assets successfully turned over from {$decodedAssigneeName} to {$request->new_assignee}.");
+            $message = "{$turnoverCount} asset(s) successfully turned over from {$decodedAssigneeName} to {$validated['new_assignee']}.";
+            
+            return redirect()->route('asset.assigned')->with('success', $message);
+            
         } catch (\Exception $e) {
-            \DB::rollback();
-            \Log::error("Error in turnover process: " . $e->getMessage());
-            \Log::error("Stack trace: " . $e->getTraceAsString());
-            
-            return redirect()->back()
-                ->with('error', "Failed to turnover assets: " . $e->getMessage())
-                ->withInput();
+            DB::rollback();
+            \Log::error("Turnover error: " . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to process turnover: ' . $e->getMessage());
         }
+    }
+
+    // Add this method to get turnover history for the view
+    private function getAssetTurnoverHistory($assetId)
+    {
+        return AssetTurnoverHistory::where('asset_id', $assetId)
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
     }
 }
