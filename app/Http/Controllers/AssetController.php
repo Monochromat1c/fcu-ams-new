@@ -971,7 +971,6 @@ class AssetController extends Controller
         
         try {
             $turnoverCount = 0;
-            $timestamp = now()->format('Y-m-d H:i:s');
             
             foreach ($assets as $asset) {
                 \Log::debug("Processing asset ID: " . $asset->id);
@@ -979,21 +978,8 @@ class AssetController extends Controller
                 // Store the old asset data for history
                 $oldAsset = clone $asset;
                 
-                // Format the turnover note with a timestamp and clear structure
-                $turnoverNote = "--- TURNOVER [{$timestamp}] ---\n";
-                $turnoverNote .= "From: {$decodedAssigneeName}\n";
-                $turnoverNote .= "To: {$request->new_assignee}\n";
-                
-                if (!empty($request->notes)) {
-                    $turnoverNote .= "Notes: {$request->notes}\n";
-                }
-                
-                // Append the new note to existing notes with proper formatting
-                if ($asset->notes) {
-                    $asset->notes = $turnoverNote . "\n\n" . $asset->notes;
-                } else {
-                    $asset->notes = $turnoverNote;
-                }
+                // Just set the notes to whatever the user typed, no formatting
+                $asset->notes = $request->notes;
                 
                 // Update asset directly
                 $asset->assigned_to = $request->new_assignee;

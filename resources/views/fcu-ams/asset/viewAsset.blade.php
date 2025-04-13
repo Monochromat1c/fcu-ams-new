@@ -245,7 +245,13 @@
                                 </div>
                                 <div class="space-y-1">
                                     <label class="text-xs font-medium text-gray-500 uppercase">Notes</label>
-                                    <p class="text-sm font-medium text-gray-900">{{ $asset->notes ?? 'No notes available' }}</p>
+                                    <div class="rounded-md border border-gray-200 bg-gray-50 p-3 max-h-60 overflow-y-auto">
+                                        @if($asset->notes)
+                                            <div class="whitespace-pre-wrap text-sm font-medium text-gray-900 font-mono">{{ $asset->notes }}</div>
+                                        @else
+                                            <p class="text-sm text-gray-500 italic">No notes available</p>
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                         </div>
