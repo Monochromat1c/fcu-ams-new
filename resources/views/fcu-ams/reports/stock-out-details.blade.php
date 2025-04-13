@@ -22,8 +22,7 @@
             background-color: white;
             margin: 0;
             padding: 0;
-            font-size: 14px !important; /* Explicitly set font size for print */
-
+            font-size: 17px !important; /* Explicitly set font size for print */
         }
 
         .no-print {
@@ -32,7 +31,7 @@
 
         @page {
             size: auto;
-            margin: -4mm;
+            margin: 0mm;
         }
 
         .shadow-lg {
@@ -41,156 +40,59 @@
     }
 </style>
 <div class="bg-white rounded-lg p-8 mb-8 max-w-3xl my-9 mx-auto shadow-lg">
-    <div class="text-center">
-        <h2 class="title segoe font-bold">FILAMER CHRISTIAN UNIVERSITY, INC.</h2>
-        <h2 class="sub-title segoe font-bold italic">Roxas Avenue, Roxas City</h2>
-        <h2 class="sub-title segoe font-bold">PROPERTY CUSTODIAN'S OFFICE</h2>
-
-        <table class="w-full">
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Document Name:</td>
-                <td class="px-2 py-1 border border-black text-left">OFFICE SUPPLIES REQUISITION SLIP</td>
-                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Effectivity:</td>
-                <td class="px-2 py-1 border border-black text-left">August 15, 2022</td>
-            </tr>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Document No:</td>
-                <td class="px-2 py-1 border border-black text-left">PCO-2023-03</td>
-                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Issuing Office:</td>
-                <td class="px-2 py-1 border border-black text-left" colspan="2">Property Custodian's Office</td>
-            </tr>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Revision No:</td>
-                <td class="px-2 py-1 border border-black text-left">1</td>
-                <td class="px-2 py-1 segoe font-semibold border border-black text-left">Page No.</td>
-                <td class="px-2 py-1 border border-black text-left" colspan="2">1</td>
-            </tr>
-        </table>
-
-        <h2 class="segoe font-bold mt-2 mb-2">OFFICE SUPPLIES REQUESITION SLIP</h2>
-        <table class="w-full">
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold text-left">Department/Unit:</td>
-                <td class="px-2 py-1 text-left">
-                    {{ $record->department->department ?? 'N/A' }}</td>
-                <td class="px-2 py-1 segoe font-semibold text-left">Date:</td>
-                <td class="px-2 py-1 text-left">
-                    {{ \Carbon\Carbon::parse($record->stock_out_date)->format('M d, Y') }}
-                </td>
-            </tr>
-        </table>
+    <div class="text-center mb-5 relative">
+        <img class="fcu-icon" src="/img/login/fcu-icon.png" alt="" srcset="">
+        <h2 class="text-xl font-bold">FILAMER CHRISTIAN UNIVERSITY, INC</h2>
+        <h2 class="text-lg font-bold mb-3">Roxas Avenue, Roxas City</h2>
+        <h2 class="text-lg font-bold">Stock Out Receipt</h2>
+        <p class="text-gray-600 mb-3 text-sm">Date: {{ \Carbon\Carbon::parse($record->stock_out_date)->format('M d, Y') }}</p>
+        <h2 class="text-lg font-bold">{{ $record->department->department ?? 'N/A' }}
+        </h2>
     </div>
 
-    <table class="w-full border mt-2 mb-4 border-black">
+    <table class="w-full mb-8 text-sm">
         <thead>
             <tr class="bg-gray-100">
-                <th class="px-4 py-2 text-center segoe font-semibold border border-black">Qty</th>
-                <th class="px-4 py-2 text-left segoe font-semibold border border-black">Unit</th>
-                <th class="px-4 py-2 text-left segoe font-semibold border border-black">Items</th>
-                <th class="px-4 py-2 text-right segoe font-semibold border border-black">Unit Cost</th>
-                <th class="px-4 py-2 text-right segoe font-semibold border border-black">Amount</th>
+                <th class="px-4 py-2 text-left font-semibold">Item</th>
+                <th class="px-4 py-2 text-center font-semibold">Quantity</th>
+                <th class="px-4 py-2 text-right font-semibold">Price</th>
+                <th class="px-4 py-2 text-right font-semibold">Total</th>
             </tr>
         </thead>
         <tbody>
             @foreach($stockOutDetails as $detail)
                 <tr>
-                    <td class="border border-black px-4 py-2 text-center">{{ $detail['quantity'] }}</td>
-                    <td class="border border-black px-4 py-2 text-left">
-                        @if($detail['inventory_id'])
-                            {{ $detail['unit'] }}
-                        @else
-                            N/A
-                        @endif
+                    <td class="border-b px-4 py-2">{{ $detail['item'] }}</td>
+                    <td class="border-b px-4 py-2 text-center">{{ $detail['quantity'] }}</td>
+                    <td class="border-b px-4 py-2 text-right">
+                        ₱{{ number_format($detail['price'], 2) }}</td>
+                    <td class="border-b px-4 py-2 text-right">
+                        ₱{{ number_format($detail['quantity'] * $detail['price'], 2) }}
                     </td>
-                    <td class="border border-black px-4 py-2 text-left">{{ $detail['item'] }}</td>
-                    <td class="border border-black px-4 py-2 text-right">₱{{ number_format($detail['price'], 2) }}</td>
-                    <td class="border border-black px-4 py-2 text-right">₱{{ number_format($detail['quantity'] * $detail['price'], 2) }}</td>
                 </tr>
             @endforeach
         </tbody>
         <tfoot>
-            <tr class="segoe font-bold">
-                <td colspan="3"></td>
-                <td class="px-4 py-2 text-right border border-black">Grand Total:</td>
-                <td class="px-4 py-2 text-right border border-black">₱{{ number_format($totalPrice, 2) }}</td>
+            <tr class="font-bold">
+                <td class="px-4 py-2" colspan="3">Overall Price:</td>
+                <td class="px-4 py-2 text-right">₱{{ number_format($totalPrice, 2) }}</td>
             </tr>
         </tfoot>
     </table>
 
-    <table class="w-full">
-        <div>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold text-left">Requested by:</td>
-                <td class="px-2 py-1 segoe font-semibold text-center border-b border-black">
-                    {{ $record->receiver }}</td>
-                <td class="px-2 py-1 segoe font-semibold text-left pl-10">Stocks Available:</td>
-                <td class="px-2 py-1 segoe font-semibold text-left">Budget Available: </td>
-            </tr>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold text-left">Dept/Unit: </td>
-                <td class="px-2 py-1 segoe font-semibold text-center">
-                    {{ $record->department->department ?? 'N/A' }}</td>
-                <td class="px-2 py-1 segoe font-semibold text-left"></td>
-                <td class="px-2 py-1 segoe font-semibold text-left"></td>
-            </tr>
+    <div class="flex justify-between mt-12 pt-6 border-t text-sm">
+        <div class="text-center">
+            <p class="font-bold mb-1">Released by:</p>
+            <p>{{ (auth()->user() ? auth()->user()->first_name . ' ' . auth()->user()->last_name : 'N/A') }}
+            </p>
         </div>
-        <div>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold text-left">Noted by:</td>
-                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
-                <td class="px-2 py-1 segoe font-semibold text-left pl-10">SHERALYN A. DE LEON</td>
-                <td class="px-2 py-1 segoe font-semibold text-left">MELINOR B. SUMAYGAYSAY</td>
-            </tr>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold text-left"></td>
-                <td class="px-2 py-1 segoe font-semibold italic text-center">Head of Office</td>
-                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10">Acting Property Custodian</td>
-                <td class="px-2 py-1 segoe font-semibold italic text-left">OIC-Accountant</td>
-            </tr>
+        <div class="text-center">
+            <div>
+                <p class="font-bold mb-1">Received by:</p>
+                <p>{{ $record->receiver }}</p>
+            </div>
         </div>
-        <div>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold text-left">Released by:</td>
-                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
-                <td class="px-2 py-1 segoe font-semibold text-left pl-10"></td>
-                <td class="px-2 py-1 segoe font-semibold text-left"></td>
-            </tr>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold text-left"></td>
-                <td class="px-2 py-1 segoe font-semibold italic text-center">PCO Staff</td>
-                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10">Recommending Approval</td>
-                <td class="px-2 py-1 segoe font-semibold italic text-left">Approved</td>
-            </tr>
-        </div>
-        <div>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold text-left">Received by:</td>
-                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
-                <td class="px-2 py-1 segoe font-semibold text-left pl-10"></td>
-                <td class="px-2 py-1 segoe font-semibold text-left"></td>
-            </tr>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold text-left"></td>
-                <td class="px-2 py-1 segoe font-semibold italic text-center"></td>
-                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10"></td>
-                <td class="px-2 py-1 segoe font-semibold italic text-left"></td>
-            </tr>
-        </div>
-        <div>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold text-left">Checker:</td>
-                <td class="px-2 py-1 segoe font-semibold text-left border-b border-black"></td>
-                <td class="px-2 py-1 segoe font-semibold text-left pl-10">ESTHER S. ARCEÑO,CPA</td>
-                <td class="px-2 py-1 segoe font-semibold text-left">DR. GEORGE O. CORTEL</td>
-            </tr>
-            <tr>
-                <td class="px-2 py-1 segoe font-semibold text-left"></td>
-                <td class="px-2 py-1 segoe font-semibold italic text-center">PCO Staff</td>
-                <td class="px-2 py-1 segoe font-semibold italic text-left pl-10">TIC, VP-Finance</td>
-                <td class="px-2 py-1 segoe font-semibold italic text-left">President</td>
-            </tr>
-        </div>
-    </table>
+    </div>
 
     <div class="flex justify-between mt-8 no-print">
         <button onclick="window.history.back()"
