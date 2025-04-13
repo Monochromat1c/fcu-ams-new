@@ -186,6 +186,25 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
+        // Improved refresh handling
+        const hasSearchParams = window.location.search !== '';
+        
+        // Store a flag in sessionStorage to detect the first page load vs refresh
+        const isFirstLoad = sessionStorage.getItem('pageLoaded') !== 'true';
+        
+        if (hasSearchParams) {
+            if (!isFirstLoad) {
+                // This is a refresh with search params, redirect immediately
+                window.location.href = window.location.pathname;
+            } else {
+                // First load with search params, set the flag
+                sessionStorage.setItem('pageLoaded', 'true');
+            }
+        } else {
+            // No search params, update the flag
+            sessionStorage.setItem('pageLoaded', 'true');
+        }
+        
         const searchInput = document.getElementById('searchInput');
         const form = searchInput.closest('form');
 
@@ -201,6 +220,13 @@
             searchInput.value = '';
             window.location.href = '{{ route("asset.assigned") }}';
         });
+    });
+    
+    // Clear session flag when leaving the page
+    window.addEventListener('beforeunload', function() {
+        if (window.location.search === '') {
+            sessionStorage.removeItem('pageLoaded');
+        }
     });
 </script>
 
