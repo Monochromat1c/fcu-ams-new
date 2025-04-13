@@ -110,24 +110,21 @@
                                 onclick="openConfirmModal('return-all-form-{{ Str::slug($decodedAssigneeName) }}', 'Confirm Return All', 'Are you sure you want to return ALL assets assigned to {{ $decodedAssigneeName }}? This action cannot be undone.')"
                                 class="flex items-center bg-orange-500 text-white hover:bg-orange-600 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm" 
                                 title="Return All Assets for {{ $decodedAssigneeName }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="h-5 w-5 mr-2">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10l-5 5 5 5M20 4v7a4 4 0 01-4 4H4" />
                             </svg>
                             Return All Assets
                         </button>
                     </form>
                     
                     {{-- Turnover Button --}}
-                    <button type="button" 
-                            onclick="openTurnoverModal()"
-                            class="flex items-center bg-purple-600 text-white hover:bg-purple-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm" 
-                            title="Turnover Assets to Another Assignee">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="h-5 w-5 mr-2">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                    <button type="button" onclick="openTurnoverModal()"
+                        class="flex items-center bg-purple-600 text-white hover:bg-purple-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm"
+                        title="Turnover Assets to Another Assignee">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
                         Turnover Assets
                     </button>
@@ -212,10 +209,8 @@
                                                     onclick="openConfirmModal('return-asset-form-{{ $asset->id }}', 'Confirm Return', 'Do you want to return this asset? (Tag: {{ $asset->asset_tag_id }})')" 
                                                     class="text-blue-600 hover:text-blue-900 hover:scale-110 transition-transform duration-200" 
                                                     title="Return Asset">
-                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                                    stroke-width="1.5" stroke="currentColor" class="h-5 w-5">
-                                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                                        d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10l-5 5 5 5M20 4v7a4 4 0 01-4 4H4" />
                                                 </svg>
                                             </button>
                                         </form>

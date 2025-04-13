@@ -940,57 +940,38 @@ class AssetController extends Controller
      */
     public function turnoverAssetsForAssignee(Request $request, $assigneeName)
     {
-        // Add proper debugging to trace execution flow
-        \Log::debug("Starting turnover process for {$assigneeName}");
-        
         try {
-            $request->validate([
-                'new_assignee' => 'required|string|max:255',
-                'department_id' => 'required|exists:departments,id',
-                'turnover_date' => 'required|date',
-                'notes' => 'nullable|string',
-            ]);
-        } catch (\Exception $e) {
-            \Log::error("Validation error in turnover: " . $e->getMessage());
-            return redirect()->back()->withErrors($e->validator)->withInput();
-        }
-
-        $decodedAssigneeName = urldecode($assigneeName);
-        \Log::debug("Decoded assignee name: {$decodedAssigneeName}");
-        
-        // Get all assets for the current assignee
-        $assets = Asset::where('assigned_to', $decodedAssigneeName)->get();
-        \Log::debug("Found " . $assets->count() . " assets to turnover");
-        
-        if ($assets->isEmpty()) {
-            return redirect()->back()->with('error', 'No assets found for this assignee.')->withInput();
-        }
-
-        // Begin transaction to ensure all updates complete or none do
-        \DB::beginTransaction();
-        
-        try {
+            \DB::beginTransaction();
+            
+            $decodedAssigneeName = urldecode($assigneeName);
             $turnoverCount = 0;
+            $assets = Asset::where('assigned_to', $decodedAssigneeName)->get();
             
             foreach ($assets as $asset) {
-                \Log::debug("Processing asset ID: " . $asset->id);
+                // Extract existing notes
+                $existingNotes = $asset->notes;
+                $previousAssigneesNotes = '';
                 
-                // Store the old asset data for history
-                $oldAsset = clone $asset;
+                if ($existingNotes) {
+                    // Keep all existing notes
+                    $previousAssigneesNotes = $existingNotes . "\n\n";
+                }
                 
-                // Just set the notes to whatever the user typed, no formatting
-                $asset->notes = $request->notes;
+                // Add the new turnover record
+                $formattedDateTime = date('F j, Y \a\t g:i A');
+                $previousAssigneesNotes .= "{$decodedAssigneeName} turned over the asset to {$request->new_assignee} on {$formattedDateTime}";
                 
-                // Update asset directly
-                $asset->assigned_to = $request->new_assignee;
-                $asset->department_id = $request->department_id;
-                $asset->issued_date = $request->turnover_date;
+                // Add turnover notes if provided
+                if ($request->notes) {
+                    $previousAssigneesNotes .= "\nTurnover Notes: " . $request->notes;
+                }
                 
-                // Save the asset
-                $asset->save();
-                
-                // Use the existing asset history method for consistency
-                $this->storeEditHistory($asset, auth()->user(), $oldAsset);
+                $asset->update([
+                    'assigned_to' => $request->new_assignee,
+                    'department_id' => $request->department_id,
+                    'issued_date' => $request->turnover_date,
+                    'notes' => $previousAssigneesNotes
+                ]);
                 
                 $turnoverCount++;
             }
@@ -998,7 +979,6 @@ class AssetController extends Controller
             \DB::commit();
             \Log::debug("Turnover successful, processed {$turnoverCount} assets");
             
-            // Notify admin of successful turnover
             return redirect()->route('asset.assigned')
                 ->with('success', "{$turnoverCount} assets successfully turned over from {$decodedAssigneeName} to {$request->new_assignee}.");
         } catch (\Exception $e) {
@@ -1006,7 +986,6 @@ class AssetController extends Controller
             \Log::error("Error in turnover process: " . $e->getMessage());
             \Log::error("Stack trace: " . $e->getTraceAsString());
             
-            // Be more specific about the error
             return redirect()->back()
                 ->with('error', "Failed to turnover assets: " . $e->getMessage())
                 ->withInput();
