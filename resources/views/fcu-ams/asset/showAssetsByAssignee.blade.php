@@ -118,6 +118,19 @@
                             Return All Assets
                         </button>
                     </form>
+                    
+                    {{-- Turnover Button --}}
+                    <button type="button" 
+                            onclick="openTurnoverModal()"
+                            class="flex items-center bg-purple-600 text-white hover:bg-purple-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm" 
+                            title="Turnover Assets to Another Assignee">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="h-5 w-5 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" />
+                        </svg>
+                        Turnover Assets
+                    </button>
                     @endif
                 </div>
 
@@ -224,6 +237,74 @@
 
 @include('layouts.modals.confirmActionModal')
 
+{{-- Turnover Modal --}}
+<div id="turnover-modal" class="fixed inset-0 z-50 hidden overflow-y-auto overflow-x-hidden">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" onclick="closeTurnoverModal()"></div>
+        <div class="relative bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="flex items-center justify-between p-4 border-b rounded-t">
+                <h3 class="text-xl font-semibold text-gray-900">
+                    Turnover Assets
+                </h3>
+                <button type="button" onclick="closeTurnoverModal()" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+            <form action="{{ route('asset.assigned.turnover', ['assigneeName' => urlencode($decodedAssigneeName)]) }}" method="POST">
+                @csrf
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label for="new_assignee" class="block text-sm font-medium text-gray-700">New Assignee Name</label>
+                        <input type="text" name="new_assignee" id="new_assignee" required 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    </div>
+                    
+                    <div>
+                        <label for="department_id" class="block text-sm font-medium text-gray-700">Department</label>
+                        <select name="department_id" id="department_id" required
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                            <option value="">Select Department</option>
+                            @foreach(\App\Models\Department::orderBy('department')->get() as $department)
+                                <option value="{{ $department->id }}">{{ $department->department }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label for="turnover_date" class="block text-sm font-medium text-gray-700">Turnover Date</label>
+                        <input type="date" name="turnover_date" id="turnover_date" required value="{{ date('Y-m-d') }}" 
+                               class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                    </div>
+                    
+                    <div>
+                        <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
+                        <textarea name="notes" id="notes" rows="3" 
+                                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+                                  placeholder="Optional notes about this turnover"></textarea>
+                    </div>
+                    
+                    <div class="bg-gray-100 p-3 rounded-lg">
+                        <p class="text-sm text-gray-700 mb-1 font-medium">Turnover Summary:</p>
+                        <p class="text-sm text-gray-600">{{ $assets->count() }} assets will be turned over from <span class="font-semibold">{{ $decodedAssigneeName }}</span> to the new assignee.</p>
+                    </div>
+                </div>
+                <div class="flex items-center justify-end p-4 space-x-2 border-t border-gray-200 rounded-b">
+                    <button type="button" onclick="closeTurnoverModal()" 
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+                        Turnover Assets
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     // Script for search/clear specific to this page
     document.addEventListener('DOMContentLoaded', function() {
@@ -245,6 +326,14 @@
             form.submit(); // Submit to clear search on backend as well
         });
     });
+
+    function openTurnoverModal() {
+        document.getElementById('turnover-modal').classList.remove('hidden');
+    }
+    
+    function closeTurnoverModal() {
+        document.getElementById('turnover-modal').classList.add('hidden');
+    }
 </script>
 @stack('scripts') {{-- For the confirmActionModal script --}}
 
