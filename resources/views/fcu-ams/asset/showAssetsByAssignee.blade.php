@@ -96,7 +96,7 @@
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex flex-wrap justify-between mb-6 gap-4">
                 <div class="flex gap-2 items-center">
-                    <a href="{{ route('asset.assigned') }}" class="flex items-center bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm">
+                    <a href="{{ route('asset.assigned') }}" class="flex items-center bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm h-10">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                         </svg>
@@ -108,7 +108,7 @@
                         @csrf
                         <button type="button" 
                                 onclick="openConfirmModal('return-all-form-{{ Str::slug($decodedAssigneeName) }}', 'Confirm Return All', 'Are you sure you want to return ALL assets assigned to {{ $decodedAssigneeName }}? This action cannot be undone.')"
-                                class="flex items-center bg-orange-500 text-white hover:bg-orange-600 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm" 
+                                class="flex items-center bg-orange-500 text-white hover:bg-orange-600 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm h-10" 
                                 title="Return All Assets for {{ $decodedAssigneeName }}">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10l-5 5 5 5M20 4v7a4 4 0 01-4 4H4" />
@@ -119,7 +119,7 @@
                     
                     {{-- Turnover Button --}}
                     <button type="button" onclick="openTurnoverModal()"
-                        class="flex items-center bg-purple-600 text-white hover:bg-purple-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm"
+                        class="flex items-center bg-purple-600 text-white hover:bg-purple-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm h-10"
                         title="Turnover Assets to Another Assignee">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -130,7 +130,7 @@
                     </button>
                     @endif
                     @if(Auth::user()->role->role != 'Department')
-                    <button type="button" onclick="openFilterModal()"
+                    <!-- <button type="button" onclick="openFilterModal()"
                         class="flex items-center bg-gray-600 text-white hover:bg-gray-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm"
                         title="Filter Assets">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -140,18 +140,32 @@
                         @if($hasActiveFilters)
                         <span class="ml-2 bg-blue-500 text-white rounded-full px-2 py-1 text-xs">{{ $activeFilterCount }}</span>
                         @endif
-                    </button>
+                    </button> -->
                     @endif
                 </div>
 
-                
+                {{-- Search and Filter Container --}}
+                <div class="searchBox flex gap-2 items-center">
+                    {{-- Filter Button --}}
+                    @if(Auth::user()->role->role != 'Department')
+                    <button type="button" onclick="openFilterModal()"
+                        class="flex items-center bg-gray-600 text-white hover:bg-gray-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm min-w-[100px] justify-center h-10"
+                        title="Filter Assets">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                        </svg>
+                        Filter
+                        @if($hasActiveFilters)
+                        <span class="ml-2 bg-blue-500 text-white rounded-full px-2 py-1 text-xs">{{ $activeFilterCount }}</span>
+                        @endif
+                    </button>
+                    @endif
 
-                {{-- Search adapted for assets within this assignee's list --}}
-                <div class="searchBox flex gap-2">
-                    <form action="{{ route('asset.assigned.show', ['assigneeName' => urlencode($decodedAssigneeName)]) }}" method="GET" class="flex gap-2">
+                    {{-- Search Form --}}
+                    <form action="{{ route('asset.assigned.show', ['assigneeName' => urlencode($decodedAssigneeName)]) }}" method="GET" class="flex-1 flex gap-2">
                         <div class="relative flex-1">
                             <input type="text" name="search" value="{{ request('search') }}"
-                                class="w-full rounded-md border-0 py-2 pl-2 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                class="w-full rounded-md border-0 py-2 pl-2 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 h-10"
                                 placeholder="Search assets..." id="searchInput">
                             <div class="absolute inset-y-0 right-0 flex items-center pr-2">
                                 <button type="submit" class="text-gray-400 hover:text-blue-600">
@@ -159,16 +173,17 @@
                                 </button>
                             </div>
                         </div>
-                         {{-- Keep existing sort/direction if present --}}
+                        {{-- Hidden inputs for sort/direction --}}
                         @if(request('sort')) <input type="hidden" name="sort" value="{{ request('sort') }}"> @endif
                         @if(request('direction')) <input type="hidden" name="direction" value="{{ request('direction') }}"> @endif
-
-                        <button type="button" onclick="window.location.href='{{ route('asset.assigned.show', ['assigneeName' => urlencode($decodedAssigneeName)]) }}'"
-                            class="flex gap-1 items-center bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 ease-in rounded-md px-4 py-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
-                            Clear
-                        </button>
                     </form>
+
+                    {{-- Clear Button --}}
+                    <button type="button" onclick="window.location.href='{{ route('asset.assigned.show', ['assigneeName' => urlencode($decodedAssigneeName)]) }}'"
+                        class="flex gap-1 items-center bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm h-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+                        Clear
+                    </button>
                 </div>
             </div>
             <div class="overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-300">
@@ -492,8 +507,12 @@
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" onclick="closeFilterModal()"></div>
         <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl mx-auto">
+            {{-- Modal Header --}}
             <div class="flex items-center justify-between p-4 border-b rounded-t bg-gradient-to-r from-gray-600 to-gray-700">
-                <h3 class="text-xl font-semibold text-white">
+                <h3 class="text-xl font-semibold text-white flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                    </svg>
                     Filter Assets
                 </h3>
                 <button type="button" onclick="closeFilterModal()" class="text-white bg-transparent hover:bg-gray-800/50 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
@@ -503,71 +522,94 @@
                 </button>
             </div>
             <form method="GET" action="{{ route('asset.assigned.show', ['assigneeName' => urlencode($decodedAssigneeName)]) }}">
-                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto">
-                    {{-- Brand Filter --}}
-                    <div class="space-y-2">
-                        <h4 class="font-medium text-gray-700">Brand</h4>
-                        @foreach($allBrands as $brand)
-                        <label class="flex items-center space-x-2">
-                            <input type="checkbox" name="brands[]" value="{{ $brand->id }}" 
-                                {{ in_array($brand->id, (array)request('brands')) ? 'checked' : '' }}
-                                class="rounded border-gray-300 text-blue-600 shadow-sm">
-                            <span class="text-gray-600">{{ $brand->brand }}</span>
-                        </label>
-                        @endforeach
+                {{-- Modal Body with Filters --}}
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 max-h-[65vh] overflow-y-auto">
+                    {{-- Brand Filter Section --}}
+                    <div class="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50/50">
+                        <h4 class="text-base font-semibold text-gray-800 border-b pb-2 mb-3">Brand</h4>
+                        <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+                            @forelse($allBrands as $brand)
+                            <label class="flex items-center space-x-2 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                                <input type="checkbox" name="brands[]" value="{{ $brand->id }}" 
+                                    {{ in_array($brand->id, (array)request('brands')) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
+                                <span class="text-gray-700 text-sm">{{ $brand->brand }}</span>
+                            </label>
+                            @empty
+                            <p class="text-sm text-gray-500 italic">No brands available.</p>
+                            @endforelse
+                        </div>
                     </div>
                     
-                    {{-- Category Filter --}}
-                    <div class="space-y-2">
-                        <h4 class="font-medium text-gray-700">Category</h4>
-                        @foreach($allCategories as $category)
-                        <label class="flex items-center space-x-2">
-                            <input type="checkbox" name="categories[]" value="{{ $category->id }}"
-                                {{ in_array($category->id, (array)request('categories')) ? 'checked' : '' }}
-                                class="rounded border-gray-300 text-blue-600 shadow-sm">
-                            <span class="text-gray-600">{{ $category->category }}</span>
-                        </label>
-                        @endforeach
+                    {{-- Category Filter Section --}}
+                    <div class="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50/50">
+                        <h4 class="text-base font-semibold text-gray-800 border-b pb-2 mb-3">Category</h4>
+                        <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+                            @forelse($allCategories as $category)
+                            <label class="flex items-center space-x-2 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                                <input type="checkbox" name="categories[]" value="{{ $category->id }}"
+                                    {{ in_array($category->id, (array)request('categories')) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
+                                <span class="text-gray-700 text-sm">{{ $category->category }}</span>
+                            </label>
+                            @empty
+                            <p class="text-sm text-gray-500 italic">No categories available.</p>
+                            @endforelse
+                        </div>
                     </div>
                     
-                    {{-- Department Filter --}}
-                    <div class="space-y-2">
-                        <h4 class="font-medium text-gray-700">Department</h4>
-                        @foreach($allDepartments as $department)
-                        <label class="flex items-center space-x-2">
-                            <input type="checkbox" name="departments[]" value="{{ $department->id }}"
-                                {{ in_array($department->id, (array)request('departments')) ? 'checked' : '' }}
-                                class="rounded border-gray-300 text-blue-600 shadow-sm">
-                            <span class="text-gray-600">{{ $department->department }}</span>
-                        </label>
-                        @endforeach
+                    {{-- Department Filter Section --}}
+                    <div class="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50/50">
+                        <h4 class="text-base font-semibold text-gray-800 border-b pb-2 mb-3">Department</h4>
+                        <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+                            @forelse($allDepartments as $department)
+                            <label class="flex items-center space-x-2 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                                <input type="checkbox" name="departments[]" value="{{ $department->id }}"
+                                    {{ in_array($department->id, (array)request('departments')) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
+                                <span class="text-gray-700 text-sm">{{ $department->department }}</span>
+                            </label>
+                            @empty
+                            <p class="text-sm text-gray-500 italic">No departments available.</p>
+                            @endforelse
+                        </div>
                     </div>
                     
-                    {{-- Status Filter --}}
-                    <div class="space-y-2">
-                        <h4 class="font-medium text-gray-700">Status</h4>
-                        @foreach($allStatuses as $status)
-                        <label class="flex items-center space-x-2">
-                            <input type="checkbox" name="statuses[]" value="{{ $status->id }}"
-                                {{ in_array($status->id, (array)request('statuses')) ? 'checked' : '' }}
-                                class="rounded border-gray-300 text-blue-600 shadow-sm">
-                            <span class="text-gray-600">{{ $status->status }}</span>
-                        </label>
-                        @endforeach
+                    {{-- Status Filter Section --}}
+                    <div class="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50/50">
+                        <h4 class="text-base font-semibold text-gray-800 border-b pb-2 mb-3">Status</h4>
+                        <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+                            @forelse($allStatuses as $status)
+                            <label class="flex items-center space-x-2 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                                <input type="checkbox" name="statuses[]" value="{{ $status->id }}"
+                                    {{ in_array($status->id, (array)request('statuses')) ? 'checked' : '' }}
+                                    class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
+                                <span class="text-gray-700 text-sm">{{ $status->status }}</span>
+                            </label>
+                            @empty
+                            <p class="text-sm text-gray-500 italic">No statuses available.</p>
+                            @endforelse
+                        </div>
                     </div>
                 </div>
-                <div class="flex items-center justify-between p-4 border-t-2 border-gray-200 rounded-b bg-gray-50">
+                {{-- Modal Footer --}}
+                <div class="flex items-center justify-between p-4 border-t border-gray-200 rounded-b bg-gray-50">
+                    {{-- Clear All Button --}}
                     <button type="button" onclick="clearFilters()" 
-                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
                         Clear All
                     </button>
+                    {{-- Cancel and Apply Buttons --}}
                     <div class="space-x-3">
                         <button type="button" onclick="closeFilterModal()" 
-                                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
                             Cancel
                         </button>
                         <button type="submit" 
-                                class="inline-flex items-center px-5 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700">
+                                class="inline-flex items-center px-5 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
                             Apply Filters
                         </button>
                     </div>
