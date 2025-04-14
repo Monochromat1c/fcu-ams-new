@@ -394,10 +394,10 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-red-600">
                                         {{ $history->previous_assignee }}
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600">
                                         {{ $history->new_assignee }}
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-600">
