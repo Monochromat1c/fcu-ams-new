@@ -982,6 +982,63 @@ class AssetController extends Controller
         }
     }
 
+    /**
+     * Turn over a single asset to a new assignee
+     * 
+     * @param Request $request
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function turnoverSingleAsset(Request $request, $id)
+    {
+        try {
+            // Validate request data
+            $validated = $request->validate([
+                'new_assignee' => 'required|string|max:255',
+                'department_id' => 'required|exists:departments,id',
+                'turnover_date' => 'required|date',
+                'notes' => 'nullable|string'
+            ]);
+
+            DB::beginTransaction();
+            
+            $asset = Asset::findOrFail($id);
+            $previousAssignee = $asset->assigned_to;
+            
+            if (!$previousAssignee) {
+                throw new \Exception('Asset is not currently assigned to anyone');
+            }
+
+            // Create turnover history record
+            AssetTurnoverHistory::create([
+                'asset_id' => $asset->id,
+                'previous_assignee' => $previousAssignee,
+                'new_assignee' => $validated['new_assignee'],
+                'turnover_date' => Carbon::now(),
+                'notes' => $validated['notes'],
+                'user_id' => auth()->user()->id
+            ]);
+
+            // Update asset assignment
+            $asset->update([
+                'assigned_to' => $validated['new_assignee'],
+                'department_id' => $validated['department_id'],
+                'issued_date' => $validated['turnover_date'],
+                'notes' => $validated['notes'] ?? null
+            ]);
+            
+            DB::commit();
+            
+            return redirect()->back()->with('success', 
+                "Asset {$asset->asset_tag_id} successfully turned over from {$previousAssignee} to {$validated['new_assignee']}.");
+            
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error("Single asset turnover error: " . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to process turnover: ' . $e->getMessage());
+        }
+    }
+
     // Add this method to get turnover history for the view
     private function getAssetTurnoverHistory($assetId)
     {

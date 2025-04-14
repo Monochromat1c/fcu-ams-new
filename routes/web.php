@@ -68,7 +68,8 @@ Route::middleware(['auth.user'])->group(function () {
         Route::delete('/asset/{id}', 'destroy')->name('asset.destroy');
         Route::put('/asset/{id}/return', 'return')->name('asset.return');
         Route::put('/asset/{id}/return-from-assigned', 'returnFromAssigned')->name('asset.return.from.assigned');
-        Route::post('/asset/assigned/{assigneeName}/turnover', 'turnoverAssetsForAssignee')->name('asset.assigned.turnover');
+        Route::post('/asset/assigned/turnover/{assigneeName}', 'turnoverAssetsForAssignee')->name('asset.assigned.turnover');
+        Route::post('/asset/assigned/turnover-single/{id}', 'turnoverSingleAsset')->name('asset.assigned.turnover-single');
     }); 
 
     Route::controller(InventoryController::class)->group(function (){

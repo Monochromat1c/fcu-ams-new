@@ -345,13 +345,13 @@
                                     Date & Time
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Turned Over By
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Previous Assignee
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     New Assignee
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Turned Over By
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Notes
@@ -371,20 +371,15 @@
                                             {{ $history->turnover_date->format('F d, Y g:i A') }}
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{ $history->previous_assignee }}
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                        {{ $history->new_assignee }}
-                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-8 w-8">
                                                 @if($history->user->profile_picture)
-                                                    <img class="h-8 w-8 rounded-full object-cover" 
+                                                    <img class="h-8 w-8 rounded-full object-cover"
                                                         src="{{ asset($history->user->profile_picture) }}" alt="">
                                                 @else
-                                                    <div class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center">
+                                                    <div
+                                                        class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center">
                                                         <span class="text-white text-sm font-medium">
                                                             {{ substr($history->user->first_name, 0, 1) }}{{ substr($history->user->last_name, 0, 1) }}
                                                         </span>
@@ -393,10 +388,17 @@
                                             </div>
                                             <div class="ml-3">
                                                 <p class="text-sm font-medium text-gray-900">
-                                                    {{ $history->user->first_name }} {{ $history->user->last_name }}
+                                                    {{ $history->user->first_name }}
+                                                    {{ $history->user->last_name }}
                                                 </p>
                                             </div>
                                         </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $history->previous_assignee }}
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        {{ $history->new_assignee }}
                                     </td>
                                     <td class="px-6 py-4 text-sm text-gray-600">
                                         {{ $history->notes ?? 'No notes provided' }}
