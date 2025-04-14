@@ -824,10 +824,27 @@ class AssetController extends Controller
         $direction = $request->input('direction', 'asc');
 
         $query = Asset::with(['brand', 'category', 'status', 'condition', 'department'])
-            ->where('assigned_to', $decodedAssigneeName) // Filter by the specific assignee
+            ->where('assigned_to', $decodedAssigneeName)
             ->whereHas('condition', function ($q) {
-                $q->where('condition', '!=', 'Disposed'); // Exclude disposed assets
+                $q->where('condition', '!=', 'Disposed');
             });
+
+        // Add filter constraints
+        if ($request->filled('brands')) {
+            $query->whereIn('brand_id', $request->input('brands'));
+        }
+
+        if ($request->filled('categories')) {
+            $query->whereIn('category_id', $request->input('categories'));
+        }
+
+        if ($request->filled('departments')) {
+            $query->whereIn('department_id', $request->input('departments'));
+        }
+
+        if ($request->filled('statuses')) {
+            $query->whereIn('status_id', $request->input('statuses'));
+        }
 
         // Apply search within this assignee's assets
         if ($search) {
@@ -849,12 +866,31 @@ class AssetController extends Controller
        
         $assets = $query->paginate(15)->appends($request->except('page')); // Paginate the results for this assignee
 
-        return view('fcu-ams.asset.showAssetsByAssignee', compact(
-            'assets',
-            'decodedAssigneeName', // Pass the assignee name to the view
-            'search',
-            'sort',
-            'direction'
+        // Add these lines to get filter data
+        $allBrands = Brand::orderBy('brand')->get();
+        $allCategories = Category::orderBy('category')->get();
+        $allDepartments = Department::orderBy('department')->get();
+        $allStatuses = Status::orderBy('status')->get();
+        $allConditions = Condition::orderBy('condition')->get();
+
+        // Add to return statement
+        return view('fcu-ams.asset.showAssetsByAssignee', array_merge(
+            compact(
+                'assets',
+                'decodedAssigneeName', // Pass the assignee name to the view
+                'search',
+                'sort',
+                'direction'
+            ),
+            [
+                'allBrands' => $allBrands,
+                'allCategories' => $allCategories,
+                'allDepartments' => $allDepartments,
+                'allStatuses' => $allStatuses,
+                'allConditions' => $allConditions,
+                'hasActiveFilters' => count(array_filter($request->except(['page', 'search', 'sort', 'direction']))) > 0,
+                'activeFilterCount' => count(array_filter($request->except(['page', 'search', 'sort', 'direction'])))
+            ]
         ));
     }
 

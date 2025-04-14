@@ -129,6 +129,19 @@
                         Turnover Assets
                     </button>
                     @endif
+                    @if(Auth::user()->role->role != 'Department')
+                    <button type="button" onclick="openFilterModal()"
+                        class="flex items-center bg-gray-600 text-white hover:bg-gray-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm"
+                        title="Filter Assets">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                        </svg>
+                        Filter
+                        @if($hasActiveFilters)
+                        <span class="ml-2 bg-blue-500 text-white rounded-full px-2 py-1 text-xs">{{ $activeFilterCount }}</span>
+                        @endif
+                    </button>
+                    @endif
                 </div>
 
                 
@@ -474,6 +487,96 @@
     </div>
 </div>
 
+{{-- Filter Modal --}}
+<div id="filter-modal" class="fixed inset-0 z-50 hidden overflow-y-auto overflow-x-hidden">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" onclick="closeFilterModal()"></div>
+        <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl mx-auto">
+            <div class="flex items-center justify-between p-4 border-b rounded-t bg-gradient-to-r from-gray-600 to-gray-700">
+                <h3 class="text-xl font-semibold text-white">
+                    Filter Assets
+                </h3>
+                <button type="button" onclick="closeFilterModal()" class="text-white bg-transparent hover:bg-gray-800/50 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
+            </div>
+            <form method="GET" action="{{ route('asset.assigned.show', ['assigneeName' => urlencode($decodedAssigneeName)]) }}">
+                <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[70vh] overflow-y-auto">
+                    {{-- Brand Filter --}}
+                    <div class="space-y-2">
+                        <h4 class="font-medium text-gray-700">Brand</h4>
+                        @foreach($allBrands as $brand)
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="brands[]" value="{{ $brand->id }}" 
+                                {{ in_array($brand->id, (array)request('brands')) ? 'checked' : '' }}
+                                class="rounded border-gray-300 text-blue-600 shadow-sm">
+                            <span class="text-gray-600">{{ $brand->brand }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                    
+                    {{-- Category Filter --}}
+                    <div class="space-y-2">
+                        <h4 class="font-medium text-gray-700">Category</h4>
+                        @foreach($allCategories as $category)
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="categories[]" value="{{ $category->id }}"
+                                {{ in_array($category->id, (array)request('categories')) ? 'checked' : '' }}
+                                class="rounded border-gray-300 text-blue-600 shadow-sm">
+                            <span class="text-gray-600">{{ $category->category }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                    
+                    {{-- Department Filter --}}
+                    <div class="space-y-2">
+                        <h4 class="font-medium text-gray-700">Department</h4>
+                        @foreach($allDepartments as $department)
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="departments[]" value="{{ $department->id }}"
+                                {{ in_array($department->id, (array)request('departments')) ? 'checked' : '' }}
+                                class="rounded border-gray-300 text-blue-600 shadow-sm">
+                            <span class="text-gray-600">{{ $department->department }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                    
+                    {{-- Status Filter --}}
+                    <div class="space-y-2">
+                        <h4 class="font-medium text-gray-700">Status</h4>
+                        @foreach($allStatuses as $status)
+                        <label class="flex items-center space-x-2">
+                            <input type="checkbox" name="statuses[]" value="{{ $status->id }}"
+                                {{ in_array($status->id, (array)request('statuses')) ? 'checked' : '' }}
+                                class="rounded border-gray-300 text-blue-600 shadow-sm">
+                            <span class="text-gray-600">{{ $status->status }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                </div>
+                <div class="flex items-center justify-between p-4 border-t-2 border-gray-200 rounded-b bg-gray-50">
+                    <button type="button" onclick="clearFilters()" 
+                            class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                        Clear All
+                    </button>
+                    <div class="space-x-3">
+                        <button type="button" onclick="closeFilterModal()" 
+                                class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            Cancel
+                        </button>
+                        <button type="submit" 
+                                class="inline-flex items-center px-5 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700">
+                            Apply Filters
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     // Script for search/clear specific to this page
     document.addEventListener('DOMContentLoaded', function() {
@@ -544,6 +647,24 @@
             });
         }
     });
+
+    // Filter Modal Functions
+    function openFilterModal() {
+        document.getElementById('filter-modal').classList.remove('hidden');
+    }
+
+    function closeFilterModal() {
+        document.getElementById('filter-modal').classList.add('hidden');
+    }
+
+    function clearFilters() {
+        const url = new URL(window.location.href);
+        url.searchParams.delete('brands[]');
+        url.searchParams.delete('categories[]');
+        url.searchParams.delete('departments[]');
+        url.searchParams.delete('statuses[]');
+        window.location.href = url.toString();
+    }
 </script>
 @stack('scripts') {{-- For the confirmActionModal script --}}
 
