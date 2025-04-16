@@ -119,10 +119,162 @@
         <div class="m-3">
             @include('layouts.messageWithoutTimerForError')
         </div>
+        {{-- Filter Modal --}}
+        <div id="filter-modal" class="fixed inset-0 z-50 hidden overflow-y-auto overflow-x-hidden">
+            <div class="flex items-center justify-center min-h-screen px-4">
+                <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" onclick="closeFilterModal()"></div>
+                <div class="relative bg-white rounded-lg shadow-xl w-full max-w-2xl mx-auto">
+                    <div class="flex items-center justify-between p-4 border-b rounded-t bg-gradient-to-r from-gray-600 to-gray-700">
+                        <h3 class="text-xl font-semibold text-white flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                            </svg>
+                            Filter Assignees
+                        </h3>
+                        <button type="button" onclick="closeFilterModal()" class="text-white bg-transparent hover:bg-gray-800/50 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <form method="GET" action="{{ route('asset.assigned') }}">
+                        <div class="p-6 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 max-h-[65vh] overflow-y-auto">
+                            {{-- Category --}}
+                            <div class="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50/50">
+                                <h4 class="text-base font-semibold text-gray-800 border-b pb-2 mb-3">Category</h4>
+                                <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+                                    @foreach($allCategories as $category)
+                                    <label class="flex items-center space-x-2 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                                        <input type="checkbox" name="categories[]" value="{{ $category->id }}"
+                                            {{ in_array($category->id, (array)request('categories')) ? 'checked' : '' }}
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
+                                        <span class="text-gray-700 text-sm">{{ $category->category }}</span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                            {{-- Department --}}
+                            <div class="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50/50">
+                                <h4 class="text-base font-semibold text-gray-800 border-b pb-2 mb-3">Department</h4>
+                                <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+                                    @foreach($allDepartments as $department)
+                                    <label class="flex items-center space-x-2 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                                        <input type="checkbox" name="departments[]" value="{{ $department->id }}"
+                                            {{ in_array($department->id, (array)request('departments')) ? 'checked' : '' }}
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
+                                        <span class="text-gray-700 text-sm">{{ $department->department }}</span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                            {{-- Condition --}}
+                            <div class="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50/50">
+                                <h4 class="text-base font-semibold text-gray-800 border-b pb-2 mb-3">Condition</h4>
+                                <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+                                    @foreach($allConditions as $condition)
+                                    <label class="flex items-center space-x-2 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                                        <input type="checkbox" name="conditions[]" value="{{ $condition->id }}"
+                                            {{ in_array($condition->id, (array)request('conditions')) ? 'checked' : '' }}
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
+                                        <span class="text-gray-700 text-sm">{{ $condition->condition }}</span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                            {{-- Site --}}
+                            <div class="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50/50">
+                                <h4 class="text-base font-semibold text-gray-800 border-b pb-2 mb-3">Site</h4>
+                                <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+                                    @foreach($allSites as $site)
+                                    <label class="flex items-center space-x-2 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                                        <input type="checkbox" name="sites[]" value="{{ $site->id }}"
+                                            {{ in_array($site->id, (array)request('sites')) ? 'checked' : '' }}
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
+                                        <span class="text-gray-700 text-sm">{{ $site->site }}</span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                            {{-- Location --}}
+                            <div class="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50/50">
+                                <h4 class="text-base font-semibold text-gray-800 border-b pb-2 mb-3">Location</h4>
+                                <div class="space-y-2 max-h-48 overflow-y-auto pr-2">
+                                    @foreach($allLocations as $location)
+                                    <label class="flex items-center space-x-2 hover:bg-gray-100 px-2 py-1 rounded transition-colors">
+                                        <input type="checkbox" name="locations[]" value="{{ $location->id }}"
+                                            {{ in_array($location->id, (array)request('locations')) ? 'checked' : '' }}
+                                            class="rounded border-gray-300 text-blue-600 shadow-sm focus:ring-blue-500">
+                                        <span class="text-gray-700 text-sm">{{ $location->location }}</span>
+                                    </label>
+                                    @endforeach
+                                </div>
+                            </div>
+                            {{-- Sorting --}}
+                            <div class="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50/50 col-span-2">
+                                <h4 class="text-base font-semibold text-gray-800 border-b pb-2 mb-3">Sort By</h4>
+                                <div class="flex flex-wrap gap-4">
+                                    <label>
+                                        <input type="radio" name="sort" value="assigned_to" {{ request('sort', 'assigned_to') == 'assigned_to' ? 'checked' : '' }}>
+                                        <span class="ml-1">Assignee Name</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="sort" value="asset_count" {{ request('sort') == 'asset_count' ? 'checked' : '' }}>
+                                        <span class="ml-1">Total Assets</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="sort" value="total_cost" {{ request('sort') == 'total_cost' ? 'checked' : '' }}>
+                                        <span class="ml-1">Total Cost</span>
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="sort" value="last_issued_date" {{ request('sort') == 'last_issued_date' ? 'checked' : '' }}>
+                                        <span class="ml-1">Last Issued Date</span>
+                                    </label>
+                                    <select name="direction" class="ml-4 border rounded px-2 py-1">
+                                        <option value="asc" {{ request('direction', 'asc') == 'asc' ? 'selected' : '' }}>Ascending</option>
+                                        <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}>Descending</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-4 border-t border-gray-200 rounded-b bg-gray-50">
+                            <button type="button" onclick="clearFilters()" 
+                                    class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                                Clear All
+                            </button>
+                            <div class="space-x-3">
+                                <button type="button" onclick="closeFilterModal()" 
+                                        class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors">
+                                    Cancel
+                                </button>
+                                <button type="submit" 
+                                        class="inline-flex items-center px-5 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors">
+                                    Apply Filters
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex justify-between mb-6">
                 <h2 class="text-2xl font-bold my-auto">Assignee List</h2>
-                <div class="searchBox flex gap-2">
+                <div class="searchBox flex gap-2 items-center">
+                    {{-- Filter Button --}}
+                <div class="flex justify-end">
+                        <button type="button"
+                            onclick="openFilterModal()"
+                            class="flex items-center bg-gray-600 text-white hover:bg-gray-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm min-w-[100px] justify-center h-10"
+                            title="Filter Assignees">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                            </svg>
+                            Filter
+                        </button>
+                    </div>
                     <form action="{{ route('asset.assigned') }}" method="GET" class="flex gap-2">
                         <div class="relative flex-1">
                             <input type="text" name="search" value="{{ request('search') }}"
@@ -239,6 +391,16 @@
             sessionStorage.removeItem('pageLoaded');
         }
     });
+
+    function openFilterModal() {
+        document.getElementById('filter-modal').classList.remove('hidden');
+    }
+    function closeFilterModal() {
+        document.getElementById('filter-modal').classList.add('hidden');
+    }
+    function clearFilters() {
+        window.location.href = '{{ route("asset.assigned") }}';
+    }
 </script>
 
 @endsection 

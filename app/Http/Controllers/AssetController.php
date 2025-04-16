@@ -782,6 +782,14 @@ class AssetController extends Controller
     public function assignedAssets(Request $request)
     {
         $search = $request->input('search');
+        // Add filter parameters
+        $categories = $request->input('categories', []);
+        $departments = $request->input('departments', []);
+        $conditions = $request->input('conditions', []);
+        $sites = $request->input('sites', []);
+        $locations = $request->input('locations', []);
+        $sort = $request->input('sort', 'assigned_to');
+        $direction = $request->input('direction', 'asc');
 
         $query = Asset::query()
             ->whereNotNull('assigned_to')
@@ -789,23 +797,57 @@ class AssetController extends Controller
             ->whereHas('condition', function ($q) {
                 $q->where('condition', '!=', 'Disposed');
             })
-            ->selectRaw('assigned_to, 
-                         COUNT(*) as asset_count, 
-                         SUM(cost) as total_cost, 
-                         MAX(issued_date) as last_issued_date') // Added SUM(cost) and MAX(issued_date)
+            ->selectRaw('assigned_to, COUNT(*) as asset_count, SUM(cost) as total_cost, MAX(issued_date) as last_issued_date')
             ->groupBy('assigned_to');
 
         if ($search) {
             $query->where('assigned_to', 'like', '%' . $search . '%');
         }
-        
-        $query->orderBy('assigned_to', 'asc');
+        if (!empty($categories)) {
+            $query->whereHas('category', function ($q) use ($categories) {
+                $q->whereIn('id', $categories);
+            });
+        }
+        if (!empty($departments)) {
+            $query->whereHas('department', function ($q) use ($departments) {
+                $q->whereIn('id', $departments);
+            });
+        }
+        if (!empty($conditions)) {
+            $query->whereHas('condition', function ($q) use ($conditions) {
+                $q->whereIn('id', $conditions);
+            });
+        }
+        if (!empty($sites)) {
+            $query->whereHas('site', function ($q) use ($sites) {
+                $q->whereIn('id', $sites);
+            });
+        }
+        if (!empty($locations)) {
+            $query->whereHas('location', function ($q) use ($locations) {
+                $q->whereIn('id', $locations);
+            });
+        }
+
+        // Sorting
+        $sortable = ['assigned_to', 'asset_count', 'total_cost', 'last_issued_date'];
+        if (in_array($sort, $sortable)) {
+            $query->orderBy($sort, $direction);
+        } else {
+            $query->orderBy('assigned_to', 'asc');
+        }
 
         $assignees = $query->paginate(20)->appends($request->all());
 
+        // For filter modal options
+        $allCategories = \App\Models\Category::orderBy('category')->get();
+        $allDepartments = \App\Models\Department::orderBy('department')->get();
+        $allConditions = \App\Models\Condition::orderBy('condition')->get();
+        $allSites = \App\Models\Site::orderBy('site')->get();
+        $allLocations = \App\Models\Location::orderBy('location')->get();
+
         return view('fcu-ams.asset.assignedAssets', compact(
-            'assignees',
-            'search'
+            'assignees', 'search', 'allCategories', 'allDepartments', 'allConditions', 'allSites', 'allLocations'
         ));
     }
 
