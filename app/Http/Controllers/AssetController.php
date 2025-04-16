@@ -1033,6 +1033,7 @@ class AssetController extends Controller
                     'previous_assignee' => $decodedAssigneeName,
                     'new_assignee' => $validated['new_assignee'],
                     'turnover_date' => $turnoverDateTime,
+                    'assignment_start_date' => $asset->issued_date,
                     'notes' => $validated['notes'],
                     'user_id' => auth()->user()->id
                 ]);
@@ -1093,6 +1094,7 @@ class AssetController extends Controller
                 'previous_assignee' => $previousAssignee,
                 'new_assignee' => $validated['new_assignee'],
                 'turnover_date' => Carbon::now(),
+                'assignment_start_date' => $asset->issued_date,
                 'notes' => $validated['notes'],
                 'user_id' => auth()->user()->id
             ]);

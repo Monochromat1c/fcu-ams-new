@@ -13,12 +13,14 @@ class AssetTurnoverHistory extends Model
         'previous_assignee',
         'new_assignee',
         'turnover_date',
+        'assignment_start_date',
         'notes',
         'user_id'
     ];
 
     protected $casts = [
-        'turnover_date' => 'datetime'
+        'turnover_date' => 'datetime',
+        'assignment_start_date' => 'date'
     ];
 
     public function asset()

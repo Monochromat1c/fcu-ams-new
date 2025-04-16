@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('asset_turnover_history', function (Blueprint $table) {
             $table->id();
             $table->foreignId('asset_id')->constrained('assets')->onDelete('cascade');
+            $table->date('assignment_start_date')->nullable();
             $table->string('previous_assignee');
             $table->string('new_assignee');
             $table->dateTime('turnover_date');
