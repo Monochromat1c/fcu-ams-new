@@ -261,7 +261,7 @@ class InventoryController extends Controller
 
         $inventory->save();
 
-        return redirect()->back()->with('success', 'Inventory updated successfully.');
+        return redirect()->route('inventory.list')->with('success', 'Inventory updated successfully.');
     }
 
     private function storeEditHistory($inventory, $user, $oldInventory)

@@ -492,9 +492,6 @@
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Date & Time
-                                </th>
-                                <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Modified by
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -505,17 +502,7 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($editHistory as $history)
                                 <tr class="hover:bg-gray-50 transition-colors duration-200">
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                        <div class="flex items-center gap-2">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
-                                                stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-400">
-                                                <path stroke-linecap="round" stroke-linejoin="round" 
-                                                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                                            </svg>
-                                            {{ $history->created_at->format('F d, Y g:i A') }}
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
+                                    <td class="px-6 py-4 whitespace-nowrap align-top">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-8 w-8">
                                                 @if($history->user->profile_picture)
@@ -533,6 +520,14 @@
                                                 <p class="text-sm font-medium text-gray-900">
                                                     {{ $history->user->first_name }} {{ $history->user->last_name }}
                                                 </p>
+                                                <div class="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+                                                        stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-400">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" 
+                                                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                                                    </svg>
+                                                    {{ $history->created_at->format('F d, Y g:i A') }}
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
