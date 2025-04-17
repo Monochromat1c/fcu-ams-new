@@ -325,32 +325,27 @@
             
         @if($turnoverHistory->isNotEmpty())
             <div class="bg-white p-6 shadow-lg m-3 rounded-lg">
-                <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-2">
+                <div class="flex justify-between items-center mb-6">
                     <div class="flex items-center gap-3">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 text-purple-600" fill="none"
-                            viewBox="0 0 24 24" stroke="currentColor" >
+                            viewBox="0 0 24 24"
+                            stroke="currentColor" >
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                         </svg>
                         <h2 class="text-2xl font-bold text-gray-800">Turnover History</h2>
                     </div>
-                    <div class="flex items-center gap-2 bg-blue-50 border border-blue-200 rounded-lg px-4 py-2 shadow-sm">
-                        <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V7h2v2z"/>
-                        </svg>
-                        <span class="text-sm font-bold text-blue-700 uppercase">Current Assignee:</span>
-                        <span class="text-base font-semibold text-blue-900 ml-1">{{ $asset->assigned_to ?? 'Not Assigned' }}</span>
-                    </div>
+                    <span class="text-sm text-gray-500">Showing latest turnovers</span>
                 </div>
                 <div class="overflow-hidden rounded-lg border border-gray-200">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Processed By
+                                    Turned Over By
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Previous Assignee
+                                    Transferred To
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Notes
@@ -360,37 +355,6 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($turnoverHistory as $history)
                                 <tr class="hover:bg-gray-50 transition-colors duration-200">
-                                    <td class="px-6 py-4 whitespace-nowrap align-top">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-8 w-8">
-                                                @if($history->user->profile_picture)
-                                                    <img class="h-8 w-8 rounded-full object-cover"
-                                                        src="{{ asset($history->user->profile_picture) }}" alt="">
-                                                @else
-                                                    <div
-                                                        class="h-8 w-8 rounded-full bg-purple-600 flex items-center justify-center">
-                                                        <span class="text-white text-sm font-medium">
-                                                            {{ substr($history->user->first_name, 0, 1) }}{{ substr($history->user->last_name, 0, 1) }}
-                                                        </span>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                            <div class="ml-3">
-                                                <p class="text-sm font-medium text-gray-900">
-                                                    {{ $history->user->first_name }}
-                                                    {{ $history->user->last_name }}
-                                                </p>
-                                                <div class="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
-                                                        stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-400">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" 
-                                                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
-                                                    </svg>
-                                                    {{ $history->turnover_date->format('F d, Y g:i A') }}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
                                     <td class="px-6 py-4 whitespace-nowrap align-top text-sm text-red-600">
                                         <div>
                                             {{ $history->previous_assignee }}
@@ -402,6 +366,35 @@
                                                             d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                                                     </svg>
                                                     {{ $history->assignment_start_date->format('M d, Y') }} – {{ $history->turnover_date->format('M d, Y') }}
+                                                </div>
+                                            @else
+                                                <div class="flex items-center gap-1 text-xs text-gray-400 mt-0.5 italic">
+                                                    N/A
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 align-top">
+                                        <div class="flex flex-col gap-1">
+                                            <div class="flex items-center gap-2">
+                                                {{ $history->new_assignee }}
+                                                @if($loop->first && $history->new_assignee === $asset->assigned_to)
+                                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full border border-blue-300 bg-blue-50 shadow-sm text-xs font-bold uppercase text-blue-700 ml-1">
+                                                        <svg class="w-3 h-3 mr-1 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                                            <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V7h2v2z"/>
+                                                        </svg>
+                                                        Current Owner
+                                                    </span>
+                                                @endif
+                                            </div>
+                                            @if($history->turnover_date)
+                                                <div class="flex items-center gap-1 text-xs text-gray-500 mt-0.5">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                        stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-400">
+                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                                                    </svg>
+                                                    Assigned: {{ $history->turnover_date->format('M d, Y') }}
                                                 </div>
                                             @else
                                                 <div class="flex items-center gap-1 text-xs text-gray-400 mt-0.5 italic">
