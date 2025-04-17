@@ -591,6 +591,41 @@
                             @endforelse
                         </div>
                     </div>
+
+                    {{-- Sort By Section (NEW) --}}
+                    <div class="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50/50 col-span-2">
+                        <h4 class="text-base font-semibold text-gray-800 border-b pb-2 mb-3">Sort By</h4>
+                        <div class="flex flex-wrap gap-4">
+                            <label>
+                                <input type="radio" name="sort" value="asset_tag_id" {{ request('sort', 'asset_tag_id') == 'asset_tag_id' ? 'checked' : '' }}>
+                                <span class="ml-1">Asset Tag ID</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="sort" value="brand_id" {{ request('sort') == 'brand_id' ? 'checked' : '' }}>
+                                <span class="ml-1">Brand</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="sort" value="model" {{ request('sort') == 'model' ? 'checked' : '' }}>
+                                <span class="ml-1">Model</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="sort" value="category_id" {{ request('sort') == 'category_id' ? 'checked' : '' }}>
+                                <span class="ml-1">Category</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="sort" value="department_id" {{ request('sort') == 'department_id' ? 'checked' : '' }}>
+                                <span class="ml-1">Department</span>
+                            </label>
+                            <label>
+                                <input type="radio" name="sort" value="issued_date" {{ request('sort') == 'issued_date' ? 'checked' : '' }}>
+                                <span class="ml-1">Issued Date</span>
+                            </label>
+                            <select name="direction" class="ml-4 border rounded px-2 py-1">
+                                <option value="asc" {{ request('direction', 'asc') == 'asc' ? 'selected' : '' }}>Ascending</option>
+                                <option value="desc" {{ request('direction') == 'desc' ? 'selected' : '' }}>Descending</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 {{-- Modal Footer --}}
                 <div class="flex items-center justify-between p-4 border-t border-gray-200 rounded-b bg-gray-50">
