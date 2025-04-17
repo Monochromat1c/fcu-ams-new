@@ -736,7 +736,7 @@
         }
 
         const searchInput = document.getElementById('searchInput');
-        const tableBody = document.querySelector('tbody');
+        const tableBody = document.querySelector('tbody'); // Get reference to tbody
         let typingTimer;
         const doneTypingInterval = 300;
 
@@ -794,28 +794,40 @@
         }
 
         function updateTable(assets) {
-            tableBody.innerHTML = '';
+            tableBody.innerHTML = ''; // Clear existing rows
             
             assets.forEach(asset => {
                 const row = document.createElement('tr');
-                row.className = 'hover:bg-gray-50 transition-colors duration-200 cursor-pointer';
-                row.onclick = () => window.location.href = `/asset/${asset.id}/view`;
+                row.className = 'hover:bg-gray-50 transition-colors duration-200'; // Removed cursor-pointer as row isn't clickable
+                // Removed row click handler:
+                // row.onclick = () => window.location.href = `/asset/${asset.id}/view`; 
                 
                 const statusClass = getStatusClass(asset.status_name);
-                const userRole = '{{ Auth::user()->role->role }}';
-                const actionButtons = userRole !== 'Department' ? `
-                    <a href="/asset/${asset.id}/edit" class="text-indigo-600 hover:text-indigo-900">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                    </a>
-                    <button onclick="event.stopPropagation(); document.getElementById('delete-asset-modal${asset.id}').classList.remove('hidden')" class="text-red-600 hover:text-red-900">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
-                    </button>
-                ` : '';
+                const userRole = '{{ Auth::user()->role->role }}'; 
 
+                // Define action buttons conditionally using data attributes for delegation
+                let actionButtons = '';
+                if (userRole !== 'Department') {
+                    actionButtons = `
+                        <a href="/asset/${asset.id}/edit" class="text-indigo-600 hover:text-indigo-900">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </a>
+                        <button type="button" class="text-red-600 hover:text-red-900 delete-asset-button" data-asset-id="${asset.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                        </button>
+                        <button type="button" class="text-orange-600 hover:text-orange-900 transition-transform duration-200 dispose-asset-button" data-asset-id="${asset.id}" title="Dispose Asset">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 pointer-events-none">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                            </svg>
+                        </button>
+                    `;
+                }
+
+                // Set innerHTML for the row (same as before)
                 row.innerHTML = `
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${asset.asset_tag_id}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${asset.assigned_to || 'Not currently assigned'}</td>
@@ -832,7 +844,7 @@
                             ${asset.condition_name}
                         </span>
                     </td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" onclick="event.stopPropagation();">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center"> 
                         <div class="flex justify-center space-x-2">
                             <a href="/asset/${asset.id}/view" class="text-green-600 hover:text-blue-900 hover:scale-110 transition-transform duration-200">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -840,7 +852,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                 </svg>
                             </a>
-                            ${actionButtons}
+                            ${actionButtons} 
                         </div>
                     </td>
                 `;
@@ -849,7 +861,38 @@
             });
         }
 
+        // Event Delegation for dynamic buttons (keep existing function)
+        tableBody.addEventListener('click', function(event) {
+            // ... (rest of event delegation logic remains the same) ...
+            const deleteButton = event.target.closest('.delete-asset-button');
+            const disposeButton = event.target.closest('.dispose-asset-button');
+
+            if (deleteButton) {
+                event.preventDefault(); 
+                event.stopPropagation(); 
+                const assetId = deleteButton.getAttribute('data-asset-id');
+                const modal = document.getElementById(`delete-asset-modal${assetId}`);
+                if (modal) {
+                    modal.classList.remove('hidden');
+                }
+            } else if (disposeButton) {
+                event.preventDefault();
+                event.stopPropagation(); 
+                const assetId = disposeButton.getAttribute('data-asset-id');
+                const modal = document.getElementById(`dispose-asset-modal-${assetId}`);
+                if (modal) {
+                    modal.classList.remove('hidden');
+                    const amountInput = modal.querySelector(`#disposed_amount_${assetId}`);
+                    const statusSelect = modal.querySelector(`#disposed_status_id_${assetId}`);
+                    if(amountInput) amountInput.value = '';
+                    if(statusSelect) statusSelect.value = '';
+                    toggleDisposeAmountRequired(assetId); 
+                }
+            }
+        });
+
         function getStatusClass(status) {
+            // ... (keep existing function) ...
             switch(status) {
                 case 'Available':
                     return 'bg-green-100 text-green-800';
@@ -902,9 +945,7 @@
         const amountInput = document.getElementById(`disposed_amount_${assetId}`);
         const requiredStar = document.getElementById(`disposed_amount_required_star_${assetId}`);
         
-        // Get the selected option element
         const selectedOption = statusSelect.options[statusSelect.selectedIndex];
-        // Get the status name from the data attribute
         const selectedStatusName = selectedOption ? selectedOption.getAttribute('data-status-name') : null;
 
         if (selectedStatusName && selectedStatusName.toLowerCase() === 'sold') {
@@ -916,19 +957,13 @@
         }
     }
 
-    // Initial check in case a value is pre-selected (though unlikely here)
+    // Initial check (keep existing function)
     document.addEventListener('DOMContentLoaded', function() {
         document.querySelectorAll('select[id^="disposed_status_id_"]').forEach(select => {
             const assetId = select.id.split('_').pop();
             toggleDisposeAmountRequired(assetId);
         });
-        
-        // Reset filters on page load/reload
-        if (performance.navigation.type === 1) { // Check if it's a page reload
-            window.location.href = "{{ route('asset.list') }}";
-        }
-
-        // ... rest of your existing script ...
+        // ... (keep existing DOMContentLoaded code)
     });
 </script>
 

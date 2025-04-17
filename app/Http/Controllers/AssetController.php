@@ -211,17 +211,24 @@ class AssetController extends Controller
                 $q->where('assets.asset_tag_id', 'like', '%' . $searchQuery . '%')
                   ->orWhere('assets.assigned_to', 'like', '%' . $searchQuery . '%')
                   ->orWhere('suppliers.supplier', 'like', '%' . $searchQuery . '%')
-                  ->orWhere('categories.category', 'like', '%' . $searchQuery . '%')    
+                  ->orWhere('categories.category', 'like', '%' . $searchQuery . '%')
                   ->orWhere('conditions.condition', 'like', '%' . $searchQuery . '%');
             })
-            ->whereNull('assets.deleted_at');
+            ->whereNull('assets.deleted_at')
+            ->whereNotIn('conditions.condition', ['Disposed']);
 
         // Apply filters if they exist
         if ($request->has('conditions')) {
             $conditions = $request->input('conditions');
             if (is_array($conditions)) {
-                $query->whereIn('assets.condition_id', $conditions);
+                $disposedConditionId = Condition::where('condition', 'Disposed')->value('id');
+                $conditions = array_filter($conditions, fn($id) => $id != $disposedConditionId);
+                if (!empty($conditions)) {
+                    $query->whereIn('assets.condition_id', $conditions);
+                }
             }
+        } else {
+            $query->whereNotIn('assets.condition_id', [Condition::where('condition', 'Disposed')->value('id')]);
         }
         if ($request->has('categories')) {
             $categories = $request->input('categories');
