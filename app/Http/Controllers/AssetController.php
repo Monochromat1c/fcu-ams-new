@@ -1124,7 +1124,7 @@ class AssetController extends Controller
     {
         return AssetTurnoverHistory::where('asset_id', $assetId)
             ->with('user')
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->paginate(5);
     }
 }

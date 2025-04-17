@@ -377,7 +377,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap align-top text-sm">
                                         <div class="flex flex-col gap-1">
                                             <div class="flex items-center gap-2">
-                                                @if($loop->first && $history->new_assignee === $asset->assigned_to)
+                                                @if($loop->last && $history->new_assignee === $asset->assigned_to)
                                                     <span class="text-green-600 font-semibold">
                                                         {{ $history->new_assignee }}
                                                     </span>
