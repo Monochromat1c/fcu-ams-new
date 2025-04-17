@@ -682,7 +682,7 @@
             <div class="mb-4">
                 <label for="condition_id" class="block text-sm font-medium text-gray-700 mb-1">Asset Condition</label>
                 <select name="condition_id" id="condition_id" class="w-full border rounded p-2" required>
-                    @foreach(\App\Models\Condition::orderBy('condition')->get() as $condition)
+                    @foreach(\App\Models\Condition::where('condition', '!=', 'Disposed')->orderBy('condition')->get() as $condition)
                         <option value="{{ $condition->id }}">
                             {{ $condition->condition }}
                         </option>
@@ -839,7 +839,7 @@
                 <label for="all_condition_id" class="block text-sm font-medium text-gray-700 mb-1">Asset Condition</label>
                 <select name="condition_id" id="all_condition_id" class="w-full border rounded p-2" required>
                     <option value="">Select Condition</option>
-                    @foreach(\App\Models\Condition::orderBy('condition')->get() as $condition)
+                    @foreach(\App\Models\Condition::where('condition', '!=', 'Disposed')->orderBy('condition')->get() as $condition)
                         <option value="{{ $condition->id }}">{{ $condition->condition }}</option>
                     @endforeach
                 </select>
