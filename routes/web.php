@@ -65,6 +65,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/asset/{id}', 'update')->name('asset.update');
         Route::post('/asset/import', 'import')->name('asset.import');
         Route::post('/asset/{id}/update-condition', 'updateCondition')->name('asset.update.condition');
+        Route::post('/asset/{id}/dispose', 'dispose')->name('asset.dispose');
         Route::delete('/asset/{id}', 'destroy')->name('asset.destroy');
         Route::put('/asset/{id}/return', 'return')->name('asset.return');
         Route::put('/asset/{id}/return-from-assigned', 'returnFromAssigned')->name('asset.return.from.assigned');

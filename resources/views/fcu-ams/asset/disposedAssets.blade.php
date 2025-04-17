@@ -175,16 +175,6 @@
                                     </a>
                                 </div>
                             </th>
-                            <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                <div class="flex items-center">
-                                    <span>Disposed Amount</span>
-                                    <a class="ml-2" href="{{ route('asset.disposed', ['sort' => 'disposed_amount', 'direction' => ($direction == 'asc' && $sort == 'disposed_amount') ? 'desc' : 'asc']) }}">
-                                        {{-- <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" />
-                                        </svg> --}}
-                                    </a>
-                                </div>
-                            </th>
                             <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                         </tr>
                     </thead>
@@ -196,8 +186,14 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->brand_name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->model }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->department_name }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $asset->disposed_status_name }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">₱{{ number_format($asset->disposed_amount, 2) }}</td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <div>{{ $asset->disposed_status_name }}</div>
+                                    @if($asset->disposed_status_name == 'Sold' && $asset->disposed_amount !== null)
+                                        <div class="text-xs text-gray-500 mt-1">
+                                            Amount: ₱{{ number_format($asset->disposed_amount, 2) }}
+                                        </div>
+                                    @endif
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center" onclick="event.stopPropagation();">
                                     <div class="flex justify-center space-x-2">
                                         <a href="{{ route('asset.view', $asset->id) }}" 
@@ -212,7 +208,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="px-6 py-12 text-center">
+                                <td colspan="7" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center justify-center space-y-3">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
@@ -240,22 +236,23 @@
         let typingTimer;
         const doneTypingInterval = 300;
 
-        searchInput.addEventListener('input', function() {
-            clearTimeout(typingTimer);
-            typingTimer = setTimeout(performSearch, doneTypingInterval);
-        });
+        // Commenting out search script as search box was removed
+        // searchInput.addEventListener('input', function() {
+        //     clearTimeout(typingTimer);
+        //     typingTimer = setTimeout(performSearch, doneTypingInterval);
+        // });
 
-        searchInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                performSearch();
-            }
-        });
+        // searchInput.addEventListener('keypress', function(e) {
+        //     if (e.key === 'Enter') {
+        //         e.preventDefault();
+        //         performSearch();
+        //     }
+        // });
 
-        function performSearch() {
-            const searchQuery = searchInput.value;
-            window.location.href = `{{ route('asset.disposed') }}?search=${searchQuery}`;
-        }
+        // function performSearch() {
+        //     const searchQuery = searchInput.value;
+        //     window.location.href = `{{ route('asset.disposed') }}?search=${searchQuery}`;
+        // }
     });
 </script>
 

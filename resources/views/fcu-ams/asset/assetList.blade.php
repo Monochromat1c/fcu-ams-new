@@ -605,6 +605,14 @@
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                                             </svg>
                                         </button>
+                                        {{-- Dispose Button --}}
+                                        <button onclick="document.getElementById('dispose-asset-modal-{{ $asset->id }}').classList.remove('hidden')"
+                                                class="text-orange-600 hover:text-orange-900 transition-transform duration-200"
+                                                title="Dispose Asset">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                                            </svg>
+                                        </button>
                                         @endif
                                     </div>
                                 </td>
@@ -618,6 +626,90 @@
 </div>
 
 @include('layouts.modals.asset.deleteAsset')
+{{-- Add Dispose Modal for each asset --}}
+@foreach ($assets as $asset)
+<div id="dispose-asset-modal-{{ $asset->id }}" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="relative w-full max-w-lg transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+            <form action="{{ route('asset.dispose', $asset->id) }}" method="POST">
+                @csrf
+                <!-- Header -->
+                <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-medium text-gray-900">Dispose Asset: {{ $asset->asset_tag_id }}</h3>
+                        <button type="button" class="text-gray-400 hover:text-gray-500" onclick="document.getElementById('dispose-asset-modal-{{ $asset->id }}').classList.add('hidden')">
+                            <span class="sr-only">Close</span>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-6 space-y-4">
+                    <div>
+                        {{-- Label with optional asterisk span --}}
+                        <label for="disposed_amount_{{ $asset->id }}" class="block text-sm font-medium text-gray-700">
+                            Disposed Amount (₱) <span id="disposed_amount_required_star_{{ $asset->id }}" class="text-red-500 hidden">*</span>
+                        </label>
+                        <div class="mt-1">
+                            {{-- Removed required attribute --}}
+                            <input type="number" id="disposed_amount_{{ $asset->id }}" name="disposed_amount" step="0.01" min="0"
+                                class="shadow-sm p-2 border focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="disposed_status_id_{{ $asset->id }}" class="block text-sm font-medium text-gray-700">Disposal Status</label>
+                        <div class="mt-1">
+                            {{-- Add data attribute to fetch status name --}}
+                            <select id="disposed_status_id_{{ $asset->id }}" name="disposed_status_id" required
+                                    onchange="toggleDisposeAmountRequired({{ $asset->id }})"
+                                    class="shadow-sm p-2 border focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
+                                <option value="" disabled selected>Select disposal status</option>
+                                @foreach($allDisposedStatuses as $disposedStatus)
+                                    {{-- Store status text in a data attribute --}}
+                                    <option value="{{ $disposedStatus->id }}" data-status-name="{{ $disposedStatus->status }}">
+                                        {{ $disposedStatus->status }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495zM10 14a1 1 0 110-2 1 1 0 010 2zm0-7a1 1 0 011 1v3a1 1 0 11-2 0V8a1 1 0 011-1z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-yellow-700">
+                                Disposing this asset will set its condition to 'Disposed' and status to 'Unavailable'. This action cannot be easily undone.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+                    <button type="button"
+                        class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        onclick="document.getElementById('dispose-asset-modal-{{ $asset->id }}').classList.add('hidden')">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="inline-flex items-center rounded-md border border-transparent bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+                        Confirm Disposal
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endforeach
+
 <script src="{{ asset('js/chart.js') }}"></script>
 <script>
     document.querySelectorAll(
@@ -800,6 +892,43 @@
                 fileNameDisplay.textContent = '';
             }
         }
+    });
+</script>
+
+<script>
+    // Function to toggle the 'required' attribute for dispose amount
+    function toggleDisposeAmountRequired(assetId) {
+        const statusSelect = document.getElementById(`disposed_status_id_${assetId}`);
+        const amountInput = document.getElementById(`disposed_amount_${assetId}`);
+        const requiredStar = document.getElementById(`disposed_amount_required_star_${assetId}`);
+        
+        // Get the selected option element
+        const selectedOption = statusSelect.options[statusSelect.selectedIndex];
+        // Get the status name from the data attribute
+        const selectedStatusName = selectedOption ? selectedOption.getAttribute('data-status-name') : null;
+
+        if (selectedStatusName && selectedStatusName.toLowerCase() === 'sold') {
+            amountInput.setAttribute('required', 'required');
+            requiredStar.classList.remove('hidden');
+        } else {
+            amountInput.removeAttribute('required');
+            requiredStar.classList.add('hidden');
+        }
+    }
+
+    // Initial check in case a value is pre-selected (though unlikely here)
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('select[id^="disposed_status_id_"]').forEach(select => {
+            const assetId = select.id.split('_').pop();
+            toggleDisposeAmountRequired(assetId);
+        });
+        
+        // Reset filters on page load/reload
+        if (performance.navigation.type === 1) { // Check if it's a page reload
+            window.location.href = "{{ route('asset.list') }}";
+        }
+
+        // ... rest of your existing script ...
     });
 </script>
 

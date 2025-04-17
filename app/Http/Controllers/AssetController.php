@@ -155,6 +155,9 @@ class AssetController extends Controller
         $allSites = DB::table('sites')->get();
         $allSuppliers = DB::table('suppliers')->get();
         $allBrands = DB::table('brands')->get();
+        $allConditions = DB::table('conditions')->get();
+        $allStatuses = DB::table('statuses')->get();
+        $allDisposedStatuses = DB::table('disposed_statuses')->get();
         
         return view('fcu-ams/asset/assetList', array_merge(
             compact(
@@ -180,10 +183,11 @@ class AssetController extends Controller
                 'selectedSites' => $sites,
                 'selectedSuppliers' => $suppliers,
                 'selectedBrands' => $brands,
-                'allConditions' => DB::table('conditions')->get(),
-                'allStatuses' => DB::table('statuses')->get(),
+                'allConditions' => $allConditions,
+                'allStatuses' => $allStatuses,
                 'selectedConditions' => $conditions,
                 'selectedStatuses' => $statuses,
+                'allDisposedStatuses' => $allDisposedStatuses,
             ]
         ));
     }
@@ -1163,5 +1167,57 @@ class AssetController extends Controller
 
         // Return a new view (to be created in Step 4)
         return view('fcu-ams.asset.globalReturnHistory', compact('returnHistory'));
+    }
+
+    /**
+     * Dispose of an asset.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function dispose(Request $request, $id)
+    {
+        // Get the ID for the 'Sold' status
+        $soldStatus = DisposedStatus::where('status', 'Sold')->first();
+        $soldStatusId = $soldStatus ? $soldStatus->id : null;
+
+        $validatedData = $request->validate([
+            // Conditionally require disposed_amount if status is 'Sold'
+            'disposed_amount' => [
+                Rule::requiredIf(function () use ($request, $soldStatusId) {
+                    return $request->input('disposed_status_id') == $soldStatusId;
+                }),
+                'nullable', // Allow null if not required
+                'numeric',
+                'min:0'
+            ],
+            'disposed_status_id' => 'required|exists:disposed_statuses,id',
+        ]);
+
+        $asset = Asset::findOrFail($id);
+        $oldAsset = clone $asset;
+
+        $disposedCondition = Condition::where('condition', 'Disposed')->first();
+        $unavailableStatus = Status::where('status', 'Unavailable')->first();
+
+        if (!$disposedCondition || !$unavailableStatus) {
+            return redirect()->back()->with('error', 'Required condition or status not found.');
+        }
+
+        $asset->condition_id = $disposedCondition->id;
+        $asset->status_id = $unavailableStatus->id;
+        // Set amount to null if status is not 'Sold', otherwise use validated value
+        $asset->disposed_amount = ($request->input('disposed_status_id') == $soldStatusId) ? $validatedData['disposed_amount'] : null;
+        $asset->disposed_status_id = $validatedData['disposed_status_id'];
+        $asset->assigned_to = null; // Asset cannot be assigned if disposed
+        $asset->issued_date = null;
+
+        // Log the edit history
+        $this->storeEditHistory($asset, auth()->user(), $oldAsset);
+
+        $asset->save();
+
+        return redirect()->route('asset.list')->with('success', 'Asset disposed successfully.');
     }
 }
