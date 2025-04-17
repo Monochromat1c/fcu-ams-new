@@ -238,6 +238,13 @@
 
                 <!-- Modal Body -->
                 <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+                    <!-- Search Input -->
+                    <div class="mb-4">
+                        <input type="text" id="assetSearchInput" placeholder="Search by Tag, Brand, Model, Category..."
+                               class="shadow-sm p-2 border focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 border-gray-300 rounded-md">
+                    </div>
+                    <!-- End Search Input -->
+
                     <!-- Asset Selection Table -->
                     <div class="overflow-x-auto rounded-lg border border-gray-200">
                         <table class="min-w-full divide-y divide-gray-200">
@@ -483,12 +490,24 @@
             } else {
                 // Check if all other checkboxes are checked
                 let allChecked = true;
-                assetCheckboxes.forEach(cb => {
-                    if (!cb.checked) {
-                        allChecked = false;
+                // Consider only visible rows for select all logic when individual box is checked
+                document.querySelectorAll('#disposeMultipleAssetsModal .asset-row').forEach(r => {
+                    if (r.style.display !== 'none') { // Check if row is visible
+                        const cb = r.querySelector('.asset-checkbox');
+                        if (!cb || !cb.checked) {
+                            allChecked = false;
+                        }
                     }
                 });
                 if (selectAllCheckbox) selectAllCheckbox.checked = allChecked;
+            }
+
+            // Move row to top if checked
+            if (this.checked) {
+                const tableBody = row.closest('tbody');
+                if (tableBody) {
+                    tableBody.insertBefore(row, tableBody.firstChild);
+                }
             }
         });
     });
@@ -517,6 +536,48 @@
             checkbox.dispatchEvent(changeEvent);
         });
     });
+
+    // --- Dynamic Search for Modal Table --- 
+    const searchInput = document.getElementById('assetSearchInput');
+    const tableRows = document.querySelectorAll('#disposeMultipleAssetsModal .asset-row');
+    const selectAllCheckboxForSearch = document.getElementById('selectAllAssets'); // Reuse existing variable if defined earlier
+
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase().trim();
+            let allVisibleChecked = true;
+            let anyVisible = false;
+
+            tableRows.forEach(row => {
+                const assetTag = row.cells[1]?.textContent.toLowerCase() || '';
+                const brand = row.cells[2]?.textContent.toLowerCase() || '';
+                const model = row.cells[3]?.textContent.toLowerCase() || '';
+                const category = row.cells[4]?.textContent.toLowerCase() || '';
+                const rowText = `${assetTag} ${brand} ${model} ${category}`;
+                const isMatch = rowText.includes(searchTerm);
+                const checkbox = row.querySelector('.asset-checkbox');
+
+                if (isMatch) {
+                    row.style.display = ''; // Show row
+                    anyVisible = true;
+                    if (!checkbox || !checkbox.checked) {
+                        allVisibleChecked = false; // If any visible row is unchecked, Select All should be unchecked
+                    }
+                } else {
+                    row.style.display = 'none'; // Hide row
+                    // If a hidden row is unchecked, it doesn't affect the Select All state for *visible* rows
+                    // If a hidden row *is* checked, it also shouldn't make Select All unchecked (as it's not visible)
+                    // So, we only care about the state of *visible* rows for the Select All checkbox.
+                }
+            });
+
+            // Update Select All checkbox based on visible rows
+            if (selectAllCheckboxForSearch) {
+                selectAllCheckboxForSearch.checked = anyVisible && allVisibleChecked;
+            }
+        });
+    }
+    // --- End Dynamic Search ---
 
     // REMOVE Initial check for the old global modal fields
     /*
