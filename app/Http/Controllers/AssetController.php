@@ -1120,4 +1120,48 @@ class AssetController extends Controller
             ->orderBy('created_at', 'asc')
             ->paginate(5);
     }
+
+    /**
+     * Display global turnover history for all assets.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
+     */
+    public function showGlobalTurnoverHistory(Request $request)
+    {
+        // Fetch all turnover records, paginated
+        $turnoverHistory = AssetTurnoverHistory::with(['asset' => function ($query) {
+                $query->select('id', 'asset_tag_id', 'model'); // Select only needed fields
+            }, 'user' => function ($query) {
+                $query->select('id', 'first_name', 'last_name', 'profile_picture'); // Select only needed fields
+            }])
+            ->orderBy('turnover_date', 'desc') // Show most recent first
+            ->paginate(25); // Adjust pagination as needed
+
+        // Return a new view (to be created in Step 4)
+        return view('fcu-ams.asset.globalTurnoverHistory', compact('turnoverHistory'));
+    }
+
+    /**
+     * Display global return history for all assets.
+     *
+     * @param  \Illuminate\Http\Request $request
+     * @return \Illuminate\View\View
+     */
+    public function showGlobalReturnHistory(Request $request)
+    {
+         // Fetch all return records, paginated
+         $returnHistory = AssetReturnHistory::with(['asset' => function ($query) {
+                $query->select('id', 'asset_tag_id', 'model'); // Select only needed fields
+            }, 'condition' => function ($query) {
+                $query->select('id', 'condition'); // Select only needed fields
+            }/*, 'receiver' => function ($query) { // Eager load receiver if needed
+                 $query->select('id', 'first_name', 'last_name');
+            }*/])
+            ->orderBy('created_at', 'desc') // Show most recent first
+            ->paginate(25); // Adjust pagination as needed
+
+        // Return a new view (to be created in Step 4)
+        return view('fcu-ams.asset.globalReturnHistory', compact('returnHistory'));
+    }
 }

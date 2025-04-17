@@ -70,6 +70,8 @@ Route::middleware(['auth.user'])->group(function () {
         Route::put('/asset/{id}/return-from-assigned', 'returnFromAssigned')->name('asset.return.from.assigned');
         Route::post('/asset/assigned/turnover/{assigneeName}', 'turnoverAssetsForAssignee')->name('asset.assigned.turnover');
         Route::post('/asset/assigned/turnover-single/{id}', 'turnoverSingleAsset')->name('asset.assigned.turnover-single');
+        Route::get('/history/turnover/all', 'showGlobalTurnoverHistory')->name('history.turnover.all');
+        Route::get('/history/return/all', 'showGlobalReturnHistory')->name('history.return.all');
     }); 
 
     Route::controller(InventoryController::class)->group(function (){

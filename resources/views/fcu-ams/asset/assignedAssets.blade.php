@@ -260,25 +260,34 @@
             </div>
         </div>
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
-            <div class="flex justify-between mb-6">
+            <div class="flex flex-wrap justify-between items-center gap-4 mb-6">
                 <h2 class="text-2xl font-bold my-auto">Assignee List</h2>
-                <div class="searchBox flex gap-2 items-center">
+                <div class="searchBox flex flex-wrap gap-2 items-center">
                     {{-- Filter Button --}}
-                <div class="flex justify-end">
-                        <button type="button"
-                            onclick="openFilterModal()"
-                            class="flex items-center bg-gray-600 text-white hover:bg-gray-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm min-w-[100px] justify-center h-10"
-                            title="Filter Assignees">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
-                            </svg>
-                            Filter
-                        </button>
-                    </div>
-                    <form action="{{ route('asset.assigned') }}" method="GET" class="flex gap-2">
-                        <div class="relative flex-1">
+                    <button type="button"
+                        onclick="openFilterModal()"
+                        class="flex items-center bg-gray-600 text-white hover:bg-gray-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm min-w-[100px] justify-center h-10"
+                        title="Filter Assignees">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
+                        </svg>
+                        Filter
+                    </button>
+                    {{-- NEW: Global History Button --}}
+                    <button type="button"
+                            onclick="openGlobalHistoryModal()"
+                            class="flex items-center bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm min-w-[100px] justify-center h-10"
+                            title="View Global History">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0Z" />
+                        </svg>
+                        History
+                    </button>
+                    {{-- Search Form --}}
+                    <form action="{{ route('asset.assigned') }}" method="GET" class="flex gap-2 flex-grow sm:flex-grow-0">
+                        <div class="relative flex-grow">
                             <input type="text" name="search" value="{{ request('search') }}"
-                                class="w-full rounded-md border-0 py-2 pl-2 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                class="w-full rounded-md border-0 py-2 pl-2 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6 h-10"
                                 placeholder="Search by assignee name..." id="searchInput">
                             <div class="absolute inset-y-0 right-0 flex items-center pr-2">
                                 <button type="submit" class="text-gray-400 hover:text-blue-600">
@@ -287,7 +296,7 @@
                             </div>
                         </div>
                         <button type="button" onclick="window.location.href='{{ route('asset.assigned') }}'"
-                            class="flex gap-1 items-center bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 ease-in rounded-md px-4 py-2">
+                            class="flex gap-1 items-center bg-red-600 text-white hover:bg-red-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 h-10">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
                             Clear
                         </button>
@@ -323,8 +332,8 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">{{ $assignee->asset_count }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-left">₱{{ number_format($assignee->total_cost, 2) }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-left">{{ $assignee->last_issued_date ? \Carbon\Carbon::parse($assignee->last_issued_date)->format('M d, Y') : 'N/A' }}</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
-                                    <a href="{{ route('asset.assigned.show', ['assigneeName' => urlencode($assignee->assigned_to)]) }}" 
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center space-x-2">
+                                    <a href="{{ route('asset.assigned.show', ['assigneeName' => urlencode($assignee->assigned_to)]) }}"
                                        class="inline-flex items-center px-3 py-1.5 bg-green-600 text-white text-xs font-medium rounded-md hover:bg-green-700 transition-colors duration-200">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -346,6 +355,31 @@
     </div>
 </div>
 
+{{-- NEW: Global History Modal --}}
+<div id="global-history-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-40">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6">
+        <div class="flex justify-between items-center mb-4">
+             <h2 class="text-lg font-bold">View Global History</h2>
+             <button type="button" onclick="closeGlobalHistoryModal()" class="text-gray-400 hover:text-gray-600">
+                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                 </svg>
+             </button>
+        </div>
+        <p class="mb-5 text-sm text-gray-600">Select which global history log you want to view.</p>
+        <div class="space-y-3">
+            <button type="button" id="view-global-turnover-history" class="w-full text-center px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors">
+                All Turnover History
+            </button>
+            <button type="button" id="view-global-return-history" class="w-full text-center px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors">
+                All Return History
+            </button>
+        </div>
+        <div class="mt-5 text-right">
+            <button type="button" onclick="closeGlobalHistoryModal()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm">Cancel</button>
+        </div>
+    </div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -389,6 +423,36 @@
     window.addEventListener('beforeunload', function() {
         if (window.location.search === '') {
             sessionStorage.removeItem('pageLoaded');
+        }
+    });
+
+    function openGlobalHistoryModal() {
+        // Set actions for modal buttons using the NEW global routes
+        document.getElementById('view-global-turnover-history').onclick = function() {
+            console.log('Redirecting to Global Turnover History');
+            window.location.href = '{{ route("history.turnover.all") }}'; // Use new route name
+            closeGlobalHistoryModal();
+        };
+        document.getElementById('view-global-return-history').onclick = function() {
+            console.log('Redirecting to Global Return History');
+            window.location.href = '{{ route("history.return.all") }}'; // Use new route name
+            closeGlobalHistoryModal();
+        };
+        document.getElementById('global-history-modal').classList.remove('hidden');
+    }
+
+    function closeGlobalHistoryModal() {
+        document.getElementById('global-history-modal').classList.add('hidden');
+    }
+
+    // Optional: Close modal on ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === "Escape" && !document.getElementById('global-history-modal').classList.contains('hidden')) {
+            closeGlobalHistoryModal();
+        }
+        // Also close filter modal if open
+        if (e.key === "Escape" && !document.getElementById('filter-modal').classList.contains('hidden')) {
+            closeFilterModal();
         }
     });
 
