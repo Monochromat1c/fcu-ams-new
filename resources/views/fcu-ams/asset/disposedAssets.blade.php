@@ -87,28 +87,15 @@
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex justify-between mb-6">
                 <h2 class="text-2xl font-bold my-auto">Disposed Assets List</h2>
-                <!-- <div class="searchBox flex gap-2">
-                    <div class="flex gap-2">
-                        <div class="relative flex-1">
-                            <input type="text" name="search" value="{{ request('search') }}"
-                                class="w-full rounded-md border-0 py-2 pl-2 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                placeholder="Search disposed assets..." id="searchInput">
-                            <div class="absolute inset-y-0 right-0 flex items-center pr-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" 
-                                    class="w-5 h-5 text-gray-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                </svg>
-                            </div>
-                        </div>
-                        <button type="button" onclick="window.location.href='{{ route('asset.disposed') }}'"
-                            class="flex gap-1 items-center bg-red-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-                            </svg>
-                            Clear
-                        </button>
-                    </div>
-                </div> -->
+                <!-- Add Dispose Assets Button -->
+                <button type="button" onclick="document.getElementById('disposeMultipleAssetsModal').classList.remove('hidden')"
+                    class="flex gap-2 items-center bg-orange-600 text-white hover:scale-105 transition-all duration-200 ease-in rounded-md px-4 p-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
+                    </svg>
+                    Dispose Assets
+                </button>
+                <!-- End Dispose Assets Button -->
             </div>
 
             <div class="overflow-x-auto overflow-y-auto rounded-lg border-2 border-slate-300">
@@ -230,6 +217,148 @@
     </div>
 </div>
 
+<!-- Dispose Multiple Assets Modal -->
+<div id="disposeMultipleAssetsModal" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-50 overflow-y-auto bg-gray-900 bg-opacity-50 backdrop-blur-sm hidden">
+    <div class="flex min-h-screen items-center justify-center p-4">
+        <div class="relative w-full max-w-6xl transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+            <form action="{{ route('asset.dispose.multiple') }}" method="POST" id="disposeMultipleForm">
+                @csrf
+                <!-- Header -->
+                <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-medium text-gray-900">Select Assets to Dispose</h3>
+                        <button type="button" class="text-gray-400 hover:text-gray-500" onclick="document.getElementById('disposeMultipleAssetsModal').classList.add('hidden')">
+                            <span class="sr-only">Close</span>
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+                    <!-- Asset Selection Table -->
+                    <div class="overflow-x-auto rounded-lg border border-gray-200">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="p-4 flex items-center">
+                                        <input type="checkbox" id="selectAllAssets" class="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                    </th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Asset Tag ID</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Brand</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Model</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Disposal Status</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Disposal Amount (₱)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                @forelse($allAssetsForDisposal as $assetForDisposal)
+                                    <tr class="hover:bg-gray-50 asset-row" data-asset-id="{{ $assetForDisposal->id }}">
+                                        <td class="p-4 whitespace-nowrap">
+                                            <input type="checkbox" name="asset_ids[]" value="{{ $assetForDisposal->id }}" class="asset-checkbox h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500">
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $assetForDisposal->asset_tag_id }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $assetForDisposal->brand->brand ?? 'N/A' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $assetForDisposal->model }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $assetForDisposal->category->category ?? 'N/A' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-top">
+                                            <select name="disposed_status[{{ $assetForDisposal->id }}]" 
+                                                    id="disposed_status_id_{{ $assetForDisposal->id }}_modal"
+                                                    class="dispose-status-select shadow-sm p-2 border focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md disabled:bg-gray-200 disabled:cursor-not-allowed"
+                                                    disabled>
+                                                <option value="" selected>Select Status</option> 
+                                                @foreach($allDisposedStatuses as $disposedStatus)
+                                                    <option value="{{ $disposedStatus->id }}" data-status-name="{{ $disposedStatus->status }}">
+                                                        {{ $disposedStatus->status }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 align-top">
+                                            <div> 
+                                                <input type="number" name="disposed_amount[{{ $assetForDisposal->id }}]" 
+                                                       id="disposed_amount_{{ $assetForDisposal->id }}_modal"
+                                                       step="0.01" min="0"
+                                                       class="dispose-amount-input shadow-sm p-2 border focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md disabled:bg-gray-200 disabled:cursor-not-allowed"
+                                                       disabled>
+                                                <span id="disposed_amount_required_star_{{ $assetForDisposal->id }}_modal" class="text-red-500 text-xs hidden mt-1">Required if Sold</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="px-6 py-4 text-center text-sm text-gray-500">No non-disposed assets found.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Disposal Fields - REMOVED -->
+                    {{-- <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-gray-200">
+                        <div>
+                            <label for="disposed_status_id_modal" class="block text-sm font-medium text-gray-700">Disposal Status <span class="text-red-500">*</span></label>
+                            <div class="mt-1">
+                                <select id="disposed_status_id_modal" name="disposed_status_id" required
+                                        onchange="toggleDisposeAmountRequiredModal()"
+                                        class="shadow-sm p-2 border focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
+                                    <option value="" disabled selected>Select disposal status</option>
+                                    @foreach($allDisposedStatuses as $disposedStatus)
+                                        <option value="{{ $disposedStatus->id }}" data-status-name="{{ $disposedStatus->status }}">
+                                            {{ $disposedStatus->status }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="disposed_amount_modal" class="block text-sm font-medium text-gray-700">
+                                Disposed Amount (₱) <span id="disposed_amount_required_star_modal" class="text-red-500 hidden">*</span>
+                            </label>
+                            <div class="mt-1">
+                                <input type="number" id="disposed_amount_modal" name="disposed_amount" step="0.01" min="0"
+                                       class="shadow-sm p-2 border focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-2 bg-slate-50 border-gray-300 rounded-md">
+                            </div>
+                        </div>
+                    </div> --}}
+
+                    <!-- <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mt-4">
+                        <div class="flex">
+                            <div class="flex-shrink-0">
+                                <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M8.485 3.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 3.495zM10 14a1 1 0 110-2 1 1 0 010 2zm0-7a1 1 0 011 1v3a1 1 0 11-2 0V8a1 1 0 011-1z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm text-yellow-700">
+                                Disposing selected assets will set their condition to 'Disposed' and status to 'Unavailable'. This action cannot be easily undone.
+                                </p>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <!-- Footer -->
+                <div class="bg-gray-50 px-6 py-4 flex justify-end space-x-3">
+                    <button type="button"
+                        class="inline-flex items-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                        onclick="document.getElementById('disposeMultipleAssetsModal').classList.add('hidden')">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="inline-flex items-center rounded-md border border-transparent bg-orange-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
+                        Dispose Selected Assets
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- End Dispose Multiple Assets Modal -->
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('searchInput');
@@ -254,6 +383,148 @@
         //     window.location.href = `{{ route('asset.disposed') }}?search=${searchQuery}`;
         // }
     });
+
+    // Function to toggle the 'required' attribute for dispose amount in the MULTIPLE dispose modal - ROW SPECIFIC
+    function toggleDisposeAmountRequiredForRow(assetId) {
+        const statusSelect = document.getElementById(`disposed_status_id_${assetId}_modal`);
+        const amountInput = document.getElementById(`disposed_amount_${assetId}_modal`);
+        const requiredStar = document.getElementById(`disposed_amount_required_star_${assetId}_modal`);
+
+        if (!statusSelect || !amountInput || !requiredStar) return; // Elements might not exist if row is hidden
+
+        const selectedOption = statusSelect.options[statusSelect.selectedIndex];
+        const selectedStatusName = selectedOption ? selectedOption.getAttribute('data-status-name') : null;
+
+        // Only require if the specific status select is enabled (meaning checkbox is checked)
+        if (!statusSelect.disabled && selectedStatusName && selectedStatusName.toLowerCase() === 'sold') {
+            amountInput.setAttribute('required', 'required');
+            requiredStar.classList.remove('hidden');
+        } else {
+            amountInput.removeAttribute('required');
+            requiredStar.classList.add('hidden');
+        }
+    }
+
+    // Add event listener for the Select All checkbox
+    const selectAllCheckbox = document.getElementById('selectAllAssets');
+    const assetCheckboxes = document.querySelectorAll('.asset-checkbox');
+
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+            assetCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+                // Enable/disable fields in the row
+                const row = checkbox.closest('.asset-row');
+                const statusSelect = row.querySelector('.dispose-status-select');
+                const amountInput = row.querySelector('.dispose-amount-input');
+                if (statusSelect) statusSelect.disabled = !this.checked;
+                if (amountInput) amountInput.disabled = !this.checked;
+                // Clear values if unchecking all
+                if (!this.checked) {
+                    if (statusSelect) statusSelect.value = '';
+                    if (amountInput) amountInput.value = '';
+                }
+                 // Trigger required check
+                 const assetId = row.getAttribute('data-asset-id');
+                 if (assetId) toggleDisposeAmountRequiredForRow(assetId);
+            });
+        });
+    }
+
+    // Add change event listener to each status select dropdown in the modal
+    document.querySelectorAll('#disposeMultipleAssetsModal .dispose-status-select').forEach(select => {
+        select.addEventListener('change', function() {
+            const row = this.closest('.asset-row');
+            const assetId = row.getAttribute('data-asset-id');
+            if (assetId) {
+                toggleDisposeAmountRequiredForRow(assetId);
+            }
+        });
+    });
+
+    // Add event listener to uncheck Select All if any individual checkbox is unchecked
+    assetCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const row = this.closest('.asset-row');
+            if (!row) return; // Safety check
+
+            const statusSelect = row.querySelector('.dispose-status-select');
+            const amountInput = row.querySelector('.dispose-amount-input');
+            const assetId = row.getAttribute('data-asset-id');
+            const shouldBeEnabled = this.checked;
+
+            // console.log(`Checkbox for asset ${assetId} changed. Checked: ${this.checked}. Should be enabled: ${shouldBeEnabled}`);
+
+            if (statusSelect) {
+                statusSelect.disabled = !shouldBeEnabled;
+                // console.log(`  Status select disabled: ${statusSelect.disabled}`);
+                // Clear value if disabling
+                if (!shouldBeEnabled) {
+                    statusSelect.value = '';
+                }
+            }
+            if (amountInput) {
+                amountInput.disabled = !shouldBeEnabled;
+                // console.log(`  Amount input disabled: ${amountInput.disabled}`);
+                 // Clear value if disabling
+                 if (!shouldBeEnabled) {
+                    amountInput.value = '';
+                }
+            }
+
+            // Trigger required check for the specific row
+            if (assetId) {
+                toggleDisposeAmountRequiredForRow(assetId);
+            }
+
+            // Update Select All checkbox state
+            if (!this.checked) {
+                if (selectAllCheckbox) selectAllCheckbox.checked = false;
+            } else {
+                // Check if all other checkboxes are checked
+                let allChecked = true;
+                assetCheckboxes.forEach(cb => {
+                    if (!cb.checked) {
+                        allChecked = false;
+                    }
+                });
+                if (selectAllCheckbox) selectAllCheckbox.checked = allChecked;
+            }
+        });
+    });
+
+    // Add click listener to table rows to toggle checkbox
+    document.querySelectorAll('#disposeMultipleAssetsModal .asset-row').forEach(row => {
+        row.addEventListener('click', function(event) {
+            // Find the checkbox within this row
+            const checkbox = this.querySelector('.asset-checkbox');
+            if (!checkbox) return;
+
+            // Prevent toggling if the click was directly on the checkbox or its label (if any)
+            // Or if the click was on the input/select fields themselves
+            if (event.target === checkbox || 
+                event.target.closest('.dispose-status-select') || 
+                event.target.closest('.dispose-amount-input')) {
+                return; 
+            }
+
+            // Toggle the checkbox state
+            checkbox.checked = !checkbox.checked;
+
+            // Manually trigger the change event on the checkbox
+            // This is crucial for our existing logic (enable/disable fields, update selectAll) to run
+            const changeEvent = new Event('change', { bubbles: true });
+            checkbox.dispatchEvent(changeEvent);
+        });
+    });
+
+    // REMOVE Initial check for the old global modal fields
+    /*
+    document.addEventListener('DOMContentLoaded', function() {
+        toggleDisposeAmountRequiredModal();
+    });
+    */
+
 </script>
 
 @endsection 

@@ -73,6 +73,7 @@ Route::middleware(['auth.user'])->group(function () {
         Route::post('/asset/assigned/turnover-single/{id}', 'turnoverSingleAsset')->name('asset.assigned.turnover-single');
         Route::get('/history/turnover/all', 'showGlobalTurnoverHistory')->name('history.turnover.all');
         Route::get('/history/return/all', 'showGlobalReturnHistory')->name('history.return.all');
+        Route::post('/assets/dispose-multiple', 'disposeMultiple')->name('asset.dispose.multiple');
     }); 
 
     Route::controller(InventoryController::class)->group(function (){

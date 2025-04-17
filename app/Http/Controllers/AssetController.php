@@ -796,11 +796,24 @@ class AssetController extends Controller
         $disposedAssets = $query->paginate(15)
             ->appends($request->all());
 
+        // Fetch all non-disposed assets for the modal
+        $allAssetsForDisposal = Asset::with(['brand', 'category'])
+            ->whereDoesntHave('condition', function ($q) {
+                $q->where('condition', 'Disposed');
+            })
+            ->orderBy('asset_tag_id')
+            ->get();
+
+        // Fetch all disposal statuses for the modal dropdown
+        $allDisposedStatuses = DisposedStatus::orderBy('status')->get();
+
         return view('fcu-ams/asset/disposedAssets', compact(
             'disposedAssets',
             'sort',
             'direction',
-            'search'
+            'search',
+            'allAssetsForDisposal', // Add this for the modal
+            'allDisposedStatuses'   // Add this for the modal
         ));
     }
 
@@ -1226,5 +1239,91 @@ class AssetController extends Controller
         $asset->save();
 
         return redirect()->route('asset.list')->with('success', 'Asset disposed successfully.');
+    }
+
+    /**
+     * Dispose of multiple assets.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function disposeMultiple(Request $request)
+    {
+        // Get the ID for the 'Sold' status
+        $soldStatus = DisposedStatus::where('status', 'Sold')->first();
+        $soldStatusId = $soldStatus ? $soldStatus->id : null;
+
+        $validatedData = $request->validate([
+            'asset_ids' => 'required|array',
+            'asset_ids.*' => 'exists:assets,id',
+            // Validate status and amount as arrays keyed by asset ID
+            'disposed_status' => 'required|array',
+            'disposed_status.*' => 'required|exists:disposed_statuses,id',
+            'disposed_amount' => 'present|array', // present ensures the array exists, even if empty
+            'disposed_amount.*' => 'nullable|numeric|min:0',
+        ]);
+
+        $disposedCondition = Condition::where('condition', 'Disposed')->first();
+        $unavailableStatus = Status::where('status', 'Unavailable')->first();
+
+        if (!$disposedCondition || !$unavailableStatus) {
+            return redirect()->back()->with('error', 'Required condition or status definition not found.');
+        }
+
+        DB::beginTransaction();
+        try {
+            $disposedCount = 0;
+            foreach ($validatedData['asset_ids'] as $assetId) {
+                $asset = Asset::find($assetId);
+                // Retrieve the specific status and amount for this asset
+                $currentStatusId = $validatedData['disposed_status'][$assetId] ?? null;
+                $currentAmount = $validatedData['disposed_amount'][$assetId] ?? null;
+
+                // Additional check: Ensure status is provided for the selected asset
+                if (!$currentStatusId) {
+                    // Optionally skip or throw an error if status is missing for a checked asset
+                    \Log::warning("Missing disposal status for selected asset ID: {$assetId}");
+                    continue; // Skip this asset
+                }
+
+                // Amount validation (require if status is 'Sold')
+                if ($currentStatusId == $soldStatusId && !isset($currentAmount)) {
+                     // Throw validation error or handle as needed if amount is missing when required
+                     // For simplicity, we'll skip this asset and log a warning
+                     \Log::warning("Missing disposal amount for asset ID: {$assetId} when status is Sold");
+                     continue;
+                }
+
+                if ($asset) {
+                    // Check if already disposed to avoid re-disposing
+                    if ($asset->condition_id !== $disposedCondition->id) {
+                        $oldAsset = clone $asset;
+
+                        $asset->condition_id = $disposedCondition->id;
+                        $asset->status_id = $unavailableStatus->id;
+                        // Set amount based on the specific row's data
+                        $asset->disposed_amount = ($currentStatusId == $soldStatusId) ? $currentAmount : null;
+                        $asset->disposed_status_id = $currentStatusId;
+                        $asset->assigned_to = null; // Asset cannot be assigned if disposed
+                        $asset->issued_date = null;
+
+                        // Log the edit history
+                        $this->storeEditHistory($asset, auth()->user(), $oldAsset);
+                        $asset->save();
+                        $disposedCount++;
+                    }
+                }
+            }
+            DB::commit();
+            if ($disposedCount > 0) {
+                return redirect()->route('asset.disposed')->with('success', $disposedCount . ' asset(s) disposed successfully.');
+            } else {
+                return redirect()->route('asset.disposed')->with('warning', 'No assets were updated. They might have already been disposed.');
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
+            \Log::error("Error disposing multiple assets: " . $e->getMessage());
+            return redirect()->back()->with('error', 'An error occurred while disposing assets. Please try again.');
+        }
     }
 }
