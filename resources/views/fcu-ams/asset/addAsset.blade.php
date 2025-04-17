@@ -367,7 +367,7 @@
                             <div class="mt-1">
                                 <input type="date" id="modal_issued_date"
                                     class="block w-full px-4 py-2 border-2 border-gray-200 hover:shadow-inner rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
-                                    value="{{ old('issued_date') }}">
+                                    value="{{ old('issued_date', now()->format('Y-m-d')) }}">
                             </div>
                         </div>
 
@@ -430,11 +430,29 @@
         document.getElementById('assignment-modal').classList.remove('hidden');
     });
 
+    // Assignment Modal: Enable Save only if both fields are filled
+    function checkAssignmentFields() {
+        const assignedTo = document.getElementById('modal_assigned_to').value.trim();
+        const issuedDate = document.getElementById('modal_issued_date').value.trim();
+        const saveBtn = document.getElementById('save-assignment-btn');
+        saveBtn.disabled = !(assignedTo && issuedDate);
+        saveBtn.classList.toggle('opacity-50', saveBtn.disabled);
+        saveBtn.classList.toggle('cursor-not-allowed', saveBtn.disabled);
+    }
+    document.getElementById('modal_assigned_to').addEventListener('input', checkAssignmentFields);
+    document.getElementById('modal_issued_date').addEventListener('input', checkAssignmentFields);
+    checkAssignmentFields();
+
     // Handle save assignment button click
     document.getElementById('save-assignment-btn').addEventListener('click', function () {
         const assignedTo = document.getElementById('modal_assigned_to').value;
         const issuedDate = document.getElementById('modal_issued_date').value;
         const notes = document.getElementById('modal_notes').value;
+
+        // Prevent save if required fields are missing
+        if (!assignedTo.trim() || !issuedDate.trim()) {
+            return;
+        }
 
         // Update hidden inputs
         document.getElementById('assigned_to').value = assignedTo;
