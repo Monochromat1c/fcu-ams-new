@@ -80,7 +80,18 @@
             </div>
         </nav>
         
-        <div class="mb-1 flex justify-end m-3 rounded-md">
+        <div class="mb-1 flex justify-between m-3 rounded-md">
+            {{-- NEW: Global History Button --}}
+            <button type="button" onclick="openGlobalHistoryModal()"
+                class="flex items-center bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm min-w-[100px] justify-center h-10"
+                title="View Global History">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0Z" />
+                </svg>
+                History
+            </button>
             <div class="pagination-here flex justify-between align-items-center">
                 <div class="flex align-items-center">
                     <ul class="pagination my-auto flex">
@@ -273,16 +284,6 @@
                         </svg>
                         Filter
                     </button>
-                    {{-- NEW: Global History Button --}}
-                    <button type="button"
-                            onclick="openGlobalHistoryModal()"
-                            class="flex items-center bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm min-w-[100px] justify-center h-10"
-                            title="View Global History">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0Z" />
-                        </svg>
-                        History
-                    </button>
                     {{-- Search Form --}}
                     <form action="{{ route('asset.assigned') }}" method="GET" class="flex gap-2 flex-grow sm:flex-grow-0">
                         <div class="relative flex-grow">
@@ -356,27 +357,48 @@
 </div>
 
 {{-- NEW: Global History Modal --}}
-<div id="global-history-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-40">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-sm p-6">
-        <div class="flex justify-between items-center mb-4">
-             <h2 class="text-lg font-bold">View Global History</h2>
-             <button type="button" onclick="closeGlobalHistoryModal()" class="text-gray-400 hover:text-gray-600">
+<div id="global-history-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-gray-900 bg-opacity-60 transition-opacity duration-300 ease-in-out" 
+     aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class="bg-white rounded-lg shadow-xl w-full max-w-md overflow-hidden transform transition-all duration-300 ease-in-out sm:my-8 sm:align-middle">
+        {{-- Modal Header --}}
+        <div class="flex justify-between items-center px-6 py-4 border-b border-gray-200 bg-gray-50">
+             <h2 class="text-lg font-semibold text-gray-800" id="modal-title">View Global History</h2>
+             <button type="button" onclick="closeGlobalHistoryModal()" 
+                     class="text-gray-400 hover:text-gray-600 p-1 rounded-full hover:bg-gray-200 transition-colors duration-150" 
+                     aria-label="Close modal">
                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                  </svg>
              </button>
         </div>
-        <p class="mb-5 text-sm text-gray-600">Select which global history log you want to view.</p>
-        <div class="space-y-3">
-            <button type="button" id="view-global-turnover-history" class="w-full text-center px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors">
-                All Turnover History
-            </button>
-            <button type="button" id="view-global-return-history" class="w-full text-center px-4 py-2 bg-orange-600 text-white rounded hover:bg-orange-700 transition-colors">
-                All Return History
-            </button>
+        {{-- Modal Body --}}
+        <div class="px-6 py-5">
+            <p class="mb-6 text-sm text-gray-600">Select which global history log you want to view.</p>
+            <div class="space-y-4"> {{-- Increased spacing --}}
+                {{-- Turnover History Button --}}
+                <button type="button" id="view-global-turnover-history" 
+                        class="w-full flex items-center justify-center gap-2 text-center px-4 py-2.5 bg-purple-600 text-white rounded-md shadow-sm hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-150 font-medium">
+                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Turnover History
+                </button>
+                {{-- Return History Button --}}
+                <button type="button" id="view-global-return-history" 
+                        class="w-full flex items-center justify-center gap-2 text-center px-4 py-2.5 bg-orange-600 text-white rounded-md shadow-sm hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors duration-150 font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                    </svg>
+                    Return History
+                </button>
+            </div>
         </div>
-        <div class="mt-5 text-right">
-            <button type="button" onclick="closeGlobalHistoryModal()" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 text-sm">Cancel</button>
+         {{-- Modal Footer --}}
+        <div class="px-6 py-4 bg-gray-50 border-t border-gray-200 text-right">
+            <button type="button" onclick="closeGlobalHistoryModal()" 
+                    class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400 transition-colors duration-150 text-sm font-medium">
+                Cancel
+            </button>
         </div>
     </div>
 </div>
@@ -427,6 +449,10 @@
     });
 
     function openGlobalHistoryModal() {
+        const modal = document.getElementById('global-history-modal');
+        modal.classList.remove('hidden');
+        // Add focus trap or manage focus appropriately for accessibility if needed
+
         // Set actions for modal buttons using the NEW global routes
         document.getElementById('view-global-turnover-history').onclick = function() {
             console.log('Redirecting to Global Turnover History');
@@ -438,7 +464,6 @@
             window.location.href = '{{ route("history.return.all") }}'; // Use new route name
             closeGlobalHistoryModal();
         };
-        document.getElementById('global-history-modal').classList.remove('hidden');
     }
 
     function closeGlobalHistoryModal() {

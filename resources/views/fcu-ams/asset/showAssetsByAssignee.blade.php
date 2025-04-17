@@ -63,7 +63,16 @@
         </nav>
 
         {{-- Pagination for Assets --}}
-        <div class="mb-1 flex justify-end m-3 rounded-md">
+        <div class="mb-1 flex justify-between m-3 rounded-md">
+            <a href="{{ route('asset.assigned') }}"
+                class="flex items-center bg-gray-700 text-white hover:bg-gray-800 transition-colors duration-300 ease-out rounded-lg px-5 py-2.5 text-sm h-10 shadow-md hover:shadow-lg transform">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clip-rule="evenodd" />
+                </svg>
+                Back to Assignees
+            </a>
             <div class="pagination-here flex justify-between align-items-center">
                 <div class="flex align-items-center">
                      <ul class="pagination my-auto flex">
@@ -96,23 +105,17 @@
         <div class="bg-white p-5 shadow-md m-3 rounded-md">
             <div class="flex flex-wrap justify-between mb-6 gap-4">
                 <div class="flex gap-2 items-center">
-                    <a href="{{ route('asset.assigned') }}" class="flex items-center bg-blue-600 text-white hover:bg-blue-700 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm h-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        Back to Assignees
-                    </a>
                     {{-- Return All Button and Form --}}
                     @if($assets->isNotEmpty() && Auth::user()->role->role != 'Department')
                     <form id="return-all-form-{{ Str::slug($decodedAssigneeName) }}" action="{{ route('asset.assigned.return-all', ['assigneeName' => urlencode($decodedAssigneeName)]) }}" method="POST" class="inline-block">
                         @csrf
                         <button type="button" onclick="openReturnAllModal()"
-                            class="flex items-center bg-orange-500 text-white hover:bg-orange-600 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm h-10"
+                            class="flex items-center  bg-orange-500 text-white hover:bg-orange-600 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm h-10"
                             title="Return All Assets for {{ $decodedAssigneeName }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
-                                stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M9 10l-5 5 5 5M20 4v7a4 4 0 01-4 4H4" />
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="w-5 h-5 mr-2">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
                             </svg>
                             Return All Assets
                         </button>
@@ -243,8 +246,10 @@
                                                 )"
                                                 class="inline-flex items-center text-blue-600 hover:text-blue-900 hover:scale-110 transition-transform duration-200"
                                                 title="Return Asset">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10l-5 5 5 5M20 4v7a4 4 0 01-4 4H4" />
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                                    stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                                        d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
                                                 </svg>
                                             </button>
                                         </form>
