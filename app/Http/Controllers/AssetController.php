@@ -30,6 +30,7 @@ use App\Models\InventoryEditHistory;
 use App\Imports\AssetsImport;
 use Carbon\Carbon;
 use App\Models\AssetTurnoverHistory;
+use App\Models\AssetReturnHistory;
 
 class AssetController extends Controller
 {
@@ -648,69 +649,88 @@ class AssetController extends Controller
         $this->save();
     }
 
-    public function return($id)
+    public function return($id, Request $request)
     {
         $asset = Asset::findOrFail($id);
         $oldAsset = clone $asset;
 
-        // Clear assignment details and set return timestamp
+        // Validate input
+        $validated = $request->validate([
+            'return_date'   => 'required|date_format:Y-m-d\TH:i',
+            'returned_by'   => 'required|string|max:255',
+            'condition_id'  => 'required|exists:conditions,id',
+            'received_by'   => 'required|string|max:255',
+            'return_notes'  => 'nullable|string',
+        ]);
+
+        // Store return history
+        AssetReturnHistory::create([
+            'asset_id'     => $asset->id,
+            'returned_by'  => $validated['returned_by'],
+            'received_by'  => $validated['received_by'], // string
+            'condition_id' => $validated['condition_id'],
+            'return_date'  => Carbon::createFromFormat('Y-m-d\TH:i', $validated['return_date']),
+            'remarks'      => $validated['return_notes'],
+        ]);
+
+        // Update asset
         $asset->assigned_to = null;
         $asset->issued_date = null;
-        $asset->return_date = now()->toDateString(); // Add return date
-        $asset->returned_at = now();
-        
-        // Update status to Available
+        $asset->return_date = Carbon::createFromFormat('Y-m-d\TH:i', $validated['return_date'])->toDateString();
+        $asset->returned_at = Carbon::createFromFormat('Y-m-d\TH:i', $validated['return_date']);
+        $asset->condition_id = $validated['condition_id'];
+
+        // Status to Available
         $availableStatus = Status::where('status', 'Available')->first();
         if ($availableStatus) {
             $asset->status_id = $availableStatus->id;
         }
 
-        // Update condition to Used
-        $usedCondition = Condition::where('condition', 'Used')->first();
-        if ($usedCondition) {
-            $asset->condition_id = $usedCondition->id;
-        }
-
-        // Store the edit history
         $this->storeEditHistory($asset, auth()->user(), $oldAsset);
-
         $asset->save();
 
         return redirect()->route('asset.list')->with('success', 'Asset has been returned successfully.');
     }
 
-    public function returnFromAssigned($id)
+    public function returnFromAssigned($id, Request $request)
     {
         $asset = Asset::findOrFail($id);
         $oldAsset = clone $asset;
-        $assigneeName = $asset->assigned_to; // Get the assignee name before clearing it
 
-        // Clear assignment details and set return timestamp
+        $validated = $request->validate([
+            'return_date'   => 'required|date_format:Y-m-d\TH:i',
+            'returned_by'   => 'required|string|max:255',
+            'condition_id'  => 'required|exists:conditions,id',
+            'received_by'   => 'required|string|max:255',
+            'return_notes'  => 'nullable|string',
+        ]);
+
+        AssetReturnHistory::create([
+            'asset_id'     => $asset->id,
+            'returned_by'  => $validated['returned_by'],
+            'received_by'  => $validated['received_by'],
+            'condition_id' => $validated['condition_id'],
+            'return_date'  => Carbon::createFromFormat('Y-m-d\TH:i', $validated['return_date']),
+            'remarks'      => $validated['return_notes'],
+        ]);
+
         $asset->assigned_to = null;
         $asset->issued_date = null;
-        $asset->return_date = now()->toDateString(); // Add return date
-        $asset->returned_at = now();
-        
-        // Update status to Available
+        $asset->return_date = Carbon::createFromFormat('Y-m-d\TH:i', $validated['return_date'])->toDateString();
+        $asset->returned_at = Carbon::createFromFormat('Y-m-d\TH:i', $validated['return_date']);
+        $asset->condition_id = $validated['condition_id'];
+
         $availableStatus = Status::where('status', 'Available')->first();
         if ($availableStatus) {
             $asset->status_id = $availableStatus->id;
         }
 
-        // Update condition to Used
-        $usedCondition = Condition::where('condition', 'Used')->first();
-        if ($usedCondition) {
-            $asset->condition_id = $usedCondition->id;
-        }
-
-        // Store the edit history
         $this->storeEditHistory($asset, auth()->user(), $oldAsset);
-
         $asset->save();
 
         // Redirect back to the specific assignee's detail page
-        if ($assigneeName) {
-            return redirect()->route('asset.assigned.show', ['assigneeName' => urlencode($assigneeName)])
+        if ($validated['returned_by']) {
+            return redirect()->route('asset.assigned.show', ['assigneeName' => urlencode($validated['returned_by'])])
                              ->with('success', 'Asset has been returned successfully.');
         } else {
              // Fallback if assignee name was somehow lost (shouldn't happen)
@@ -942,59 +962,32 @@ class AssetController extends Controller
      * @param  string  $assigneeName The URL-encoded name of the assignee.
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function returnAllAssetsForAssignee($assigneeName)
+    public function returnAllAssetsForAssignee($assigneeName, Request $request)
     {
-        $decodedAssigneeName = urldecode($assigneeName);
-        $user = auth()->user();
+        $decodedAssigneeName = urldecode($assigneeName); // CAUSE RESOLUTION
+        $assets = Asset::where('assigned_to', $decodedAssigneeName)->get();
 
-        $assetsToReturn = Asset::where('assigned_to', $decodedAssigneeName)
-                               ->whereHas('condition', function ($q) {
-                                   $q->where('condition', '!=', 'Disposed');
-                               })
-                               ->get();
+        foreach ($assets as $asset) {
+            // 1. Create return history
+            AssetReturnHistory::create([
+                'asset_id'     => $asset->id,
+                'returned_by'  => $request->input('returned_by'),
+                'received_by'  => $request->input('received_by'),
+                'condition_id' => $request->input('condition_id'),
+                'return_date'  => \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('return_date')),
+                'remarks'      => $request->input('return_notes'),
+            ]);
 
-        if ($assetsToReturn->isEmpty()) {
-            return redirect()->back()->with('error', 'No assets found assigned to ' . $decodedAssigneeName . ' to return.');
+            // 2. Update asset fields
+            $asset->condition_id = $request->input('condition_id');
+            $asset->assigned_to = null;
+            $asset->issued_date = null;
+            $asset->return_date = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('return_date'))->toDateString();
+            $asset->returned_at = \Carbon\Carbon::createFromFormat('Y-m-d\TH:i', $request->input('return_date'));
+            $asset->save();
         }
 
-        $availableStatus = Status::where('status', 'Available')->first();
-        $usedCondition = Condition::where('condition', 'Used')->first();
-        $returnDate = now()->toDateString();
-        $returnedAt = now();
-        
-        $returnedCount = 0;
-
-        DB::beginTransaction(); // Start transaction for atomicity
-        try {
-            foreach ($assetsToReturn as $asset) {
-                $oldAsset = clone $asset;
-
-                $asset->assigned_to = null;
-                $asset->issued_date = null;
-                $asset->return_date = $returnDate;
-                $asset->returned_at = $returnedAt;
-                
-                if ($availableStatus) {
-                    $asset->status_id = $availableStatus->id;
-                }
-                if ($usedCondition) {
-                    $asset->condition_id = $usedCondition->id;
-                }
-
-                $this->storeEditHistory($asset, $user, $oldAsset); // Log individual changes
-                $asset->save();
-                $returnedCount++;
-            }
-            DB::commit(); // Commit transaction if all successful
-        } catch (\Exception $e) {
-            DB::rollBack(); // Rollback on error
-            \Log::error("Error returning all assets for {$decodedAssigneeName}: " . $e->getMessage());
-            return redirect()->back()->with('error', 'An error occurred while returning assets. Please try again.');
-        }
-
-        // Redirect back to the main assignee list page after returning all
-        return redirect()->route('asset.assigned')
-                         ->with('success', $returnedCount . ' asset(s) for ' . $decodedAssigneeName . ' have been returned successfully.');
+        return redirect()->back()->with('success', 'All assets returned and recorded in history.');
     }
 
     /**

@@ -295,32 +295,30 @@
                         
                     </div>
                 </div>
-                <div class="flex gap-3 justify-end mt-6 border-t border-gray-200 pt-4"> {{-- Added margin-top, border, padding --}}
-                            @if(Auth::user()->role->role != 'Department')
-                            <a href="{{ route('asset.qrCode', $asset->id) }}" class="rounded-md shadow-md px-5 py-2 bg-blue-600 hover:shadow-md hover:bg-blue-500 transition-all
+                <div class="flex gap-3 justify-end mt-6 border-t border-gray-200 pt-4">
+                    @if(Auth::user()->role->role != 'Department')
+                        <a href="{{ route('asset.qrCode', $asset->id) }}" class="rounded-md shadow-md px-5 py-2 bg-blue-600 hover:shadow-md hover:bg-blue-500 transition-all
+                            duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                                stroke="currentColor" class="size-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5Z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+                            </svg>
+                            Generate Asset Tag
+                        </a>
+                        @if($asset->assigned_to)
+                            <!-- Return Asset Button triggers modal -->
+                            <button type="button" onclick="document.getElementById('return-modal').classList.remove('hidden')"
+                                class="rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500 transition-all
                                 duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex gap-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                    stroke="currentColor" class="size-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5Z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
                                 </svg>
-                                Generate Asset Tag
-                            </a>
-                            @if($asset->assigned_to)
-                                <form action="{{ route('asset.return', $asset->id) }}" method="POST">
-                                    @csrf
-                                    @method('PUT')
-                                    <button type="submit" class="rounded-md shadow-md px-5 py-2 bg-red-600 hover:shadow-md hover:bg-red-500 transition-all
-                                        duration-200 hover:scale-105 ease-in hover:shadow-inner text-white flex gap-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
-                                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15M12 9l-3 3m0 0l3 3m-3-3h12.75" />
-                                        </svg>
-                                        Return Asset
-                                    </button>
-                                </form>
-                            @endif
-                            @endif
-                        </div>
+                                Return Asset
+                            </button>
+                        @endif
+                    @endif
+                </div>
             </div>
             
         @if($turnoverHistory->isNotEmpty())
@@ -564,6 +562,60 @@
         @endif
     </div>
 </div>
+
+<!-- Return Modal -->
+<div id="return-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-40">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+        <h2 class="text-lg font-bold mb-4">Return Asset</h2>
+        <form action="{{ route('asset.return', $asset->id) }}" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="mb-4">
+                <label for="return_date" class="block text-sm font-medium text-gray-700 mb-1">Date Returned</label>
+                <input type="datetime-local" name="return_date" id="return_date"
+                    class="w-full border rounded p-2"
+                    value="{{ now()->format('Y-m-d\TH:i') }}" required>
+            </div>
+            <div class="mb-4">
+                <label for="returned_by" class="block text-sm font-medium text-gray-700 mb-1">Returned By</label>
+                <input type="text" name="returned_by" id="returned_by"
+                    class="w-full border rounded p-2"
+                    value="{{ $asset->assigned_to ?? '' }}" required>
+            </div>
+            <div class="mb-4">
+                <label for="condition_id" class="block text-sm font-medium text-gray-700 mb-1">Asset Condition</label>
+                <select name="condition_id" id="condition_id" class="w-full border rounded p-2" required>
+                    @foreach(\App\Models\Condition::orderBy('condition')->get() as $condition)
+                        <option value="{{ $condition->id }}" {{ $asset->condition_id == $condition->id ? 'selected' : '' }}>
+                            {{ $condition->condition }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="received_by" class="block text-sm font-medium text-gray-700 mb-1">Received By</label>
+                <input type="text" name="received_by" id="received_by"
+                    class="w-full border rounded p-2" required>
+            </div>
+            <div class="mb-4">
+                <label for="return_notes" class="block text-sm font-medium text-gray-700 mb-1">Remarks / Notes</label>
+                <textarea name="return_notes" id="return_notes" rows="3" class="w-full border rounded p-2" placeholder="Enter remarks or notes (optional)"></textarea>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="document.getElementById('return-modal').classList.add('hidden')" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Return</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    // Optional: Close modal on ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === "Escape") {
+            document.getElementById('return-modal').classList.add('hidden');
+        }
+    });
+</script>
 
 <script src="{{ asset('js/chart.js') }}"></script>
  

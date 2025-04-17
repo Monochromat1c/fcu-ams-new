@@ -106,12 +106,13 @@
                     @if($assets->isNotEmpty() && Auth::user()->role->role != 'Department')
                     <form id="return-all-form-{{ Str::slug($decodedAssigneeName) }}" action="{{ route('asset.assigned.return-all', ['assigneeName' => urlencode($decodedAssigneeName)]) }}" method="POST" class="inline-block">
                         @csrf
-                        <button type="button" 
-                                onclick="openConfirmModal('return-all-form-{{ Str::slug($decodedAssigneeName) }}', 'Confirm Return All', 'Are you sure you want to return ALL assets assigned to {{ $decodedAssigneeName }}? This action cannot be undone.')"
-                                class="flex items-center bg-orange-500 text-white hover:bg-orange-600 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm h-10" 
-                                title="Return All Assets for {{ $decodedAssigneeName }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10l-5 5 5 5M20 4v7a4 4 0 01-4 4H4" />
+                        <button type="button" onclick="openReturnAllModal()"
+                            class="flex items-center bg-orange-500 text-white hover:bg-orange-600 transition-colors duration-200 ease-in rounded-md px-4 py-2 text-sm h-10"
+                            title="Return All Assets for {{ $decodedAssigneeName }}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M9 10l-5 5 5 5M20 4v7a4 4 0 01-4 4H4" />
                             </svg>
                             Return All Assets
                         </button>
@@ -233,10 +234,15 @@
                                         <form id="return-asset-form-{{ $asset->id }}" action="{{ route('asset.return.from.assigned', $asset->id) }}" method="POST" class="flex items-center">
                                             @csrf
                                             @method('PUT')
-                                            <button type="button" 
-                                                    onclick="openConfirmModal('return-asset-form-{{ $asset->id }}', 'Confirm Return', 'Do you want to return this asset? (Tag: {{ $asset->asset_tag_id }})')" 
-                                                    class="inline-flex items-center text-blue-600 hover:text-blue-900 hover:scale-110 transition-transform duration-200" 
-                                                    title="Return Asset">
+                                            <!-- Button triggers modal -->
+                                            <button type="button"
+                                                onclick="openReturnModal(
+                                                    {{ $asset->id }},
+                                                    '{{ addslashes($asset->assigned_to ?? '') }}',
+                                                    '{{ $asset->condition_id }}'
+                                                )"
+                                                class="inline-flex items-center text-blue-600 hover:text-blue-900 hover:scale-110 transition-transform duration-200"
+                                                title="Return Asset">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10l-5 5 5 5M20 4v7a4 4 0 01-4 4H4" />
                                                 </svg>
@@ -654,6 +660,72 @@
     </div>
 </div>
 
+<!-- Return Modal -->
+<div id="return-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-40">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+        <h2 class="text-lg font-bold mb-4">Return Asset</h2>
+        <form id="dynamic-return-form" method="POST">
+            @csrf
+            @method('PUT')
+            <div class="mb-4">
+                <label for="return_date" class="block text-sm font-medium text-gray-700 mb-1">Date Returned</label>
+                <input type="datetime-local" name="return_date" id="return_date"
+                    class="w-full border rounded p-2"
+                    value="{{ now()->format('Y-m-d\TH:i') }}" required>
+            </div>
+            <div class="mb-4">
+                <label for="returned_by" class="block text-sm font-medium text-gray-700 mb-1">Returned By</label>
+                <input type="text" name="returned_by" id="returned_by"
+                    class="w-full border rounded p-2"
+                    value="" required>
+            </div>
+            <div class="mb-4">
+                <label for="condition_id" class="block text-sm font-medium text-gray-700 mb-1">Asset Condition</label>
+                <select name="condition_id" id="condition_id" class="w-full border rounded p-2" required>
+                    @foreach(\App\Models\Condition::orderBy('condition')->get() as $condition)
+                        <option value="{{ $condition->id }}">
+                            {{ $condition->condition }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="received_by" class="block text-sm font-medium text-gray-700 mb-1">Received By</label>
+                <input type="text" name="received_by" id="received_by"
+                    class="w-full border rounded p-2" required>
+            </div>
+            <div class="mb-4">
+                <label for="return_notes" class="block text-sm font-medium text-gray-700 mb-1">Remarks / Notes</label>
+                <textarea name="return_notes" id="return_notes" rows="3" class="w-full border rounded p-2" placeholder="Enter remarks or notes (optional)"></textarea>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="document.getElementById('return-modal').classList.add('hidden')" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Return</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    function openReturnModal(assetId, assignedTo, conditionId) {
+        const modal = document.getElementById('return-modal');
+        const form = document.getElementById('dynamic-return-form');
+        form.action = `/asset/${assetId}/return-from-assigned`;
+        // Set fields
+        document.getElementById('returned_by').value = assignedTo || '';
+        document.getElementById('condition_id').value = conditionId || '';
+        // Optionally clear other fields
+        document.getElementById('received_by').value = '';
+        document.getElementById('return_notes').value = '';
+        // Show modal
+        modal.classList.remove('hidden');
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === "Escape") {
+            document.getElementById('return-modal').classList.add('hidden');
+        }
+    });
+</script>
+
 <script>
     // Script for search/clear specific to this page
     document.addEventListener('DOMContentLoaded', function() {
@@ -744,5 +816,61 @@
     }
 </script>
 @stack('scripts') {{-- For the confirmActionModal script --}}
+
+<!-- Return All Modal -->
+<div id="return-all-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-40">
+    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
+        <h2 class="text-lg font-bold mb-4">Return All Assets</h2>
+        <form id="return-all-dynamic-form" method="POST" action="{{ route('asset.assigned.return-all', ['assigneeName' => urlencode($decodedAssigneeName)]) }}">
+            @csrf
+            <div class="mb-4">
+                <label for="all_return_date" class="block text-sm font-medium text-gray-700 mb-1">Date Returned</label>
+                <input type="datetime-local" name="return_date" id="all_return_date"
+                    class="w-full border rounded p-2"
+                    value="{{ now()->format('Y-m-d\TH:i') }}" required>
+            </div>
+            <div class="mb-4">
+                <label for="all_returned_by" class="block text-sm font-medium text-gray-700 mb-1">Returned By</label>
+                <input type="text" name="returned_by" id="all_returned_by"
+                    class="w-full border rounded p-2"
+                    value="{{ $decodedAssigneeName }}" required>
+            </div>
+            <div class="mb-4">
+                <label for="all_condition_id" class="block text-sm font-medium text-gray-700 mb-1">Asset Condition</label>
+                <select name="condition_id" id="all_condition_id" class="w-full border rounded p-2" required>
+                    <option value="">Select Condition</option>
+                    @foreach(\App\Models\Condition::orderBy('condition')->get() as $condition)
+                        <option value="{{ $condition->id }}">{{ $condition->condition }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="all_received_by" class="block text-sm font-medium text-gray-700 mb-1">Received By</label>
+                <input type="text" name="received_by" id="all_received_by"
+                    class="w-full border rounded p-2" required>
+            </div>
+            <div class="mb-4">
+                <label for="all_return_notes" class="block text-sm font-medium text-gray-700 mb-1">Remarks / Notes</label>
+                <textarea name="return_notes" id="all_return_notes" rows="3" class="w-full border rounded p-2" placeholder="Enter remarks or notes (optional)"></textarea>
+            </div>
+            <div class="flex justify-end gap-2">
+                <button type="button" onclick="document.getElementById('return-all-modal').classList.add('hidden')" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
+                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Return All</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function openReturnAllModal() {
+    // Optionally reset fields
+    document.getElementById('all_return_date').value = (new Date()).toISOString().slice(0,16);
+    document.getElementById('all_returned_by').value = "{{ $decodedAssigneeName }}";
+    document.getElementById('all_condition_id').selectedIndex = 0;
+    document.getElementById('all_received_by').value = '';
+    document.getElementById('all_return_notes').value = '';
+    document.getElementById('return-all-modal').classList.remove('hidden');
+}
+</script>
 
 @endsection 
