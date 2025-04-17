@@ -194,9 +194,9 @@
                             <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <span>Asset Tag ID</span>
-                                    <a class="ml-2" href="{{ route('asset.assigned.show', ['assigneeName' => urlencode($decodedAssigneeName), 'sort' => 'asset_tag_id', 'direction' => ($direction == 'asc' && $sort == 'asset_tag_id') ? 'desc' : 'asc', 'search' => request('search')]) }}">
+                                    <!-- <a class="ml-2" href="{{ route('asset.assigned.show', ['assigneeName' => urlencode($decodedAssigneeName), 'sort' => 'asset_tag_id', 'direction' => ($direction == 'asc' && $sort == 'asset_tag_id') ? 'desc' : 'asc', 'search' => request('search')]) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>
-                                    </a>
+                                    </a> -->
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">Brand</th>
@@ -206,9 +206,9 @@
                             <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-left text-xs font-medium uppercase tracking-wider">
                                 <div class="flex items-center">
                                     <span>Issued Date</span>
-                                    <a class="ml-2" href="{{ route('asset.assigned.show', ['assigneeName' => urlencode($decodedAssigneeName), 'sort' => 'issued_date', 'direction' => ($direction == 'asc' && $sort == 'issued_date') ? 'desc' : 'asc', 'search' => request('search')]) }}">
+                                    <!-- <a class="ml-2" href="{{ route('asset.assigned.show', ['assigneeName' => urlencode($decodedAssigneeName), 'sort' => 'issued_date', 'direction' => ($direction == 'asc' && $sort == 'issued_date') ? 'desc' : 'asc', 'search' => request('search')]) }}">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4" /></svg>
-                                    </a>
+                                    </a> -->
                                 </div>
                             </th>
                             <th scope="col" class="px-6 py-3 bg-gradient-to-r from-blue-400 to-blue-400 text-white text-center text-xs font-medium uppercase tracking-wider">Actions</th>

@@ -355,7 +355,7 @@
                         <tbody class="bg-white divide-y divide-gray-200">
                             @foreach($turnoverHistory as $history)
                                 <tr class="hover:bg-gray-50 transition-colors duration-200">
-                                    <td class="px-6 py-4 whitespace-nowrap align-top text-sm text-red-600">
+                                    <td class="px-6 py-4 whitespace-nowrap align-top text-sm text-gray-500">
                                         <div>
                                             {{ $history->previous_assignee }}
                                             @if($history->assignment_start_date)
@@ -374,16 +374,22 @@
                                             @endif
                                         </div>
                                     </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-green-600 align-top">
+                                    <td class="px-6 py-4 whitespace-nowrap align-top text-sm">
                                         <div class="flex flex-col gap-1">
                                             <div class="flex items-center gap-2">
-                                                {{ $history->new_assignee }}
                                                 @if($loop->first && $history->new_assignee === $asset->assigned_to)
+                                                    <span class="text-green-600 font-semibold">
+                                                        {{ $history->new_assignee }}
+                                                    </span>
                                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full border border-blue-300 bg-blue-50 shadow-sm text-xs font-bold uppercase text-blue-700 ml-1">
                                                         <svg class="w-3 h-3 mr-1 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
                                                             <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V7h2v2z"/>
                                                         </svg>
                                                         Current Owner
+                                                    </span>
+                                                @else
+                                                    <span>
+                                                        {{ $history->new_assignee }}
                                                     </span>
                                                 @endif
                                             </div>
