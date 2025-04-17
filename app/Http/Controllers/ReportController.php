@@ -363,7 +363,7 @@ class ReportController extends Controller
         return $printService->printMonthlyAssetsReport($assets, $startDate, $endDate);
     }
 
-    public function printAssignedAssets(Request $request, ReportPrintService $printService)
+    public function printAssignedAssets(Request $request)
     {
         $assignee = $request->input('assignee');
         if (!$assignee) {
@@ -379,7 +379,11 @@ class ReportController extends Controller
             return redirect()->back()->with('error', 'No assets found for the specified assignee.');
         }
 
-        return $printService->printAssignedAssetsReport($assets, $assignee);
+        $totalValue = $assets->sum('cost');
+        $currentDate = now()->format('F d, Y');
+
+        // Render as web page for print preview
+        return view('fcu-ams.reports.print-assigned-assets', compact('assets', 'assignee', 'totalValue', 'currentDate'));
     }
 
     private function getMonthlyInventories($month, $year)
