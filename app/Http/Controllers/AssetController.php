@@ -1126,7 +1126,7 @@ class AssetController extends Controller
             
             DB::commit();
             
-            return redirect()->back()->with('success', 
+            return redirect()->route('asset.assigned')->with('success', 
                 "Asset {$asset->asset_tag_id} successfully turned over from {$previousAssignee} to {$validated['new_assignee']}.");
             
         } catch (\Exception $e) {

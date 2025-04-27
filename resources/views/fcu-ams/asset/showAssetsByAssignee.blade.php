@@ -666,48 +666,128 @@
 </div>
 
 <!-- Return Modal -->
-<div id="return-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-40">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-        <h2 class="text-lg font-bold mb-4">Return Asset</h2>
-        <form id="dynamic-return-form" method="POST">
-            @csrf
-            @method('PUT')
-            <div class="mb-4">
-                <label for="return_date" class="block text-sm font-medium text-gray-700 mb-1">Date Returned</label>
-                <input type="datetime-local" name="return_date" id="return_date"
-                    class="w-full border rounded p-2"
-                    value="{{ now()->format('Y-m-d\TH:i') }}" required>
+<div id="return-modal" class="fixed inset-0 z-50 hidden overflow-y-auto overflow-x-hidden">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" onclick="document.getElementById('return-modal').classList.add('hidden')"></div>
+        <div class="relative bg-white rounded-lg shadow-xl w-full max-w-md mx-auto">
+            {{-- Modal Header --}}
+            <div class="flex items-center justify-between p-4 border-b rounded-t bg-gradient-to-r from-orange-500 to-orange-700">
+                <h3 class="text-xl font-semibold text-white flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                    </svg>
+                    Return Asset
+                </h3>
+                <button type="button" onclick="document.getElementById('return-modal').classList.add('hidden')" class="text-white bg-transparent hover:bg-orange-800/50 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
             </div>
-            <div class="mb-4">
-                <label for="returned_by" class="block text-sm font-medium text-gray-700 mb-1">Returned By</label>
-                <input type="text" name="returned_by" id="returned_by"
-                    class="w-full border rounded p-2"
-                    value="" required>
-            </div>
-            <div class="mb-4">
-                <label for="condition_id" class="block text-sm font-medium text-gray-700 mb-1">Asset Condition</label>
-                <select name="condition_id" id="condition_id" class="w-full border rounded p-2" required>
-                    @foreach(\App\Models\Condition::where('condition', '!=', 'Disposed')->orderBy('condition')->get() as $condition)
-                        <option value="{{ $condition->id }}">
-                            {{ $condition->condition }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="mb-4">
-                <label for="received_by" class="block text-sm font-medium text-gray-700 mb-1">Received By</label>
-                <input type="text" name="received_by" id="received_by"
-                    class="w-full border rounded p-2" required>
-            </div>
-            <div class="mb-4">
-                <label for="return_notes" class="block text-sm font-medium text-gray-700 mb-1">Remarks / Notes</label>
-                <textarea name="return_notes" id="return_notes" rows="3" class="w-full border rounded p-2" placeholder="Enter remarks or notes (optional)"></textarea>
-            </div>
-            <div class="flex justify-end gap-2">
-                <button type="button" onclick="document.getElementById('return-modal').classList.add('hidden')" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
-                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Return</button>
-            </div>
-        </form>
+            {{-- Modal Body --}}
+            <form id="dynamic-return-form" method="POST">
+                @csrf
+                @method('PUT')
+                <div class="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+                    {{-- Date Returned --}}
+                    <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-orange-300 transition-colors">
+                        <label for="return_date" class="block text-sm font-medium text-gray-700 mb-2">Date Returned</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input type="datetime-local" name="return_date" id="return_date"
+                                class="border pl-10 py-2.5 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50 transition-colors"
+                                value="{{ now()->format('Y-m-d\TH:i') }}" required>
+                        </div>
+                    </div>
+                    {{-- Returned By --}}
+                    <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-orange-300 transition-colors">
+                        <label for="returned_by" class="block text-sm font-medium text-gray-700 mb-2">Returned By</label>
+                         <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input type="text" name="returned_by" id="returned_by"
+                                class="border pl-10 py-2.5 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50 transition-colors"
+                                value="" required>
+                         </div>
+                    </div>
+                    {{-- Asset Condition --}}
+                    <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-orange-300 transition-colors">
+                        <label for="condition_id" class="block text-sm font-medium text-gray-700 mb-2">Asset Condition</label>
+                        <div class="relative">
+                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <select name="condition_id" id="condition_id" 
+                                class="border pl-10 py-2.5 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50 transition-colors appearance-none bg-white" required>
+                                @foreach(\App\Models\Condition::where('condition', '!=', 'Disposed')->orderBy('condition')->get() as $condition)
+                                    <option value="{{ $condition->id }}">
+                                        {{ $condition->condition }}
+                                    </option>
+                                @endforeach
+                            </select>
+                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- Received By --}}
+                    <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-orange-300 transition-colors">
+                        <label for="received_by" class="block text-sm font-medium text-gray-700 mb-2">Received By</label>
+                         <div class="relative">
+                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input type="text" name="received_by" id="received_by"
+                                class="border pl-10 py-2.5 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50 transition-colors" required>
+                         </div>
+                    </div>
+                    {{-- Remarks / Notes --}}
+                    <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-orange-300 transition-colors">
+                        <label for="return_notes" class="block text-sm font-medium text-gray-700 mb-2">Remarks / Notes</label>
+                        <div class="relative">
+                            <div class="absolute top-3 left-3 flex items-start pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <textarea name="return_notes" id="return_notes" rows="3" 
+                                class="border pl-10 py-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50 transition-colors" 
+                                placeholder="Enter remarks or notes (optional)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                {{-- Modal Footer --}}
+                <div class="flex items-center justify-end p-4 space-x-3 border-t-2 border-gray-200 rounded-b bg-gray-50">
+                    <button type="button" onclick="document.getElementById('return-modal').classList.add('hidden')" 
+                            class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="inline-flex items-center px-5 py-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all transform hover:scale-105">
+                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                        </svg>
+                        Return Asset
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 <script>
@@ -823,46 +903,126 @@
 @stack('scripts') {{-- For the confirmActionModal script --}}
 
 <!-- Return All Modal -->
-<div id="return-all-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-black bg-opacity-40">
-    <div class="bg-white rounded-lg shadow-lg w-full max-w-md p-6">
-        <h2 class="text-lg font-bold mb-4">Return All Assets</h2>
-        <form id="return-all-dynamic-form" method="POST" action="{{ route('asset.assigned.return-all', ['assigneeName' => urlencode($decodedAssigneeName)]) }}">
-            @csrf
-            <div class="mb-4">
-                <label for="all_return_date" class="block text-sm font-medium text-gray-700 mb-1">Date Returned</label>
-                <input type="datetime-local" name="return_date" id="all_return_date"
-                    class="w-full border rounded p-2"
-                    value="{{ now()->format('Y-m-d\TH:i') }}" required>
+<div id="return-all-modal" class="fixed inset-0 z-50 hidden overflow-y-auto overflow-x-hidden">
+    <div class="flex items-center justify-center min-h-screen px-4">
+        <div class="fixed inset-0 bg-gray-900 bg-opacity-75 transition-opacity" onclick="document.getElementById('return-all-modal').classList.add('hidden')"></div>
+        <div class="relative bg-white rounded-lg shadow-xl w-full max-w-md mx-auto">
+            {{-- Modal Header --}}
+            <div class="flex items-center justify-between p-4 border-b rounded-t bg-gradient-to-r from-orange-500 to-orange-700">
+                <h3 class="text-xl font-semibold text-white flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                    </svg>
+                    Return All Assets
+                </h3>
+                <button type="button" onclick="document.getElementById('return-all-modal').classList.add('hidden')" class="text-white bg-transparent hover:bg-orange-800/50 hover:text-white rounded-lg text-sm p-1.5 ml-auto inline-flex items-center">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                </button>
             </div>
-            <div class="mb-4">
-                <label for="all_returned_by" class="block text-sm font-medium text-gray-700 mb-1">Returned By</label>
-                <input type="text" name="returned_by" id="all_returned_by"
-                    class="w-full border rounded p-2"
-                    value="{{ $decodedAssigneeName }}" required>
-            </div>
-            <div class="mb-4">
-                <label for="all_condition_id" class="block text-sm font-medium text-gray-700 mb-1">Asset Condition</label>
-                <select name="condition_id" id="all_condition_id" class="w-full border rounded p-2" required>
-                    <option value="">Select Condition</option>
-                    @foreach(\App\Models\Condition::where('condition', '!=', 'Disposed')->orderBy('condition')->get() as $condition)
-                        <option value="{{ $condition->id }}">{{ $condition->condition }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="mb-4">
-                <label for="all_received_by" class="block text-sm font-medium text-gray-700 mb-1">Received By</label>
-                <input type="text" name="received_by" id="all_received_by"
-                    class="w-full border rounded p-2" required>
-            </div>
-            <div class="mb-4">
-                <label for="all_return_notes" class="block text-sm font-medium text-gray-700 mb-1">Remarks / Notes</label>
-                <textarea name="return_notes" id="all_return_notes" rows="3" class="w-full border rounded p-2" placeholder="Enter remarks or notes (optional)"></textarea>
-            </div>
-            <div class="flex justify-end gap-2">
-                <button type="button" onclick="document.getElementById('return-all-modal').classList.add('hidden')" class="px-4 py-2 bg-gray-200 rounded">Cancel</button>
-                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Return All</button>
-            </div>
-        </form>
+            {{-- Modal Body --}}
+            <form id="return-all-dynamic-form" method="POST" action="{{ route('asset.assigned.return-all', ['assigneeName' => urlencode($decodedAssigneeName)]) }}">
+                @csrf
+                <div class="p-6 space-y-5 max-h-[70vh] overflow-y-auto">
+                    {{-- Date Returned --}}
+                     <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-orange-300 transition-colors">
+                        <label for="all_return_date" class="block text-sm font-medium text-gray-700 mb-2">Date Returned</label>
+                         <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input type="datetime-local" name="return_date" id="all_return_date"
+                                class="border pl-10 py-2.5 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50 transition-colors"
+                                value="{{ now()->format('Y-m-d\TH:i') }}" required>
+                         </div>
+                    </div>
+                    {{-- Returned By --}}
+                     <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-orange-300 transition-colors">
+                        <label for="all_returned_by" class="block text-sm font-medium text-gray-700 mb-2">Returned By</label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <input type="text" name="returned_by" id="all_returned_by"
+                                class="border pl-10 py-2.5 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50 transition-colors"
+                                value="{{ $decodedAssigneeName }}" required>
+                         </div>
+                    </div>
+                    {{-- Asset Condition --}}
+                     <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-orange-300 transition-colors">
+                        <label for="all_condition_id" class="block text-sm font-medium text-gray-700 mb-2">Asset Condition</label>
+                         <div class="relative">
+                              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                     <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                                 </svg>
+                             </div>
+                            <select name="condition_id" id="all_condition_id" 
+                                class="border pl-10 py-2.5 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50 transition-colors appearance-none bg-white" required>
+                                <option value="">Select Condition</option>
+                                @foreach(\App\Models\Condition::where('condition', '!=', 'Disposed')->orderBy('condition')->get() as $condition)
+                                    <option value="{{ $condition->id }}">{{ $condition->condition }}</option>
+                                @endforeach
+                            </select>
+                             <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                         </div>
+                    </div>
+                     {{-- Received By --}}
+                     <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-orange-300 transition-colors">
+                        <label for="all_received_by" class="block text-sm font-medium text-gray-700 mb-2">Received By</label>
+                         <div class="relative">
+                              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                     <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                                 </svg>
+                             </div>
+                            <input type="text" name="received_by" id="all_received_by"
+                                class="border pl-10 py-2.5 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50 transition-colors" required>
+                         </div>
+                    </div>
+                    {{-- Remarks / Notes --}}
+                    <div class="group bg-white p-4 rounded-lg border border-gray-200 shadow-sm hover:border-orange-300 transition-colors">
+                        <label for="all_return_notes" class="block text-sm font-medium text-gray-700 mb-2">Remarks / Notes</label>
+                        <div class="relative">
+                            <div class="absolute top-3 left-3 flex items-start pointer-events-none">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fill-rule="evenodd" d="M18 13V5a2 2 0 00-2-2H4a2 2 0 00-2 2v8a2 2 0 002 2h3l3 3 3-3h3a2 2 0 002-2zM5 7a1 1 0 011-1h8a1 1 0 110 2H6a1 1 0 01-1-1zm1 3a1 1 0 100 2h3a1 1 0 100-2H6z" clip-rule="evenodd" />
+                                </svg>
+                            </div>
+                            <textarea name="return_notes" id="all_return_notes" rows="3" 
+                                class="border pl-10 py-2 mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-orange-500 focus:ring focus:ring-orange-200 focus:ring-opacity-50 transition-colors" 
+                                placeholder="Enter remarks or notes (optional)"></textarea>
+                        </div>
+                    </div>
+                </div>
+                {{-- Modal Footer --}}
+                <div class="flex items-center justify-end p-4 space-x-3 border-t-2 border-gray-200 rounded-b bg-gray-50">
+                    <button type="button" onclick="document.getElementById('return-all-modal').classList.add('hidden')" 
+                            class="inline-flex items-center px-4 py-2.5 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-colors">
+                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                        Cancel
+                    </button>
+                    <button type="submit" 
+                            class="inline-flex items-center px-5 py-2.5 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 transition-all transform hover:scale-105">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                        </svg>
+                        Return All Assets
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
