@@ -673,6 +673,9 @@
         const showAssignmentButton = document.getElementById('show-assignment-modal');
         const assignmentModal = document.getElementById('assignment-modal');
         const saveAssignmentButton = document.getElementById('save-assignment-btn');
+        const modalAssignedTo = document.getElementById('modal_assigned_to');
+        const modalIssuedDate = document.getElementById('modal_issued_date');
+        const modalNotes = document.getElementById('modal_notes');
 
         if (showAssignmentButton && assignmentModal) {
             showAssignmentButton.addEventListener('click', function(e) {
@@ -685,9 +688,9 @@
 
         if (saveAssignmentButton) {
             saveAssignmentButton.addEventListener('click', function() {
-                const assignedTo = document.getElementById('modal_assigned_to').value;
-                const issuedDate = document.getElementById('modal_issued_date').value;
-                const notes = document.getElementById('modal_notes').value;
+                const assignedTo = modalAssignedTo.value;
+                const issuedDate = modalIssuedDate.value;
+                const notes = modalNotes.value;
 
                 // Update hidden inputs
                 document.getElementById('assigned_to').value = assignedTo;
@@ -701,6 +704,21 @@
                 assignmentModal.classList.add('hidden');
             });
         }
+
+        // ENTER KEY HANDLER FOR ASSIGNMENT MODAL
+        [modalAssignedTo, modalIssuedDate, modalNotes].forEach(function(input) {
+            if (input) {
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        // Only trigger if modal is visible
+                        if (!assignmentModal.classList.contains('hidden')) {
+                            e.preventDefault();
+                            saveAssignmentButton.click();
+                        }
+                    }
+                });
+            }
+        });
     });
 
     // Function to refresh select options after adding new item
