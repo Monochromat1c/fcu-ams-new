@@ -317,7 +317,8 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         @forelse($assignees as $assignee)
-                            <tr class="hover:bg-gray-50 transition-colors duration-200">
+                            <tr class="hover:bg-gray-50 transition-colors duration-200"
+                                onclick="window.location.href='{{ route('asset.assigned.show', ['assigneeName' => urlencode($assignee->assigned_to)]) }}'">
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-8 w-8 bg-gray-100 rounded-full flex items-center justify-center">
