@@ -18,6 +18,10 @@
             font-size: 16px;
         }
 
+        .body {
+            background-color: white;
+        }
+
         .no-print {
             display: none;
         }
@@ -42,6 +46,7 @@
             margin: 10px auto !important;
             transform: scale(0.7);
             transform-origin: center;
+            background-color: white;
         }
 
         .background-color {
@@ -87,7 +92,7 @@
     }
 </style>
 
-<div class="min-h-screen flex items-center justify-center bg-slate-100 p-4">
+<div class="min-h-screen body flex items-center justify-center bg-slate-100 p-4">
     <div class="qr-code-container bg-white rounded-xl p-8 max-w-lg w-full shadow-none transform transition-all duration-300 hover:shadow-none">
         <div class="text-center space-y-6">
             <div class="space-y-2">
