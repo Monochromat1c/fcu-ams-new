@@ -176,7 +176,7 @@
             </div>
             <div class="flex-grow">
                 <h3 class="text-2xl font-bold text-red-600 mb-1">Password Mismatch</h3>
-                <p class="text-gray-700">The password and confirm password fields do not match.</p>
+                <p class="text-gray-700">The password and confirm password fields do not match. </p>
             </div>
             <!-- Close Button -->
             <button type="button" onclick="document.getElementById('password-mismatch-error-modal').classList.add('hidden')" class="ml-4 text-gray-400 hover:text-gray-600 rounded-full p-1 -mt-1 -mr-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
