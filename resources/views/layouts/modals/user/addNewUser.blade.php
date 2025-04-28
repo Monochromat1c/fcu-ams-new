@@ -164,30 +164,113 @@
     </div>
 </div>
 
+<!-- Password Mismatch Error Modal -->
+<div id="password-mismatch-error-modal" tabindex="-1" aria-hidden="true" class="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-black bg-opacity-60 p-4 hidden">
+    <div class="relative w-full max-w-md rounded-lg bg-white shadow-lg p-6 border-l-4 border-red-500">
+        <div class="flex items-start mb-4">
+            <!-- Warning Icon -->
+            <div class="flex-shrink-0 mr-3">
+                <svg class="h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.008v.008H12v-.008Z" />
+                  </svg>
+            </div>
+            <div class="flex-grow">
+                <h3 class="text-2xl font-bold text-red-600 mb-1">Password Mismatch</h3>
+                <p class="text-gray-700">The password and confirm password fields do not match.</p>
+            </div>
+            <!-- Close Button -->
+            <button type="button" onclick="document.getElementById('password-mismatch-error-modal').classList.add('hidden')" class="ml-4 text-gray-400 hover:text-gray-600 rounded-full p-1 -mt-1 -mr-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <div class="flex justify-end mt-4">
+            <button type="button" onclick="document.getElementById('password-mismatch-error-modal').classList.add('hidden')" class="px-5 py-2 bg-blue-600 text-white font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+                OK
+            </button>
+        </div>
+    </div>
+</div>
+
 <script>
-    function previewProfilePic(input, action) {
-        const preview = document.getElementById('profilePicPreview' + action);
+    document.addEventListener('DOMContentLoaded', function() {
+        // Existing previewProfilePic function
+        window.previewProfilePic = function(input, action) {
+            const preview = document.getElementById('profilePicPreview' + action);
 
-        if (input.files && input.files[0]) {
-            const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!validImageTypes.includes(input.files[0].type)) {
-                alert('Please select a valid image file (JPEG, PNG, or GIF)');
-                input.value = '';
-                return;
-            }
+            if (input.files && input.files[0]) {
+                const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!validImageTypes.includes(input.files[0].type)) {
+                    alert('Please select a valid image file (JPEG, PNG, or GIF)');
+                    input.value = '';
+                    return;
+                }
 
-            const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-            if (input.files[0].size > maxSizeInBytes) {
-                alert('File is too large. Maximum file size is 5MB.');
-                input.value = '';
-                return;
-            }
+                const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+                if (input.files[0].size > maxSizeInBytes) {
+                    alert('File is too large. Maximum file size is 5MB.');
+                    input.value = '';
+                    return;
+                }
 
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                preview.src = e.target.result;
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                }
+                reader.readAsDataURL(input.files[0]);
             }
-            reader.readAsDataURL(input.files[0]);
         }
-    }
+
+        // Password validation logic
+        const addUserForm = document.querySelector('#add-user-modal .login-form');
+        const passwordInput = addUserForm ? addUserForm.querySelector('input[name="password"]') : null;
+        const confirmPasswordInput = addUserForm ? addUserForm.querySelector('input[name="password_confirmation"]') : null;
+        const errorModal = document.getElementById('password-mismatch-error-modal');
+
+        if (addUserForm && passwordInput && confirmPasswordInput && errorModal) {
+            addUserForm.addEventListener('submit', function(event) {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                if (password !== confirmPassword) {
+                    // Prevent form submission
+                    event.preventDefault();
+
+                    // Show the error modal
+                    errorModal.classList.remove('hidden');
+
+                    // Add visual feedback to fields
+                    passwordInput.classList.add('border-red-500');
+                    confirmPasswordInput.classList.add('border-red-500');
+                    passwordInput.classList.remove('focus:border-blue-500');
+                    confirmPasswordInput.classList.remove('focus:border-blue-500');
+
+                } else {
+                    // Passwords match, remove potential error styles before allowing submission
+                    passwordInput.classList.remove('border-red-500');
+                    confirmPasswordInput.classList.remove('border-red-500');
+                    passwordInput.classList.add('focus:border-blue-500');
+                    confirmPasswordInput.classList.add('focus:border-blue-500');
+                    // Form will submit normally as preventDefault wasn't called
+                }
+            });
+
+            // Remove error styling when user types again
+            function removeErrorStyles() {
+                if (passwordInput.classList.contains('border-red-500') || confirmPasswordInput.classList.contains('border-red-500')) {
+                    passwordInput.classList.remove('border-red-500');
+                    confirmPasswordInput.classList.remove('border-red-500');
+                    passwordInput.classList.add('focus:border-blue-500');
+                    confirmPasswordInput.classList.add('focus:border-blue-500');
+                }
+            }
+
+            passwordInput.addEventListener('input', removeErrorStyles);
+            confirmPasswordInput.addEventListener('input', removeErrorStyles);
+
+        } else {
+            console.error('Add User Modal form elements not found for password validation.');
+        }
+    });
 </script>
