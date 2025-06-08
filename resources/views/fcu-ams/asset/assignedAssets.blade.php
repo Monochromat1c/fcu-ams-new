@@ -406,25 +406,37 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Improved refresh handling
         const hasSearchParams = window.location.search !== '';
-        
-        // Store a flag in sessionStorage to detect the first page load vs refresh
-        const isFirstLoad = sessionStorage.getItem('pageLoaded') !== 'true';
-        
-        if (hasSearchParams) {
-            if (!isFirstLoad) {
-                // This is a refresh with search params, redirect immediately
-                window.location.href = window.location.pathname;
-            } else {
-                // First load with search params, set the flag
-                sessionStorage.setItem('pageLoaded', 'true');
-            }
+        const isFormSubmitReload = sessionStorage.getItem('lastFormSubmit') === 'true';
+
+        // Reset the flag immediately to handle subsequent manual refreshes correctly
+        sessionStorage.setItem('lastFormSubmit', 'false');
+
+        if (hasSearchParams && !isFormSubmitReload) {
+            // This is a direct navigation/hard refresh with search params, so clear them
+            window.location.href = window.location.pathname;
         } else {
-            // No search params, update the flag
+            // Either no search params, or it was a form submission reload.
+            // In both cases, do not clear the URL.
+            // Ensure pageLoaded is set for general tracking
             sessionStorage.setItem('pageLoaded', 'true');
         }
-        
+
+        // Add submit listeners to both forms
+        const filterForm = document.querySelector('#filter-modal form');
+        if (filterForm) {
+            filterForm.addEventListener('submit', function() {
+                sessionStorage.setItem('lastFormSubmit', 'true');
+            });
+        }
+
+        const searchForm = document.querySelector('.searchBox form');
+        if (searchForm) {
+            searchForm.addEventListener('submit', function() {
+                sessionStorage.setItem('lastFormSubmit', 'true');
+            });
+        }
+
         const searchInput = document.getElementById('searchInput');
         const form = searchInput.closest('form');
 
@@ -489,6 +501,7 @@
         document.getElementById('filter-modal').classList.add('hidden');
     }
     function clearFilters() {
+        sessionStorage.setItem('lastFormSubmit', 'false'); // Explicitly mark that the next load is NOT a form submit
         window.location.href = '{{ route("asset.assigned") }}';
     }
 </script>
