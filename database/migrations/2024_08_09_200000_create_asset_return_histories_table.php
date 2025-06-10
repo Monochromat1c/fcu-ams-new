@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('asset_return_histories', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('asset_id');
-            $table->string('returned_by'); // assignee name or user id
-            $table->string('received_by'); // new, for storing name/username
+            $table->string('returned_by'); 
+            $table->string('received_by'); 
             $table->unsignedBigInteger('condition_id')->nullable();
             $table->date('return_date');
             $table->text('remarks')->nullable();
